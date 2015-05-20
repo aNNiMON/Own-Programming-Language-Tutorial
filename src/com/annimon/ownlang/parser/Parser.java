@@ -1,6 +1,7 @@
 package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.parser.ast.BinaryExpression;
+import com.annimon.ownlang.parser.ast.ConstantExpression;
 import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.NumberExpression;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
@@ -91,6 +92,9 @@ public final class Parser {
         }
         if (match(TokenType.HEX_NUMBER)) {
             return new NumberExpression(Long.parseLong(current.getText(), 16));
+        }
+        if (match(TokenType.WORD)) {
+            return new ConstantExpression(current.getText());
         }
         if (match(TokenType.LPAREN)) {
             Expression result = expression();

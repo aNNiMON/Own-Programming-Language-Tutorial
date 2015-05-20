@@ -13,7 +13,8 @@ public final class Main {
 
     public static void main(String[] args) {
         final String input1 = "2 + 2";
-        final String input2 = "(2 + 2) * #f";
+//        final String input2 = "(GOLDEN_RATIO + 2) * #f";
+        final String input2 = "GOLDEN_RATIO";
         final List<Token> tokens = new Lexer(input2).tokenize();
         for (Token token : tokens) {
             System.out.println(token);

@@ -1,23 +1,23 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.Constants;
+import com.annimon.ownlang.lib.Variables;
 
 /**
  *
  * @author aNNiMON
  */
-public final class ConstantExpression implements Expression {
+public final class VariabletExpression implements Expression {
     
     private final String name;
     
-    public ConstantExpression(String name) {
+    public VariabletExpression(String name) {
         this.name = name;
     }
 
     @Override
     public double eval() {
-        if (!Constants.isExists(name)) throw new RuntimeException("Constant does not exists");
-        return Constants.get(name);
+        if (!Variables.isExists(name)) throw new RuntimeException("Constant does not exists");
+        return Variables.get(name);
     }
 
     @Override

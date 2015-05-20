@@ -9,11 +9,12 @@ import java.util.List;
  */
 public final class Lexer {
     
-    private static final String OPERATOR_CHARS = "+-*/()";
+    private static final String OPERATOR_CHARS = "+-*/()=";
     private static final TokenType[] OPERATOR_TOKENS = {
         TokenType.PLUS, TokenType.MINUS,
         TokenType.STAR, TokenType.SLASH,
         TokenType.LPAREN, TokenType.RPAREN,
+        TokenType.EQ
     };
 
     private final String input;

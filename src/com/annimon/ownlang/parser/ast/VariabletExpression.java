@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 
 /**
@@ -15,7 +16,7 @@ public final class VariabletExpression implements Expression {
     }
 
     @Override
-    public double eval() {
+    public Value eval() {
         if (!Variables.isExists(name)) throw new RuntimeException("Constant does not exists");
         return Variables.get(name);
     }

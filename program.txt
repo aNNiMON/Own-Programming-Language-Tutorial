@@ -1,0 +1,6 @@
+word = 2 + 2
+word2 = PI + word
+str = "a" * 5 + "ba" * 7 + "\n"
+print str * "3" * 2
+print "word = " + word + "\n"
+print "word2 = " + word2

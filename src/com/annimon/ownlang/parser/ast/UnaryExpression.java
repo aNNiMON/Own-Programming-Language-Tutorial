@@ -1,5 +1,8 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
+
 /**
  *
  * @author aNNiMON
@@ -15,9 +18,9 @@ public final class UnaryExpression implements Expression {
     }
 
     @Override
-    public double eval() {
+    public Value eval() {
         switch (operation) {
-            case '-': return -expr1.eval();
+            case '-': return new NumberValue(-expr1.eval().asNumber());
             case '+':
             default:
                 return expr1.eval();

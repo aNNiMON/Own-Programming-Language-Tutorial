@@ -1,10 +1,11 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.parser.ast.PrintStatement;
 import com.annimon.ownlang.parser.ast.AssignmentStatement;
 import com.annimon.ownlang.parser.ast.BinaryExpression;
 import com.annimon.ownlang.parser.ast.VariabletExpression;
 import com.annimon.ownlang.parser.ast.Expression;
-import com.annimon.ownlang.parser.ast.NumberExpression;
+import com.annimon.ownlang.parser.ast.ValueExpression;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
 import java.util.ArrayList;
@@ -37,6 +38,9 @@ public final class Parser {
     }
     
     private Statement statement() {
+        if (match(TokenType.PRINT)) {
+            return new PrintStatement(expression());
+        }
         return assignmentStatement();
     }
     
@@ -107,13 +111,16 @@ public final class Parser {
     private Expression primary() {
         final Token current = get(0);
         if (match(TokenType.NUMBER)) {
-            return new NumberExpression(Double.parseDouble(current.getText()));
+            return new ValueExpression(Double.parseDouble(current.getText()));
         }
         if (match(TokenType.HEX_NUMBER)) {
-            return new NumberExpression(Long.parseLong(current.getText(), 16));
+            return new ValueExpression(Long.parseLong(current.getText(), 16));
         }
         if (match(TokenType.WORD)) {
             return new VariabletExpression(current.getText());
+        }
+        if (match(TokenType.TEXT)) {
+            return new ValueExpression(current.getText());
         }
         if (match(TokenType.LPAREN)) {
             Expression result = expression();

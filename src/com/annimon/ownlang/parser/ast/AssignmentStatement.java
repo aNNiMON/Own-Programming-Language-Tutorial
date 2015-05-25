@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 
 /**
@@ -18,7 +19,7 @@ public final class AssignmentStatement implements Statement {
     
     @Override
     public void execute() {
-        final double result = expression.eval();
+        final Value result = expression.eval();
         Variables.set(variable, result);
     }
 

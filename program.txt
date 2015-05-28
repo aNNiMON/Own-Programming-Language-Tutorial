@@ -3,4 +3,9 @@ word2 = PI + word
 str = "a" * 5 + "ba" * 7 + "\n"
 print str * "3" * 2
 print "word = " + word + "\n"
-print "word2 = " + word2
+print "word2 = " + word2 + "\n"
+print "1" > "abc"
+print "\n"
+if (1 < 2) print "1 = 1"
+else print "1 != 1"
+print "\n"

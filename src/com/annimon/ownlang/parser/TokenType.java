@@ -21,8 +21,18 @@ public enum TokenType {
     STAR,
     SLASH,
     EQ,
+    EQEQ,
+    EXCL,
+    EXCLEQ,
     LT,
+    LTEQ,
     GT,
+    GTEQ,
+    
+    BAR,
+    BARBAR,
+    AMP,
+    AMPAMP,
     
     LPAREN, // (
     RPAREN, // )

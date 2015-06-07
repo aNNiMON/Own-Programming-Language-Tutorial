@@ -15,6 +15,8 @@ public enum TokenType {
     PRINT,
     IF,
     ELSE,
+    WHILE,
+    FOR,
     
     PLUS,
     MINUS,
@@ -36,6 +38,9 @@ public enum TokenType {
     
     LPAREN, // (
     RPAREN, // )
+    LBRACE, // {
+    RBRACE, // }
+    COMMA, // ,
     
     EOF
 }

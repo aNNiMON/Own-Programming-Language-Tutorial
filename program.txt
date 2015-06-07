@@ -9,5 +9,16 @@ print "\n"
 if (1 <= 2) print "1 = 1"
 else print "1 != 1"
 print "\n"
-if (40 < 50 && 50 > 60) print "true"
+if (40 < 50 || 50 > 60) {
+    print "true1\n"
+    print "true2\n"
+    i = 0
+    while (i < 10) {
+        print "i = " + i + "\n"
+        i = i + 1
+    }
+    for i = 0, i < 10, i = i + 1 {
+        print "i = " + i + "\n"
+    }
+}
 else print "false"

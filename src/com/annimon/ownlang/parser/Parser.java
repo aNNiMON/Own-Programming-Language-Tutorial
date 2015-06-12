@@ -5,7 +5,7 @@ import com.annimon.ownlang.parser.ast.AssignmentStatement;
 import com.annimon.ownlang.parser.ast.BinaryExpression;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.ConditionalExpression;
-import com.annimon.ownlang.parser.ast.VariabletExpression;
+import com.annimon.ownlang.parser.ast.VariableExpression;
 import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.ForStatement;
 import com.annimon.ownlang.parser.ast.IfStatement;
@@ -239,7 +239,7 @@ public final class Parser {
             return new ValueExpression(Long.parseLong(current.getText(), 16));
         }
         if (match(TokenType.WORD)) {
-            return new VariabletExpression(current.getText());
+            return new VariableExpression(current.getText());
         }
         if (match(TokenType.TEXT)) {
             return new ValueExpression(current.getText());

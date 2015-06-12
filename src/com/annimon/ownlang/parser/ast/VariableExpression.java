@@ -7,11 +7,11 @@ import com.annimon.ownlang.lib.Variables;
  *
  * @author aNNiMON
  */
-public final class VariabletExpression implements Expression {
+public final class VariableExpression implements Expression {
     
     private final String name;
     
-    public VariabletExpression(String name) {
+    public VariableExpression(String name) {
         this.name = name;
     }
 

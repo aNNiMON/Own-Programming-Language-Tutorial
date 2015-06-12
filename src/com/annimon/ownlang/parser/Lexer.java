@@ -150,6 +150,9 @@ public final class Lexer {
             case "else": addToken(TokenType.ELSE); break;
             case "while": addToken(TokenType.WHILE); break;
             case "for": addToken(TokenType.FOR); break;
+            case "do": addToken(TokenType.DO); break;
+            case "break": addToken(TokenType.BREAK); break;
+            case "continue": addToken(TokenType.CONTINUE); break;
             default:
                 addToken(TokenType.WORD, word);
                 break;

@@ -1,19 +1,6 @@
 package com.annimon.ownlang.parser;
 
-import com.annimon.ownlang.parser.ast.PrintStatement;
-import com.annimon.ownlang.parser.ast.AssignmentStatement;
-import com.annimon.ownlang.parser.ast.BinaryExpression;
-import com.annimon.ownlang.parser.ast.BlockStatement;
-import com.annimon.ownlang.parser.ast.ConditionalExpression;
-import com.annimon.ownlang.parser.ast.VariableExpression;
-import com.annimon.ownlang.parser.ast.Expression;
-import com.annimon.ownlang.parser.ast.ForStatement;
-import com.annimon.ownlang.parser.ast.IfStatement;
-import com.annimon.ownlang.parser.ast.ValueExpression;
-import com.annimon.ownlang.parser.ast.Statement;
-import com.annimon.ownlang.parser.ast.UnaryExpression;
-import com.annimon.ownlang.parser.ast.WhileStatement;
-import java.util.ArrayList;
+import com.annimon.ownlang.parser.ast.*;
 import java.util.List;
 
 /**
@@ -66,6 +53,15 @@ public final class Parser {
         if (match(TokenType.WHILE)) {
             return whileStatement();
         }
+        if (match(TokenType.DO)) {
+            return doWhileStatement();
+        }
+        if (match(TokenType.BREAK)) {
+            return new BreakStatement();
+        }
+        if (match(TokenType.CONTINUE)) {
+            return new ContinueStatement();
+        }
         if (match(TokenType.FOR)) {
             return forStatement();
         }
@@ -99,6 +95,13 @@ public final class Parser {
         final Expression condition = expression();
         final Statement statement = statementOrBlock();
         return new WhileStatement(condition, statement);
+    }
+    
+    private Statement doWhileStatement() {
+        final Statement statement = statementOrBlock();
+        consume(TokenType.WHILE);
+        final Expression condition = expression();
+        return new DoWhileStatement(condition, statement);
     }
     
     private Statement forStatement() {

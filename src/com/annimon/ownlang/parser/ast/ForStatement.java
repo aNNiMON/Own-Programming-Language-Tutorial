@@ -21,7 +21,13 @@ public final class ForStatement implements Statement {
     @Override
     public void execute() {
         for (initialization.execute(); termination.eval().asNumber() != 0; increment.execute()) {
-            statement.execute();
+            try {
+                statement.execute();
+            } catch (BreakStatement bs) {
+                break;
+            } catch (ContinueStatement cs) {
+                // continue;
+            }
         }
     }
 

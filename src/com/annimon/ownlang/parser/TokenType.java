@@ -17,6 +17,9 @@ public enum TokenType {
     ELSE,
     WHILE,
     FOR,
+    DO,
+    BREAK,
+    CONTINUE,
     
     PLUS,
     MINUS,

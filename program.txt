@@ -21,7 +21,7 @@ if (40 < 50 || 50 > 60) {
     i = 0
     print "while"
     while (i < 10) {
-        print "i = " + i + "\n"
+        print "i = " + i + sin(i) + "\n"
         i = i + 1
     }
     print "for"
@@ -30,3 +30,6 @@ if (40 < 50 || 50 > 60) {
     }
 }
 else print "false"
+
+print "sin(PI) = " + sin(PI/2)
+echo(1,2,3,"4","5","text",sin(0),cos(0),sin(PI),cos(PI),PI)

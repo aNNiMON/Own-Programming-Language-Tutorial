@@ -6,6 +6,8 @@ package com.annimon.ownlang.lib;
  */
 public final class NumberValue implements Value {
     
+    public static final NumberValue ZERO = new NumberValue(0);
+    
     private final double value;
     
     public NumberValue(boolean value) {

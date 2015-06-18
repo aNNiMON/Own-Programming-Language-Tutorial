@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public final class Variables {
 
-    private static final NumberValue ZERO = new NumberValue(0);
     private static final Map<String, Value> variables;
     
     static {
@@ -25,7 +24,7 @@ public final class Variables {
     }
     
     public static Value get(String key) {
-        if (!isExists(key)) return ZERO;
+        if (!isExists(key)) return NumberValue.ZERO;
         return variables.get(key);
     }
     

@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public final class Functions {
 
-    private static final NumberValue ZERO = new NumberValue(0);
     private static final Map<String, Function> functions;
     
     static {
@@ -30,7 +29,7 @@ public final class Functions {
             for (Value arg : args) {
                 System.out.println(arg.asString());
             }
-            return ZERO;
+            return NumberValue.ZERO;
         });
     }
     

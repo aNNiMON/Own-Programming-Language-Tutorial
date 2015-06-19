@@ -33,3 +33,19 @@ else print "false"
 
 print "sin(PI) = " + sin(PI/2)
 echo(1,2,3,"4","5","text",sin(0),cos(0),sin(PI),cos(PI),PI)
+
+a = "print"
+print a
+
+def name(a,b) {
+   echo("a = ", a, " b = ", b)
+}
+
+def sum(a,b) {
+   a = -60
+   return a+b
+}
+name(1,"text")
+print sum(10, 15)
+
+print a

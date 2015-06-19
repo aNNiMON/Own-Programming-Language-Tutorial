@@ -20,6 +20,8 @@ public enum TokenType {
     DO,
     BREAK,
     CONTINUE,
+    DEF,
+    RETURN,
     
     PLUS,
     MINUS,

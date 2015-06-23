@@ -40,7 +40,7 @@ public final class Parser {
     }
     
     private Statement statementOrBlock() {
-        if (get(0).getType() == TokenType.LBRACE) return block();
+        if (lookMatch(0, TokenType.LBRACE)) return block();
         return statement();
     }
     
@@ -72,7 +72,7 @@ public final class Parser {
         if (match(TokenType.DEF)) {
             return functionDefine();
         }
-        if (get(0).getType() == TokenType.WORD && get(1).getType() == TokenType.LPAREN) {
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return new FunctionStatement(function());
         }
         return assignmentStatement();
@@ -81,7 +81,7 @@ public final class Parser {
     private Statement assignmentStatement() {
         // WORD EQ
         final Token current = get(0);
-        if (match(TokenType.WORD) && get(0).getType() == TokenType.EQ) {
+        if (match(TokenType.WORD) && lookMatch(0, TokenType.EQ)) {
             final String variable = current.getText();
             consume(TokenType.EQ);
             return new AssignmentStatement(variable, expression());
@@ -240,7 +240,6 @@ public final class Parser {
         Expression result = unary();
         
         while (true) {
-            // 2 * 6 / 3 
             if (match(TokenType.STAR)) {
                 result = new BinaryExpression('*', result, unary());
                 continue;
@@ -273,7 +272,7 @@ public final class Parser {
         if (match(TokenType.HEX_NUMBER)) {
             return new ValueExpression(Long.parseLong(current.getText(), 16));
         }
-        if (get(0).getType() == TokenType.WORD && get(1).getType() == TokenType.LPAREN) {
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return function();
         }
         if (match(TokenType.WORD)) {
@@ -302,6 +301,10 @@ public final class Parser {
         if (type != current.getType()) return false;
         pos++;
         return true;
+    }
+    
+    private boolean lookMatch(int pos, TokenType type) {
+        return get(pos).getType() == type;
     }
     
     private Token get(int relativePosition) {

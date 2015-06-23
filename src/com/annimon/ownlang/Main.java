@@ -1,6 +1,5 @@
 package com.annimon.ownlang;
 
-import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.Token;
@@ -16,7 +15,7 @@ import java.util.List;
 public final class Main {
 
     public static void main(String[] args) throws IOException {
-        final String input = new String( Files.readAllBytes(Paths.get("program.txt")), "UTF-8");
+        final String input = new String( Files.readAllBytes(Paths.get("program.own")), "UTF-8");
         final List<Token> tokens = new Lexer(input).tokenize();
         for (Token token : tokens) {
             System.out.println(token);

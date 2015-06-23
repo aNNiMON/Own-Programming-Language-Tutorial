@@ -80,11 +80,18 @@ public final class Parser {
     
     private Statement assignmentStatement() {
         // WORD EQ
-        final Token current = get(0);
-        if (match(TokenType.WORD) && lookMatch(0, TokenType.EQ)) {
-            final String variable = current.getText();
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.EQ)) {
+            final String variable = consume(TokenType.WORD).getText();
             consume(TokenType.EQ);
             return new AssignmentStatement(variable, expression());
+        }
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
+            final String variable = consume(TokenType.WORD).getText();
+            consume(TokenType.LBRACKET);
+            final Expression index = expression();
+            consume(TokenType.RBRACKET);
+            consume(TokenType.EQ);
+            return new ArrayAssignmentStatement(variable, index, expression());
         }
         throw new RuntimeException("Unknown statement");
     }
@@ -145,6 +152,24 @@ public final class Parser {
             match(TokenType.COMMA);
         }
         return function;
+    }
+    
+    private Expression array() {
+        consume(TokenType.LBRACKET);
+        final List<Expression> elements = new ArrayList<>();
+        while (!match(TokenType.RBRACKET)) {
+            elements.add(expression());
+            match(TokenType.COMMA);
+        }
+        return new ArrayExpression(elements);
+    }
+    
+    private Expression element() {
+        final String variable = consume(TokenType.WORD).getText();
+        consume(TokenType.LBRACKET);
+        final Expression index = expression();
+        consume(TokenType.RBRACKET);
+        return new ArrayAccessExpression(variable, index);
     }
     
     private Expression expression() {
@@ -274,6 +299,12 @@ public final class Parser {
         }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return function();
+        }
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
+            return element();
+        }
+        if (lookMatch(0, TokenType.LBRACKET)) {
+            return array();
         }
         if (match(TokenType.WORD)) {
             return new VariableExpression(current.getText());

@@ -43,6 +43,8 @@ public enum TokenType {
     
     LPAREN, // (
     RPAREN, // )
+    LBRACKET, // [
+    RBRACKET, // ]
     LBRACE, // {
     RBRACE, // }
     COMMA, // ,

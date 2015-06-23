@@ -31,6 +31,9 @@ public final class Functions {
             }
             return NumberValue.ZERO;
         });
+        functions.put("newarray", args -> {
+            return new ArrayValue(args);
+        });
     }
     
     public static boolean isExists(String key) {

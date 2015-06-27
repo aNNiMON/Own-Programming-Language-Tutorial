@@ -54,7 +54,10 @@ arr = [1, "text", sum(10, 15), [], ["text", [90, [7 + 6, [50]]]]]
 print arr + "\n"
 arr[0] = arr[0] + 1000 + arr[2]
 print arr + "\n"
-arr4 = arr[4]
-print arr4 + "\n"
-arr41 = arr4[1]
-print arr41 + "\n"
+print arr[4][1] + "\n"
+arr[4][1] = "text"
+print arr[4][1] + "\n"
+
+print "\n\n"
+array = newarray(2, 2, 2, 2)
+print array

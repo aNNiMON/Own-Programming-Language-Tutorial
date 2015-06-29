@@ -11,8 +11,8 @@ import com.annimon.ownlang.lib.Value;
  */
 public final class BinaryExpression implements Expression {
     
-    private final Expression expr1, expr2;
-    private final char operation;
+    public final Expression expr1, expr2;
+    public final char operation;
 
     public BinaryExpression(char operation, Expression expr1, Expression expr2) {
         this.operation = operation;
@@ -51,6 +51,11 @@ public final class BinaryExpression implements Expression {
             default:
                 return new NumberValue(number1 + number2);
         }
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

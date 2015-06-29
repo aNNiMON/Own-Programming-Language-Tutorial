@@ -9,14 +9,14 @@ import com.annimon.ownlang.lib.Value;
  */
 public final class UnaryExpression implements Expression {
     
-    private final Expression expr1;
-    private final char operation;
+    public final Expression expr1;
+    public final char operation;
 
     public UnaryExpression(char operation, Expression expr1) {
         this.operation = operation;
         this.expr1 = expr1;
     }
-
+    
     @Override
     public Value eval() {
         switch (operation) {
@@ -25,6 +25,11 @@ public final class UnaryExpression implements Expression {
             default:
                 return expr1.eval();
         }
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
     
     @Override

@@ -6,8 +6,8 @@ package com.annimon.ownlang.parser.ast;
  */
 public final class DoWhileStatement implements Statement {
     
-    private final Expression condition;
-    private final Statement statement;
+    public final Expression condition;
+    public final Statement statement;
 
     public DoWhileStatement(Expression condition, Statement statement) {
         this.condition = condition;
@@ -26,6 +26,11 @@ public final class DoWhileStatement implements Statement {
             }
         }
         while (condition.eval().asNumber() != 0);
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

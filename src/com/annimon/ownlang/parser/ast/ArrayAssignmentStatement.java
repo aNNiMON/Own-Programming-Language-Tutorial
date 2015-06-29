@@ -6,8 +6,8 @@ package com.annimon.ownlang.parser.ast;
  */
 public final class ArrayAssignmentStatement implements Statement {
     
-    private final ArrayAccessExpression array;
-    private final Expression expression;
+    public final ArrayAccessExpression array;
+    public final Expression expression;
 
     public ArrayAssignmentStatement(ArrayAccessExpression array, Expression expression) {
         this.array = array;
@@ -17,6 +17,11 @@ public final class ArrayAssignmentStatement implements Statement {
     @Override
     public void execute() {
         array.getArray().set(array.lastIndex(), expression.eval());
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

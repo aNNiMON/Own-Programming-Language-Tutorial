@@ -10,6 +10,11 @@ public final class ContinueStatement extends RuntimeException implements Stateme
     public void execute() {
         throw this;
     }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 
     @Override
     public String toString() {

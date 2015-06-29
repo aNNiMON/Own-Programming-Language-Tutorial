@@ -6,8 +6,8 @@ package com.annimon.ownlang.parser.ast;
  */
 public final class IfStatement implements Statement {
     
-    private final Expression expression;
-    private final Statement ifStatement, elseStatement;
+    public final Expression expression;
+    public final Statement ifStatement, elseStatement;
 
     public IfStatement(Expression expression, Statement ifStatement, Statement elseStatement) {
         this.expression = expression;
@@ -23,6 +23,11 @@ public final class IfStatement implements Statement {
         } else if (elseStatement != null) {
             elseStatement.execute();
         }
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

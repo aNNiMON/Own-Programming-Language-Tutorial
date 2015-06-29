@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.Value;
  *
  * @author aNNiMON
  */
-public interface Expression {
+public interface Expression extends Node {
     
     Value eval();
 }

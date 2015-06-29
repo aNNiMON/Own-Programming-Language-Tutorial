@@ -14,8 +14,8 @@ import java.util.List;
  */
 public final class FunctionalExpression implements Expression {
     
-    private final String name;
-    private final List<Expression> arguments;
+    public final String name;
+    public final List<Expression> arguments;
     
     public FunctionalExpression(String name) {
         this.name = name;
@@ -30,7 +30,7 @@ public final class FunctionalExpression implements Expression {
     public void addArgument(Expression arg) {
         arguments.add(arg);
     }
-
+    
     @Override
     public Value eval() {
         final int size = arguments.size();
@@ -53,6 +53,11 @@ public final class FunctionalExpression implements Expression {
             return result;
         }
         return function.execute(values);
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

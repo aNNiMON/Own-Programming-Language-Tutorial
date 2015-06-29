@@ -10,7 +10,7 @@ import java.util.List;
  */
 public final class ArrayExpression implements Expression {
     
-    private final List<Expression> elements;
+    public final List<Expression> elements;
 
     public ArrayExpression(List<Expression> arguments) {
         this.elements = arguments;
@@ -24,6 +24,11 @@ public final class ArrayExpression implements Expression {
             array.set(i, elements.get(i).eval());
         }
         return array;
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

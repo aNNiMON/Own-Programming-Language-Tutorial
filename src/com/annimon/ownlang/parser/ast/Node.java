@@ -4,7 +4,7 @@ package com.annimon.ownlang.parser.ast;
  *
  * @author aNNiMON
  */
-public interface Statement extends Node {
+public interface Node {
     
-    void execute();
+    void accept(Visitor visitor);
 }

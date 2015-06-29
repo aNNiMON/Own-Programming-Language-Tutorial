@@ -11,8 +11,8 @@ import java.util.List;
  */
 public final class ArrayAccessExpression implements Expression {
     
-    private final String variable;
-    private final List<Expression> indices;
+    public final String variable;
+    public final List<Expression> indices;
 
     public ArrayAccessExpression(String variable, List<Expression> indices) {
         this.variable = variable;
@@ -47,6 +47,11 @@ public final class ArrayAccessExpression implements Expression {
         } else {
             throw new RuntimeException("Array expected");
         }
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

@@ -6,8 +6,8 @@ package com.annimon.ownlang.parser.ast;
  */
 public final class WhileStatement implements Statement {
     
-    private final Expression condition;
-    private final Statement statement;
+    public final Expression condition;
+    public final Statement statement;
 
     public WhileStatement(Expression condition, Statement statement) {
         this.condition = condition;
@@ -25,6 +25,11 @@ public final class WhileStatement implements Statement {
                 // continue;
             }
         }
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

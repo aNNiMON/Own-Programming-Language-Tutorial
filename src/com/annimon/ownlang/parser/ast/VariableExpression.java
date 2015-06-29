@@ -9,7 +9,7 @@ import com.annimon.ownlang.lib.Variables;
  */
 public final class VariableExpression implements Expression {
     
-    private final String name;
+    public final String name;
     
     public VariableExpression(String name) {
         this.name = name;
@@ -19,6 +19,11 @@ public final class VariableExpression implements Expression {
     public Value eval() {
         if (!Variables.isExists(name)) throw new RuntimeException("Variable does not exists");
         return Variables.get(name);
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

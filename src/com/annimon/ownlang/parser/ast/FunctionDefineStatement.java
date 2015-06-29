@@ -10,9 +10,9 @@ import java.util.List;
  */
 public final class FunctionDefineStatement implements Statement {
     
-    private final String name;
-    private final List<String> argNames;
-    private final Statement body;
+    public final String name;
+    public final List<String> argNames;
+    public final Statement body;
     
     public FunctionDefineStatement(String name, List<String> argNames, Statement body) {
         this.name = name;
@@ -23,6 +23,11 @@ public final class FunctionDefineStatement implements Statement {
     @Override
     public void execute() {
         Functions.set(name, new UserDefinedFunction(argNames, body));
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

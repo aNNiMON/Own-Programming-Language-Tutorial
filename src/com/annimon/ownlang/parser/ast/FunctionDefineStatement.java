@@ -32,6 +32,6 @@ public final class FunctionDefineStatement implements Statement {
 
     @Override
     public String toString() {
-        return "def (" + argNames.toString() + ") " + body.toString();
+        return String.format("def %s(%s) %s", name, argNames, body);
     }
 }

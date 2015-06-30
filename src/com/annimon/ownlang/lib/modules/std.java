@@ -70,6 +70,8 @@ public final class std implements Module {
 
         @Override
         public Value execute(Value... args) {
+            if (args.length == 0) return new NumberValue(RND.nextDouble());
+            
             int from = 0;
             int to = 100;
             if (args.length == 1) {

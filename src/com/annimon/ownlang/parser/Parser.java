@@ -122,11 +122,13 @@ public final class Parser {
     }
     
     private Statement forStatement() {
+        match(TokenType.LPAREN); // необязательные скобки
         final Statement initialization = assignmentStatement();
         consume(TokenType.COMMA);
         final Expression termination = expression();
         consume(TokenType.COMMA);
         final Statement increment = assignmentStatement();
+        match(TokenType.RPAREN);
         final Statement statement = statementOrBlock();
         return new ForStatement(initialization, termination, increment, statement);
     }

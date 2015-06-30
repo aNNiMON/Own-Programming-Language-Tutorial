@@ -1,8 +1,8 @@
 package com.annimon.ownlang.lib;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -15,15 +15,13 @@ public final class Variables {
     
     static {
         stack = new Stack<>();
-        variables = new HashMap<>();
-        variables.put("PI", new NumberValue(Math.PI));
-        variables.put("ПИ", new NumberValue(Math.PI));
-        variables.put("E", new NumberValue(Math.E));
-        variables.put("GOLDEN_RATIO", new NumberValue(1.618));
+        variables = new ConcurrentHashMap<>();
+        variables.put("true", NumberValue.ONE);
+        variables.put("false", NumberValue.ZERO);
     }
     
     public static void push() {
-        stack.push(new HashMap<>(variables));
+        stack.push(new ConcurrentHashMap<>(variables));
     }
     
     public static void pop() {

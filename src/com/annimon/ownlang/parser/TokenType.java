@@ -24,23 +24,30 @@ public enum TokenType {
     RETURN,
     USE,
     
-    PLUS,
-    MINUS,
-    STAR,
-    SLASH,
-    EQ,
-    EQEQ,
-    EXCL,
-    EXCLEQ,
-    LT,
-    LTEQ,
-    GT,
-    GTEQ,
+    PLUS, // +
+    MINUS, // -
+    STAR, // *
+    SLASH, // /
+    PERCENT,// %
+    EQ, // =
+    EQEQ, // ==
+    EXCL, // !
+    EXCLEQ, // !=
+    LTEQ, // <=
+    LT, // <
+    GT, // >
+    GTEQ, // >=
     
-    BAR,
-    BARBAR,
-    AMP,
-    AMPAMP,
+    LTLT, // <<
+    GTGT, // >>
+    GTGTGT, // >>>
+    
+    TILDE, // ~
+    CARET, // ^
+    BAR, // |
+    BARBAR, // ||
+    AMP, // &
+    AMPAMP, // &&
     
     LPAREN, // (
     RPAREN, // )

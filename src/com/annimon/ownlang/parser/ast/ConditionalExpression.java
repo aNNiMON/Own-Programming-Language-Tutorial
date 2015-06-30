@@ -11,11 +11,6 @@ import com.annimon.ownlang.lib.Value;
 public final class ConditionalExpression implements Expression {
     
     public static enum Operator {
-        PLUS("+"),
-        MINUS("-"),
-        MULTIPLY("*"),
-        DIVIDE("/"),
-        
         EQUALS("=="),
         NOT_EQUALS("!="),
         
@@ -63,18 +58,19 @@ public final class ConditionalExpression implements Expression {
         
         boolean result;
         switch (operation) {
+            case EQUALS: result = number1 == number2; break;
+            case NOT_EQUALS: result = number1 != number2; break;
+            
             case LT: result = number1 < number2; break;
             case LTEQ: result = number1 <= number2; break;
             case GT: result = number1 > number2; break;
             case GTEQ: result = number1 >= number2; break;
-            case NOT_EQUALS: result = number1 != number2; break;
             
             case AND: result = (number1 != 0) && (number2 != 0); break;
             case OR: result = (number1 != 0) || (number2 != 0); break;
             
-            case EQUALS: 
             default:
-                result = number1 == number2; break;
+                throw new RuntimeException("Operation " + operation + " is not supported");
         }
         return new NumberValue(result);
     }

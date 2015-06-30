@@ -22,6 +22,7 @@ public enum TokenType {
     CONTINUE,
     DEF,
     RETURN,
+    USE,
     
     PLUS,
     MINUS,

@@ -129,4 +129,8 @@ public abstract class AbstractVisitor implements Visitor {
         st.statement.accept(this);
     }
 
+    @Override
+    public void visit(UseStatement st) {
+        st.expression.accept(this);
+    }
 }

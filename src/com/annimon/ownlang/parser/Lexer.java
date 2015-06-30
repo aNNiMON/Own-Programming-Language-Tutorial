@@ -59,12 +59,14 @@ public final class Lexer {
     private final List<Token> tokens;
     
     private int pos;
+    private int row, col;
 
     public Lexer(String input) {
         this.input = input;
         length = input.length();
         
         tokens = new ArrayList<>();
+        row = col = 1;
     }
     
     public List<Token> tokenize() {
@@ -92,7 +94,7 @@ public final class Lexer {
         char current = peek(0);
         while (true) {
             if (current == '.') {
-                if (buffer.indexOf(".") != -1) throw new RuntimeException("Invalid float number");
+                if (buffer.indexOf(".") != -1) throw error("Invalid float number");
             } else if (!Character.isDigit(current)) {
                 break;
             }
@@ -178,6 +180,7 @@ public final class Lexer {
         final StringBuilder buffer = new StringBuilder();
         char current = peek(0);
         while (true) {
+            if (current == '\0') throw error("Reached end of file while parsing text string.");
             if (current == '\\') {
                 current = next();
                 switch (current) {
@@ -207,7 +210,7 @@ public final class Lexer {
     private void tokenizeMultilineComment() {
         char current = peek(0);
         while (true) {
-            if (current == '\0') throw new RuntimeException("Missing close tag");
+            if (current == '\0') throw error("Reached end of file while parsing multiline comment");
             if (current == '*' && peek(1) == '/') break;
             current = next();
         }
@@ -217,7 +220,12 @@ public final class Lexer {
     
     private char next() {
         pos++;
-        return peek(0);
+        final char result = peek(0);
+        if (result == '\n') {
+            row++;
+            col = 1;
+        } else col++;
+        return result;
     }
     
     private char peek(int relativePosition) {
@@ -231,6 +239,10 @@ public final class Lexer {
     }
     
     private void addToken(TokenType type, String text) {
-        tokens.add(new Token(type, text));
+        tokens.add(new Token(type, text, row, col));
+    }
+    
+    private LexerException error(String text) {
+        return new LexerException(row, col, text);
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public final class Parser {
     
-    private static final Token EOF = new Token(TokenType.EOF, "");
+    private static final Token EOF = new Token(TokenType.EOF, "", -1, -1);
 
     private final List<Token> tokens;
     private final int size;
@@ -82,7 +82,6 @@ public final class Parser {
     }
     
     private Statement assignmentStatement() {
-        // WORD EQ
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.EQ)) {
             final String variable = consume(TokenType.WORD).getText();
             consume(TokenType.EQ);
@@ -93,7 +92,7 @@ public final class Parser {
             consume(TokenType.EQ);
             return new ArrayAssignmentStatement(array, expression());
         }
-        throw new RuntimeException("Unknown statement");
+        throw new ParseException("Unknown statement: " + get(0));
     }
     
     private Statement ifElse() {
@@ -128,7 +127,7 @@ public final class Parser {
         final Expression termination = expression();
         consume(TokenType.COMMA);
         final Statement increment = assignmentStatement();
-        match(TokenType.RPAREN);
+        match(TokenType.RPAREN); // необязательные скобки
         final Statement statement = statementOrBlock();
         return new ForStatement(initialization, termination, increment, statement);
     }
@@ -409,12 +408,12 @@ public final class Parser {
             match(TokenType.RPAREN);
             return result;
         }
-        throw new RuntimeException("Unknown expression");
+        throw new ParseException("Unknown expression: " + current);
     }
     
     private Token consume(TokenType type) {
         final Token current = get(0);
-        if (type != current.getType()) throw new RuntimeException("Token " + current + " doesn't match " + type);
+        if (type != current.getType()) throw new ParseException("Token " + current + " doesn't match " + type);
         pos++;
         return current;
     }

@@ -176,7 +176,20 @@ public final class Parser {
     }
     
     private Expression expression() {
-        return logicalOr();
+        return ternary();
+    }
+    
+    private Expression ternary() {
+        Expression result = logicalOr();
+        
+        if (match(TokenType.QUESTION)) {
+            final Expression trueExpr = expression();
+            consume(TokenType.COLON);
+            final Expression falseExpr = expression();
+            return new TernaryExpression(result, trueExpr, falseExpr);
+        }
+        
+        return result;
     }
     
     private Expression logicalOr() {

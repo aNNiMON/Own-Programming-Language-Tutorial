@@ -111,6 +111,13 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
+    public void visit(TernaryExpression s) {
+        s.condition.accept(this);
+        s.trueExpr.accept(this);
+        s.falseExpr.accept(this);
+    }
+    
+    @Override
     public void visit(UnaryExpression s) {
         s.expr1.accept(this);
     }

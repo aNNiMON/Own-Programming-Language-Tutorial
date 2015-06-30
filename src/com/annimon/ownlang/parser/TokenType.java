@@ -49,6 +49,9 @@ public enum TokenType {
     AMP, // &
     AMPAMP, // &&
     
+    QUESTION, // ?
+    COLON, // :
+    
     LPAREN, // (
     RPAREN, // )
     LBRACKET, // [

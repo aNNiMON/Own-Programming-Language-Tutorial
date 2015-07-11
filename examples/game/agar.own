@@ -1,0 +1,76 @@
+use "canvas"
+use "math"
+use "std"
+
+w = 800  h = 600
+w2 = w/2 h2 = h/2
+window("agar.io own clone", w, h)
+
+// поле
+fieldWidth = 5000
+fieldHeight = 3000
+fieldX = rand(fieldWidth) - w2
+fieldY = rand(fieldHeight) - h2
+
+// еда
+NUM_FOOD = 350
+food = newarray(4, NUM_FOOD)
+
+for i = 0, i < NUM_FOOD, i = i + 1 {
+    food[0][i] = rand(fieldWidth)
+    food[1][i] = rand(fieldHeight)
+    food[2][i] = 6 + rand(2)
+    food[3][i] = rand(#ffffff)
+}
+
+// игрок
+playerSize = 8
+playerColor = rand(#ffffff)
+
+run = 1
+while run {
+    mouse = mousehover()
+    angle = atan2(mouse[1] - h2, mouse[0] - w2)
+    fieldX = fieldX + cos(angle) * 50/playerSize
+    fieldY = fieldY + sin(angle) * 50/playerSize
+    if (fieldX < -w2) fieldX = -w2
+    else if (fieldX > fieldWidth - w2 - 1) fieldX = fieldWidth - w2 - 1
+    if (fieldY < -h2) fieldY = -h2
+    else if (fieldY > fieldHeight - h2 - 1) fieldY = fieldHeight - h2 - 1
+
+    // очистка экрана
+    color(#ffffff)
+    frect(0, 0, w, h)
+    // граница
+    color(#333333)
+    rect(-fieldX, -fieldY, fieldWidth, fieldHeight)
+    
+    for i = 0, i < NUM_FOOD, i = i + 1 {
+        dx = food[0][i] - fieldX - w2
+        dy = food[1][i] - fieldY - h2
+        rad = food[2][i] + playerSize
+        if ( (dx*dx + dy*dy) < (rad*rad) ) {
+            // есть столкновение
+            playerSize = playerSize + 1
+            food[0][i] = rand(w)
+            food[1][i] = rand(h)
+            food[2][i] = 6 + rand(2)
+            food[3][i] = rand(#ffffff)
+        }
+        // отрисовка еды
+        color(food[3][i])
+        circle(food[0][i] - fieldX, food[1][i] - fieldY, food[2][i])
+    }
+    
+    // отрисовка игрока
+    color(playerColor)
+    circle(w2, h2, playerSize)
+    color(0)
+    drawstring(playerSize, w2-10, h2+4)
+    
+    repaint()
+    sleep(20)
+}
+
+
+def circle(cx, cy, rad) foval(cx-rad, cy-rad, 2*rad, 2*rad)

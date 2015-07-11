@@ -1,3 +1,5 @@
+use "math"
+use "std"
 word = 2 + 2
 word2 = PI + word
 str = "a" * 5 + "ba" * 7 + "\n"

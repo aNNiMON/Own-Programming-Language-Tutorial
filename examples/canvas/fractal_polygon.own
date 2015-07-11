@@ -1,0 +1,46 @@
+use "canvas"
+use "math"
+use "std"
+
+msg = ""
+NUM_POINTS = 0
+while (NUM_POINTS <= 2 || NUM_POINTS > 25) {
+  NUM_POINTS = 0 + prompt("Сколькиугольник? (3..25)" + msg)
+  if (NUM_POINTS <= 2) msg = "!! Сказано же, ну!"
+  else if (NUM_POINTS > 25) msg = " Чувак, " + NUM_POINTS + " это будет ООООЧЕНЬ долго!"
+}
+angle = 2*PI / NUM_POINTS;
+DIVIDER = 2.8
+
+
+w = 800 h = 600
+window("Fractal polygon demo", w, h)
+fractal(w/2, h/2, w/2)
+repaint()
+
+def cpoly(cx, cy, size) {
+  ox = cx  oy = cy - size
+  i = 0
+  ang = 0
+  while i < NUM_POINTS {
+    ang = ang + angle
+    nx = cx - sin(ang)*size  ny = cy - cos(ang)*size
+    line(ox, oy, nx, ny)
+    ox = nx  oy = ny
+    i = i + 1
+  }
+}
+
+def fractal(cx, cy, size) {
+  if size >= 3 {
+    s2 = size / 2
+    color(0, 0, 255 - size * 255 / w/2)
+    cpoly(cx, cy, size / DIVIDER)
+    fractal(cx, cy - s2, size / DIVIDER)
+    n = 0
+    while n < NUM_POINTS {
+      fractal(cx - sin(angle*n)*s2, cy - cos(angle*n)*s2, size / DIVIDER)
+      n = n + 1
+    }
+  }
+}

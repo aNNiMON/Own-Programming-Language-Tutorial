@@ -1,0 +1,24 @@
+use "canvas"
+
+w = 800 h = 600
+window("Fractal rectangle demo", w, h)
+fractal(w/2, h/2, w/2)
+repaint()
+
+def rect(x, y, w, h) {
+  line(x, y, x + w, y)
+  line(x + w, y, x + w, y + h)
+  line(x, y + h, x + w, y + h)
+  line(x, y, x, y + h)
+}
+
+def fractal(cx, cy, size) {
+  if size >= 2 {
+    color(0, 0, 255 - size * 255 / w/2)
+    rect(cx-size/2, cy-size/2, size, size)
+    fractal(cx-size/2, cy-size/2, size / 2)
+    fractal(cx+size/2, cy-size/2, size / 2)
+    fractal(cx-size/2, cy+size/2, size / 2)
+    fractal(cx+size/2, cy+size/2, size / 2)
+  }
+}

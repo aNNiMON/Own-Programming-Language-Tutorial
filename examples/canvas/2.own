@@ -1,0 +1,17 @@
+use "std"
+use "canvas"
+
+w = 800   h = 600
+window("canvas example 2", w, h);
+color(#ffffff)
+frect(0, 0, w, h)
+
+step = rand(20)
+color(#0000ff)
+for y = 0, y < h, y = y + step {
+    line(0, y, w, y)
+}
+for x = 0, x < w, x = x + step {
+    line(x, 0, x, h)
+}
+repaint();

@@ -1,0 +1,14 @@
+use "canvas"
+
+w = 800   h = 600
+window("canvas example", w, h);
+
+// Очистка экрана белым цветом
+color(#ffffff)
+frect(0, 0, w, h)
+
+// Рисуем две линии красным цветом
+color(#ff0000)
+line(0, 0, w, h)
+line(w, 0, 0, h)
+repaint()

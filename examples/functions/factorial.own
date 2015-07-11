@@ -1,0 +1,35 @@
+// Вычисляем факториал
+def factorial(n) {
+    if n == 1 return 1
+    return n * factorial(n-1)
+}
+
+print factorial(6)
+print "\n"
+
+// 0 1 1 2 3 5 8 13 21 34
+def fibonacci(count) {
+    def fib(n) {
+        if n < 2 return n
+        return fib(n-2) + fib(n-1)
+    }
+    
+    return fib(count)
+}
+
+for i = 0, i < 10, i = i + 1 
+    print "  " + fibonacci(i)
+print "\n"
+
+
+// Вычисляем факториал с помощью хвостовой рекурсии
+def factorial_tailrec(n) {
+    def fact(acc, n) {
+        if n == 0 return acc
+        return fact(acc * n, n - 1)
+    }
+    return fact(1, n-1)
+}
+
+print factorial_tailrec(6)
+print "\n"

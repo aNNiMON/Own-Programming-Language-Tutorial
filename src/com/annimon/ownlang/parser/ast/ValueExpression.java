@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Value;
@@ -18,6 +20,10 @@ public final class ValueExpression implements Expression {
     
     public ValueExpression(String value) {
         this.value = new StringValue(value);
+    }
+    
+    public ValueExpression(Function value) {
+        this.value = new FunctionValue(value);
     }
 
     @Override

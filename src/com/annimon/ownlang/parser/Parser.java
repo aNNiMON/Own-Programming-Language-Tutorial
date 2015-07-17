@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -402,6 +403,16 @@ public final class Parser {
         }
         if (match(TokenType.TEXT)) {
             return new ValueExpression(current.getText());
+        }
+        if (match(TokenType.DEF)) {
+            consume(TokenType.LPAREN);
+            final List<String> argNames = new ArrayList<>();
+            while (!match(TokenType.RPAREN)) {
+                argNames.add(consume(TokenType.WORD).getText());
+                match(TokenType.COMMA);
+            }
+            final Statement body = statementOrBlock();
+            return new ValueExpression(new UserDefinedFunction(argNames, body));
         }
         if (match(TokenType.LPAREN)) {
             Expression result = expression();

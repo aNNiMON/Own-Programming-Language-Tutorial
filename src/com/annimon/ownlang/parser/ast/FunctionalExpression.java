@@ -1,7 +1,9 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Functions;
+import static com.annimon.ownlang.lib.Functions.isExists;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
@@ -39,7 +41,7 @@ public final class FunctionalExpression implements Expression {
             values[i] = arguments.get(i).eval();
         }
         
-        final Function function = Functions.get(name);
+        final Function function = getFunction(name);
         if (function instanceof UserDefinedFunction) {
             final UserDefinedFunction userFunction = (UserDefinedFunction) function;
             if (size != userFunction.getArgsCount()) throw new RuntimeException("Args count mismatch");
@@ -53,6 +55,15 @@ public final class FunctionalExpression implements Expression {
             return result;
         }
         return function.execute(values);
+    }
+    
+    private Function getFunction(String key) {
+        if (Functions.isExists(key)) return Functions.get(key);
+        if (Variables.isExists(key)) {
+            final Value value = Variables.get(key);
+            if (value instanceof FunctionValue) return ((FunctionValue)value).getValue();
+        }
+        throw new RuntimeException("Unknown function " + key);
     }
     
     @Override

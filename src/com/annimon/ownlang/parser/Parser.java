@@ -141,6 +141,10 @@ public final class Parser {
             argNames.add(consume(TokenType.WORD).getText());
             match(TokenType.COMMA);
         }
+        if (lookMatch(0, TokenType.EQ)) {
+            match(TokenType.EQ);
+            return new FunctionDefineStatement(name, argNames, new ReturnStatement(expression()));
+        }
         final Statement body = statementOrBlock();
         return new FunctionDefineStatement(name, argNames, body);
     }
@@ -411,8 +415,14 @@ public final class Parser {
                 argNames.add(consume(TokenType.WORD).getText());
                 match(TokenType.COMMA);
             }
-            final Statement body = statementOrBlock();
-            return new ValueExpression(new UserDefinedFunction(argNames, body));
+            Statement statement;
+            if (lookMatch(0, TokenType.EQ)) {
+                match(TokenType.EQ);
+                statement = new ReturnStatement(expression());
+            } else {
+                statement = statementOrBlock();
+            }
+            return new ValueExpression(new UserDefinedFunction(argNames, statement));
         }
         if (match(TokenType.LPAREN)) {
             Expression result = expression();

@@ -64,18 +64,18 @@ print "\n\n"
 array = newarray(2, 2, 2, 2)
 print array
 
-add = def(a,b) return a+b
-sub = def(a,b) return a-b
-mul = def(a,b) return a*b
-div = def(a,b) return a/b
-cube = def(x) return x*mul(x, x)
+add = def(a,b) = a+b
+sub = def(a,b) = a-b
+mul = def(a,b) = a*b
+div = def(a,b) = a/b
+cube = def(x) = x*mul(x, x)
 print "\n\n"
 print mul(8, 5)
 print "\n"
 print cube(2)
 
 functions = [add, sub, mul, div]
-def function(f, a, b) return f(a, b)
+def function(f, a, b) = f(a, b)
 for i = 0, i < 4, i = i + 1 {
     print "\n"
     print functions[i]

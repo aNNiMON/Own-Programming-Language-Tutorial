@@ -40,21 +40,7 @@ public final class FunctionalExpression implements Expression {
         for (int i = 0; i < size; i++) {
             values[i] = arguments.get(i).eval();
         }
-        
-        final Function function = getFunction(name);
-        if (function instanceof UserDefinedFunction) {
-            final UserDefinedFunction userFunction = (UserDefinedFunction) function;
-            if (size != userFunction.getArgsCount()) throw new RuntimeException("Args count mismatch");
-            
-            Variables.push();
-            for (int i = 0; i < size; i++) {
-                Variables.set(userFunction.getArgsName(i), values[i]);
-            }
-            final Value result = userFunction.execute(values);
-            Variables.pop();
-            return result;
-        }
-        return function.execute(values);
+        return getFunction(name).execute(values);
     }
     
     private Function getFunction(String key) {

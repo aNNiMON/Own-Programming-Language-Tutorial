@@ -28,12 +28,21 @@ public final class UserDefinedFunction implements Function {
     }
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value... values) {
+        final int size = values.length;
+        if (size != getArgsCount()) throw new RuntimeException("Args count mismatch");
+
         try {
+            Variables.push();
+            for (int i = 0; i < size; i++) {
+                Variables.set(getArgsName(i), values[i]);
+            }
             body.execute();
             return NumberValue.ZERO;
         } catch (ReturnStatement rt) {
             return rt.getResult();
+        } finally {
+            Variables.pop();
         }
     }
 

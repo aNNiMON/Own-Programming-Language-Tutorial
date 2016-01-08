@@ -54,7 +54,7 @@ public final class ArrayAccessExpression implements Expression {
         }
     }
     
-    private MapValue consumeMap(Value value) {
+    public MapValue consumeMap(Value value) {
         if (value instanceof MapValue) {
             return (MapValue) value;
         } else {

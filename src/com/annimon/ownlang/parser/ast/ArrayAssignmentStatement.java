@@ -1,5 +1,9 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.ArrayValue;
+import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.Variables;
+
 /**
  *
  * @author aNNiMON
@@ -16,7 +20,12 @@ public final class ArrayAssignmentStatement implements Statement {
     
     @Override
     public void execute() {
-        array.getArray().set(array.lastIndex(), expression.eval());
+        final Value container = Variables.get(array.variable);
+        if (container instanceof ArrayValue) {
+            array.getArray().set(array.lastIndex(), expression.eval());
+            return;
+        }
+        array.consumeMap(container).set(array.indices.get(0).eval(), expression.eval());
     }
     
     @Override

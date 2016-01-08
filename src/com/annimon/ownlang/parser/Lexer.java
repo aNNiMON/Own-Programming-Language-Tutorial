@@ -44,7 +44,7 @@ public final class Lexer {
         OPERATORS.put("!=", TokenType.EXCLEQ);
         OPERATORS.put("<=", TokenType.LTEQ);
         OPERATORS.put(">=", TokenType.GTEQ);
-        
+
         OPERATORS.put("&&", TokenType.AMPAMP);
         OPERATORS.put("||", TokenType.BARBAR);
         
@@ -73,7 +73,7 @@ public final class Lexer {
         while (pos < length) {
             final char current = peek(0);
             if (Character.isDigit(current)) tokenizeNumber();
-            else if (Character.isLetter(current)) tokenizeWord();
+            else if (Character.isJavaIdentifierStart(current)) tokenizeWord();
             else if (current == '"') tokenizeText();
             else if (current == '#') {
                 next();

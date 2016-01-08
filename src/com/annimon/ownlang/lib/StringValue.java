@@ -1,5 +1,7 @@
 package com.annimon.ownlang.lib;
 
+import java.util.Objects;
+
 /**
  *
  * @author aNNiMON
@@ -26,6 +28,23 @@ public final class StringValue implements Value {
         return value;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.value);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final StringValue other = (StringValue) obj;
+        return Objects.equals(this.value, other.value);
+    }
+    
     @Override
     public String toString() {
         return asString();

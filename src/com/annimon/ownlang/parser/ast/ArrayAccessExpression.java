@@ -1,6 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.ArrayValue;
+import com.annimon.ownlang.lib.MapValue;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import java.util.List;
@@ -21,7 +22,11 @@ public final class ArrayAccessExpression implements Expression {
     
     @Override
     public Value eval() {
-        return getArray().get(lastIndex());
+        Value container = Variables.get(variable);
+        if (container instanceof ArrayValue) {
+            return getArray().get(lastIndex());
+        }
+        return consumeMap(container).get(indices.get(0).eval());
     }
     
     public ArrayValue getArray() {
@@ -46,6 +51,14 @@ public final class ArrayAccessExpression implements Expression {
             return (ArrayValue) value;
         } else {
             throw new RuntimeException("Array expected");
+        }
+    }
+    
+    private MapValue consumeMap(Value value) {
+        if (value instanceof MapValue) {
+            return (MapValue) value;
+        } else {
+            throw new RuntimeException("Map expected");
         }
     }
     

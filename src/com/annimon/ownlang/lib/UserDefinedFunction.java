@@ -36,4 +36,9 @@ public final class UserDefinedFunction implements Function {
             return rt.getResult();
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("function %s %s", argNames.toString(), body.toString());
+    }
 }

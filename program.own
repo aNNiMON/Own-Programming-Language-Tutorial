@@ -82,3 +82,9 @@ for i = 0, i < 4, i = i + 1 {
     print "\n"
     print function(functions[i], 6, 3)
 }
+
+// map
+map = {"+" : add, "-" : sub. "*" : mul, "/" : div}
+//print map["+"]
+print "\n"
+print function(map["+"], 4, 5)

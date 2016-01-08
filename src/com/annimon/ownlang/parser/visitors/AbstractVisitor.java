@@ -99,6 +99,14 @@ public abstract class AbstractVisitor implements Visitor {
             s.elseStatement.accept(this);
         }
     }
+    
+    @Override
+    public void visit(MapExpression s) {
+        for (Expression key : s.elements.keySet()) {
+            key.accept(this);
+            s.elements.get(key).accept(this);
+        }
+    }
 
     @Override
     public void visit(PrintStatement s) {

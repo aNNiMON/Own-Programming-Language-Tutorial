@@ -3,7 +3,9 @@ package com.annimon.ownlang.parser;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -168,6 +170,19 @@ public final class Parser {
             match(TokenType.COMMA);
         }
         return new ArrayExpression(elements);
+    }
+    
+    private Expression map() {
+        consume(TokenType.LBRACE);
+        final Map<Expression, Expression> elements = new HashMap<>();
+        while (!match(TokenType.RBRACE)) {
+            final Expression key = primary();
+            consume(TokenType.COLON);
+            final Expression value = expression();
+            elements.put(key, value);
+            match(TokenType.COMMA);
+        }
+        return new MapExpression(elements);
     }
     
     private ArrayAccessExpression element() {
@@ -393,14 +408,17 @@ public final class Parser {
         if (match(TokenType.HEX_NUMBER)) {
             return new ValueExpression(Long.parseLong(current.getText(), 16));
         }
-        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
-            return function();
-        }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
             return element();
         }
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
+            return function();
+        }
         if (lookMatch(0, TokenType.LBRACKET)) {
             return array();
+        }
+        if (lookMatch(0, TokenType.LBRACE)) {
+            return map();
         }
         if (match(TokenType.WORD)) {
             return new VariableExpression(current.getText());

@@ -18,7 +18,7 @@ import java.util.List;
 public final class Main {
 
     public static void main(String[] args) throws IOException {
-        final String file = "examples/game/agar.own";
+        final String file = "program.own";
         final String input = new String( Files.readAllBytes(Paths.get(file)), "UTF-8");
         final List<Token> tokens = new Lexer(input).tokenize();
         for (int i = 0; i < tokens.size(); i++) {

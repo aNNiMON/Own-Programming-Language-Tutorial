@@ -1,6 +1,7 @@
 package com.annimon.ownlang.lib;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -8,14 +9,18 @@ import java.util.Objects;
  *
  * @author aNNiMON
  */
-public final class MapValue implements Value {
+public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     
     private final Map<Value, Value> map;
 
     public MapValue(int size) {
         this.map = new HashMap<>(size);
     }
-    
+
+    public MapValue(Map<Value, Value> map) {
+        this.map = map;
+    }
+
     public Value get(Value key) {
         return map.get(key);
     }
@@ -23,7 +28,7 @@ public final class MapValue implements Value {
     public void set(Value key, Value value) {
         map.put(key, value);
     }
-    
+
     @Override
     public double asNumber() {
         throw new RuntimeException("Cannot cast map to number");
@@ -32,6 +37,11 @@ public final class MapValue implements Value {
     @Override
     public String asString() {
         return map.toString();
+    }
+
+    @Override
+    public Iterator<Map.Entry<Value, Value>> iterator() {
+        return map.entrySet().iterator();
     }
 
     @Override
@@ -51,8 +61,6 @@ public final class MapValue implements Value {
         return Objects.equals(this.map, other.map);
     }
     
-    
-
     @Override
     public String toString() {
         return asString();

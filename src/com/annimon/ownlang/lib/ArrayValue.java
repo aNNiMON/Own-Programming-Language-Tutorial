@@ -1,12 +1,13 @@
 package com.annimon.ownlang.lib;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  *
  * @author aNNiMON
  */
-public final class ArrayValue implements Value {
+public final class ArrayValue implements Value, Iterable<Value> {
     
     private final Value[] elements;
 
@@ -42,6 +43,11 @@ public final class ArrayValue implements Value {
     }
 
     @Override
+    public Iterator<Value> iterator() {
+        return Arrays.asList(elements).iterator();
+    }
+
+    @Override
     public int hashCode() {
         int hash = 5;
         hash = 79 * hash + Arrays.deepHashCode(this.elements);
@@ -57,8 +63,6 @@ public final class ArrayValue implements Value {
         final ArrayValue other = (ArrayValue) obj;
         return Arrays.deepEquals(this.elements, other.elements);
     }
-    
-    
 
     @Override
     public String toString() {

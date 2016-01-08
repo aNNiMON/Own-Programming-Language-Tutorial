@@ -51,7 +51,8 @@ public enum TokenType {
     
     QUESTION, // ?
     COLON, // :
-    
+    COLONCOLON, // ::
+
     LPAREN, // (
     RPAREN, // )
     LBRACKET, // [

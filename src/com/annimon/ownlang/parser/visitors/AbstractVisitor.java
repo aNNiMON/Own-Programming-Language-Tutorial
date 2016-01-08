@@ -2,6 +2,8 @@ package com.annimon.ownlang.parser.visitors;
 
 import com.annimon.ownlang.parser.ast.*;
 
+import java.util.Map;
+
 /**
  *
  * @author aNNiMON
@@ -80,6 +82,10 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
+    public void visit(FunctionReferenceExpression e) {
+    }
+
+    @Override
     public void visit(FunctionStatement s) {
         s.function.accept(this);
     }
@@ -102,9 +108,9 @@ public abstract class AbstractVisitor implements Visitor {
     
     @Override
     public void visit(MapExpression s) {
-        for (Expression key : s.elements.keySet()) {
-            key.accept(this);
-            s.elements.get(key).accept(this);
+        for (Map.Entry<Expression, Expression> entry : s.elements.entrySet()) {
+            entry.getKey().accept(this);
+            entry.getValue().accept(this);
         }
     }
 

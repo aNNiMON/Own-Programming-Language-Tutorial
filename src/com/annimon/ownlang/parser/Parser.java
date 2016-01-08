@@ -426,6 +426,10 @@ public final class Parser {
         if (match(TokenType.TEXT)) {
             return new ValueExpression(current.getText());
         }
+        if (match(TokenType.COLONCOLON)) {
+            final String functionName = consume(TokenType.WORD).getText();
+            return new FunctionReferenceExpression(functionName);
+        }
         if (match(TokenType.DEF)) {
             consume(TokenType.LPAREN);
             final List<String> argNames = new ArrayList<>();

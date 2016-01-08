@@ -18,6 +18,7 @@ public interface Visitor {
     void visit(DoWhileStatement s);
     void visit(ForStatement s);
     void visit(FunctionDefineStatement s);
+    void visit(FunctionReferenceExpression e);
     void visit(FunctionStatement s);
     void visit(FunctionalExpression s);
     void visit(IfStatement s);

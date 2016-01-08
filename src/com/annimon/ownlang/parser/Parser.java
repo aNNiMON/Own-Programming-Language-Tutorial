@@ -356,6 +356,10 @@ public final class Parser {
                 result = new BinaryExpression(BinaryExpression.Operator.SUBTRACT, result, multiplicative());
                 continue;
             }
+            if (match(TokenType.COLONCOLON)) {
+                result = new BinaryExpression(BinaryExpression.Operator.PUSH, result, multiplicative());
+                continue;
+            }
             break;
         }
         

@@ -91,3 +91,10 @@ print function(map["+"], 4, 5)
 print "\n"
 foreach(map, def(op, func) = echo (4, op, 5, "=", func(4,5)))
 foreach(arr, ::echo)
+
+arr1 = [1,2,3]
+arr1 = arr1 :: 4
+arr2 = [5,6,7]
+print arr1
+print "\n"
+print arr1 << arr2

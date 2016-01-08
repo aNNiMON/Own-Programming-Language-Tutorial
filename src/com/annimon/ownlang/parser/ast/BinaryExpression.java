@@ -17,6 +17,7 @@ public final class BinaryExpression implements Expression {
         MULTIPLY("*"),
         DIVIDE("/"),
         REMAINDER("%"),
+        PUSH("::"),
         // Bitwise
         AND("&"),
         OR("|"),
@@ -50,23 +51,46 @@ public final class BinaryExpression implements Expression {
     public Value eval() {
         final Value value1 = expr1.eval();
         final Value value2 = expr2.eval();
-        if ( (value1 instanceof StringValue) || (value1 instanceof ArrayValue) ) {
-            final String string1 = value1.asString();
-            switch (operation) {
-                case MULTIPLY: {
-                    final int iterations = (int) value2.asNumber();
-                    final StringBuilder buffer = new StringBuilder();
-                    for (int i = 0; i < iterations; i++) {
-                        buffer.append(string1);
-                    }
-                    return new StringValue(buffer.toString());
-                }
-                case ADD:
-                default:
-                    return new StringValue(string1 + value2.asString());
-            }
-        }
         
+        if (value1 instanceof StringValue) {
+            return eval((StringValue) value1, value2);
+        }
+        if (value1 instanceof ArrayValue) {
+            return eval((ArrayValue) value1, value2);
+        }
+        return eval(value1, value2);
+    }
+    
+    private Value eval(StringValue value1, Value value2) {
+        final String string1 = value1.asString();
+        switch (operation) {
+            case MULTIPLY: {
+                final int iterations = (int) value2.asNumber();
+                final StringBuilder buffer = new StringBuilder();
+                for (int i = 0; i < iterations; i++) {
+                    buffer.append(string1);
+                }
+                return new StringValue(buffer.toString());
+            }
+            case ADD:
+            default:
+                return new StringValue(string1 + value2.asString());
+        }
+    }
+    
+    private Value eval(ArrayValue value1, Value value2) {
+        switch (operation) {
+            case LSHIFT:
+                if (!(value2 instanceof ArrayValue))
+                    throw new RuntimeException("Cannot merge non array value to array");
+                return ArrayValue.merge(value1, (ArrayValue) value2);
+            case PUSH: 
+            default:
+                return ArrayValue.add(value1, value2);
+        }
+    }
+    
+    private Value eval(Value value1, Value value2) {
         final double number1 = value1.asNumber();
         final double number2 = value2.asNumber();
         double result;

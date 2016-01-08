@@ -9,6 +9,24 @@ import java.util.Iterator;
  */
 public final class ArrayValue implements Value, Iterable<Value> {
     
+    public static ArrayValue add(ArrayValue array, Value value) {
+        final int last = array.elements.length;
+        final ArrayValue result = new ArrayValue(last + 1);
+        System.arraycopy(array.elements, 0, result.elements, 0, last);
+        result.elements[last] = value;
+        return result;
+    }
+    
+    public static ArrayValue merge(ArrayValue array1, ArrayValue array2) {
+        final int length1 = array1.elements.length;
+        final int length2 = array2.elements.length;
+        final int length = length1 + length2;
+        final ArrayValue result = new ArrayValue(length);
+        System.arraycopy(array1.elements, 0, result.elements, 0, length1);
+        System.arraycopy(array2.elements, 0, result.elements, length1, length2);
+        return result;
+    }
+    
     private final Value[] elements;
 
     public ArrayValue(int size) {

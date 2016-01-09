@@ -111,3 +111,19 @@ for (v : arr1 << arr2) print "" + v + ", "
 print "\n"
 for v : [1,2,3,4,5,6,7,8,9] print "" + v + ", "
 
+use "types"
+print "\n"
+print typeof(1)
+print "\n"
+print typeof("1")
+print "\n"
+print typeof(arr1)
+print "\n"
+print typeof({})
+print "\n"
+print typeof(add)
+
+print "\n"
+print typeof(number("1"))
+print "\n"
+print typeof(string(1))

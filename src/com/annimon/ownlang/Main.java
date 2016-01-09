@@ -31,7 +31,7 @@ public final class Main {
         final Statement program = new Parser(tokens).parse();
         System.out.println(program.toString());
         program.accept(new FunctionAdder());
-        program.accept(new VariablePrinter());
+//        program.accept(new VariablePrinter());
         program.accept(new AssignValidator());
         program.execute();
     }

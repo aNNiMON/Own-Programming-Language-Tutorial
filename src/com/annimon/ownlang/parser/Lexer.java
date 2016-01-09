@@ -161,6 +161,7 @@ public final class Lexer {
         final String word = buffer.toString();
         switch (word) {
             case "print": addToken(TokenType.PRINT); break;
+            case "println": addToken(TokenType.PRINTLN); break;
             case "if": addToken(TokenType.IF); break;
             case "else": addToken(TokenType.ELSE); break;
             case "while": addToken(TokenType.WHILE); break;

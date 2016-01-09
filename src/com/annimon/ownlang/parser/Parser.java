@@ -51,6 +51,9 @@ public final class Parser {
         if (match(TokenType.PRINT)) {
             return new PrintStatement(expression());
         }
+        if (match(TokenType.PRINTLN)) {
+            return new PrintlnStatement(expression());
+        }
         if (match(TokenType.IF)) {
             return ifElse();
         }

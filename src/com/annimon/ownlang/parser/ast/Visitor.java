@@ -26,6 +26,7 @@ public interface Visitor {
     void visit(IfStatement s);
     void visit(MapExpression s);
     void visit(PrintStatement s);
+    void visit(PrintlnStatement s);
     void visit(ReturnStatement s);
     void visit(TernaryExpression s);
     void visit(UnaryExpression s);

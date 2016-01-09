@@ -130,6 +130,11 @@ public abstract class AbstractVisitor implements Visitor {
     public void visit(PrintStatement s) {
         s.expression.accept(this);
     }
+    
+    @Override
+    public void visit(PrintlnStatement s) {
+        s.expression.accept(this);
+    }
 
     @Override
     public void visit(ReturnStatement s) {

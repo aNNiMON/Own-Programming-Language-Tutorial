@@ -3,32 +3,30 @@ use "std"
 word = 2 + 2
 word2 = PI + word
 str = "a" * 5 + "ba" * 7 + "\n"
-print str * "3" * 2
-print "word = " + word + "\n"
-print "word2 = " + word2 + "\n"
-print "1" > "abc"
-print "\n"
-if (1 <= 2) print "1 = 1"
-else print "1 != 1"
-print "\n"
+println str * "3" * 2
+println "word = " + word
+println "word2 = " + word2
+println "1" > "abc"
+if (1 <= 2) println "1 = 1"
+else println "1 != 1"
 if (40 < 50 || 50 > 60) {
-    print "true1\n"
-    print "true2\n"
+    println "true1"
+    println "true2"
     i = 0
-    print "do while"
+    println "do while"
     do {
-       print "i = " + i + "\n"
+       println "i = " + i
        i = i + 1
     } while (i < 10)
     i = 0
-    print "while"
+    println "while"
     while (i < 10) {
-        print "i = " + i + sin(i) + "\n"
+        println "i = " + i + sin(i)
         i = i + 1
     }
-    print "for"
+    println "for"
     for i = 0, i < 10, i = i + 1 {
-        print "i = " + i + "\n"
+        println "i = " + i
     }
 }
 else print "false"
@@ -53,16 +51,16 @@ print sum(10, 15)
 print a + "\n"
 
 arr = [1, "text", sum(10, 15), [], ["text", [90, [7 + 6, [50]]]]]
-print arr + "\n"
+println arr + "\n"
 arr[0] = arr[0] + 1000 + arr[2]
 print arr + "\n"
 print arr[4][1] + "\n"
 arr[4][1] = "text"
-print arr[4][1] + "\n"
+println arr[4][1]
 
 print "\n\n"
 array = newarray(2, 2, 2, 2)
-print array
+println array
 
 add = def(a,b) = a+b
 sub = def(a,b) = a-b
@@ -70,36 +68,30 @@ mul = def(a,b) = a*b
 div = def(a,b) = a/b
 cube = def(x) = x*mul(x, x)
 print "\n\n"
-print mul(8, 5)
-print "\n"
-print cube(2)
+println mul(8, 5)
+println cube(2)
 
 functions = [add, sub, mul, div]
 def function(f, a, b) = f(a, b)
 for i = 0, i < 4, i = i + 1 {
-    print "\n"
-    print functions[i]
-    print "\n"
-    print function(functions[i], 6, 3)
+    println functions[i]
+    println function(functions[i], 6, 3)
 }
 
 // map
 map = {"+" : add, "-" : sub. "*" : mul, "/" : div}
 map["%"] = def(x,y) = x % y
 map["pow"] = def(x,y) = pow(x, y)
-//print map["+"]
-print "\n"
-print function(map["+"], 4, 5)
-print "\n"
+println map["+"]
+println function(map["+"], 4, 5)
 foreach(map, def(op, func) = echo (4, op, 5, "=", func(4,5)))
 foreach(arr, ::echo)
 
 arr1 = [1,2,3]
 arr1 = arr1 :: 4
 arr2 = [5,6,7]
-print arr1
-print "\n"
-print arr1 << arr2
+println arr1
+println arr1 << arr2
 
 for op, func : map {
   echo (4, op, 5, "=", func(4,5))
@@ -112,18 +104,11 @@ print "\n"
 for v : [1,2,3,4,5,6,7,8,9] print "" + v + ", "
 
 use "types"
-print "\n"
-print typeof(1)
-print "\n"
-print typeof("1")
-print "\n"
-print typeof(arr1)
-print "\n"
-print typeof({})
-print "\n"
-print typeof(add)
+println typeof(1)
+println typeof("1")
+println typeof(arr1)
+println typeof({})
+println typeof(add)
 
-print "\n"
-print typeof(number("1"))
-print "\n"
-print typeof(string(1))
+println typeof(number("1"))
+println typeof(string(1))

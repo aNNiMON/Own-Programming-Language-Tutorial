@@ -3,6 +3,7 @@ package com.annimon.ownlang.parser.ast;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
+import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
 /**
@@ -52,13 +53,15 @@ public final class BinaryExpression implements Expression {
         final Value value1 = expr1.eval();
         final Value value2 = expr2.eval();
         
-        if (value1 instanceof StringValue) {
-            return eval((StringValue) value1, value2);
+        switch (value1.type()) {
+            case Types.STRING:
+                return eval((StringValue) value1, value2);
+            case Types.ARRAY:
+                return eval((ArrayValue) value1, value2);
+            case Types.NUMBER:
+            default:
+                return eval(value1, value2);
         }
-        if (value1 instanceof ArrayValue) {
-            return eval((ArrayValue) value1, value2);
-        }
-        return eval(value1, value2);
     }
     
     private Value eval(StringValue value1, Value value2) {
@@ -81,7 +84,7 @@ public final class BinaryExpression implements Expression {
     private Value eval(ArrayValue value1, Value value2) {
         switch (operation) {
             case LSHIFT:
-                if (!(value2 instanceof ArrayValue))
+                if (value2.type() != Types.ARRAY)
                     throw new RuntimeException("Cannot merge non array value to array");
                 return ArrayValue.merge(value1, (ArrayValue) value2);
             case PUSH: 

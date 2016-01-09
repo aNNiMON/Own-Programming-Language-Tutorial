@@ -15,6 +15,11 @@ public final class FunctionValue implements Value {
     }
     
     @Override
+    public int type() {
+        return Types.FUNCTION;
+    }
+    
+    @Override
     public double asNumber() {
         throw new RuntimeException("Cannot cast function to number");
     }

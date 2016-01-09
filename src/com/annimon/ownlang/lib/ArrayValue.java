@@ -42,6 +42,11 @@ public final class ArrayValue implements Value, Iterable<Value> {
         this(array.elements);
     }
     
+    @Override
+    public int type() {
+        return Types.ARRAY;
+    }
+    
     public Value get(int index) {
         return elements[index];
     }

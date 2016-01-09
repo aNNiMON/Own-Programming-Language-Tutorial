@@ -1,6 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.ArrayValue;
+import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 
@@ -21,7 +21,7 @@ public final class ArrayAssignmentStatement implements Statement {
     @Override
     public void execute() {
         final Value container = Variables.get(array.variable);
-        if (container instanceof ArrayValue) {
+        if (container.type() == Types.ARRAY) {
             array.getArray().set(array.lastIndex(), expression.eval());
             return;
         }

@@ -3,8 +3,7 @@ package com.annimon.ownlang.parser.ast;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Functions;
-import static com.annimon.ownlang.lib.Functions.isExists;
-import com.annimon.ownlang.lib.UserDefinedFunction;
+import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import java.util.ArrayList;
@@ -47,7 +46,9 @@ public final class FunctionalExpression implements Expression {
         if (Functions.isExists(key)) return Functions.get(key);
         if (Variables.isExists(key)) {
             final Value value = Variables.get(key);
-            if (value instanceof FunctionValue) return ((FunctionValue)value).getValue();
+            if (value.type() == Types.FUNCTION) {
+                return ((FunctionValue)value).getValue();
+            }
         }
         throw new RuntimeException("Unknown function " + key);
     }

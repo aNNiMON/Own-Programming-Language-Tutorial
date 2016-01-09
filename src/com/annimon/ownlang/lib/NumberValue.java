@@ -20,6 +20,11 @@ public final class NumberValue implements Value {
     }
     
     @Override
+    public int type() {
+        return Types.NUMBER;
+    }
+    
+    @Override
     public double asNumber() {
         return value;
     }

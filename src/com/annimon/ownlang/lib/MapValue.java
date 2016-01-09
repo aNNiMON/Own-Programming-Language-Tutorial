@@ -20,6 +20,11 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     public MapValue(Map<Value, Value> map) {
         this.map = map;
     }
+    
+    @Override
+    public int type() {
+        return Types.MAP;
+    }
 
     public Value get(Value key) {
         return map.get(key);

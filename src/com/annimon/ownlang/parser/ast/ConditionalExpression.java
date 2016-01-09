@@ -2,6 +2,7 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
+import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
 /**
@@ -56,7 +57,7 @@ public final class ConditionalExpression implements Expression {
         final Value value2 = expr2.eval();
         
         double number1, number2;
-        if (value1 instanceof StringValue) {
+        if (value1.type() == Types.STRING) {
             number1 = value1.asString().compareTo(value2.asString());
             number2 = 0;
         } else {

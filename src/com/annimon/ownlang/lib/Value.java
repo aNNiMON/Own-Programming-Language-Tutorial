@@ -9,4 +9,6 @@ public interface Value {
     double asNumber();
     
     String asString();
+    
+    int type();
 }

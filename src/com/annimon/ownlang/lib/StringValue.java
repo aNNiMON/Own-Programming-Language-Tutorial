@@ -15,6 +15,11 @@ public final class StringValue implements Value {
     }
     
     @Override
+    public int type() {
+        return Types.STRING;
+    }
+    
+    @Override
     public double asNumber() {
         try {
             return Double.parseDouble(value);

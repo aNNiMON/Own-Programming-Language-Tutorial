@@ -112,3 +112,8 @@ println typeof(add)
 
 println typeof(number("1"))
 println typeof(string(1))
+
+thread(::inthread)
+def inthread() = echo("this is a thread")
+thread(def (str) { println str }, "this is a thread with arguments")
+

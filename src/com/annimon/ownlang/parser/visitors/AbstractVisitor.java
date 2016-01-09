@@ -75,6 +75,18 @@ public abstract class AbstractVisitor implements Visitor {
         s.increment.accept(this);
         s.statement.accept(this);
     }
+    
+    @Override
+    public void visit(ForeachArrayStatement s) {
+        s.container.accept(this);
+        s.body.accept(this);
+    }
+    
+    @Override
+    public void visit(ForeachMapStatement s) {
+        s.container.accept(this);
+        s.body.accept(this);
+    }
 
     @Override
     public void visit(FunctionDefineStatement s) {

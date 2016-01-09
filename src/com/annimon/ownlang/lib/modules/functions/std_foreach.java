@@ -10,17 +10,17 @@ public final class std_foreach implements Function {
     public Value execute(Value... args) {
         if (args.length != 2) return NumberValue.ZERO;
 
-        if (!(args[1] instanceof FunctionValue)) return NumberValue.ZERO;
+        if (args[1].type() != Types.FUNCTION) return NumberValue.ZERO;
         final Function function = ((FunctionValue) args[1]).getValue();
         final Value container = args[0];
-        if (container instanceof ArrayValue) {
+        if (container.type() == Types.ARRAY) {
             final ArrayValue array = (ArrayValue) container;
             for (Value element : array) {
                 function.execute(element);
             }
             return NumberValue.ZERO;
         }
-        if (container instanceof MapValue) {
+        if (container.type() == Types.MAP) {
             final MapValue map = (MapValue) container;
             for (Map.Entry<Value, Value> element : map) {
                 function.execute(element.getKey(), element.getValue());

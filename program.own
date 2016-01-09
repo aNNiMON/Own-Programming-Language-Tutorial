@@ -1,5 +1,7 @@
 use "math"
 use "std"
+use "functional"
+
 word = 2 + 2
 word2 = PI + word
 str = "a" * 5 + "ba" * 7 + "\n"
@@ -117,3 +119,9 @@ thread(::inthread)
 def inthread() = echo("this is a thread")
 thread(def (str) { println str }, "this is a thread with arguments")
 
+println "functional"
+nums = [1,2,3,4,5,6,7,8,9,10]
+nums = filter(nums, def(x) = x % 2 == 0)
+squares = map(nums, def(x) = x * x)
+foreach(squares, ::echo)
+println "Sum: " + reduce(squares, 0, def(x, y) = x + y)

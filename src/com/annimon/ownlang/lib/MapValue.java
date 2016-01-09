@@ -25,6 +25,10 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     public int type() {
         return Types.MAP;
     }
+    
+    public int size() {
+        return map.size();
+    }
 
     public Value get(Value key) {
         return map.get(key);

@@ -12,7 +12,6 @@ public final class std implements Module {
     @Override
     public void init() {
         Functions.set("echo", new std_echo());
-        Functions.set("foreach", new std_foreach());
         Functions.set("newarray", new std_newarray());
         Functions.set("rand", new std_rand());
         Functions.set("sleep", new std_sleep());

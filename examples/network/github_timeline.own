@@ -19,42 +19,42 @@ thread(::http, "https://api.github.com/events", def(r) {
 })
 
 def show_github_events(event) {
-    println event["created_at"]
-    actor = event["actor"]
-    println "User: https://github.com/" + actor["login"]
+    println event.created_at
+    actor = event.actor
+    println "User: https://github.com/" + actor.login
     println github_event_type(event)
     println "-" * 50
 }
 
 def github_event_type(event) {
-    type = event["type"]
-    repo = "https://github.com/" + event["repo"]["name"]
-    payload = event["payload"]
+    type = event.type
+    repo = "https://github.com/" + event.repo.name
+    payload = event.payload
     
     if (type == "CommitCommentEvent") {
-      return "commented commit in " + repo + "\n" + payload["comment"]["body"]
+      return "commented commit in " + repo + "\n" + payload.comment.body
     }
     if (type == "CreateEvent") {
-      return "created " + payload["ref_type"] + " on " + repo
+      return "created " + payload.ref_type + " on " + repo
     }
     if (type == "DeleteEvent") {
-      return "deleted " + payload["ref_type"] + " on " + repo
+      return "deleted " + payload.ref_type + " on " + repo
     }
     if (type == "ForkEvent") {
       return "forked repository " + repo
     }
     if (type == "IssueCommentEvent") {
-      return "commented issue " + payload["issue"]["title"] + " on " + repo + "\n" + payload["comment"]["body"]
+      return "commented issue " + payload.issue.title + " on " + repo + "\n" + payload.comment.body
     }
     if (type == "IssuesEvent") {
-      return payload["action"] + " issue '" + payload["issue"]["title"] + "' on " + repo
+      return payload.action + " issue '" + payload.issue.title + "' on " + repo
     }
     if (type == "PullRequestEvent") {
-      pr = payload["pull_request"]
-      return payload["action"] + " pull request #" + payload["number"] + " '" + pr["title"] + "' on " + repo
+      pr = payload.pull_request
+      return payload.action + " pull request #" + payload.number + " '" + pr.title + "' on " + repo
     }
     if (type == "PushEvent") {
-      return "pushed " + length(payload["commits"]) + " commits to " + repo
+      return "pushed " + length(payload.commits) + " commits to " + repo
     }
     if (type == "WatchEvent") {
       return "start watching repository " + repo

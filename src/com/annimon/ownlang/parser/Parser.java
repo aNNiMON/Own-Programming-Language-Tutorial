@@ -237,6 +237,19 @@ public final class Parser {
         return new ArrayAccessExpression(variable, indices);
     }
     
+    private ArrayAccessExpression object() {
+        // object.field1.field2
+        // Syntaxic sugar for object["field1"]["field2"]
+        final String variable = consume(TokenType.WORD).getText();
+        final List<Expression> indices = new ArrayList<>();
+        while (match(TokenType.DOT)) {
+            final String fieldName = consume(TokenType.WORD).getText();
+            final Expression key = new ValueExpression(fieldName);
+            indices.add(key);
+        }
+        return new ArrayAccessExpression(variable, indices);
+    }
+    
     private Expression expression() {
         return ternary();
     }
@@ -458,6 +471,9 @@ public final class Parser {
         }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return function();
+        }
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.DOT)) {
+            return object();
         }
         if (lookMatch(0, TokenType.LBRACKET)) {
             return array();

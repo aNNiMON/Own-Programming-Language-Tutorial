@@ -22,10 +22,11 @@ public final class ArrayAssignmentStatement implements Statement {
     public void execute() {
         final Value container = Variables.get(array.variable);
         if (container.type() == Types.ARRAY) {
-            array.getArray().set(array.lastIndex(), expression.eval());
+            final int lastIndex = (int) array.lastIndex().asNumber();
+            array.getArray().set(lastIndex, expression.eval());
             return;
         }
-        array.consumeMap(container).set(array.indices.get(0).eval(), expression.eval());
+        array.getMap().set(array.lastIndex(), expression.eval());
     }
     
     @Override

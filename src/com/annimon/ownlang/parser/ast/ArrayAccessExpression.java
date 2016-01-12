@@ -1,10 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
 import java.util.List;
 
 /**
@@ -25,26 +21,37 @@ public final class ArrayAccessExpression implements Expression {
     public Value eval() {
         Value container = Variables.get(variable);
         if (container.type() == Types.ARRAY) {
-            return getArray().get(lastIndex());
+            final int lastIndex = (int) lastIndex().asNumber();
+            return getArray().get(lastIndex);
         }
-        return consumeMap(container).get(indices.get(0).eval());
+        return getMap().get(lastIndex());
     }
     
     public ArrayValue getArray() {
         ArrayValue array = consumeArray(Variables.get(variable));
         final int last = indices.size() - 1;
         for (int i = 0; i < last; i++) {
-            array = consumeArray( array.get(index(i)) );
+            final int index = (int) index(i).asNumber();
+            array = consumeArray( array.get(index) );
         }
         return array;
     }
     
-    public int lastIndex() {
+    public MapValue getMap() {
+        MapValue map = consumeMap(Variables.get(variable));
+        final int last = indices.size() - 1;
+        for (int i = 0; i < last; i++) {
+            map = consumeMap( map.get(index(i)) );
+        }
+        return map;
+    }
+    
+    public Value lastIndex() {
         return index(indices.size() - 1);
     }
     
-    private int index(int index) {
-        return (int) indices.get(index).eval().asNumber();
+    private Value index(int index) {
+        return indices.get(index).eval();
     }
     
     private ArrayValue consumeArray(Value value) {

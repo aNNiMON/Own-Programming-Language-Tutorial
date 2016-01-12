@@ -172,6 +172,7 @@ public final class Parser {
     }
     
     private FunctionDefineStatement functionDefine() {
+        // def name(arg1, arg2) { ... }  ||  def name(args) = expr
         final String name = consume(TokenType.WORD).getText();
         consume(TokenType.LPAREN);
         final List<String> argNames = new ArrayList<>();
@@ -188,6 +189,7 @@ public final class Parser {
     }
     
     private FunctionalExpression function() {
+        // function(arg1, arg2, ...)
         final String name = consume(TokenType.WORD).getText();
         consume(TokenType.LPAREN);
         final FunctionalExpression function = new FunctionalExpression(name);
@@ -199,6 +201,7 @@ public final class Parser {
     }
     
     private Expression array() {
+        // [value1, value2, ...]
         consume(TokenType.LBRACKET);
         final List<Expression> elements = new ArrayList<>();
         while (!match(TokenType.RBRACKET)) {
@@ -209,6 +212,7 @@ public final class Parser {
     }
     
     private Expression map() {
+        // {key1 : value1, key2 : value2, ...}
         consume(TokenType.LBRACE);
         final Map<Expression, Expression> elements = new HashMap<>();
         while (!match(TokenType.RBRACE)) {
@@ -222,6 +226,7 @@ public final class Parser {
     }
     
     private ArrayAccessExpression element() {
+        // array[e1][e2]...[eN]
         final String variable = consume(TokenType.WORD).getText();
         final List<Expression> indices = new ArrayList<>();
         do {

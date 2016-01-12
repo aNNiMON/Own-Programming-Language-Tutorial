@@ -28,13 +28,11 @@ def show_github_events(event) {
 
 def github_event_type(event) {
     type = event["type"]
-    repo = event["repo"]
-    repo = "https://github.com/" + repo["name"]
+    repo = "https://github.com/" + event["repo"]["name"]
     payload = event["payload"]
     
     if (type == "CommitCommentEvent") {
-      comment = payload["comment"]
-      return "commented commit in " + repo + "\n" + comment["body"]
+      return "commented commit in " + repo + "\n" + payload["comment"]["body"]
     }
     if (type == "CreateEvent") {
       return "created " + payload["ref_type"] + " on " + repo
@@ -46,13 +44,10 @@ def github_event_type(event) {
       return "forked repository " + repo
     }
     if (type == "IssueCommentEvent") {
-      comment = payload["comment"]
-      issue = payload["issue"]
-      return "commented issue " + issue["title"] + " on " + repo + "\n" + comment["body"]
+      return "commented issue " + payload["issue"]["title"] + " on " + repo + "\n" + payload["comment"]["body"]
     }
     if (type == "IssuesEvent") {
-      issue = payload["issue"]
-      return payload["action"] + " issue '" + issue["title"] + "' on " + repo
+      return payload["action"] + " issue '" + payload["issue"]["title"] + "' on " + repo
     }
     if (type == "PullRequestEvent") {
       pr = payload["pull_request"]

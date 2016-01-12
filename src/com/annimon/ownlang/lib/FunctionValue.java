@@ -7,6 +7,8 @@ import java.util.Objects;
  * @author aNNiMON
  */
 public final class FunctionValue implements Value {
+    
+    public static final FunctionValue EMPTY = new FunctionValue(args -> NumberValue.ZERO);
 
     private final Function value;
 

@@ -14,6 +14,10 @@ public final class StringValue implements Value {
         this.value = value;
     }
     
+    public int length() {
+        return value.length();
+    }
+    
     @Override
     public int type() {
         return Types.STRING;

@@ -11,6 +11,8 @@ import java.util.Objects;
  */
 public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     
+    public static final MapValue EMPTY = new MapValue(1);
+    
     private final Map<Value, Value> map;
 
     public MapValue(int size) {
@@ -28,6 +30,10 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     
     public int size() {
         return map.size();
+    }
+    
+    public boolean containsKey(Value key) {
+        return map.containsKey(key);
     }
 
     public Value get(Value key) {

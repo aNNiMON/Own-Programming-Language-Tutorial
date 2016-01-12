@@ -1,0 +1,68 @@
+use "std"
+use "http"
+use "json"
+use "functional"
+
+header = "* Prints current GitHub timeline *"
+println "*" * length(header)
+println header
+println "*" * length(header)
+
+// Executes in main thread
+//http("https://api.github.com/events", def(r) {
+//  foreach(jsondecode(r), ::show_github_events)
+//})
+
+// Executes in new thread
+thread(::http, "https://api.github.com/events", def(r) {
+  foreach(jsondecode(r), ::show_github_events)
+})
+
+def show_github_events(event) {
+    println event["created_at"]
+    actor = event["actor"]
+    println "User: https://github.com/" + actor["login"]
+    println github_event_type(event)
+    println "-" * 50
+}
+
+def github_event_type(event) {
+    type = event["type"]
+    repo = event["repo"]
+    repo = "https://github.com/" + repo["name"]
+    payload = event["payload"]
+    
+    if (type == "CommitCommentEvent") {
+      comment = payload["comment"]
+      return "commented commit in " + repo + "\n" + comment["body"]
+    }
+    if (type == "CreateEvent") {
+      return "created " + payload["ref_type"] + " on " + repo
+    }
+    if (type == "DeleteEvent") {
+      return "deleted " + payload["ref_type"] + " on " + repo
+    }
+    if (type == "ForkEvent") {
+      return "forked repository " + repo
+    }
+    if (type == "IssueCommentEvent") {
+      comment = payload["comment"]
+      issue = payload["issue"]
+      return "commented issue " + issue["title"] + " on " + repo + "\n" + comment["body"]
+    }
+    if (type == "IssuesEvent") {
+      issue = payload["issue"]
+      return payload["action"] + " issue '" + issue["title"] + "' on " + repo
+    }
+    if (type == "PullRequestEvent") {
+      pr = payload["pull_request"]
+      return payload["action"] + " pull request #" + payload["number"] + " '" + pr["title"] + "' on " + repo
+    }
+    if (type == "PushEvent") {
+      return "pushed " + length(payload["commits"]) + " commits to " + repo
+    }
+    if (type == "WatchEvent") {
+      return "start watching repository " + repo
+    }
+    return type + " on " + repo
+}

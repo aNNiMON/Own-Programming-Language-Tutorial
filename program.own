@@ -128,11 +128,25 @@ println "Sum: " + reduce(squares, 0, def(x, y) = x + y)
 
 use "http"
 
-http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
+/*http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
   println "Added: " + v
   http("http://jsonplaceholder.typicode.com/users/2", "PATCH", {"name": "Patched Name"}, ::http_get_demo)
 })
 def http_get_demo(v) {
   println "Updated: " + v
   http("http://jsonplaceholder.typicode.com/users", ::echo)
-}
+}*/
+
+use "json"
+println "json"
+println jsonencode({
+  "name": "JSON Example",
+  "version": 1,
+  "arrayData": [
+     1, 2, 3, 4
+  ],
+  "objectData": {
+    "key": "value",
+    10: "1000"
+  }
+})

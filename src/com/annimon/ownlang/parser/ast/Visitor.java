@@ -25,6 +25,7 @@ public interface Visitor {
     void visit(FunctionalExpression s);
     void visit(IfStatement s);
     void visit(MapExpression s);
+    void visit(MatchExpression s);
     void visit(PrintStatement s);
     void visit(PrintlnStatement s);
     void visit(ReturnStatement s);

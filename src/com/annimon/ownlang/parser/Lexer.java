@@ -173,6 +173,8 @@ public final class Lexer {
             case "def": addToken(TokenType.DEF); break;
             case "return": addToken(TokenType.RETURN); break;
             case "use": addToken(TokenType.USE); break;
+            case "match": addToken(TokenType.MATCH); break;
+            case "case": addToken(TokenType.CASE); break;
             default:
                 addToken(TokenType.WORD, word);
                 break;

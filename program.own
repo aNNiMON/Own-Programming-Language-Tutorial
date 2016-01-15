@@ -81,7 +81,7 @@ for i = 0, i < 4, i = i + 1 {
 }
 
 // map
-map = {"+" : add, "-" : sub. "*" : mul, "/" : div}
+map = {"+" : add, "-" : sub, "*" : mul, "/" : div}
 map["%"] = def(x,y) = x % y
 map["pow"] = def(x,y) = pow(x, y)
 println map["+"]
@@ -150,3 +150,18 @@ println jsonencode({
     10: "1000"
   }
 })
+
+println ""
+
+
+def fact1(n) = match n {
+  case 0: 1
+  case n: n * fact1(n - 1)
+}
+def fact2(n) = match n {
+  case n if n == 0: 1
+  case _: n * fact2(n - 1)
+}
+
+println fact1(6)
+println fact2(6)

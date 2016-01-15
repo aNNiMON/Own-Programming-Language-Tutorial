@@ -24,6 +24,8 @@ public enum TokenType {
     DEF,
     RETURN,
     USE,
+    MATCH,
+    CASE,
     
     PLUS, // +
     MINUS, // -

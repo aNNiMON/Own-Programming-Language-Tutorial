@@ -125,6 +125,11 @@ public abstract class AbstractVisitor implements Visitor {
             entry.getValue().accept(this);
         }
     }
+    
+    @Override
+    public void visit(MatchExpression s) {
+        s.expression.accept(this);
+    }
 
     @Override
     public void visit(PrintStatement s) {

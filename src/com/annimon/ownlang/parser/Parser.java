@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import java.util.ArrayList;
@@ -250,6 +252,53 @@ public final class Parser {
         return new ArrayAccessExpression(variable, indices);
     }
     
+    private MatchExpression match() {
+        // match expression {
+        //  case pattern1: result1
+        //  case pattern2 if extr: result2
+        // }
+        final Expression expression = expression();
+        consume(TokenType.LBRACE);
+        final List<MatchExpression.Pattern> patterns = new ArrayList<>();
+        do {
+            consume(TokenType.CASE);
+            MatchExpression.Pattern pattern = null;
+            final Token current = get(0);
+            if (match(TokenType.NUMBER)) {
+                pattern = new MatchExpression.ConstantPattern(
+                        new NumberValue(Double.parseDouble(current.getText()))
+                );
+            } else if (match(TokenType.HEX_NUMBER)) {
+                pattern = new MatchExpression.ConstantPattern(
+                        new NumberValue(Long.parseLong(current.getText(), 16))
+                );
+            } else if (match(TokenType.TEXT)) {
+                pattern = new MatchExpression.ConstantPattern(
+                        new StringValue(current.getText())
+                );
+            } else if (match(TokenType.WORD)) {
+                pattern = new MatchExpression.VariablePattern(current.getText());
+            }
+            
+            if (pattern == null) {
+                throw new ParseException("Wrong pattern in match expression: " + current);
+            }
+            if (match(TokenType.IF)) {
+                pattern.optCondition = expression();
+            }
+            
+            consume(TokenType.COLON);
+            if (lookMatch(0, TokenType.LBRACE)) {
+                pattern.result = block();
+            } else {
+                pattern.result = new ReturnStatement(expression());
+            }
+            patterns.add(pattern);
+        } while (!match(TokenType.RBRACE));
+        
+        return new MatchExpression(expression, patterns);
+    }
+    
     private Expression expression() {
         return ternary();
     }
@@ -459,13 +508,40 @@ public final class Parser {
     }
     
     private Expression primary() {
+        if (match(TokenType.LPAREN)) {
+            Expression result = expression();
+            match(TokenType.RPAREN);
+            return result;
+        }
+        
+        if (match(TokenType.COLONCOLON)) {
+            final String functionName = consume(TokenType.WORD).getText();
+            return new FunctionReferenceExpression(functionName);
+        }
+        if (match(TokenType.MATCH)) {
+            return match();
+        }
+        if (match(TokenType.DEF)) {
+            consume(TokenType.LPAREN);
+            final List<String> argNames = new ArrayList<>();
+            while (!match(TokenType.RPAREN)) {
+                argNames.add(consume(TokenType.WORD).getText());
+                match(TokenType.COMMA);
+            }
+            Statement statement;
+            if (lookMatch(0, TokenType.EQ)) {
+                match(TokenType.EQ);
+                statement = new ReturnStatement(expression());
+            } else {
+                statement = statementOrBlock();
+            }
+            return new ValueExpression(new UserDefinedFunction(argNames, statement));
+        }
+        return variable();
+    }
+    
+    private Expression variable() {
         final Token current = get(0);
-        if (match(TokenType.NUMBER)) {
-            return new ValueExpression(Double.parseDouble(current.getText()));
-        }
-        if (match(TokenType.HEX_NUMBER)) {
-            return new ValueExpression(Long.parseLong(current.getText(), 16));
-        }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
             return element();
         }
@@ -484,33 +560,19 @@ public final class Parser {
         if (match(TokenType.WORD)) {
             return new VariableExpression(current.getText());
         }
+        return value();
+    }
+    
+    private Expression value() {
+        final Token current = get(0);
+        if (match(TokenType.NUMBER)) {
+            return new ValueExpression(Double.parseDouble(current.getText()));
+        }
+        if (match(TokenType.HEX_NUMBER)) {
+            return new ValueExpression(Long.parseLong(current.getText(), 16));
+        }
         if (match(TokenType.TEXT)) {
             return new ValueExpression(current.getText());
-        }
-        if (match(TokenType.COLONCOLON)) {
-            final String functionName = consume(TokenType.WORD).getText();
-            return new FunctionReferenceExpression(functionName);
-        }
-        if (match(TokenType.DEF)) {
-            consume(TokenType.LPAREN);
-            final List<String> argNames = new ArrayList<>();
-            while (!match(TokenType.RPAREN)) {
-                argNames.add(consume(TokenType.WORD).getText());
-                match(TokenType.COMMA);
-            }
-            Statement statement;
-            if (lookMatch(0, TokenType.EQ)) {
-                match(TokenType.EQ);
-                statement = new ReturnStatement(expression());
-            } else {
-                statement = statementOrBlock();
-            }
-            return new ValueExpression(new UserDefinedFunction(argNames, statement));
-        }
-        if (match(TokenType.LPAREN)) {
-            Expression result = expression();
-            match(TokenType.RPAREN);
-            return result;
         }
         throw new ParseException("Unknown expression: " + current);
     }

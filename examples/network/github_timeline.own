@@ -27,37 +27,18 @@ def show_github_events(event) {
 }
 
 def github_event_type(event) {
-    type = event.type
     repo = "https://github.com/" + event.repo.name
     payload = event.payload
-    
-    if (type == "CommitCommentEvent") {
-      return "commented commit in " + repo + "\n" + payload.comment.body
+    return match event.type {
+      case "CommitCommentEvent": "commented commit in " + repo + "\n" + payload.comment.body
+      case "CreateEvent": "created " + payload.ref_type + " on " + repo
+      case "DeleteEvent": "deleted " + payload.ref_type + " on " + repo    
+      case "ForkEvent": "forked repository " + repo
+      case "IssueCommentEvent": "commented issue " + payload.issue.title + " on " + repo + "\n" + payload.comment.body
+      case "IssuesEvent": payload.action + " issue '" + payload.issue.title + "' on " + repo
+      case "PullRequestEvent": payload.action + " pull request #" + payload.number + " '" + payload.pull_request.title + "' on " + repo
+      case "PushEvent": "pushed " + length(payload.commits) + " commits to " + repo
+      case "WatchEvent": "start watching repository " + repo
+      case type : type + " on " + repo
     }
-    if (type == "CreateEvent") {
-      return "created " + payload.ref_type + " on " + repo
-    }
-    if (type == "DeleteEvent") {
-      return "deleted " + payload.ref_type + " on " + repo
-    }
-    if (type == "ForkEvent") {
-      return "forked repository " + repo
-    }
-    if (type == "IssueCommentEvent") {
-      return "commented issue " + payload.issue.title + " on " + repo + "\n" + payload.comment.body
-    }
-    if (type == "IssuesEvent") {
-      return payload.action + " issue '" + payload.issue.title + "' on " + repo
-    }
-    if (type == "PullRequestEvent") {
-      pr = payload.pull_request
-      return payload.action + " pull request #" + payload.number + " '" + pr.title + "' on " + repo
-    }
-    if (type == "PushEvent") {
-      return "pushed " + length(payload.commits) + " commits to " + repo
-    }
-    if (type == "WatchEvent") {
-      return "start watching repository " + repo
-    }
-    return type + " on " + repo
 }

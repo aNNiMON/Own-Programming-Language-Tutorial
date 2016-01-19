@@ -51,7 +51,13 @@ public final class NumberValue implements Value {
         return Double.doubleToLongBits(this.value) == Double.doubleToLongBits(other.value);
     }
     
-    
+    @Override
+    public int compareTo(Value o) {
+        if (o.type() == Types.NUMBER) {
+            return Double.compare(value, ((NumberValue)o).value);
+        }
+        return asString().compareTo(o.asString());
+    }
 
     @Override
     public String toString() {

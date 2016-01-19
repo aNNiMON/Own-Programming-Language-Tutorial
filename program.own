@@ -130,6 +130,8 @@ nums = [[1, 2], [3], [], [4, 5]]
 nums = flatmap(nums, IDENTITY)
 println "flatmap"
 foreach(nums, ::echo)
+println "sort"
+foreach(sort(nums, def(a,b) = b - a), ::echo)
 
 use "http"
 

@@ -78,6 +78,15 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     }
     
     @Override
+    public int compareTo(Value o) {
+        if (o.type() == Types.MAP) {
+            final int lengthCompare = Integer.compare(size(), ((MapValue) o).size());
+            if (lengthCompare != 0) return lengthCompare;
+        }
+        return asString().compareTo(o.asString());
+    }
+    
+    @Override
     public String toString() {
         return asString();
     }

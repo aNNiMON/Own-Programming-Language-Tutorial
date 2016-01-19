@@ -48,6 +48,12 @@ public final class ArrayValue implements Value, Iterable<Value> {
     public ArrayValue(ArrayValue array) {
         this(array.elements);
     }
+
+    public Value[] getCopyElements() {
+        final Value[] result = new Value[elements.length];
+        System.arraycopy(elements, 0, result, 0, elements.length);
+        return result;
+    }
     
     @Override
     public int type() {
@@ -96,6 +102,15 @@ public final class ArrayValue implements Value, Iterable<Value> {
             return false;
         final ArrayValue other = (ArrayValue) obj;
         return Arrays.deepEquals(this.elements, other.elements);
+    }
+    
+    @Override
+    public int compareTo(Value o) {
+        if (o.type() == Types.ARRAY) {
+            final int lengthCompare = Integer.compare(size(), ((ArrayValue) o).size());
+            if (lengthCompare != 0) return lengthCompare;
+        }
+        return asString().compareTo(o.asString());
     }
 
     @Override

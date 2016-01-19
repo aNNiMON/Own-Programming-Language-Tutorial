@@ -55,6 +55,14 @@ public final class StringValue implements Value {
     }
     
     @Override
+    public int compareTo(Value o) {
+        if (o.type() == Types.STRING) {
+            return value.compareTo(((StringValue) o).value);
+        }
+        return asString().compareTo(o.asString());
+    }
+    
+    @Override
     public String toString() {
         return asString();
     }

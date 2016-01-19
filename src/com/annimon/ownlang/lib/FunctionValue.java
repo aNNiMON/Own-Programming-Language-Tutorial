@@ -54,6 +54,11 @@ public final class FunctionValue implements Value {
     }
     
     @Override
+    public int compareTo(Value o) {
+        return asString().compareTo(o.asString());
+    }
+    
+    @Override
     public String toString() {
         return asString();
     }

@@ -4,7 +4,7 @@ package com.annimon.ownlang.lib;
  *
  * @author aNNiMON
  */
-public interface Value {
+public interface Value extends Comparable<Value> {
     
     double asNumber();
     

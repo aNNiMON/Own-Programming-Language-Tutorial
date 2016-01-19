@@ -3,6 +3,7 @@ package com.annimon.ownlang.lib;
 import com.annimon.ownlang.exceptions.TypeException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -37,6 +38,11 @@ public final class ArrayValue implements Value, Iterable<Value> {
     public ArrayValue(Value[] elements) {
         this.elements = new Value[elements.length];
         System.arraycopy(elements, 0, this.elements, 0, elements.length);
+    }
+    
+    public ArrayValue(List<Value> values) {
+        final int size = values.size();
+        this.elements = values.toArray(new Value[size]);
     }
     
     public ArrayValue(ArrayValue array) {

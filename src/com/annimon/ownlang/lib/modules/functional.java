@@ -13,7 +13,12 @@ public final class functional implements Module {
     public void init() {
         Functions.set("foreach", new functional_foreach());
         Functions.set("map", new functional_map());
+        Functions.set("flatmap", new functional_flatmap());
         Functions.set("reduce", new functional_reduce());
         Functions.set("filter", new functional_filter());
+        
+        Functions.set("combine", new functional_combine());
+        
+        Variables.set("IDENTITY", new FunctionValue(args -> args[0]));
     }
 }

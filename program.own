@@ -126,6 +126,11 @@ squares = map(nums, def(x) = x * x)
 foreach(squares, ::echo)
 println "Sum: " + reduce(squares, 0, def(x, y) = x + y)
 
+nums = [[1, 2], [3], [], [4, 5]]
+nums = flatmap(nums, IDENTITY)
+println "flatmap"
+foreach(nums, ::echo)
+
 use "http"
 
 /*http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
@@ -165,3 +170,12 @@ def fact2(n) = match n {
 
 println fact1(6)
 println fact2(6)
+
+class = {
+  "add": def(a, b) = a + b,
+  "sub": def(a, b) = a - b,
+  "mul": def(a, b) = a * b,
+  "div": def(a, b) = a / b
+}
+
+println class.add(2, class.mul(2, 2))

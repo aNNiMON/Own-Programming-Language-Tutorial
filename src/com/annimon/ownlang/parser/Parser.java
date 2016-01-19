@@ -85,7 +85,7 @@ public final class Parser {
             return functionDefine();
         }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
-            return new FunctionStatement(function());
+            return new FunctionStatement(function(qualifiedName()));
         }
         return assignmentStatement();
     }
@@ -191,11 +191,10 @@ public final class Parser {
         return new FunctionDefineStatement(name, argNames, body);
     }
     
-    private FunctionalExpression function() {
+    private FunctionalExpression function(Expression qualifiedNameExpr) {
         // function(arg1, arg2, ...)
-        final String name = consume(TokenType.WORD).getText();
         consume(TokenType.LPAREN);
-        final FunctionalExpression function = new FunctionalExpression(name);
+        final FunctionalExpression function = new FunctionalExpression(qualifiedNameExpr);
         while (!match(TokenType.RPAREN)) {
             function.addArgument(expression());
             match(TokenType.COMMA);
@@ -542,26 +541,39 @@ public final class Parser {
     }
     
     private Expression variable() {
-        final Token current = get(0);
-        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
-            return element();
-        }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
-            return function();
+            return function(new ValueExpression(consume(TokenType.WORD).getText()));
         }
-        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.DOT)) {
-            return object();
+        final Expression qualifiedNameExpr = qualifiedName();
+        if (qualifiedNameExpr != null) {
+            // variable(args) || arr["key"](args) || obj.key(args)
+            if (lookMatch(0, TokenType.LPAREN)) {
+                return function(qualifiedNameExpr);
+            }
+            return qualifiedNameExpr;
         }
+        
         if (lookMatch(0, TokenType.LBRACKET)) {
             return array();
         }
         if (lookMatch(0, TokenType.LBRACE)) {
             return map();
         }
+        return value();
+    }
+    
+    private Expression qualifiedName() {
+        final Token current = get(0);
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
+            return element();
+        }
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.DOT)) {
+            return object();
+        }
         if (match(TokenType.WORD)) {
             return new VariableExpression(current.getText());
         }
-        return value();
+        return null;
     }
     
     private Expression value() {

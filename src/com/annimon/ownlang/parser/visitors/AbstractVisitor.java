@@ -104,6 +104,7 @@ public abstract class AbstractVisitor implements Visitor {
 
     @Override
     public void visit(FunctionalExpression s) {
+        s.functionExpr.accept(this);
         for (Expression argument : s.arguments) {
             argument.accept(this);
         }

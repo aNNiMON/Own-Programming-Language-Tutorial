@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Value;
 
@@ -44,7 +45,7 @@ public final class UnaryExpression implements Expression {
             case COMPLEMENT: return new NumberValue(~(int)value.asNumber());
             case NOT: return new NumberValue(value.asNumber() != 0 ? 0 : 1);
             default:
-                throw new RuntimeException("Operation " + operation + " is not supported");
+                throw new OperationIsNotSupportedException(operation);
         }
     }
     

@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.parser.ast.ReturnStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import java.util.List;
@@ -30,7 +31,7 @@ public final class UserDefinedFunction implements Function {
     @Override
     public Value execute(Value... values) {
         final int size = values.length;
-        if (size != getArgsCount()) throw new RuntimeException("Args count mismatch");
+        if (size != getArgsCount()) throw new ArgumentsMismatchException("Arguments count mismatch");
 
         try {
             Variables.push();

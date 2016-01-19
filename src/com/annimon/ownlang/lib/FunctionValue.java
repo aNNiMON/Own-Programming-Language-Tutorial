@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.TypeException;
 import java.util.Objects;
 
 /**
@@ -23,7 +24,7 @@ public final class FunctionValue implements Value {
     
     @Override
     public double asNumber() {
-        throw new RuntimeException("Cannot cast function to number");
+        throw new TypeException("Cannot cast function to number");
     }
 
     @Override

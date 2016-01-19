@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.UnknownFunctionException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public final class Functions {
     }
     
     public static Function get(String key) {
-        if (!isExists(key)) throw new RuntimeException("Unknown function " + key);
+        if (!isExists(key)) throw new UnknownFunctionException(key);
         return functions.get(key);
     }
     

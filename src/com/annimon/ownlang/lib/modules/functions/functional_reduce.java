@@ -1,5 +1,7 @@
 package com.annimon.ownlang.lib.modules.functions;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 
 import java.util.Map;
@@ -8,10 +10,10 @@ public final class functional_reduce implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length != 3) throw new RuntimeException("Three args expected");
+        if (args.length != 3) throw new ArgumentsMismatchException("Three args expected");
         
         if (args[2].type() != Types.FUNCTION) {
-            throw new RuntimeException("Function expected in third arg");
+            throw new TypeException("Function expected in third arg");
         }
         final Value container = args[0];
         final Value identity = args[1];
@@ -32,6 +34,6 @@ public final class functional_reduce implements Function {
             }
             return result;
         }
-        throw new RuntimeException("Invalid first argument. Array or map exprected");
+        throw new TypeException("Invalid first argument. Array or map exprected");
     }
 }

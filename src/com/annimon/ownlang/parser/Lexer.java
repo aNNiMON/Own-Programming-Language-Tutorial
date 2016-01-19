@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.exceptions.LexerException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

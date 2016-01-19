@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser;
+package com.annimon.ownlang.exceptions;
 
 /**
  *

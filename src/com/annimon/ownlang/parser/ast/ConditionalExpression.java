@@ -1,7 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
 import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
@@ -76,7 +76,7 @@ public final class ConditionalExpression implements Expression {
             case GTEQ: result = number1 >= number2; break;
             
             default:
-                throw new RuntimeException("Operation " + operation + " is not supported");
+                throw new OperationIsNotSupportedException(operation);
         }
         return NumberValue.fromBoolean(result);
     }

@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -89,7 +90,7 @@ public final class canvas implements Module {
     
     private static Function intConsumer4Convert(IntConsumer4 consumer) {
         return args -> {
-            if (args.length != 4) throw new RuntimeException("Four args expected");
+            if (args.length != 4) throw new ArgumentsMismatchException("Four args expected");
             int x = (int) args[0].asNumber();
             int y = (int) args[1].asNumber();
             int w = (int) args[2].asNumber();
@@ -186,7 +187,7 @@ public final class canvas implements Module {
         
         @Override
         public Value execute(Value... args) {
-            if (args.length != 3) throw new RuntimeException("Three args expected");
+            if (args.length != 3) throw new ArgumentsMismatchException("Three args expected");
             int x = (int) args[1].asNumber();
             int y = (int) args[2].asNumber();
             graphics.drawString(args[0].asString(), x, y);

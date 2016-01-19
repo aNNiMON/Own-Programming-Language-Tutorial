@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.exceptions.PatternMatchingException;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
@@ -48,7 +49,7 @@ public final class MatchExpression implements Expression {
                 }
             }
         }
-        throw new RuntimeException("No pattern were matched");
+        throw new PatternMatchingException("No pattern were matched");
     }
     
     private boolean match(Value value, Value constant) {

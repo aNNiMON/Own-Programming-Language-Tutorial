@@ -1,5 +1,7 @@
 package com.annimon.ownlang.lib.modules.functions;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -49,7 +51,7 @@ public final class http_http implements Function {
                 
             case 4: // http(url, method, params, callback)
                 if (args[3].type() != Types.FUNCTION) {
-                    throw new RuntimeException("Fourth arg must be a function callback");
+                    throw new TypeException("Fourth arg must be a function callback");
                 }
                 url = args[0].asString();
                 method = args[1].asString();
@@ -57,17 +59,17 @@ public final class http_http implements Function {
                 
             case 5: // http(url, method, params, headerParams, callback)
                 if (args[3].type() != Types.MAP) {
-                    throw new RuntimeException("Third arg must be a map");
+                    throw new TypeException("Third arg must be a map");
                 }
                 if (args[4].type() != Types.FUNCTION) {
-                    throw new RuntimeException("Fifth arg must be a function callback");
+                    throw new TypeException("Fifth arg must be a function callback");
                 }
                 url = args[0].asString();
                 method = args[1].asString();
                 return process(url, method, args[2], (MapValue) args[3], (FunctionValue) args[4]);
                 
             default:
-                throw new RuntimeException("Wrong number of arguments");
+                throw new ArgumentsMismatchException("Wrong number of arguments");
         }
     }
     

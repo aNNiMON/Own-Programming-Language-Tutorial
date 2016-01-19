@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
+import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
@@ -85,7 +87,7 @@ public final class BinaryExpression implements Expression {
         switch (operation) {
             case LSHIFT:
                 if (value2.type() != Types.ARRAY)
-                    throw new RuntimeException("Cannot merge non array value to array");
+                    throw new TypeException("Cannot merge non array value to array");
                 return ArrayValue.merge(value1, (ArrayValue) value2);
             case PUSH: 
             default:
@@ -113,7 +115,7 @@ public final class BinaryExpression implements Expression {
             case URSHIFT: result = (int)number1 >>> (int)number2; break;
             
             default:
-                throw new RuntimeException("Operation " + operation + " is not supported");
+                throw new OperationIsNotSupportedException(operation);
         }
         return new NumberValue(result);
     }

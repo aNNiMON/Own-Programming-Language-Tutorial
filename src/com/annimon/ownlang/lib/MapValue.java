@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.TypeException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
 
     @Override
     public double asNumber() {
-        throw new RuntimeException("Cannot cast map to number");
+        throw new TypeException("Cannot cast map to number");
     }
 
     @Override

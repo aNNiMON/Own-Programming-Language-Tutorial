@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.TypeException;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -61,7 +62,7 @@ public final class ArrayValue implements Value, Iterable<Value> {
     
     @Override
     public double asNumber() {
-        throw new RuntimeException("Cannot cast array to number");
+        throw new TypeException("Cannot cast array to number");
     }
 
     @Override

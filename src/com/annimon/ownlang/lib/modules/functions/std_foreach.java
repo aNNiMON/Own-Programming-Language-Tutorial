@@ -1,5 +1,7 @@
 package com.annimon.ownlang.lib.modules.functions;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 
 import java.util.Map;
@@ -8,9 +10,9 @@ public final class std_foreach implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length != 2) return NumberValue.ZERO;
+        if (args.length != 2) throw new ArgumentsMismatchException("Two arguments expected");
 
-        if (args[1].type() != Types.FUNCTION) return NumberValue.ZERO;
+        if (args[1].type() != Types.FUNCTION) throw new TypeException("Second arg must be a function");
         final Function function = ((FunctionValue) args[1]).getValue();
         final Value container = args[0];
         if (container.type() == Types.ARRAY) {
@@ -27,6 +29,6 @@ public final class std_foreach implements Function {
             }
             return NumberValue.ZERO;
         }
-        return NumberValue.ZERO;
+        throw new TypeException("First arg must be an array or map");
     }
 }

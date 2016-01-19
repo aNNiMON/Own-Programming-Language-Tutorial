@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.exceptions.ParseException;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.UserDefinedFunction;

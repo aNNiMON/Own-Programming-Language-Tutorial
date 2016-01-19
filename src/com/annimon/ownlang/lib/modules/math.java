@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
@@ -57,14 +58,14 @@ public final class math implements Module {
     
     private static Function functionConvert(DoubleUnaryOperator op) {
         return args -> {
-            if (args.length != 1) throw new RuntimeException("One arg expected");
+            if (args.length != 1) throw new ArgumentsMismatchException("One arg expected");
             return doubleToNumber.apply(op.applyAsDouble(args[0].asNumber()));
         };
     }
     
     private static Function biFunctionConvert(DoubleBinaryOperator op) {
         return args -> {
-            if (args.length != 2) throw new RuntimeException("Two args expected");
+            if (args.length != 2) throw new ArgumentsMismatchException("Two args expected");
             return doubleToNumber.apply(op.applyAsDouble(args[0].asNumber(), args[1].asNumber()));
         };
     }

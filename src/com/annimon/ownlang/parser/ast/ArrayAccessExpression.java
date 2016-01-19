@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.util.List;
 
@@ -56,14 +57,14 @@ public final class ArrayAccessExpression implements Expression {
     
     private ArrayValue consumeArray(Value value) {
         if (value.type() != Types.ARRAY) {
-            throw new RuntimeException("Array expected");
+            throw new TypeException("Array expected");
         }
         return (ArrayValue) value;
     }
     
     public MapValue consumeMap(Value value) {
         if (value.type() != Types.MAP) {
-            throw new RuntimeException("Map expected");
+            throw new TypeException("Map expected");
         }
         return (MapValue) value;
     }

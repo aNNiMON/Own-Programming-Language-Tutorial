@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules.functions;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import java.util.Map;
 import org.json.*;
@@ -8,7 +9,7 @@ public final class json_encode implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length != 1) throw new RuntimeException("One argument expected");
+        if (args.length != 1) throw new ArgumentsMismatchException("One argument expected");
         try {
             final Object root = process(args[0]);
             final String jsonRaw = JSONObject.valueToString(root);

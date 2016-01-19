@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.exceptions.VariableDoesNotExistsException;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 
@@ -17,7 +18,7 @@ public final class VariableExpression implements Expression {
 
     @Override
     public Value eval() {
-        if (!Variables.isExists(name)) throw new RuntimeException("Variable does not exists: " + name);
+        if (!Variables.isExists(name)) throw new VariableDoesNotExistsException(name);
         return Variables.get(name);
     }
     

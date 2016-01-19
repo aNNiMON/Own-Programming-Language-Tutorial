@@ -1,11 +1,7 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.lib.*;
 
 public final class std_thread implements Function {
 
@@ -13,7 +9,7 @@ public final class std_thread implements Function {
     public Value execute(Value... args) {
         // Создаём новый поток и передаём параметры, если есть.
         // Функция может передаваться как напрямую, так и по имени
-        if (args.length == 0) throw new RuntimeException("At least one arg expected");
+        if (args.length == 0) throw new ArgumentsMismatchException("At least one arg expected");
         
         Function body;
         if (args[0].type() == Types.FUNCTION) {

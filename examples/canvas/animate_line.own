@@ -46,10 +46,12 @@ def sethsbcolor(h1) {
   hueindex = floor(qr) % 6
   f = qr - floor(qr)
   
-  if hueindex == 0  color(255, f*255, 0)
-  else if hueindex == 1  color(255 - f*255, 255, 0)
-  else if hueindex == 2  color(0, 255, f*255)
-  else if hueindex == 3  color(0, 255-f*255, 255)
-  else if hueindex == 4  color(f*255, 0, 255)
-  else if hueindex == 5  color(255, 0, 255-f*255)
+  match hueindex {
+    case 0: color(255, f*255, 0)
+    case 1: color(255 - f*255, 255, 0)
+    case 2: color(0, 255, f*255)
+    case 3: color(0, 255-f*255, 255)
+    case 4: color(f*255, 0, 255)
+    case 5: color(255, 0, 255-f*255)
+  }
 }

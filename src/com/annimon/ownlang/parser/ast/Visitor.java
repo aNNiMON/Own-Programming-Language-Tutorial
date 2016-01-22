@@ -21,7 +21,7 @@ public interface Visitor {
     void visit(ForeachMapStatement s);
     void visit(FunctionDefineStatement s);
     void visit(FunctionReferenceExpression e);
-    void visit(FunctionStatement s);
+    void visit(ExprStatement s);
     void visit(FunctionalExpression s);
     void visit(IfStatement s);
     void visit(MapExpression s);

@@ -98,8 +98,8 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
-    public void visit(FunctionStatement s) {
-        s.function.accept(this);
+    public void visit(ExprStatement s) {
+        s.expr.accept(this);
     }
 
     @Override

@@ -84,8 +84,11 @@ public final class Parser {
         if (match(TokenType.DEF)) {
             return functionDefine();
         }
+        if (match(TokenType.MATCH)) {
+            return new ExprStatement(match());
+        }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
-            return new FunctionStatement(function(qualifiedName()));
+            return new ExprStatement(function(qualifiedName()));
         }
         return assignmentStatement();
     }

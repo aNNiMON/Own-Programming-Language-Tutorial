@@ -18,5 +18,21 @@ public final class std implements Module {
         Functions.set("rand", new std_rand());
         Functions.set("sleep", new std_sleep());
         Functions.set("thread", new std_thread());
+        
+        // String
+        Functions.set("sprintf", new std_sprintf());
+        Functions.set("split", new std_split());
+        Functions.set("join", new std_join());
+        Functions.set("indexOf", new std_indexof());
+        Functions.set("lastIndexOf", new std_lastindexof());
+        Functions.set("charAt", new std_charat());
+        Functions.set("toChar", new std_tochar());
+        Functions.set("substring", new std_substring());
+        Functions.set("toLowerCase", new std_tolowercase());
+        Functions.set("toUpperCase", new std_touppercase());
+        Functions.set("trim", new std_trim());
+        Functions.set("replace", new std_replace());
+        Functions.set("replaceAll", new std_replaceall());
+        Functions.set("replaceFirst", new std_replacefirst());
     }
 }

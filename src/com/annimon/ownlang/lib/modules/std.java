@@ -12,10 +12,12 @@ public final class std implements Module {
     @Override
     public void init() {
         Functions.set("echo", new std_echo());
+        Functions.set("readln", new std_readln());
         Functions.set("newarray", new std_newarray());
         Functions.set("sort", new std_sort());
         Functions.set("length", new std_length());
         Functions.set("rand", new std_rand());
+        Functions.set("time", new std_time());
         Functions.set("sleep", new std_sleep());
         Functions.set("thread", new std_thread());
         

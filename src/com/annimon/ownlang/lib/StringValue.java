@@ -8,6 +8,8 @@ import java.util.Objects;
  */
 public final class StringValue implements Value {
     
+    public static final StringValue EMPTY = new StringValue("");
+    
     private final String value;
 
     public StringValue(String value) {

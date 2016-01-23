@@ -2,6 +2,9 @@ package com.annimon.ownlang.lib.modules;
 
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.lib.modules.functions.robot_exec;
+import com.annimon.ownlang.lib.modules.functions.robot_fromclipboard;
+import com.annimon.ownlang.lib.modules.functions.robot_toclipboard;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
@@ -53,6 +56,10 @@ public final class robot implements Module {
             } catch (IllegalArgumentException iae) { }
             return NumberValue.ZERO;
         });
+        Functions.set("toClipboard", new robot_toclipboard());
+        Functions.set("fromClipboard", new robot_fromclipboard());
+        Functions.set("execProcess", new robot_exec(robot_exec.Mode.EXEC));
+        Functions.set("execProcessAndWait", new robot_exec(robot_exec.Mode.EXEC_AND_WAIT));
         
         Variables.set("VK_DOWN", new NumberValue(KeyEvent.VK_DOWN));
         Variables.set("VK_LEFT", new NumberValue(KeyEvent.VK_LEFT));

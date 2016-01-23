@@ -22,7 +22,9 @@ public final class UseStatement implements Statement {
             final String moduleName = expression.eval().asString();
             final Module module = (Module) Class.forName(PACKAGE + moduleName).newInstance();
             module.init();
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
     
     @Override

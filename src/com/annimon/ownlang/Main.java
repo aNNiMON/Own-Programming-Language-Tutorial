@@ -1,5 +1,8 @@
 package com.annimon.ownlang;
 
+import com.annimon.ownlang.lib.CallStack;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.Token;
@@ -74,6 +77,18 @@ public final class Main {
         program.accept(new FunctionAdder());
 //        program.accept(new VariablePrinter());
         program.accept(new AssignValidator());
-        program.execute();
+        try {
+            program.execute();
+        } catch (Exception ex) {
+            handleException(Thread.currentThread(), ex);
+        }
+    }
+    
+    public static void handleException(Thread thread, Throwable throwable) {
+        System.err.printf("%s in %s\n", throwable.getMessage(), thread.getName());
+        for (CallStack.CallInfo call : CallStack.getCalls()) {
+            System.err.printf("\tat %s\n", call);
+        }
+        throwable.printStackTrace();
     }
 }

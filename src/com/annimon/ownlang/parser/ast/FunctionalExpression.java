@@ -31,7 +31,11 @@ public final class FunctionalExpression implements Expression {
         for (int i = 0; i < size; i++) {
             values[i] = arguments.get(i).eval();
         }
-        return consumeFunction(functionExpr).execute(values);
+        final Function f = consumeFunction(functionExpr);
+        CallStack.enter(functionExpr.toString(), f);
+        final Value result = f.execute(values);
+        CallStack.exit();
+        return result;
     }
     
     private Function consumeFunction(Expression expr) {

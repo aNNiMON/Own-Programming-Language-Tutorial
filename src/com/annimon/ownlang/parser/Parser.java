@@ -87,6 +87,9 @@ public final class Parser {
         if (match(TokenType.MATCH)) {
             return new ExprStatement(match());
         }
+        if (match(TokenType.EXTRACT)) {
+            return destructuringAssignment();
+        }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return new ExprStatement(function(qualifiedName()));
         }
@@ -105,6 +108,22 @@ public final class Parser {
             return new ArrayAssignmentStatement(array, expression());
         }
         throw new ParseException("Unknown statement: " + get(0));
+    }
+    
+    private DestructuringAssignmentStatement destructuringAssignment() {
+        // extract(var1, var2, ...) = ...
+        consume(TokenType.LPAREN);
+        final List<String> variables = new ArrayList<>();
+        while (!match(TokenType.RPAREN)) {
+            if (lookMatch(0, TokenType.WORD)) {
+                variables.add(consume(TokenType.WORD).getText());
+            } else {
+                variables.add(null);
+            }
+            match(TokenType.COMMA);
+        }
+        consume(TokenType.EQ);
+        return new DestructuringAssignmentStatement(variables, expression());
     }
     
     private Statement ifElse() {

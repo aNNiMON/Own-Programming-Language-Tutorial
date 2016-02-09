@@ -186,3 +186,14 @@ println split("1/2/3/4/5/6", "/")
 println join(nums, ", ")
 println join(nums, "|", "/")
 println join(nums, ", ", "[", "]")
+
+// Destructuring assignment
+arr = ["a", "b", "c"]
+extract(var1, var2, var3) = arr
+echo(var1, var2, var3)
+// Swap
+extract(var2, var1) = [var1, var2]
+echo(var1, var2)
+
+extract(, , var4) = arr
+println var4

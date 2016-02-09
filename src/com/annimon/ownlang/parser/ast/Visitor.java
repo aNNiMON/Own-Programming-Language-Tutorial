@@ -16,6 +16,7 @@ public interface Visitor {
     void visit(ConditionalExpression s);
     void visit(ContinueStatement s);
     void visit(DoWhileStatement s);
+    void visit(DestructuringAssignmentStatement s);
     void visit(ForStatement s);
     void visit(ForeachArrayStatement s);
     void visit(ForeachMapStatement s);

@@ -74,6 +74,7 @@ public final class Lexer {
         KEYWORDS.put("use", TokenType.USE);
         KEYWORDS.put("match", TokenType.MATCH);
         KEYWORDS.put("case", TokenType.CASE);
+        KEYWORDS.put("extract", TokenType.EXTRACT);
     }
 
     private final String input;

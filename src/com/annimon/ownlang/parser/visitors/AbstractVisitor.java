@@ -61,6 +61,11 @@ public abstract class AbstractVisitor implements Visitor {
     @Override
     public void visit(ContinueStatement s) {
     }
+    
+    @Override
+    public void visit(DestructuringAssignmentStatement s) {
+        s.containerExpression.accept(this);
+    }
 
     @Override
     public void visit(DoWhileStatement s) {

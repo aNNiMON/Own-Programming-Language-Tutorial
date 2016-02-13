@@ -221,3 +221,13 @@ println funcWithOptionalArgs("*", 10, "<!")
 
 v1 = v2 = v3 = v4 = 5
 echo(v1, v2, v3, v4)
+
+x = 5
+x += 10
+x *= 2
+println x
+
+xarr = [0, 5, 2]
+xarr[0] += xarr[1]
+xarr[0] *= xarr[2]
+println xarr[0]

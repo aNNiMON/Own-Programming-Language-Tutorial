@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class ContainerAccessExpression implements Expression {
+public final class ContainerAccessExpression implements Expression, Accessible {
     
     public final String variable;
     public final List<Expression> indices;
@@ -20,6 +20,11 @@ public final class ContainerAccessExpression implements Expression {
     
     @Override
     public Value eval() {
+        return get();
+    }
+    
+    @Override
+    public Value get() {
         final Value container = getContainer();
         final Value lastIndex = lastIndex();
         switch (container.type()) {
@@ -31,7 +36,26 @@ public final class ContainerAccessExpression implements Expression {
                 return ((MapValue) container).get(lastIndex);
                 
             default:
-                throw new TypeException("Array or map expected");
+                throw new TypeException("Array or map expected. Got " + container.type());
+        }
+    }
+
+    @Override
+    public Value set(Value value) {
+        final Value container = getContainer();
+        final Value lastIndex = lastIndex();
+        switch (container.type()) {
+            case Types.ARRAY:
+                final int arrayIndex = (int) lastIndex.asNumber();
+                ((ArrayValue) container).set(arrayIndex, value);
+                return value;
+
+            case Types.MAP:
+                ((MapValue) container).set(lastIndex, value);
+                return value;
+                
+            default:
+                throw new TypeException("Array or map expected. Got " + container.type());
         }
     }
     

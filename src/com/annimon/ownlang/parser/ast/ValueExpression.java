@@ -25,6 +25,10 @@ public final class ValueExpression implements Expression {
     public ValueExpression(Function value) {
         this.value = new FunctionValue(value);
     }
+    
+    public ValueExpression(Value value) {
+        this.value = value;
+    }
 
     @Override
     public Value eval() {

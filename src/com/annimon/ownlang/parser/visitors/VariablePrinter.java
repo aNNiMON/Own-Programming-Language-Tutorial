@@ -11,7 +11,7 @@ public final class VariablePrinter extends AbstractVisitor {
     @Override
     public void visit(AssignmentExpression s) {
         super.visit(s);
-        System.out.println(s.variable);
+        System.out.println(s.target);
     }
     
     @Override

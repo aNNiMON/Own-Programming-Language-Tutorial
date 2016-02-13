@@ -1,7 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
 
 /**
  *
@@ -9,19 +8,25 @@ import com.annimon.ownlang.lib.Variables;
  */
 public final class AssignmentExpression implements Expression {
 
-    public final String variable;
+    public final Accessible target;
+    public final BinaryExpression.Operator operation;
     public final Expression expression;
-
-    public AssignmentExpression(String variable, Expression expression) {
-        this.variable = variable;
-        this.expression = expression;
-    }
     
+    public AssignmentExpression(BinaryExpression.Operator operation, Accessible target, Expression expr) {
+        this.operation = operation;
+        this.target = target;
+        this.expression = expr;
+    }
+
     @Override
     public Value eval() {
-        final Value result = expression.eval();
-        Variables.set(variable, result);
-        return result;
+        if (operation == null) {
+            // Simple assignment
+            return target.set(expression.eval());
+        }
+        final Expression expr1 = new ValueExpression(target.get());
+        final Expression expr2 = new ValueExpression(expression.eval());
+        return target.set(new BinaryExpression(operation, expr1, expr2).eval());
     }
     
     @Override
@@ -31,6 +36,7 @@ public final class AssignmentExpression implements Expression {
 
     @Override
     public String toString() {
-        return String.format("%s = %s", variable, expression);
+        final String op = (operation == null) ? "" : operation.toString();
+        return String.format("%s %s= %s", target, op, expression);
     }
 }

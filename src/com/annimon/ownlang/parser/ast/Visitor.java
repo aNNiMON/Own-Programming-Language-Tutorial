@@ -13,7 +13,6 @@ public interface Visitor {
     void visit(BreakStatement s);
     void visit(ConditionalExpression s);
     void visit(ContainerAccessExpression s);
-    void visit(ContainerAssignmentExpression s);
     void visit(ContinueStatement s);
     void visit(DoWhileStatement s);
     void visit(DestructuringAssignmentStatement s);

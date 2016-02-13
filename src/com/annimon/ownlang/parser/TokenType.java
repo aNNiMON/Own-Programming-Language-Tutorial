@@ -33,6 +33,7 @@ public enum TokenType {
     STAR, // *
     SLASH, // /
     PERCENT,// %
+    
     EQ, // =
     EQEQ, // ==
     EXCL, // !
@@ -41,6 +42,19 @@ public enum TokenType {
     LT, // <
     GT, // >
     GTEQ, // >=
+    
+    PLUSEQ, // +=
+    MINUSEQ, // -=
+    STAREQ, // *=
+    SLASHEQ, // /=
+    PERCENTEQ, // %=
+    AMPEQ, // &=
+    CARETEQ, // ^=
+    BAREQ, // |=
+    COLONCOLONEQ, // ::=
+    LTLTEQ, // <<=
+    GTGTEQ, // >>=
+    GTGTGTEQ, // >>>=
     
     LTLT, // <<
     GTGT, // >>

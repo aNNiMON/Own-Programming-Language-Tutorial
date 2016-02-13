@@ -53,12 +53,6 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
-    public void visit(ContainerAssignmentExpression s) {
-        s.containerExpr.accept(this);
-        s.expression.accept(this);
-    }
-
-    @Override
     public void visit(ContinueStatement s) {
     }
     

@@ -31,6 +31,6 @@ public final class functional_foreach implements Function {
             }
             return NumberValue.ZERO;
         }
-        throw new TypeException("Invalid first argument. Array or map exprected");
+        throw new TypeException("Invalid first argument. Array or map expected");
     }
 }

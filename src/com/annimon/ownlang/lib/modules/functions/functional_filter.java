@@ -27,7 +27,7 @@ public final class functional_filter implements Function {
             return filterMap((MapValue) container, consumer);
         }
 
-        throw new TypeException("Invalid first argument. Array or map exprected");
+        throw new TypeException("Invalid first argument. Array or map expected");
     }
     
     private Value filterArray(ArrayValue array, Function predicate) {

@@ -33,7 +33,7 @@ public final class functional_map implements Function {
             return mapMap((MapValue) container, keyMapper, valueMapper);
         }
 
-        throw new TypeException("Invalid first argument. Array or map exprected");
+        throw new TypeException("Invalid first argument. Array or map expected");
     }
     
     private Value mapArray(ArrayValue array, Function mapper) {

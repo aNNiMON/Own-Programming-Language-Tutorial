@@ -34,6 +34,6 @@ public final class functional_reduce implements Function {
             }
             return result;
         }
-        throw new TypeException("Invalid first argument. Array or map exprected");
+        throw new TypeException("Invalid first argument. Array or map expected");
     }
 }

@@ -87,9 +87,6 @@ public final class Parser {
         if (match(TokenType.MATCH)) {
             return new ExprStatement(match());
         }
-        if (match(TokenType.EXTRACT)) {
-            return destructuringAssignment();
-        }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return new ExprStatement(function(qualifiedName()));
         }
@@ -97,17 +94,12 @@ public final class Parser {
     }
     
     private Statement assignmentStatement() {
-        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.EQ)) {
-            final String variable = consume(TokenType.WORD).getText();
-            consume(TokenType.EQ);
-            return new AssignmentStatement(variable, expression());
+        if (match(TokenType.EXTRACT)) {
+            return destructuringAssignment();
         }
-        
-        final Expression qualifiedNameExpr = qualifiedName();
-        if (lookMatch(0, TokenType.EQ) && (qualifiedNameExpr instanceof ContainerAccessExpression)) {
-            consume(TokenType.EQ);
-            final ContainerAccessExpression containerExpr = (ContainerAccessExpression) qualifiedNameExpr;
-            return new ContainerAssignmentStatement(containerExpr, expression());
+        final Expression assignment = assignmentStrict();
+        if (assignment != null) {
+            return new ExprStatement(assignment);
         }
         throw new ParseException("Unknown statement: " + get(0));
     }
@@ -330,7 +322,34 @@ public final class Parser {
     }
     
     private Expression expression() {
+        return assignment();
+    }
+    
+    private Expression assignment() {
+        final Expression assignment = assignmentStrict();
+        if (assignment != null) {
+            return assignment;
+        }
         return ternary();
+    }
+    
+    private Expression assignmentStrict() {
+        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.EQ)) {
+            final String variable = consume(TokenType.WORD).getText();
+            consume(TokenType.EQ);
+            return new AssignmentExpression(variable, expression());
+        }
+        
+        final int position = pos;
+        final Expression qualifiedNameExpr = qualifiedName();
+        if (lookMatch(0, TokenType.EQ) && (qualifiedNameExpr instanceof ContainerAccessExpression)) {
+            consume(TokenType.EQ);
+            final ContainerAccessExpression containerExpr = (ContainerAccessExpression) qualifiedNameExpr;
+            return new ContainerAssignmentExpression(containerExpr, expression());
+        }
+        pos = position;
+        
+        return null;
     }
     
     private Expression ternary() {

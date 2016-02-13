@@ -7,20 +7,21 @@ import com.annimon.ownlang.lib.Variables;
  *
  * @author aNNiMON
  */
-public final class AssignmentStatement implements Statement {
+public final class AssignmentExpression implements Expression {
 
     public final String variable;
     public final Expression expression;
 
-    public AssignmentStatement(String variable, Expression expression) {
+    public AssignmentExpression(String variable, Expression expression) {
         this.variable = variable;
         this.expression = expression;
     }
     
     @Override
-    public void execute() {
+    public Value eval() {
         final Value result = expression.eval();
         Variables.set(variable, result);
+        return result;
     }
     
     @Override

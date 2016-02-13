@@ -218,3 +218,6 @@ def funcWithOptionalArgs(str, count = 5, prefix = "<", suffix = ">") = prefix + 
 println funcWithOptionalArgs("*")
 println funcWithOptionalArgs("+", 2)
 println funcWithOptionalArgs("*", 10, "<!")
+
+v1 = v2 = v3 = v4 = 5
+echo(v1, v2, v3, v4)

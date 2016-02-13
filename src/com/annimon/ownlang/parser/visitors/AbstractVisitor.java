@@ -18,7 +18,7 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
-    public void visit(AssignmentStatement s) {
+    public void visit(AssignmentExpression s) {
         s.expression.accept(this);
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
-    public void visit(ContainerAssignmentStatement s) {
+    public void visit(ContainerAssignmentExpression s) {
         s.containerExpr.accept(this);
         s.expression.accept(this);
     }

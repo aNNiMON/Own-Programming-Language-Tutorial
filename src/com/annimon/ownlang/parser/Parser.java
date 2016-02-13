@@ -199,20 +199,38 @@ public final class Parser {
     }
     
     private FunctionDefineStatement functionDefine() {
-        // def name(arg1, arg2) { ... }  ||  def name(args) = expr
+        // def name(arg1, arg2 = value) { ... }  ||  def name(args) = expr
         final String name = consume(TokenType.WORD).getText();
+        final Arguments arguments = arguments();
+        final Statement body = statementBody();
+        return new FunctionDefineStatement(name, arguments, body);
+    }
+    
+    private Arguments arguments() {
+        // (arg1, arg2, arg3 = expr1, arg4 = expr2)
+        final Arguments arguments = new Arguments();
+        boolean startsOptionalArgs = false;
         consume(TokenType.LPAREN);
-        final List<String> argNames = new ArrayList<>();
         while (!match(TokenType.RPAREN)) {
-            argNames.add(consume(TokenType.WORD).getText());
+            final String name = consume(TokenType.WORD).getText();
+            if (match(TokenType.EQ)) {
+                startsOptionalArgs = true;
+                arguments.addOptional(name, variable());
+            } else if (!startsOptionalArgs) {
+                arguments.addRequired(name);
+            } else {
+                throw new ParseException("Required argument cannot be after optional");
+            }
             match(TokenType.COMMA);
         }
-        if (lookMatch(0, TokenType.EQ)) {
-            match(TokenType.EQ);
-            return new FunctionDefineStatement(name, argNames, new ReturnStatement(expression()));
+        return arguments;
+    }
+    
+    private Statement statementBody() {
+        if (match(TokenType.EQ)) {
+            return new ReturnStatement(expression());
         }
-        final Statement body = statementOrBlock();
-        return new FunctionDefineStatement(name, argNames, body);
+        return statementOrBlock();
     }
     
     private FunctionalExpression function(Expression qualifiedNameExpr) {
@@ -534,20 +552,9 @@ public final class Parser {
             return match();
         }
         if (match(TokenType.DEF)) {
-            consume(TokenType.LPAREN);
-            final List<String> argNames = new ArrayList<>();
-            while (!match(TokenType.RPAREN)) {
-                argNames.add(consume(TokenType.WORD).getText());
-                match(TokenType.COMMA);
-            }
-            Statement statement;
-            if (lookMatch(0, TokenType.EQ)) {
-                match(TokenType.EQ);
-                statement = new ReturnStatement(expression());
-            } else {
-                statement = statementOrBlock();
-            }
-            return new ValueExpression(new UserDefinedFunction(argNames, statement));
+            final Arguments arguments = arguments();
+            final Statement statement = statementBody();
+            return new ValueExpression(new UserDefinedFunction(arguments, statement));
         }
         return variable();
     }

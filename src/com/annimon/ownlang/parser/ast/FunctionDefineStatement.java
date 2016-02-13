@@ -2,7 +2,6 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.lib.UserDefinedFunction;
-import java.util.List;
 
 /**
  *
@@ -11,18 +10,18 @@ import java.util.List;
 public final class FunctionDefineStatement implements Statement {
     
     public final String name;
-    public final List<String> argNames;
+    public final Arguments arguments;
     public final Statement body;
     
-    public FunctionDefineStatement(String name, List<String> argNames, Statement body) {
+    public FunctionDefineStatement(String name, Arguments arguments, Statement body) {
         this.name = name;
-        this.argNames = argNames;
+        this.arguments = arguments;
         this.body = body;
     }
 
     @Override
     public void execute() {
-        Functions.set(name, new UserDefinedFunction(argNames, body));
+        Functions.set(name, new UserDefinedFunction(arguments, body));
     }
     
     @Override
@@ -32,6 +31,6 @@ public final class FunctionDefineStatement implements Statement {
 
     @Override
     public String toString() {
-        return String.format("def %s(%s) %s", name, argNames, body);
+        return String.format("def %s%s %s", name, arguments, body);
     }
 }

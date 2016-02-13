@@ -1,9 +1,10 @@
 package com.annimon.ownlang.lib;
 
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.parser.ast.Argument;
+import com.annimon.ownlang.parser.ast.Arguments;
 import com.annimon.ownlang.parser.ast.ReturnStatement;
 import com.annimon.ownlang.parser.ast.Statement;
-import java.util.List;
 
 /**
  *
@@ -11,32 +12,44 @@ import java.util.List;
  */
 public final class UserDefinedFunction implements Function {
     
-    private final List<String> argNames;
+    private final Arguments arguments;
     private final Statement body;
     
-    public UserDefinedFunction(List<String> argNames, Statement body) {
-        this.argNames = argNames;
+    public UserDefinedFunction(Arguments arguments, Statement body) {
+        this.arguments = arguments;
         this.body = body;
     }
     
     public int getArgsCount() {
-        return argNames.size();
+        return arguments.size();
     }
     
     public String getArgsName(int index) {
         if (index < 0 || index >= getArgsCount()) return "";
-        return argNames.get(index);
+        return arguments.get(index).getName();
     }
 
     @Override
     public Value execute(Value... values) {
         final int size = values.length;
-        if (size != getArgsCount()) throw new ArgumentsMismatchException("Arguments count mismatch");
+        final int requiredArgsCount = arguments.getRequiredArgumentsCount();
+        if (size < requiredArgsCount) {
+            throw new ArgumentsMismatchException(String.format("Arguments count mismatch. %d < %d", size, requiredArgsCount));
+        }
+        final int totalArgsCount = getArgsCount();
+        if (size > totalArgsCount) {
+            throw new ArgumentsMismatchException(String.format("Arguments count mismatch. %d > %d", size, totalArgsCount));
+        }
 
         try {
             Variables.push();
             for (int i = 0; i < size; i++) {
                 Variables.set(getArgsName(i), values[i]);
+            }
+            // Optional args if exists
+            for (int i = size; i < totalArgsCount; i++) {
+                final Argument arg = arguments.get(i);
+                Variables.set(arg.getName(), arg.getValueExpr().eval());
             }
             body.execute();
             return NumberValue.ZERO;
@@ -49,6 +62,6 @@ public final class UserDefinedFunction implements Function {
 
     @Override
     public String toString() {
-        return String.format("function %s %s", argNames.toString(), body.toString());
+        return String.format("function %s %s", arguments.toString(), body.toString());
     }
 }

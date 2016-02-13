@@ -212,3 +212,9 @@ def arrayRecursive(arr) = match arr {
   case []: "[]"
   case last: "[" + last + ", []]"
 }
+
+def funcWithOptionalArgs(str, count = 5, prefix = "<", suffix = ">") = prefix + (str * count) + suffix
+
+println funcWithOptionalArgs("*")
+println funcWithOptionalArgs("+", 2)
+println funcWithOptionalArgs("*", 10, "<!")

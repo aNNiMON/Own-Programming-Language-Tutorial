@@ -102,10 +102,12 @@ public final class Parser {
             consume(TokenType.EQ);
             return new AssignmentStatement(variable, expression());
         }
-        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
-            final ArrayAccessExpression array = element();
+        
+        final Expression qualifiedNameExpr = qualifiedName();
+        if (lookMatch(0, TokenType.EQ) && (qualifiedNameExpr instanceof ContainerAccessExpression)) {
             consume(TokenType.EQ);
-            return new ArrayAssignmentStatement(array, expression());
+            final ContainerAccessExpression containerExpr = (ContainerAccessExpression) qualifiedNameExpr;
+            return new ContainerAssignmentStatement(containerExpr, expression());
         }
         throw new ParseException("Unknown statement: " + get(0));
     }
@@ -247,31 +249,6 @@ public final class Parser {
             match(TokenType.COMMA);
         }
         return new MapExpression(elements);
-    }
-    
-    private ArrayAccessExpression element() {
-        // array[e1][e2]...[eN]
-        final String variable = consume(TokenType.WORD).getText();
-        final List<Expression> indices = new ArrayList<>();
-        do {
-            consume(TokenType.LBRACKET);
-            indices.add(expression());
-            consume(TokenType.RBRACKET);
-        } while(lookMatch(0, TokenType.LBRACKET));
-        return new ArrayAccessExpression(variable, indices);
-    }
-    
-    private ArrayAccessExpression object() {
-        // object.field1.field2
-        // Syntaxic sugar for object["field1"]["field2"]
-        final String variable = consume(TokenType.WORD).getText();
-        final List<Expression> indices = new ArrayList<>();
-        while (match(TokenType.DOT)) {
-            final String fieldName = consume(TokenType.WORD).getText();
-            final Expression key = new ValueExpression(fieldName);
-            indices.add(key);
-        }
-        return new ArrayAccessExpression(variable, indices);
     }
     
     private MatchExpression match() {
@@ -563,9 +540,11 @@ public final class Parser {
     }
     
     private Expression variable() {
+        // function(...
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return function(new ValueExpression(consume(TokenType.WORD).getText()));
         }
+        
         final Expression qualifiedNameExpr = qualifiedName();
         if (qualifiedNameExpr != null) {
             // variable(args) || arr["key"](args) || obj.key(args)
@@ -585,17 +564,35 @@ public final class Parser {
     }
     
     private Expression qualifiedName() {
+        // var || var.key[index].key2
         final Token current = get(0);
-        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LBRACKET)) {
-            return element();
-        }
-        if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.DOT)) {
-            return object();
-        }
-        if (match(TokenType.WORD)) {
+        if (!match(TokenType.WORD)) return null;
+        
+        final List<Expression> indices = variableSuffix();
+        if ((indices == null) || indices.isEmpty()) {
             return new VariableExpression(current.getText());
         }
-        return null;
+        return new ContainerAccessExpression(current.getText(), indices);
+    }
+    
+    private List<Expression> variableSuffix() {
+        // .key1.arr1[expr1][expr2].key2
+        if (!lookMatch(0, TokenType.DOT) && !lookMatch(0, TokenType.LBRACKET)) {
+            return null;
+        }
+        final List<Expression> indices = new ArrayList<>();
+        while (lookMatch(0, TokenType.DOT) || lookMatch(0, TokenType.LBRACKET)) {
+            if (match(TokenType.DOT)) {
+                final String fieldName = consume(TokenType.WORD).getText();
+                final Expression key = new ValueExpression(fieldName);
+                indices.add(key);
+            }
+            if (match(TokenType.LBRACKET)) {
+                indices.add(expression());
+                consume(TokenType.RBRACKET);
+            }
+        }
+        return indices;
     }
     
     private Expression value() {

@@ -6,14 +6,14 @@ package com.annimon.ownlang.parser.ast;
  */
 public interface Visitor {
     
-    void visit(ArrayAccessExpression s);
-    void visit(ArrayAssignmentStatement s);
     void visit(ArrayExpression s);
     void visit(AssignmentStatement s);
     void visit(BinaryExpression s);
     void visit(BlockStatement s);
     void visit(BreakStatement s);
     void visit(ConditionalExpression s);
+    void visit(ContainerAccessExpression s);
+    void visit(ContainerAssignmentStatement s);
     void visit(ContinueStatement s);
     void visit(DoWhileStatement s);
     void visit(DestructuringAssignmentStatement s);

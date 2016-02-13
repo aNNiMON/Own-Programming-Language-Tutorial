@@ -9,13 +9,13 @@ import com.annimon.ownlang.parser.ast.*;
 public final class VariablePrinter extends AbstractVisitor {
 
     @Override
-    public void visit(ArrayAccessExpression s) {
+    public void visit(AssignmentStatement s) {
         super.visit(s);
         System.out.println(s.variable);
     }
     
     @Override
-    public void visit(AssignmentStatement s) {
+    public void visit(ContainerAccessExpression s) {
         super.visit(s);
         System.out.println(s.variable);
     }

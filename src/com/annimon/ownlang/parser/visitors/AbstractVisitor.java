@@ -11,19 +11,6 @@ import java.util.Map;
 public abstract class AbstractVisitor implements Visitor {
 
     @Override
-    public void visit(ArrayAccessExpression s) {
-        for (Expression index : s.indices) {
-            index.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(ArrayAssignmentStatement s) {
-        s.array.accept(this);
-        s.expression.accept(this);
-    }
-
-    @Override
     public void visit(ArrayExpression s) {
         for (Expression index : s.elements) {
             index.accept(this);
@@ -56,6 +43,19 @@ public abstract class AbstractVisitor implements Visitor {
     public void visit(ConditionalExpression s) {
         s.expr1.accept(this);
         s.expr2.accept(this);
+    }
+    
+    @Override
+    public void visit(ContainerAccessExpression s) {
+        for (Expression index : s.indices) {
+            index.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(ContainerAssignmentStatement s) {
+        s.containerExpr.accept(this);
+        s.expression.accept(this);
     }
 
     @Override

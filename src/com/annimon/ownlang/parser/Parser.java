@@ -264,25 +264,38 @@ public final class Parser {
             MatchExpression.Pattern pattern = null;
             final Token current = get(0);
             if (match(TokenType.NUMBER)) {
+                // case 0.5: 
                 pattern = new MatchExpression.ConstantPattern(
                         new NumberValue(Double.parseDouble(current.getText()))
                 );
             } else if (match(TokenType.HEX_NUMBER)) {
+                // case #FF: 
                 pattern = new MatchExpression.ConstantPattern(
                         new NumberValue(Long.parseLong(current.getText(), 16))
                 );
             } else if (match(TokenType.TEXT)) {
+                // case "text":
                 pattern = new MatchExpression.ConstantPattern(
                         new StringValue(current.getText())
                 );
             } else if (match(TokenType.WORD)) {
+                // case value: 
                 pattern = new MatchExpression.VariablePattern(current.getText());
+            } else if (match(TokenType.LBRACKET)) {
+                // case [x :: xs]:
+                final MatchExpression.ListPattern listPattern = new MatchExpression.ListPattern();
+                while (!match(TokenType.RBRACKET)) {
+                    listPattern.add(consume(TokenType.WORD).getText());
+                    match(TokenType.COLONCOLON);
+                }
+                pattern = listPattern;
             }
             
             if (pattern == null) {
                 throw new ParseException("Wrong pattern in match expression: " + current);
             }
             if (match(TokenType.IF)) {
+                // case e if e > 0:
                 pattern.optCondition = expression();
             }
             

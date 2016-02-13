@@ -205,3 +205,10 @@ println object1.arr
 println object1.arr[0][1]
 object1.arr[0][1] = "str"
 println object1.arr[0][1]
+
+println arrayRecursive([1, 2, 3, 4, 5, 6, 7])
+def arrayRecursive(arr) = match arr {
+  case [head :: tail]: "[" + head + ", " + arrayRecursive(tail) + "]"
+  case []: "[]"
+  case last: "[" + last + ", []]"
+}

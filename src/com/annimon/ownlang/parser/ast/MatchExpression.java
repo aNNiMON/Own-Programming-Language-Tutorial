@@ -1,9 +1,12 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.exceptions.PatternMatchingException;
+import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,8 +51,92 @@ public final class MatchExpression implements Expression {
                     Variables.remove(pattern.variable);
                 }
             }
+            if ((value.type() == Types.ARRAY) && (p instanceof ListPattern)) {
+                final ListPattern pattern = (ListPattern) p;
+                if (matchListPattern((ArrayValue) value, pattern)) {
+                    // Clean up variables if matched
+                    final Value result = evalResult(p.result);
+                    for (String var : pattern.parts) {
+                        Variables.remove(var);
+                    }
+                    return result;
+                }
+            }
         }
         throw new PatternMatchingException("No pattern were matched");
+    }
+    
+    private boolean matchListPattern(ArrayValue array, ListPattern p) {
+        final List<String> parts = p.parts;
+        final int partsSize = parts.size();
+        final int arraySize = array.size();
+        switch (partsSize) {
+            case 0: // match [] { case []: ... }
+                if ((arraySize == 0) && optMatches(p)) {
+                    return true;
+                }
+                return false;
+
+            case 1: // match arr { case [x]: x = arr ... }
+                final String variable = parts.get(0);
+                Variables.set(variable, array);
+                if (optMatches(p)) {
+                    return true;
+                }
+                Variables.remove(variable);
+                return false;
+                
+            default: { // match arr { case [...]: .. }
+                if (partsSize == arraySize) {
+                    // match [0, 1, 2] { case [a::b::c]: a=0, b=1, c=2 ... }
+                    return matchListPatternEqualsSize(p, parts, partsSize, array);
+                } else if (partsSize < arraySize) {
+                    // match [1, 2, 3] { case [head :: tail]: ... }
+                    return matchListPatternWithTail(p, parts, partsSize, array, arraySize);
+                }
+                return false;
+            }
+        }
+    } 
+
+    private boolean matchListPatternEqualsSize(ListPattern p, List<String> parts, int partsSize, ArrayValue array) {
+        // Set variables
+        for (int i = 0; i < partsSize; i++) {
+            Variables.set(parts.get(i), array.get(i));
+        }
+        if (optMatches(p)) {
+            // Clean up will be provided after evaluate result
+            return true;
+        }
+        // Clean up variables if no match
+        for (String var : parts) {
+            Variables.remove(var);
+        }
+        return false;
+    }
+    
+    private boolean matchListPatternWithTail(ListPattern p, List<String> parts, int partsSize, ArrayValue array, int arraySize) {
+        // Set element variables
+        final int lastPart = partsSize - 1;
+        for (int i = 0; i < lastPart; i++) {
+            Variables.set(parts.get(i), array.get(i));
+        }
+        // Set tail variable
+        final ArrayValue tail = new ArrayValue(arraySize - partsSize + 1);
+        for (int i = lastPart; i < arraySize; i++) {
+            tail.set(i - lastPart, array.get(i));
+        }
+        Variables.set(parts.get(lastPart), tail);
+        // Check optional condition
+        if (optMatches(p)) {
+            // Clean up will be provided after evaluate result
+            return true;
+        }
+        // Clean up variables
+        for (String var : parts) {
+            Variables.remove(var);
+        }
+        return false;
     }
     
     private boolean match(Value value, Value constant) {
@@ -115,6 +202,27 @@ public final class MatchExpression implements Expression {
         @Override
         public String toString() {
             return variable + ": " + result;
+        }
+    }
+    
+    public static class ListPattern extends Pattern {
+        public List<String> parts;
+        
+        public ListPattern() {
+            this(new ArrayList<String>());
+        }
+        
+        public ListPattern(List<String> parts) {
+            this.parts = parts;
+        }
+
+        public void add(String part) {
+            parts.add(part);
+        }
+
+        @Override
+        public String toString() {
+            return parts + ": " + result;
         }
     }
 }

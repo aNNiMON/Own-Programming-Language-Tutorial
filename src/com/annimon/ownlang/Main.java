@@ -70,9 +70,14 @@ public final class Main {
             }
         }
         
-        final Statement program = new Parser(tokens).parse();
+        final Parser parser = new Parser(tokens);
+        final Statement program = parser.parse();
         if (showAst) {
             System.out.println(program.toString());
+        }
+        if (parser.getParseErrors().hasErrors()) {
+            System.out.println(parser.getParseErrors());
+            return;
         }
         program.accept(new FunctionAdder());
 //        program.accept(new VariablePrinter());

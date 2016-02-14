@@ -6,12 +6,12 @@ echo(-8 >> 2)
 echo(-8 >>> 2)
 
 echo()
-for a = 0, a <= 1, a = a + 1 {
-    for b = 0, b <= 1, b = b + 1 {
+for a = 0, a <= 1, a++ {
+    for b = 0, b <= 1, b++ {
         echo(a, " | ", b, " ", a | b)
         echo(a, " & ", b, " ", a & b)
         echo(a, " ^ ", b, " ", a ^ b)
     }
-    echo(" ~", a, " ", ~a)
-    echo(" !", a, " ", !a)
+    echo("   ~", a, " ", ~a)
+    echo("   !", a, " ", !a)
 }

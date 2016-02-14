@@ -5,11 +5,11 @@ xstep = 50 ystep = 5
 startx = 50
 starty = 400 + ystep / 2
 
-for (y = 0, y < 300, y = y + ystep) {
+for (y = 0, y < 300, y += ystep) {
 
     mouseMove(startx, (starty+y))
     mousePress(BUTTON1)
-    for (i = 0, i < 600, i = i + xstep) {
+    for (i = 0, i < 600, i += xstep) {
         mouseMove((startx+i), (starty+y))
         delay(pause)
     }

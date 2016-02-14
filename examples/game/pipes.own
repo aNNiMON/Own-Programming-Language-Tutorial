@@ -33,34 +33,36 @@ support = [
 
 def draw(v, cellSize) {
   c2 = cellSize / 2
-  if (v == HORIZONTAL) fillRect(0, c2 - 2, cellSize, 4)
-  else if (v == VERTICAL) fillRect(c2 - 2, 0, 4, cellSize)
-  else if (v == LEFT_TO_DOWN) {
-    fillRect(0, c2 - 2, c2, 4)
-    fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
-  }
-  else if (v == LEFT_TO_UP) {
-    fillRect(0, c2 - 2, c2, 4)
-    fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
-  }
-  else if (v == RIGHT_TO_UP) {
-    fillRect(c2 - 2, c2 - 2, c2 + 2, 4)
-    fillRect(c2 - 2, 0, 4, c2 + 2)
-  }
-  else if (v == RIGHT_TO_DOWN) {
-    fillRect(c2 - 2, c2 - 2, c2 + 2, 4)
-    fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
-  }
-  else if (v == CROSS) {
-    fillRect(c2 - 2, 0, 4, cellSize)
-    fillRect(0, c2 - 2, cellSize, 4)
+  match v {
+    case HORIZONTAL : fillRect(0, c2 - 2, cellSize, 4)
+    case VERTICAL : fillRect(c2 - 2, 0, 4, cellSize)
+    case LEFT_TO_DOWN : {
+      fillRect(0, c2 - 2, c2, 4)
+      fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
+    }
+    case LEFT_TO_UP : {
+      fillRect(0, c2 - 2, c2, 4)
+      fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
+    }
+    case RIGHT_TO_UP : {
+      fillRect(c2 - 2, c2 - 2, c2 + 2, 4)
+      fillRect(c2 - 2, 0, 4, c2 + 2)
+    }
+    case RIGHT_TO_DOWN : {
+      fillRect(c2 - 2, c2 - 2, c2 + 2, 4)
+      fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
+    }
+    case CROSS : {
+      fillRect(c2 - 2, 0, 4, cellSize)
+      fillRect(0, c2 - 2, cellSize, 4)
+    }
   }
 }
 
-def supportLeft(v)  return support[v][0]
-def supportRight(v) return support[v][1]
-def supportUp(v)    return support[v][2]
-def supportDown(v)  return support[v][3]
+def supportLeft(v)  = support[v][0]
+def supportRight(v) = support[v][1]
+def supportUp(v)    = support[v][2]
+def supportDown(v)  = support[v][3]
 ///-------------------------------------
 
 
@@ -73,8 +75,8 @@ SIZE = 10
 board = newarray(SIZE, SIZE)
 
 def createBoard() {
-  for i=0, i<SIZE, i=i+1 
-    for j=0, j<SIZE, j=j+1
+  for i=0, i<SIZE, i++
+    for j=0, j<SIZE, j++
       board[i][j] = rand(CELL_LAST)
 }
 
@@ -144,10 +146,10 @@ run = 1
 while run {
   //key = gameaction(keypressed())
   key = keypressed()
-  if (key == VK_LEFT  && curX > 0) curX = curX - 1
-  else if (key == VK_RIGHT && curX < SIZE - 1) curX = curX + 1
-  else if (key == VK_UP    && curY > 0) curY = curY - 1
-  else if (key == VK_DOWN  && curY < SIZE - 1) curY = curY + 1
+  if (key == VK_LEFT  && curX > 0) curX--
+  else if (key == VK_RIGHT && curX < SIZE - 1) curX++
+  else if (key == VK_UP    && curY > 0) curY--
+  else if (key == VK_DOWN  && curY < SIZE - 1) curY++
   else if key == VK_FIRE switchCell(curX,curY)
   else if key == 48 run = 0
 
@@ -157,13 +159,13 @@ while run {
   // курсор
   color(#4444FF)
   frect(curX*cellSize, curY*cellSize, cellSize, cellSize)
-  for (i=0, i<SIZE, i=i+1) {
+  for (i=0, i<SIZE, i++) {
     color(0)
     ic = i*cellSize
     line(0, ic, cellSize*SIZE, ic)
     line(ic, 0, ic, cellSize*SIZE)
     color(#FF0000)
-    for j=0, j<SIZE, j=j+1 {
+    for j=0, j<SIZE, j++ {
       translateX = ic
       translateY = j*cellSize
       draw(board[i][j], cellSize)

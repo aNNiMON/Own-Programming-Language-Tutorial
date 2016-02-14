@@ -9,10 +9,10 @@ x = rand(w) y = rand(h)
 run = 1
 while run {
   key = keypressed()
-  if (key == VK_LEFT  && x > 0) x = x - 1
-  else if (key == VK_RIGHT && x < w) x = x + 1
-  else if (key == VK_UP    && y > 0) y = y - 1
-  else if (key == VK_DOWN  && y < h) y = y + 1
+  if (key == VK_LEFT  && x > 0) x--
+  else if (key == VK_RIGHT && x < w) x++
+  else if (key == VK_UP    && y > 0) y--
+  else if (key == VK_DOWN  && y < h) y++
   else if key == VK_ESCAPE run = 0
 
   color(255,255,255)

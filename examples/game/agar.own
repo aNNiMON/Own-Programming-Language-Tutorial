@@ -16,7 +16,7 @@ fieldY = rand(fieldHeight) - h2
 NUM_FOOD = 350
 food = newarray(4, NUM_FOOD)
 
-for i = 0, i < NUM_FOOD, i = i + 1 {
+for i = 0, i < NUM_FOOD, i++ {
     food[0][i] = rand(fieldWidth)
     food[1][i] = rand(fieldHeight)
     food[2][i] = 6 + rand(2)
@@ -31,8 +31,8 @@ run = 1
 while run {
     mouse = mousehover()
     angle = atan2(mouse[1] - h2, mouse[0] - w2)
-    fieldX = fieldX + cos(angle) * 50/playerSize
-    fieldY = fieldY + sin(angle) * 50/playerSize
+    fieldX += cos(angle) * 50/playerSize
+    fieldY += sin(angle) * 50/playerSize
     if (fieldX < -w2) fieldX = -w2
     else if (fieldX > fieldWidth - w2 - 1) fieldX = fieldWidth - w2 - 1
     if (fieldY < -h2) fieldY = -h2
@@ -45,13 +45,13 @@ while run {
     color(#333333)
     rect(-fieldX, -fieldY, fieldWidth, fieldHeight)
     
-    for i = 0, i < NUM_FOOD, i = i + 1 {
+    for i = 0, i < NUM_FOOD, i++ {
         dx = food[0][i] - fieldX - w2
         dy = food[1][i] - fieldY - h2
         rad = food[2][i] + playerSize
         if ( (dx*dx + dy*dy) < (rad*rad) ) {
             // есть столкновение
-            playerSize = playerSize + 1
+            playerSize++
             food[0][i] = rand(w)
             food[1][i] = rand(h)
             food[2][i] = 6 + rand(2)

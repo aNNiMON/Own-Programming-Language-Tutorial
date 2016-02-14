@@ -14,11 +14,12 @@ def rect(x, y, w, h) {
 
 def fractal(cx, cy, size) {
   if size >= 2 {
+    s2 = size / 2
     color(0, 0, 255 - size * 255 / w/2)
-    rect(cx-size/2, cy-size/2, size, size)
-    fractal(cx-size/2, cy-size/2, size / 2)
-    fractal(cx+size/2, cy-size/2, size / 2)
-    fractal(cx-size/2, cy+size/2, size / 2)
-    fractal(cx+size/2, cy+size/2, size / 2)
+    rect(cx-s2, cy-s2, size, size)
+    fractal(cx-s2, cy-s2, s2)
+    fractal(cx+s2, cy-s2, s2)
+    fractal(cx-s2, cy+s2, s2)
+    fractal(cx+s2, cy+s2, s2)
   }
 }

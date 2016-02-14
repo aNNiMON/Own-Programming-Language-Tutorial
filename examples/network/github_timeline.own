@@ -20,8 +20,7 @@ thread(::http, "https://api.github.com/events", def(r) {
 
 def show_github_events(event) {
     println event.created_at
-    actor = event.actor
-    println "User: https://github.com/" + actor.login
+    println "User: https://github.com/" + event.actor.login
     println github_event_type(event)
     println "-" * 50
 }
@@ -32,7 +31,7 @@ def github_event_type(event) {
     return match event.type {
       case "CommitCommentEvent": "commented commit in " + repo + "\n" + payload.comment.body
       case "CreateEvent": "created " + payload.ref_type + " on " + repo
-      case "DeleteEvent": "deleted " + payload.ref_type + " on " + repo    
+      case "DeleteEvent": "deleted " + payload.ref_type + " on " + repo
       case "ForkEvent": "forked repository " + repo
       case "IssueCommentEvent": "commented issue " + payload.issue.title + " on " + repo + "\n" + payload.comment.body
       case "IssuesEvent": payload.action + " issue '" + payload.issue.title + "' on " + repo

@@ -20,27 +20,24 @@ repaint()
 
 def cpoly(cx, cy, size) {
   ox = cx  oy = cy - size
-  i = 0
   ang = 0
-  while i < NUM_POINTS {
-    ang = ang + angle
+  for i = 0, i < NUM_POINTS, i++ {
+    ang += angle
     nx = cx - sin(ang)*size  ny = cy - cos(ang)*size
     line(ox, oy, nx, ny)
     ox = nx  oy = ny
-    i = i + 1
   }
 }
 
 def fractal(cx, cy, size) {
   if size >= 3 {
     s2 = size / 2
+    sD = size / DIVIDER
     color(0, 0, 255 - size * 255 / w/2)
-    cpoly(cx, cy, size / DIVIDER)
-    fractal(cx, cy - s2, size / DIVIDER)
-    n = 0
-    while n < NUM_POINTS {
-      fractal(cx - sin(angle*n)*s2, cy - cos(angle*n)*s2, size / DIVIDER)
-      n = n + 1
+    cpoly(cx, cy, sD)
+    fractal(cx, cy - s2, sD)
+    for n = 0, n < NUM_POINTS, n++ {
+      fractal(cx - sin(angle*n)*s2, cy - cos(angle*n)*s2, sD)
     }
   }
 }

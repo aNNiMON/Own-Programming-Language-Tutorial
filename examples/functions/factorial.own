@@ -17,7 +17,7 @@ def fibonacci(count) {
     return fib(count)
 }
 
-for i = 0, i < 10, i = i + 1 
+for i = 0, i < 10, i++
     print "  " + fibonacci(i)
 print "\n"
 

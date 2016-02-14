@@ -60,6 +60,9 @@ public final class Lexer {
         OPERATORS.put(">>=", TokenType.GTGTEQ);
         OPERATORS.put(">>>=", TokenType.GTGTGTEQ);
 
+        OPERATORS.put("++", TokenType.PLUSPLUS);
+        OPERATORS.put("--", TokenType.MINUSMINUS);
+        
         OPERATORS.put("::", TokenType.COLONCOLON);
         
         OPERATORS.put("&&", TokenType.AMPAMP);

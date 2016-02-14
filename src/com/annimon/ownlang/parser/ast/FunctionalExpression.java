@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class FunctionalExpression implements Expression {
+public final class FunctionalExpression implements Expression, Statement {
     
     public final Expression functionExpr;
     public final List<Expression> arguments;
@@ -22,6 +22,11 @@ public final class FunctionalExpression implements Expression {
     
     public void addArgument(Expression arg) {
         arguments.add(arg);
+    }
+    
+    @Override
+    public void execute() {
+        eval();
     }
     
     @Override

@@ -230,4 +230,5 @@ println x
 xarr = [0, 5, 2]
 xarr[0] += xarr[1]
 xarr[0] *= xarr[2]
+xarr[0]++
 println xarr[0]

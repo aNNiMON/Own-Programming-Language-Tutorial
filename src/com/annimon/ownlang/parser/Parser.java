@@ -115,9 +115,9 @@ public final class Parser {
         if (match(TokenType.EXTRACT)) {
             return destructuringAssignment();
         }
-        final Expression assignment = assignmentStrict();
-        if (assignment != null) {
-            return new ExprStatement(assignment);
+        final Expression expression = expression();
+        if (expression instanceof Statement) {
+            return (Statement) expression;
         }
         throw new ParseException("Unknown statement: " + get(0));
     }
@@ -561,6 +561,12 @@ public final class Parser {
     }
     
     private Expression unary() {
+        if (match(TokenType.PLUSPLUS)) {
+            return new UnaryExpression(UnaryExpression.Operator.INCREMENT_PREFIX, primary());
+        }
+        if (match(TokenType.MINUSMINUS)) {
+            return new UnaryExpression(UnaryExpression.Operator.DECREMENT_PREFIX, primary());
+        }
         if (match(TokenType.MINUS)) {
             return new UnaryExpression(UnaryExpression.Operator.NEGATE, primary());
         }
@@ -609,6 +615,13 @@ public final class Parser {
             // variable(args) || arr["key"](args) || obj.key(args)
             if (lookMatch(0, TokenType.LPAREN)) {
                 return function(qualifiedNameExpr);
+            }
+            // postfix increment/decrement
+            if (match(TokenType.PLUSPLUS)) {
+                return new UnaryExpression(UnaryExpression.Operator.INCREMENT_POSTFIX, qualifiedNameExpr);
+            }
+            if (match(TokenType.MINUSMINUS)) {
+                return new UnaryExpression(UnaryExpression.Operator.DECREMENT_POSTFIX, qualifiedNameExpr);
             }
             return qualifiedNameExpr;
         }

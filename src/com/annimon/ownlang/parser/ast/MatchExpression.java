@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class MatchExpression implements Expression {
+public final class MatchExpression implements Expression, Statement {
     
     public final Expression expression;
     public final List<Pattern> patterns;
@@ -21,6 +21,11 @@ public final class MatchExpression implements Expression {
     public MatchExpression(Expression expression, List<Pattern> patterns) {
         this.expression = expression;
         this.patterns = patterns;
+    }
+    
+    @Override
+    public void execute() {
+        eval();
     }
     
     @Override

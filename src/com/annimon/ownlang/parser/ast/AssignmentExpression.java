@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.Value;
  *
  * @author aNNiMON
  */
-public final class AssignmentExpression implements Expression {
+public final class AssignmentExpression implements Expression, Statement {
 
     public final Accessible target;
     public final BinaryExpression.Operator operation;
@@ -16,6 +16,11 @@ public final class AssignmentExpression implements Expression {
         this.operation = operation;
         this.target = target;
         this.expression = expr;
+    }
+    
+    @Override
+    public void execute() {
+        eval();
     }
 
     @Override

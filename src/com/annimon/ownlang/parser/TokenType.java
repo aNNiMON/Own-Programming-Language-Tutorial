@@ -56,6 +56,9 @@ public enum TokenType {
     GTGTEQ, // >>=
     GTGTGTEQ, // >>>=
     
+    PLUSPLUS, // ++
+    MINUSMINUS, // --
+    
     LTLT, // <<
     GTGT, // >>
     GTGTGT, // >>>

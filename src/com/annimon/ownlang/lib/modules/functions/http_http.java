@@ -5,26 +5,23 @@ import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.UnsupportedCharsetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.*;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
+import okhttp3.*;
+import okhttp3.internal.http.HttpMethod;
 
 public final class http_http implements Function {
     
     private static final Value
             HEADER_KEY = new StringValue("header"),
-            CHARSET_KEY = new StringValue("charset");
+            CHARSET_KEY = new StringValue("charset"),
+            ENCODED_KEY = new StringValue("encoded"),
+            CONTENT_TYPE = new StringValue("content_type"),
+            EXTENDED_RESULT = new StringValue("extended_result");
+    
+    private static final MediaType URLENCODED_MEDIA_TYPE = MediaType.parse("application/x-www-form-urlencoded");
+    
+    private final OkHttpClient client = new OkHttpClient();
 
     @Override
     public Value execute(Value... args) {
@@ -85,91 +82,90 @@ public final class http_http implements Function {
         return process(url, method, params, MapValue.EMPTY, function);
     }
     
-    private Value process(String url, String method, Value requestParams, MapValue options, FunctionValue function) {
+    private Value process(String url, String methodStr, Value requestParams, MapValue options, FunctionValue function) {
+        final String method = methodStr.toUpperCase();
         final Function callback = function.getValue();
-        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            HttpRequestBase httpMethod;
-            switch (method.toUpperCase()) {
-                case "POST":
-                    httpMethod = new HttpPost(url);
-                    break;
-                case "PUT":
-                    httpMethod = new HttpPut(url);
-                    break;
-                case "DELETE":
-                    httpMethod = new HttpDelete(url);
-                    break;
-                case "PATCH":
-                    httpMethod = new HttpPatch(url);
-                    break;
-                case "HEAD":
-                    httpMethod = new HttpHead(url);
-                    break;
-                case "OPTIONS":
-                    httpMethod = new HttpOptions(url);
-                    break;
-                case "TRACE":
-                    httpMethod = new HttpTrace(url);
-                    break;
-                case "GET":
-                default:
-                    httpMethod = new HttpGet(url);
-                    break;
-            }
-            
+        try {
+            final Request.Builder builder = new Request.Builder()
+                    .url(url)
+                    .method(method, getRequestBody(method, requestParams, options));
             if (options.containsKey(HEADER_KEY)) {
-                applyHeaderParams((MapValue) options.get(HEADER_KEY), httpMethod);
+                applyHeaderParams((MapValue) options.get(HEADER_KEY), builder);
             }
             
-            if (httpMethod instanceof HttpEntityEnclosingRequestBase) {
-                final HttpEntityEnclosingRequestBase heerb = (HttpEntityEnclosingRequestBase) httpMethod;
-                if (requestParams.type() == Types.MAP) {
-                    applyMapRequestParams(heerb, (MapValue) requestParams, options);
-                } else {
-                    applyStringRequestParams(heerb, requestParams, options);
-                }
-            }
-            
-            final HttpResponse httpResponse = httpClient.execute(httpMethod);
-            final String response = new BasicResponseHandler().handleResponse(httpResponse);
-            callback.execute(new StringValue(response));
-            return NumberValue.fromBoolean(true);
+            final Response response = client.newCall(builder.build()).execute();
+            callback.execute(getResult(response, options));
+            return NumberValue.fromBoolean(response.isSuccessful());
         } catch (IOException ex) {
             return NumberValue.fromBoolean(false);
         }
     }
+
+    private Value getResult(Response response, MapValue options) throws IOException {
+        if (options.containsKey(EXTENDED_RESULT)) {
+            final MapValue map = new MapValue(10);
+            map.set(new StringValue("text"), new StringValue(response.body().string()));
+            map.set(new StringValue("message"), new StringValue(response.message()));
+            map.set(new StringValue("code"), new NumberValue(response.code()));
+            final MapValue headers = new MapValue(response.headers().size());
+            for (Map.Entry<String, List<String>> entry : response.headers().toMultimap().entrySet()) {
+                final int valuesSize = entry.getValue().size();
+                final ArrayValue values = new ArrayValue(valuesSize);
+                for (int i = 0; i < valuesSize; i++) {
+                    values.set(i, new StringValue(entry.getValue().get(i)));
+                }
+                headers.set(new StringValue(entry.getKey()), values);
+            }
+            map.set(new StringValue("headers"), headers);
+            map.set(new StringValue("content_length"), new NumberValue(response.body().contentLength()));
+            map.set(CONTENT_TYPE, new StringValue(response.body().contentType().toString()));
+            return map;
+        }
+        return new StringValue(response.body().string());
+    }
     
-    private void applyHeaderParams(MapValue headerParams, HttpRequestBase httpMethod) {
+    private void applyHeaderParams(MapValue headerParams, Request.Builder builder) {
         for (Map.Entry<Value, Value> p : headerParams) {
-            httpMethod.addHeader(p.getKey().asString(), p.getValue().asString());
+            builder.header(p.getKey().asString(), p.getValue().asString());
         }
     }
     
-    private void applyMapRequestParams(HttpEntityEnclosingRequestBase h, MapValue params, MapValue options)
-            throws UnsupportedEncodingException {
-        final List<NameValuePair> entityParams = new ArrayList<>(params.size());
+    private RequestBody getRequestBody(String method, Value params, MapValue options) throws UnsupportedEncodingException {
+        if (!HttpMethod.permitsRequestBody(method)) return null;
+        
+        if (params.type() == Types.MAP) {
+            return getMapRequestBody((MapValue) params, options);
+        }
+        return getStringRequestBody(params, options);
+    }
+    
+    private RequestBody getMapRequestBody(MapValue params, MapValue options) throws UnsupportedEncodingException {
+        final FormBody.Builder form = new FormBody.Builder();
+        final boolean alreadyEncoded = (options.containsKey(ENCODED_KEY) && options.get(ENCODED_KEY).asNumber() != 0);
         for (Map.Entry<Value, Value> param : params) {
             final String name = param.getKey().asString();
             final String value = param.getValue().asString();
-            entityParams.add(new BasicNameValuePair(name, value));
+            if (alreadyEncoded)
+                form.addEncoded(name, value);
+            else 
+                form.add(name, value);
         }
-        HttpEntity entity;
-        if (options.containsKey(CHARSET_KEY)) {
-            entity = new UrlEncodedFormEntity(entityParams, options.get(CHARSET_KEY).asString());
-        } else {
-            entity = new UrlEncodedFormEntity(entityParams);
-        }
-        h.setEntity(entity);
+        return form.build();
     }
 
-    private void applyStringRequestParams(final HttpEntityEnclosingRequestBase heerb, Value requestParams, MapValue options) throws UnsupportedEncodingException, UnsupportedCharsetException {
-        HttpEntity entity;
-        if (options.containsKey(CHARSET_KEY)) {
-            entity = new StringEntity(requestParams.asString(), options.get(CHARSET_KEY).asString());
+    private RequestBody getStringRequestBody(Value params, MapValue options) throws UnsupportedEncodingException {
+        final MediaType type;
+        if (options.containsKey(CONTENT_TYPE)) {
+            type = MediaType.parse(options.get(CONTENT_TYPE).asString());
         } else {
-            entity = new StringEntity(requestParams.asString());
+            type = URLENCODED_MEDIA_TYPE;
         }
-        heerb.setEntity(entity);
+        
+        if (options.containsKey(CHARSET_KEY)) {
+            final String charset = options.get(CHARSET_KEY).asString();
+            return RequestBody.create(type, params.asString().getBytes(charset));
+        }
+        
+        return RequestBody.create(type, params.asString());
     }
-
 }

@@ -150,7 +150,7 @@ public final class Lexer {
     private void tokenizeHexNumber() {
         clearBuffer();
         char current = peek(0);
-        while (Character.isDigit(current) || isHexNumber(current)) {
+        while (isHexNumber(current)) {
             buffer.append(current);
             current = next();
         }
@@ -158,7 +158,9 @@ public final class Lexer {
     }
 
     private static boolean isHexNumber(char current) {
-        return "abcdef".indexOf(Character.toLowerCase(current)) != -1;
+        return Character.isDigit(current)
+                || ('a' <= current && current <= 'f')
+                || ('A' <= current && current <= 'F');
     }
     
     private void tokenizeOperator() {
@@ -236,7 +238,28 @@ public final class Lexer {
                     case 'b': current = next(); buffer.append('\b'); continue;
                     case 'f': current = next(); buffer.append('\f'); continue;
                     case 'n': current = next(); buffer.append('\n'); continue;
+                    case 'r': current = next(); buffer.append('\r'); continue;
                     case 't': current = next(); buffer.append('\t'); continue;
+                    case 'u': // http://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.3
+                        int rollbackPosition = pos;
+                        while (current == 'u') current = next();
+                        int escapedValue = 0;
+                        for (int i = 12; i >= 0 && escapedValue != -1; i -= 4) {
+                            if (isHexNumber(current)) {
+                                escapedValue |= (Character.digit(current, 16) << i);
+                            } else {
+                                escapedValue = -1;
+                            }
+                            current = next();
+                        }
+                        if (escapedValue >= 0) {
+                            buffer.append((char) escapedValue);
+                        } else {
+                            // rollback
+                            buffer.append("\\u");
+                            pos = rollbackPosition;
+                        }
+                        continue;
                 }
                 buffer.append('\\');
                 continue;

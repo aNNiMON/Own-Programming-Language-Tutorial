@@ -22,8 +22,6 @@ import javax.swing.JPanel;
  */
 public final class canvas implements Module {
     
-    private static final NumberValue MINUS_ONE = new NumberValue(-1);
-    
     private static JFrame frame;
     private static CanvasPanel panel;
     private static Graphics2D graphics;
@@ -55,7 +53,7 @@ public final class canvas implements Module {
         Variables.set("VK_FIRE", new NumberValue(KeyEvent.VK_ENTER));
         Variables.set("VK_ESCAPE", new NumberValue(KeyEvent.VK_ESCAPE));
         
-        lastKey = MINUS_ONE;
+        lastKey = NumberValue.MINUS_ONE;
         mouseHover = new ArrayValue(new Value[] { NumberValue.ZERO, NumberValue.ZERO });
     }
     
@@ -91,11 +89,7 @@ public final class canvas implements Module {
     private static Function intConsumer4Convert(IntConsumer4 consumer) {
         return args -> {
             if (args.length != 4) throw new ArgumentsMismatchException("Four args expected");
-            int x = (int) args[0].asNumber();
-            int y = (int) args[1].asNumber();
-            int w = (int) args[2].asNumber();
-            int h = (int) args[3].asNumber();
-            consumer.accept(x, y, w, h);
+            consumer.accept(args[0].asInt(), args[1].asInt(), args[2].asInt(), args[3].asInt());
             return NumberValue.ZERO;
         };
     }
@@ -116,7 +110,7 @@ public final class canvas implements Module {
                 }
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    lastKey = MINUS_ONE;
+                    lastKey = NumberValue.MINUS_ONE;
                 }
             });
             addMouseMotionListener(new MouseMotionAdapter() {
@@ -147,13 +141,13 @@ public final class canvas implements Module {
                     title = args[0].asString();
                     break;
                 case 2:
-                    width = (int) args[0].asNumber();
-                    height = (int) args[1].asNumber();
+                    width = args[0].asInt();
+                    height = args[1].asInt();
                     break;
                 case 3:
                     title = args[0].asString();
-                    width = (int) args[1].asNumber();
-                    height = (int) args[2].asNumber();
+                    width = args[1].asInt();
+                    height = args[2].asInt();
                     break;
             }
             panel = new CanvasPanel(width, height);
@@ -188,8 +182,8 @@ public final class canvas implements Module {
         @Override
         public Value execute(Value... args) {
             if (args.length != 3) throw new ArgumentsMismatchException("Three args expected");
-            int x = (int) args[1].asNumber();
-            int y = (int) args[2].asNumber();
+            int x = args[1].asInt();
+            int y = args[2].asInt();
             graphics.drawString(args[0].asString(), x, y);
             return NumberValue.ZERO;
         }
@@ -219,12 +213,12 @@ public final class canvas implements Module {
         @Override
         public Value execute(Value... args) {
             if (args.length == 1) {
-                graphics.setColor(new Color((int) args[0].asNumber()));
+                graphics.setColor(new Color(args[0].asInt()));
                 return NumberValue.ZERO;
             }
-            int r = (int) args[0].asNumber();
-            int g = (int) args[1].asNumber();
-            int b = (int) args[2].asNumber();
+            int r = args[0].asInt();
+            int g = args[1].asInt();
+            int b = args[2].asInt();
             graphics.setColor(new Color(r, g, b));
             return NumberValue.ZERO;
         }

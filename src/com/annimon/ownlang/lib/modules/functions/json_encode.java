@@ -26,7 +26,7 @@ public final class json_encode implements Function {
             case Types.MAP:
                 return process((MapValue) val);
             case Types.NUMBER:
-                return val.asNumber();
+                return ((NumberValue) val).raw();
             case Types.STRING:
                 return val.asString();
             default:

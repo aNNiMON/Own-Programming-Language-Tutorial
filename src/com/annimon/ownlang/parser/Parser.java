@@ -327,12 +327,12 @@ public final class Parser {
             if (match(TokenType.NUMBER)) {
                 // case 0.5: 
                 pattern = new MatchExpression.ConstantPattern(
-                        new NumberValue(Double.parseDouble(current.getText()))
+                        new NumberValue(createNumber(current.getText(), 10))
                 );
             } else if (match(TokenType.HEX_NUMBER)) {
                 // case #FF: 
                 pattern = new MatchExpression.ConstantPattern(
-                        new NumberValue(Long.parseLong(current.getText(), 16))
+                        new NumberValue(createNumber(current.getText(), 16))
                 );
             } else if (match(TokenType.TEXT)) {
                 // case "text":
@@ -703,15 +703,28 @@ public final class Parser {
     private Expression value() {
         final Token current = get(0);
         if (match(TokenType.NUMBER)) {
-            return new ValueExpression(Double.parseDouble(current.getText()));
+            return new ValueExpression(createNumber(current.getText(), 10));
         }
         if (match(TokenType.HEX_NUMBER)) {
-            return new ValueExpression(Long.parseLong(current.getText(), 16));
+            return new ValueExpression(createNumber(current.getText(), 16));
         }
         if (match(TokenType.TEXT)) {
             return new ValueExpression(current.getText());
         }
         throw new ParseException("Unknown expression: " + current);
+    }
+    
+    private Number createNumber(String text, int radix) {
+        // Double
+        if (text.contains(".")) {
+            return Double.parseDouble(text);
+        }
+        // Integer
+        try {
+            return Integer.parseInt(text, radix);
+        } catch (NumberFormatException nfe) {
+            return Long.parseLong(text, radix);
+        }
     }
     
     private Token consume(TokenType type) {

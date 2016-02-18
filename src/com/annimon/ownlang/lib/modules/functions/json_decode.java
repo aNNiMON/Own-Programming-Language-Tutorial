@@ -30,7 +30,7 @@ public final class json_decode implements Function {
             return new StringValue((String) obj);
         }
         if (obj instanceof Number) {
-            return new NumberValue(((Number) obj).doubleValue());
+            return new NumberValue(((Number) obj));
         }
         if (obj instanceof Boolean) {
             return NumberValue.fromBoolean((Boolean) obj);

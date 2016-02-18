@@ -20,5 +20,12 @@ public final class types implements Module {
         Functions.set("typeof", args -> new NumberValue(args[0].type()));
         Functions.set("string", args -> new StringValue(args[0].asString()));
         Functions.set("number", args -> new NumberValue(args[0].asNumber()));
+        
+        Functions.set("byte", args -> new NumberValue((byte)args[0].asInt()));
+        Functions.set("short", args -> new NumberValue((short)args[0].asInt()));
+        Functions.set("int", args -> new NumberValue(args[0].asInt()));
+        Functions.set("long", args -> new NumberValue((long)args[0].asNumber()));
+        Functions.set("float", args -> new NumberValue((float)args[0].asNumber()));
+        Functions.set("double", args -> new NumberValue(args[0].asNumber()));
     }
 }

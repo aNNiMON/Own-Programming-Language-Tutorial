@@ -48,9 +48,9 @@ public final class ConditionalExpression implements Expression {
         final Value value1 = expr1.eval();
         switch (operation) {
             case AND: return NumberValue.fromBoolean(
-                    (value1.asNumber() != 0) && (expr2.eval().asNumber() != 0) );
+                    (value1.asInt() != 0) && (expr2.eval().asInt() != 0) );
             case OR: return NumberValue.fromBoolean(
-                    (value1.asNumber() != 0) || (expr2.eval().asNumber() != 0) );
+                    (value1.asInt() != 0) || (expr2.eval().asInt() != 0) );
         }
         
         

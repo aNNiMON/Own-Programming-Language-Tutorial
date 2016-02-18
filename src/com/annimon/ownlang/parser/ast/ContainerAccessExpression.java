@@ -29,7 +29,7 @@ public final class ContainerAccessExpression implements Expression, Accessible {
         final Value lastIndex = lastIndex();
         switch (container.type()) {
             case Types.ARRAY:
-                final int arrayIndex = (int) lastIndex.asNumber();
+                final int arrayIndex = lastIndex.asInt();
                 return ((ArrayValue) container).get(arrayIndex);
 
             case Types.MAP:
@@ -46,7 +46,7 @@ public final class ContainerAccessExpression implements Expression, Accessible {
         final Value lastIndex = lastIndex();
         switch (container.type()) {
             case Types.ARRAY:
-                final int arrayIndex = (int) lastIndex.asNumber();
+                final int arrayIndex = lastIndex.asInt();
                 ((ArrayValue) container).set(arrayIndex, value);
                 return value;
 
@@ -66,7 +66,7 @@ public final class ContainerAccessExpression implements Expression, Accessible {
             final Value index = index(i);
             switch (container.type()) {
                 case Types.ARRAY:
-                    final int arrayIndex = (int) index.asNumber();
+                    final int arrayIndex = index.asInt();
                     container = ((ArrayValue) container).get(arrayIndex);
                     break;
                     

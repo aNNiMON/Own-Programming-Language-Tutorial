@@ -13,7 +13,7 @@ public final class std_newarray implements Function {
     }
 
     private ArrayValue createArray(Value[] args, int index) {
-        final int size = (int) args[index].asNumber();
+        final int size = args[index].asInt();
         final int last = args.length - 1;
         ArrayValue array = new ArrayValue(size);
         if (index == last) {

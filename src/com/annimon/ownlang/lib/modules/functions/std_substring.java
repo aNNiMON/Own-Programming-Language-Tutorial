@@ -10,13 +10,13 @@ public final class std_substring implements Function {
         if (args.length < 2 || args.length > 3) throw new ArgumentsMismatchException("Two or three arguments expected");
         
         final String input = args[0].asString();
-        final int startIndex = (int) args[1].asNumber();
+        final int startIndex = args[1].asInt();
         
         String result;
         if (args.length == 2) {
             result = input.substring(startIndex);
         } else {
-            final int endIndex = (int) args[2].asNumber();
+            final int endIndex = args[2].asInt();
             result = input.substring(startIndex, endIndex);
         }
         

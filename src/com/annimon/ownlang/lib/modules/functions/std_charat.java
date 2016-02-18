@@ -10,8 +10,8 @@ public final class std_charat implements Function {
         if (args.length != 2) throw new ArgumentsMismatchException("Two arguments expected");
         
         final String input = args[0].asString();
-        final int index = (int) args[1].asNumber();
+        final int index = args[1].asInt();
         
-        return new NumberValue(input.charAt(index));
+        return new NumberValue((short)input.charAt(index));
     }
 }

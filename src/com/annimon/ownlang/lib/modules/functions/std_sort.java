@@ -24,7 +24,7 @@ public final class std_sort implements Function {
                     throw new TypeException("Function expected in second argument");
                 }
                 final Function comparator = ((FunctionValue) args[1]).getValue();
-                Arrays.sort(elements, (o1, o2) -> (int) comparator.execute(o1, o2).asNumber());
+                Arrays.sort(elements, (o1, o2) -> comparator.execute(o1, o2).asInt());
                 break;
             default:
                 throw new ArgumentsMismatchException("Wrong number of arguments");

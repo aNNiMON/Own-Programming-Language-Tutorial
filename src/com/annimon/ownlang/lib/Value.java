@@ -6,6 +6,8 @@ package com.annimon.ownlang.lib;
  */
 public interface Value extends Comparable<Value> {
     
+    int asInt();
+    
     double asNumber();
     
     String asString();

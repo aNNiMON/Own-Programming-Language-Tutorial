@@ -17,7 +17,7 @@ public final class IfStatement implements Statement {
     
     @Override
     public void execute() {
-        final double result = expression.eval().asNumber();
+        final int result = expression.eval().asInt();
         if (result != 0) {
             ifStatement.execute();
         } else if (elseStatement != null) {

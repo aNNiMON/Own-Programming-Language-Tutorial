@@ -14,7 +14,7 @@ public final class ValueExpression implements Expression {
     
     public final Value value;
     
-    public ValueExpression(double value) {
+    public ValueExpression(Number value) {
         this.value = new NumberValue(value);
     }
     

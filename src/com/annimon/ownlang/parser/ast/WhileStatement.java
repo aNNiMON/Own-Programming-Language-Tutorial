@@ -16,7 +16,7 @@ public final class WhileStatement implements Statement {
     
     @Override
     public void execute() {
-        while (condition.eval().asNumber() != 0) {
+        while (condition.eval().asInt() != 0) {
             try {
                 statement.execute();
             } catch (BreakStatement bs) {

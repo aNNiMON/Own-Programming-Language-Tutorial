@@ -141,7 +141,7 @@ public final class http_http implements Function {
     
     private RequestBody getMapRequestBody(MapValue params, MapValue options) throws UnsupportedEncodingException {
         final FormBody.Builder form = new FormBody.Builder();
-        final boolean alreadyEncoded = (options.containsKey(ENCODED_KEY) && options.get(ENCODED_KEY).asNumber() != 0);
+        final boolean alreadyEncoded = (options.containsKey(ENCODED_KEY) && options.get(ENCODED_KEY).asInt() != 0);
         for (Map.Entry<Value, Value> param : params) {
             final String name = param.getKey().asString();
             final String value = param.getValue().asString();

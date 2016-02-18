@@ -45,7 +45,7 @@ public final class robot implements Module {
         Functions.set("mouseMove", (args) -> {
             if (args.length != 2) throw new ArgumentsMismatchException("Two arguments expected");
             try {
-                awtRobot.mouseMove((int) args[0].asNumber(), (int) args[1].asNumber());
+                awtRobot.mouseMove(args[0].asInt(), args[1].asInt());
             } catch (IllegalArgumentException iae) { }
             return NumberValue.ZERO;
         });
@@ -89,7 +89,7 @@ public final class robot implements Module {
         return args -> {
             if (args.length != 1) throw new ArgumentsMismatchException("One argument expected");
             try {
-                consumer.accept((int) args[0].asNumber());
+                consumer.accept(args[0].asInt());
             } catch (IllegalArgumentException iae) { }
             return NumberValue.ZERO;
         };

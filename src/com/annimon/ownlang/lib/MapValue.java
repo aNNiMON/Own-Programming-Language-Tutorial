@@ -44,6 +44,11 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     public void set(Value key, Value value) {
         map.put(key, value);
     }
+    
+    @Override
+    public int asInt() {
+        throw new TypeException("Cannot cast map to integer");
+    }
 
     @Override
     public double asNumber() {

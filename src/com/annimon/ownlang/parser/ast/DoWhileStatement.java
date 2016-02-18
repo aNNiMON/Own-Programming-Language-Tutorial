@@ -25,7 +25,7 @@ public final class DoWhileStatement implements Statement {
                 // continue;
             }
         }
-        while (condition.eval().asNumber() != 0);
+        while (condition.eval().asInt() != 0);
     }
     
     @Override

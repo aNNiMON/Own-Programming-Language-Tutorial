@@ -2,6 +2,8 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
 import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.StringValue;
+import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
 /**
@@ -52,36 +54,102 @@ public final class UnaryExpression implements Expression, Statement {
         switch (operation) {
             case INCREMENT_PREFIX: {
                 if (expr1 instanceof Accessible) {
-                    return ((Accessible) expr1).set(new NumberValue(value.asNumber() + 1));
+                    return ((Accessible) expr1).set(increment(value));
                 }
-                return new NumberValue(value.asNumber() + 1);
+                return increment(value);
             }
             case DECREMENT_PREFIX: {
                 if (expr1 instanceof Accessible) {
-                    return ((Accessible) expr1).set(new NumberValue(value.asNumber() - 1));
+                    return ((Accessible) expr1).set(decrement(value));
                 }
-                return new NumberValue(value.asNumber() - 1);
+                return decrement(value);
             }
             case INCREMENT_POSTFIX: {
                 if (expr1 instanceof Accessible) {
-                    ((Accessible) expr1).set(new NumberValue(value.asNumber() + 1));
+                    ((Accessible) expr1).set(increment(value));
                     return value;
                 }
-                return new NumberValue(value.asNumber() + 1);
+                return increment(value);
             }
             case DECREMENT_POSTFIX: {
                 if (expr1 instanceof Accessible) {
-                    ((Accessible) expr1).set(new NumberValue(value.asNumber() - 1));
+                    ((Accessible) expr1).set(decrement(value));
                     return value;
                 }
-                return new NumberValue(value.asNumber() - 1);
+                return decrement(value);
             }
-            case NEGATE: return new NumberValue(-value.asNumber());
-            case COMPLEMENT: return new NumberValue(~(int)value.asNumber());
-            case NOT: return new NumberValue(value.asNumber() != 0 ? 0 : 1);
+            case NEGATE: return negate(value);
+            case COMPLEMENT: return complement(value);
+            case NOT: return not(value);
             default:
                 throw new OperationIsNotSupportedException(operation);
         }
+    }
+    
+    private Value increment(Value value) {
+        if (value.type() == Types.NUMBER) {
+            final Number number = ((NumberValue) value).raw();
+            if (number instanceof Double) {
+                return new NumberValue(number.doubleValue() + 1);
+            }
+            if (number instanceof Float) {
+                return new NumberValue(number.floatValue() + 1);
+            }
+            if (number instanceof Long) {
+                return new NumberValue(number.longValue() + 1);
+            }
+        }
+        return new NumberValue(value.asInt() + 1);
+    }
+    
+    private Value decrement(Value value) {
+        if (value.type() == Types.NUMBER) {
+            final Number number = ((NumberValue) value).raw();
+            if (number instanceof Double) {
+                return new NumberValue(number.doubleValue() - 1);
+            }
+            if (number instanceof Float) {
+                return new NumberValue(number.floatValue() - 1);
+            }
+            if (number instanceof Long) {
+                return new NumberValue(number.longValue() - 1);
+            }
+        }
+        return new NumberValue(value.asInt() - 1);
+    }
+    
+    private Value negate(Value value) {
+        if (value.type() == Types.STRING) {
+            final StringBuilder sb = new StringBuilder(value.asString());
+            return new StringValue(sb.reverse().toString());
+        }
+        if (value.type() == Types.NUMBER) {
+            final Number number = ((NumberValue) value).raw();
+            if (number instanceof Double) {
+                return new NumberValue(-number.doubleValue());
+            }
+            if (number instanceof Float) {
+                return new NumberValue(-number.floatValue());
+            }
+            if (number instanceof Long) {
+                return new NumberValue(-number.longValue());
+            }
+        }
+        return new NumberValue(-value.asInt());
+    }
+    
+    private Value complement(Value value) {
+        if (value.type() == Types.NUMBER) {
+            final Number number = ((NumberValue) value).raw();
+            if (number instanceof Long) {
+                return new NumberValue(~number.longValue());
+            }
+        }
+        return new NumberValue(~value.asInt());
+    }
+    
+    private Value not(Value value) {
+        return NumberValue.fromBoolean(value.asInt() == 0);
     }
     
     @Override
@@ -91,6 +159,12 @@ public final class UnaryExpression implements Expression, Statement {
     
     @Override
     public String toString() {
-        return String.format("%s %s", operation, expr1);
+        switch (operation) {
+            case INCREMENT_POSTFIX:
+            case DECREMENT_POSTFIX:
+                return String.format("%s %s", expr1, operation);
+            default:
+                return String.format("%s %s", operation, expr1);
+        }
     }
 }

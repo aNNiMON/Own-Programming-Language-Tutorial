@@ -17,10 +17,10 @@ public final class std_rand implements Function {
         int from = 0;
         int to = 100;
         if (args.length == 1) {
-            to = (int) args[0].asNumber();
+            to = args[0].asInt();
         } else if (args.length == 2) {
-            from = (int) args[0].asNumber();
-            to = (int) args[1].asNumber();
+            from = args[0].asInt();
+            to = args[1].asInt();
         }
         return new NumberValue(RND.nextInt(to - from) + from);
     }

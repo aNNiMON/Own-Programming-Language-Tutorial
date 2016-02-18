@@ -9,4 +9,14 @@ public final class Types {
             ARRAY = 3,
             MAP = 4,
             FUNCTION = 5;
+    
+    private static int FIRST = OBJECT, LAST = FUNCTION;
+    private static final String[] NAMES = {"object", "number", "string", "array", "map", "function"};
+    
+    public static String typeToString(int type) {
+        if (FIRST <= type && type <= LAST) {
+            return NAMES[type];
+        }
+        return "unknown";
+    }
 }

@@ -69,7 +69,7 @@ public final class files implements Module {
                 }
                 return process(file, "r");
             } catch (IOException ioe) {
-                return new NumberValue(-1);
+                return NumberValue.MINUS_ONE;
             }
         }
         
@@ -101,7 +101,7 @@ public final class files implements Module {
         @Override
         public Value execute(Value... args) {
             if (args.length < 1) throw new ArgumentsMismatchException("File descriptor expected");
-            final int key = (int) args[0].asNumber();
+            final int key = args[0].asInt();
             try {
                 return execute(files.get(key), args);
             } catch (IOException ioe) {
@@ -115,7 +115,7 @@ public final class files implements Module {
     private static class readBoolean extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readBoolean() ? 1 : 0);
+            return NumberValue.fromBoolean(fileInfo.dis.readBoolean());
         }
     }
     
@@ -132,8 +132,8 @@ public final class files implements Module {
             final ArrayValue array = (ArrayValue) args[1];
             int offset = 0, length = array.size();
             if (args.length > 3) {
-                offset = (int) args[2].asNumber();
-                length = (int) args[3].asNumber();
+                offset = args[2].asInt();
+                length = args[3].asInt();
             }
             
             final byte[] buffer = new byte[length];
@@ -170,7 +170,7 @@ public final class files implements Module {
     private static class readChar extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readChar());
+            return new NumberValue((short)fileInfo.dis.readChar());
         }
     }
     
@@ -239,7 +239,7 @@ public final class files implements Module {
     private static class writeBoolean extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            fileInfo.dos.writeBoolean(args[1].asNumber() != 0);
+            fileInfo.dos.writeBoolean(args[1].asInt() != 0);
             return NumberValue.ONE;
         }
     }
@@ -247,7 +247,7 @@ public final class files implements Module {
     private static class writeByte extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            fileInfo.dos.writeByte((byte) args[1].asNumber());
+            fileInfo.dos.writeByte((byte) args[1].asInt());
             return NumberValue.ONE;
         }
     }
@@ -256,7 +256,7 @@ public final class files implements Module {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
             final char ch = (args[1].type() == Types.NUMBER)
-                    ? ((char) args[1].asNumber())
+                    ? ((char) args[1].asInt())
                     : args[1].asString().charAt(0);
             fileInfo.dos.writeChar(ch);
             return NumberValue.ONE;
@@ -266,7 +266,7 @@ public final class files implements Module {
     private static class writeShort extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            fileInfo.dos.writeShort((short) args[1].asNumber());
+            fileInfo.dos.writeShort((short) args[1].asInt());
             return NumberValue.ONE;
         }
     }
@@ -274,7 +274,7 @@ public final class files implements Module {
     private static class writeInt extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            fileInfo.dos.writeInt((int) args[1].asNumber());
+            fileInfo.dos.writeInt(args[1].asInt());
             return NumberValue.ONE;
         }
     }

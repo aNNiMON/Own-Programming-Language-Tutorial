@@ -9,6 +9,6 @@ public final class std_tochar implements Function {
     public Value execute(Value... args) {
         if (args.length != 1) throw new ArgumentsMismatchException("One argument expected");
         
-        return new StringValue(String.valueOf((char) args[0].asNumber()));
+        return new StringValue(String.valueOf((char) args[0].asInt()));
     }
 }

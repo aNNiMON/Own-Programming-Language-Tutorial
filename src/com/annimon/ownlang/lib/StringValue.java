@@ -26,6 +26,15 @@ public final class StringValue implements Value {
     }
     
     @Override
+    public int asInt() {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+    
+    @Override
     public double asNumber() {
         try {
             return Double.parseDouble(value);

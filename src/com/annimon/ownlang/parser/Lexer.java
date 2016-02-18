@@ -116,6 +116,7 @@ public final class Lexer {
             final char current = peek(0);
             if (Character.isDigit(current)) tokenizeNumber();
             else if (Character.isJavaIdentifierStart(current)) tokenizeWord();
+            else if (current == '`') tokenizeExtendedWord();
             else if (current == '"') tokenizeText();
             else if (current == '#') {
                 next();
@@ -206,6 +207,21 @@ public final class Lexer {
         }
     }
     
+    private void tokenizeExtendedWord() {
+        next();// skip `
+        clearBuffer();
+        char current = peek(0);
+        while (true) {
+            if (current == '\0') throw error("Reached end of file while parsing extended word.");
+            if (current == '\n' || current == '\r') throw error("Reached end of line while parsing extended word.");
+            if (current == '`') break;
+            buffer.append(current);
+            current = next();
+        }
+        next(); // skip closing `
+        addToken(TokenType.WORD, buffer.toString());
+    }
+    
     private void tokenizeText() {
         next();// skip "
         clearBuffer();
@@ -216,6 +232,7 @@ public final class Lexer {
                 current = next();
                 switch (current) {
                     case '"': current = next(); buffer.append('"'); continue;
+                    case '0': current = next(); buffer.append('\0'); continue;
                     case 'b': current = next(); buffer.append('\b'); continue;
                     case 'f': current = next(); buffer.append('\f'); continue;
                     case 'n': current = next(); buffer.append('\n'); continue;

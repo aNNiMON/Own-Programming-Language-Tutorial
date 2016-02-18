@@ -235,3 +235,7 @@ println xarr[0]
 
 `extended word variable` = 9
 println `extended word variable`
+
+// Operator overloading
+def `::`(v1, v2) = string(v1) + string(v2)
+println 1 :: 2 :: 3

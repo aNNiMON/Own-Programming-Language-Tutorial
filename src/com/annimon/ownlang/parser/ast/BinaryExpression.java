@@ -3,6 +3,7 @@ package com.annimon.ownlang.parser.ast;
 import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.ArrayValue;
+import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
@@ -54,6 +55,17 @@ public final class BinaryExpression implements Expression {
     public Value eval() {
         final Value value1 = expr1.eval();
         final Value value2 = expr2.eval();
+        try {
+            return eval(value1, value2);
+        } catch (OperationIsNotSupportedException ex) {
+            if (Functions.isExists(operation.toString())) {
+                return Functions.get(operation.toString()).execute(value1, value2);
+            }
+            throw ex;
+        }
+    }
+    
+    private Value eval(Value value1, Value value2) throws OperationIsNotSupportedException {
         switch (operation) {
             case ADD: return add(value1, value2);
             case SUBTRACT: return subtract(value1, value2);
@@ -75,10 +87,10 @@ public final class BinaryExpression implements Expression {
     private Value add(Value value1, Value value2) {
         switch (value1.type()) {
             case Types.NUMBER: return add((NumberValue) value1, value2);
+            case Types.STRING: return new StringValue(value1.asString() + value2.asString());
             case Types.ARRAY: return ArrayValue.add((ArrayValue) value1, value2);
             case Types.MAP: /* TODO: merge maps */
             case Types.FUNCTION: /* TODO: combining functions */
-            case Types.STRING:
             default:
                 // Concatenation strings
                 return new StringValue(value1.asString() + value2.asString());

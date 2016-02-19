@@ -23,7 +23,7 @@ public final class IncludeStatement implements Statement {
     public void execute() {
         try {
             final String input = SourceLoader.readSource(expression.eval().asString());
-            final List<Token> tokens = new Lexer(input).tokenize();
+            final List<Token> tokens = Lexer.tokenize(input);
             final Parser parser = new Parser(tokens);
             final Statement program = parser.parse();
             if (!parser.getParseErrors().hasErrors()) {

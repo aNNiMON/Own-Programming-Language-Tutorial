@@ -64,7 +64,7 @@ public final class Main {
     private static void run(String input, boolean showTokens, boolean showAst, boolean showMeasurements) {
         final TimeMeasurement measurement = new TimeMeasurement();
         measurement.start("Tokenize time");
-        final List<Token> tokens = new Lexer(input).tokenize();
+        final List<Token> tokens = Lexer.tokenize(input);
         measurement.stop("Tokenize time");
         if (showTokens) {
             for (int i = 0; i < tokens.size(); i++) {

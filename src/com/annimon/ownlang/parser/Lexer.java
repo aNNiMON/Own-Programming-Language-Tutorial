@@ -12,6 +12,10 @@ import java.util.Map;
  */
 public final class Lexer {
     
+    public static List<Token> tokenize(String input) {
+        return new Lexer(input).tokenize();
+    }
+    
     private static final String OPERATOR_CHARS = "+-*/%()[]{}=<>!&|.,^~?:";
     
     private static final Map<String, TokenType> OPERATORS;
@@ -136,6 +140,12 @@ public final class Lexer {
     private void tokenizeNumber() {
         clearBuffer();
         char current = peek(0);
+        if (current == '0' && (peek(1) == 'x' || (peek(1) == 'X'))) {
+            next();
+            next();
+            tokenizeHexNumber();
+            return;
+        }
         while (true) {
             if (current == '.') {
                 if (buffer.indexOf(".") != -1) throw error("Invalid float number");
@@ -151,11 +161,16 @@ public final class Lexer {
     private void tokenizeHexNumber() {
         clearBuffer();
         char current = peek(0);
-        while (isHexNumber(current)) {
-            buffer.append(current);
+        while (isHexNumber(current) || (current == '_')) {
+            if (current != '_') {
+                // allow _ symbol
+                buffer.append(current);
+            }
             current = next();
         }
-        addToken(TokenType.HEX_NUMBER, buffer.toString());
+        if (buffer.length() > 0) {
+            addToken(TokenType.HEX_NUMBER, buffer.toString());
+        }
     }
 
     private static boolean isHexNumber(char current) {

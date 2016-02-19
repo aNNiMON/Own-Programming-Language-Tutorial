@@ -16,6 +16,15 @@ import java.util.Map;
  */
 public final class Parser {
     
+    public static Statement parse(List<Token> tokens) {
+        final Parser parser = new Parser(tokens);
+        final Statement program = parser.parse();
+        if (parser.getParseErrors().hasErrors()) {
+            throw new ParseException();
+        }
+        return program;
+    }
+    
     private static final Token EOF = new Token(TokenType.EOF, "", -1, -1);
     
     private static final Map<TokenType, BinaryExpression.Operator> assignOperator;

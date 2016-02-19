@@ -13,7 +13,7 @@ public final class std_sprintf implements Function {
         final Object[] values = new Object[args.length - 1];
         for (int i = 1; i < args.length; i++) {
             values[i - 1] = (args[i].type() == Types.NUMBER)
-                    ? ((NumberValue) args[i]).raw()
+                    ? args[i].raw()
                     : args[i].asString();
         }
         return new StringValue(String.format(format, values));

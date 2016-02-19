@@ -73,6 +73,11 @@ public final class ArrayValue implements Value, Iterable<Value> {
     }
     
     @Override
+    public Object raw() {
+        return elements;
+    }
+    
+    @Override
     public int asInt() {
         throw new TypeException("Cannot cast array to integer");
     }

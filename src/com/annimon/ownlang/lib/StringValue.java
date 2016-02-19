@@ -24,6 +24,11 @@ public final class StringValue implements Value {
     public int type() {
         return Types.STRING;
     }
+
+    @Override
+    public Object raw() {
+        return value;
+    }
     
     @Override
     public int asInt() {

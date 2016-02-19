@@ -23,6 +23,11 @@ public final class FunctionValue implements Value {
     }
     
     @Override
+    public Object raw() {
+        return value;
+    }
+    
+    @Override
     public int asInt() {
         throw new TypeException("Cannot cast function to integer");
     }

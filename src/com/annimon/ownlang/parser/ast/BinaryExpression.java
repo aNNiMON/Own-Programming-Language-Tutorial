@@ -101,7 +101,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 + number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Double || number2 instanceof Double) {
                 return new NumberValue(number1.doubleValue() + number2.doubleValue());
             }
@@ -138,7 +138,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 - number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Double || number2 instanceof Double) {
                 return new NumberValue(number1.doubleValue() - number2.doubleValue());
             }
@@ -184,7 +184,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 * number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Double || number2 instanceof Double) {
                 return new NumberValue(number1.doubleValue() * number2.doubleValue());
             }
@@ -221,7 +221,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 / number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Double || number2 instanceof Double) {
                 return new NumberValue(number1.doubleValue() / number2.doubleValue());
             }
@@ -258,7 +258,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 % number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Double || number2 instanceof Double) {
                 return new NumberValue(number1.doubleValue() % number2.doubleValue());
             }
@@ -303,7 +303,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 & number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Long || number2 instanceof Long) {
                 return new NumberValue(number1.longValue() & number2.longValue());
             }
@@ -328,7 +328,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 | number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Long || number2 instanceof Long) {
                 return new NumberValue(number1.longValue() | number2.longValue());
             }
@@ -353,7 +353,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 ^ number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Long || number2 instanceof Long) {
                 return new NumberValue(number1.longValue() ^ number2.longValue());
             }
@@ -383,7 +383,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 << number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Long || number2 instanceof Long) {
                 return new NumberValue(number1.longValue() << number2.longValue());
             }
@@ -408,7 +408,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 >> number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Long || number2 instanceof Long) {
                 return new NumberValue(number1.longValue() >> number2.longValue());
             }
@@ -433,7 +433,7 @@ public final class BinaryExpression implements Expression {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
             // number1 >>> number2
-            final Number number2 = ((NumberValue) value2).raw();
+            final Number number2 = (Number) value2.raw();
             if (number1 instanceof Long || number2 instanceof Long) {
                 return new NumberValue(number1.longValue() >>> number2.longValue());
             }

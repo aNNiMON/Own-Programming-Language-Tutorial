@@ -88,7 +88,7 @@ public final class UnaryExpression implements Expression, Statement {
     
     private Value increment(Value value) {
         if (value.type() == Types.NUMBER) {
-            final Number number = ((NumberValue) value).raw();
+            final Number number = (Number) value.raw();
             if (number instanceof Double) {
                 return new NumberValue(number.doubleValue() + 1);
             }
@@ -104,7 +104,7 @@ public final class UnaryExpression implements Expression, Statement {
     
     private Value decrement(Value value) {
         if (value.type() == Types.NUMBER) {
-            final Number number = ((NumberValue) value).raw();
+            final Number number = (Number) value.raw();
             if (number instanceof Double) {
                 return new NumberValue(number.doubleValue() - 1);
             }
@@ -124,7 +124,7 @@ public final class UnaryExpression implements Expression, Statement {
             return new StringValue(sb.reverse().toString());
         }
         if (value.type() == Types.NUMBER) {
-            final Number number = ((NumberValue) value).raw();
+            final Number number = (Number) value.raw();
             if (number instanceof Double) {
                 return new NumberValue(-number.doubleValue());
             }
@@ -140,7 +140,7 @@ public final class UnaryExpression implements Expression, Statement {
     
     private Value complement(Value value) {
         if (value.type() == Types.NUMBER) {
-            final Number number = ((NumberValue) value).raw();
+            final Number number = (Number) value.raw();
             if (number instanceof Long) {
                 return new NumberValue(~number.longValue());
             }

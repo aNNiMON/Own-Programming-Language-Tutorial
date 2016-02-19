@@ -25,6 +25,7 @@ public final class NumberValue implements Value {
         return Types.NUMBER;
     }
     
+    @Override
     public Number raw() {
         return value;
     }

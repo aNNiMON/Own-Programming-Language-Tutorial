@@ -94,6 +94,7 @@ public final class Main {
         } finally {
             if (showMeasurements) {
                 measurement.stop("Execution time");
+                System.out.println("======================");
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }
         }

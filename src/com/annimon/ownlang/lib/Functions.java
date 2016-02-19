@@ -11,9 +11,12 @@ import java.util.Map;
 public final class Functions {
 
     private static final Map<String, Function> functions;
-    
     static {
         functions = new HashMap<>();
+    }
+    
+    public static Map<String, Function> getFunctions() {
+        return functions;
     }
     
     public static boolean isExists(String key) {

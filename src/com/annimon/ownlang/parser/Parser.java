@@ -48,6 +48,7 @@ public final class Parser {
     private final List<Token> tokens;
     private final int size;
     private final ParseErrors parseErrors;
+    private Statement parsedStatement;
     
     private int pos;
 
@@ -55,6 +56,10 @@ public final class Parser {
         this.tokens = tokens;
         size = tokens.size();
         parseErrors = new ParseErrors();
+    }
+    
+    public Statement getParsedStatement() {
+        return parsedStatement;
     }
     
     public ParseErrors getParseErrors() {
@@ -72,6 +77,7 @@ public final class Parser {
                 recover();
             }
         }
+        parsedStatement = result;
         return result;
     }
     

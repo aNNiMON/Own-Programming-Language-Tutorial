@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.visitors;
 
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.parser.ast.*;
 
 /**
@@ -11,18 +12,18 @@ public final class VariablePrinter extends AbstractVisitor {
     @Override
     public void visit(AssignmentExpression s) {
         super.visit(s);
-        System.out.println(s.target);
+        Console.println(s.target);
     }
     
     @Override
     public void visit(ContainerAccessExpression s) {
         super.visit(s);
-        System.out.println(s.variable);
+        Console.println(s.variable);
     }
 
     @Override
     public void visit(VariableExpression s) {
         super.visit(s);
-        System.out.println(s.name);
+        Console.println(s.name);
     }
 }

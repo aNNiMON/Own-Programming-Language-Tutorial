@@ -7,6 +7,10 @@ public final class CallStack {
     
     private static final Deque<CallInfo> calls = new ConcurrentLinkedDeque<CallInfo>();;
     
+    public static synchronized void clear() {
+        calls.clear();
+    }
+    
     public static synchronized void enter(String name, Function function) {
         calls.push(new CallInfo(name, function));
     }

@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.Console;
+
 /**
  *
  * @author aNNiMON
@@ -14,7 +16,7 @@ public final class PrintStatement implements Statement {
 
     @Override
     public void execute() {
-        System.out.print(expression.eval());
+        Console.print(expression.eval());
     }
     
     @Override

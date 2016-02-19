@@ -1,6 +1,6 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.Main;
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 
@@ -26,7 +26,7 @@ public final class std_thread implements Function {
         }
         
         final Thread thread = new Thread(() -> body.execute(params));
-        thread.setUncaughtExceptionHandler(Main::handleException);
+        thread.setUncaughtExceptionHandler(Console::handleException);
         thread.start();
         return NumberValue.ZERO;
     }

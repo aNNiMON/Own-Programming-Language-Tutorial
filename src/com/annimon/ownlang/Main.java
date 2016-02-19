@@ -1,6 +1,5 @@
 package com.annimon.ownlang;
 
-import com.annimon.ownlang.lib.CallStack;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
@@ -90,7 +89,7 @@ public final class Main {
             measurement.start("Execution time");
             program.execute();
         } catch (Exception ex) {
-            handleException(Thread.currentThread(), ex);
+            Console.handleException(Thread.currentThread(), ex);
         } finally {
             if (showMeasurements) {
                 measurement.stop("Execution time");
@@ -98,13 +97,5 @@ public final class Main {
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }
         }
-    }
-    
-    public static void handleException(Thread thread, Throwable throwable) {
-        System.err.printf("%s in %s\n", throwable.getMessage(), thread.getName());
-        for (CallStack.CallInfo call : CallStack.getCalls()) {
-            System.err.printf("\tat %s\n", call);
-        }
-        throwable.printStackTrace();
     }
 }

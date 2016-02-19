@@ -16,6 +16,12 @@ public final class Variables {
     static {
         stack = new Stack<>();
         variables = new ConcurrentHashMap<>();
+        Variables.clear();
+    }
+    
+    public static void clear() {
+        stack.clear();
+        variables.clear();
         variables.put("true", NumberValue.ONE);
         variables.put("false", NumberValue.ZERO);
     }

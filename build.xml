@@ -13,13 +13,16 @@
     
     <target name="package-for-store" depends="jar">
         <property name="store.jar.name" value="${application.title}"/>
+        <property name="proguard.jar.path" value="store/proguard.jar" />
  
         <property name="store.dir" value="store"/>
         <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
+        <property name="obfuscated.jar" value="${store.dir}/${store.jar.name}-obfuscated.jar"/>
 
         <echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
 
-        <delete dir="${store.dir}"/>
+        <delete file="${store.jar}"/>
+        <delete file="${obfuscated.jar}"/>
         <mkdir dir="${store.dir}"/>
 
         <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
@@ -37,7 +40,26 @@
         </zip>
 
         <delete file="${store.dir}/temp_final.jar"/>
+        
+        
+        <echo message="Obfuscating ${store.jar}..." />
+        
+        <taskdef resource="proguard/ant/task.properties"
+                 classpath="${proguard.jar.path}" />
+
+        <proguard configuration="proguard.properties">
+
+            <injar  file="${store.jar}" />
+            <outjar file="${store.dir}/temp_final.jar" />
+
+            <libraryjar path="${javac.classpath}" />
+            <libraryjar file="${java.home}/lib/rt.jar" />
+
+        </proguard>
+        
+        <move file="${store.dir}/temp_final.jar" tofile="${obfuscated.jar}"/>
     </target>
+    
     <!--
 
     There exist several targets which are by default empty and which can be 

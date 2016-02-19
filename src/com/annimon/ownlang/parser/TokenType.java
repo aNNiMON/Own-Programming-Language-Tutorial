@@ -27,6 +27,7 @@ public enum TokenType {
     MATCH,
     CASE,
     EXTRACT,
+    INCLUDE,
     
     PLUS, // +
     MINUS, // -

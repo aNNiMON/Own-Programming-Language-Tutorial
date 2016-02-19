@@ -91,6 +91,7 @@ public final class Lexer {
         KEYWORDS.put("match", TokenType.MATCH);
         KEYWORDS.put("case", TokenType.CASE);
         KEYWORDS.put("extract", TokenType.EXTRACT);
+        KEYWORDS.put("include", TokenType.INCLUDE);
     }
 
     private final String input;

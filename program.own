@@ -241,3 +241,5 @@ def `::`(v1, v2) = string(v1) + string(v2)
 println 1 :: 2 :: 3
 
 println "\u042a"
+
+include "visitor.own"

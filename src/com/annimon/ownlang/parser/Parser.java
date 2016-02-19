@@ -129,6 +129,9 @@ public final class Parser {
         if (match(TokenType.USE)) {
             return new UseStatement(expression());
         }
+        if (match(TokenType.INCLUDE)) {
+            return new IncludeStatement(expression());
+        }
         if (match(TokenType.FOR)) {
             return forStatement();
         }

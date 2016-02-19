@@ -3,14 +3,13 @@ package com.annimon.ownlang;
 import com.annimon.ownlang.lib.CallStack;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
+import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.AssignValidator;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
 import com.annimon.ownlang.parser.visitors.VariablePrinter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +20,7 @@ public final class Main {
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-            run(readFile("program.own"), true, true, true);
+            run(SourceLoader.readSource("program.own"), true, true, true);
             return;
         }
         
@@ -47,7 +46,7 @@ public final class Main {
                 case "-f":
                 case "--file":
                     if (i + 1 < args.length)  {
-                        input = readFile(args[i + 1]);
+                        input = SourceLoader.readSource(args[i + 1]);
                         i++;
                     }
                     break;
@@ -62,10 +61,6 @@ public final class Main {
         run(input, showTokens, showAst, showMeasurements);
     }
         
-    private static String readFile(String file) throws IOException {
-        return new String( Files.readAllBytes(Paths.get(file)), "UTF-8");
-    }
-    
     private static void run(String input, boolean showTokens, boolean showAst, boolean showMeasurements) {
         final TimeMeasurement measurement = new TimeMeasurement();
         measurement.start("Tokenize time");

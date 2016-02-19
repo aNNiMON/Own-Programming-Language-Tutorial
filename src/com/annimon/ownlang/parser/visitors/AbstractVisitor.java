@@ -119,6 +119,11 @@ public abstract class AbstractVisitor implements Visitor {
     }
     
     @Override
+    public void visit(IncludeStatement s) {
+        s.expression.accept(this);
+    }
+    
+    @Override
     public void visit(MapExpression s) {
         for (Map.Entry<Expression, Expression> entry : s.elements.entrySet()) {
             entry.getKey().accept(this);

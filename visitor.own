@@ -1,5 +1,5 @@
-func()
-def func() print "function\n"
+function()
+def function() print "function\n"
 
 a = 2 + 3 * 4
 print a

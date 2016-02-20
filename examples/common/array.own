@@ -1,0 +1,24 @@
+arr1 = [1, 2, 3, 4, 5]
+println arr1[0]
+println arr1
+
+use "std"
+arr2 = newarray(5)
+arr2[2] = 9
+arr2 = arr2 :: 4
+println arr2
+
+arr3 = arr1 :: arr2
+arr4 = arr1 << arr2
+println arr3
+println arr4
+
+
+// Array 2d
+arr5 = newarray(4, 4)
+println arr5
+arr5[1] = arr1
+println arr5
+
+arr6 = [arr5[1], arr5[2]]
+println arr6

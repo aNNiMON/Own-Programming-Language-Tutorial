@@ -1,0 +1,9 @@
+map1 = {"key": "value"}
+println map1["key"]
+println map1.key
+
+map1["newkey"] = "newvalue"
+map1[0] = "zero"
+x = 400
+map1[x] = [1, 2, 3]
+println map1

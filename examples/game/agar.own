@@ -66,7 +66,7 @@ while run {
     color(playerColor)
     circle(w2, h2, playerSize)
     color(0)
-    drawstring(playerSize, w2-10, h2+4)
+    drawstring(playerSize, w2-7, h2+4)
     
     repaint()
     sleep(20)

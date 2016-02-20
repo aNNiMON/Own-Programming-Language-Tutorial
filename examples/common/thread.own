@@ -1,0 +1,21 @@
+use "std"
+
+def thread1() {
+    i = 0
+    while (i < 100) {
+        print "i = " + i + "\n"
+        i = i + 1
+        sleep(100)
+    }
+}
+
+// thread("thread1")
+thread(::thread1)
+
+k = 0
+while (k < 10) {
+    print "k = " + k + "\n"
+    k = k + 1
+    sleep(1000)
+}
+

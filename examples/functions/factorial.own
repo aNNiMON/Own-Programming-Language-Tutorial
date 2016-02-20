@@ -1,4 +1,4 @@
-// Вычисляем факториал
+// Factorial
 def factorial(n) {
     if n == 1 return 1
     return n * factorial(n-1)
@@ -22,7 +22,7 @@ for i = 0, i < 10, i++
 print "\n"
 
 
-// Вычисляем факториал с помощью хвостовой рекурсии
+// Tail recursive factorial
 def factorial_tailrec(n) {
     def fact(acc, n) {
         if n == 0 return acc

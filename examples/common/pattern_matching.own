@@ -1,0 +1,39 @@
+use "std"
+use "types"
+
+v = rand(10)
+println match v {
+  case 0: "Zero"
+  case 1: "One"
+  case x if x <= 5: "Two..five"
+  case _: "Six..nine"
+}
+
+def match1(v) = match v {
+  case 1: "One"
+  case "Two": 2
+  case x if typeof(x) == NUMBER: "Number"
+  case x if typeof(x) == STRING: "String"
+  case _: "other"
+}
+
+println match1(1)
+println match1(322)
+println match1("test")
+println match1("Two")
+println match1([2])
+
+// Recursive factorial
+println factorial(6)
+def factorial(n) = match n {
+  case 0: 1
+  case _: n * factorial(n - 1)
+}
+
+// Pattern matching on arrays
+println printArrayRecursive([1, 2, 3, 4, 5, 6, 7])
+def printArrayRecursive(arr) = match arr {
+  case [head :: tail]: "[" + head + ", " + printArrayRecursive(tail) + "]"
+  case []: "[]"
+  case last: "[" + last + ", []]"
+}

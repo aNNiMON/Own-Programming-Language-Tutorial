@@ -1,0 +1,24 @@
+use "canvasfx"
+
+// https://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm
+
+window("JavaFX Basic shapes", 300, 250)
+
+setFill(Color.GREEN)
+setStroke(Color.BLUE)
+setLineWidth(5)
+strokeLine(40, 10, 10, 40)
+fillOval(10, 60, 30, 30)
+strokeOval(60, 60, 30, 30)
+fillRoundRect(110, 60, 30, 30, 10, 10)
+strokeRoundRect(160, 60, 30, 30, 10, 10)
+fillArc(10, 110, 30, 30, 45, 240, ArcType.OPEN)
+fillArc(60, 110, 30, 30, 45, 240, ArcType.CHORD)
+fillArc(110, 110, 30, 30, 45, 240, ArcType.ROUND)
+strokeArc(10, 160, 30, 30, 45, 240, ArcType.OPEN)
+strokeArc(60, 160, 30, 30, 45, 240, ArcType.CHORD)
+strokeArc(110, 160, 30, 30, 45, 240, ArcType.ROUND)
+fillPolygon([10, 40, 10, 40], [210, 210, 240, 240], 4)
+strokePolygon([60, 90, 60, 90], [210, 210, 240, 240], 4)
+strokePolyline([110, 140, 110, 140], [210, 210, 240, 240], 4)
+repaint()

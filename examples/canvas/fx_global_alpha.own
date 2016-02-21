@@ -1,0 +1,17 @@
+use "canvasfx"
+
+steps = 20
+size = 25
+w = steps * (size * 1.25)
+h = size * 1.5
+
+step = 1.0 / steps
+
+window("JavaFX Global Alpha example", w, h)
+
+setFill(Color.RED)
+y = size * 0.25
+for a = 0, a <= 1.0, a += step {
+  setGlobalAlpha(a)
+  fillRect(a * w, y, size, size)
+}

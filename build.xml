@@ -54,7 +54,7 @@
 
             <libraryjar path="${javac.classpath}" />
             <libraryjar file="${java.home}/lib/rt.jar" />
-
+            <libraryjar file="${java.home}/lib/ext/jfxrt.jar" />
         </proguard>
         
         <move file="${store.dir}/temp_final.jar" tofile="${obfuscated.jar}"/>

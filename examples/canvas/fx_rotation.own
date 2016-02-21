@@ -1,0 +1,24 @@
+use "canvasfx"
+use "std"
+
+// http://www.developer.com/java/data/using-graphics-in-javafx.html
+
+width = 800    height = 600
+window("JavaFX Rotation example", width, height)
+
+translate(width / 2, height / 2)
+
+def randomColor() = Color.rgb(rand(255), rand(255), rand(255), 0.9)
+
+for i = 0, i < 60, i++ {
+  rotate(6.0)
+  setFill(randomColor())
+  fillOval(10, 60, 30, 30)
+  setStroke(randomColor())
+  strokeOval(60, 60, 30, 30)
+  setFill(randomColor())
+  fillRoundRect(110, 60, 30, 30, 10, 10)
+  setFill(randomColor())
+  fillPolygon([105, 117, 159, 123, 133, 105, 77, 87, 51, 93],
+          [150, 186, 186, 204, 246, 222, 246, 204, 186, 186], 10)
+}

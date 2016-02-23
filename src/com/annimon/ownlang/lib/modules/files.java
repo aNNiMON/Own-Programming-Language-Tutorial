@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -29,6 +30,7 @@ public final class files implements Module {
         files = new HashMap<>();
         
         Functions.set("fopen", new fopen());
+        Functions.set("listFiles", new listFiles());
         Functions.set("readBoolean", new readBoolean());
         Functions.set("readByte", new readByte());
         Functions.set("readBytes", new readBytes());
@@ -52,6 +54,7 @@ public final class files implements Module {
         Functions.set("writeDouble", new writeDouble());
         Functions.set("writeUTF", new writeUTF());
         Functions.set("writeLine", new writeLine());
+        Functions.set("writeText", new writeText());
         Functions.set("flush", new flush());
         Functions.set("fclose", new fclose());
     }
@@ -110,6 +113,19 @@ public final class files implements Module {
         }
         
         protected abstract Value execute(FileInfo fileInfo, Value[] args) throws IOException;
+    }
+    
+    private static class listFiles extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final String[] files = fileInfo.file.list();
+            final int size = files.length;
+            final ArrayValue result = new ArrayValue(size);
+            for (int i = 0; i < size; i++) {
+                result.set(i, new StringValue(files[i]));
+            }
+            return result;
+        }
     }
     
     private static class readBoolean extends FileFunction {
@@ -314,7 +330,16 @@ public final class files implements Module {
     private static class writeLine extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            fileInfo.dos.writeDouble(args[1].asNumber());
+            fileInfo.writer.write(args[1].asString());
+            fileInfo.writer.newLine();
+            return NumberValue.ONE;
+        }
+    }
+    
+    private static class writeText extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            fileInfo.writer.write(args[1].asString());
             return NumberValue.ONE;
         }
     }

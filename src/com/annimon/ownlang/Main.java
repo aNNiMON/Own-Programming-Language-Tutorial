@@ -7,7 +7,6 @@ import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.AssignValidator;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
-import com.annimon.ownlang.parser.visitors.VariablePrinter;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +18,17 @@ public final class Main {
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-            run(SourceLoader.readSource("program.own"), true, true, true);
+            try {
+                run(SourceLoader.readSource("program.own"), true, true, true);
+            } catch (IOException ioe) {
+                System.out.println("OwnLang version 1.1.0\n\n" +
+                        "Usage: ownlang [options]\n" +
+                        "  options:\n" +
+                        "      -f, --file [input]  Run program file. Required.\n" +
+                        "      -a, --showast       Show AST of program\n" +
+                        "      -t, --showtokens    Show lexical tokens\n" +
+                        "      -m, --showtime      Show elapsed time of parsing and execution");
+            }
             return;
         }
         
@@ -83,7 +92,6 @@ public final class Main {
             return;
         }
         program.accept(new FunctionAdder());
-//        program.accept(new VariablePrinter());
         program.accept(new AssignValidator());
         try {
             measurement.start("Execution time");

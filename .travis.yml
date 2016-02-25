@@ -1,0 +1,14 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
+
+sudo: false
+    
+before_install:
+ - chmod +x gradlew

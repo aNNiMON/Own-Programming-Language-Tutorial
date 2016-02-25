@@ -11,7 +11,7 @@
     <description>Builds, tests, and runs the project OwnLang.</description>
     <import file="nbproject/build-impl.xml"/>
     
-    <target name="package-for-store" depends="jar">
+    <target name="pack" depends="jar">
         <property name="store.jar.name" value="${application.title}"/>
         <property name="proguard.jar.path" value="store/proguard.jar" />
  

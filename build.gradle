@@ -1,0 +1,40 @@
+apply plugin: "java"
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+project.ext.mainClass = 'com.annimon.ownlang.Main'
+
+sourceSets {
+    main.java.srcDir "src/"
+    test.java.srcDir "test/"
+}
+
+dependencies{
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+task run(dependsOn: classes, type: JavaExec) {
+    main = project.mainClass
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    ignoreExitValue = true
+}
+
+task dist(dependsOn: classes, type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from {configurations.compile.collect {zipTree(it)}}
+    from files(sourceSets.main.resources)
+    libsDirName = "$rootProject.projectDir/dist"
+    
+    manifest {
+        attributes 'Main-Class': project.mainClass
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

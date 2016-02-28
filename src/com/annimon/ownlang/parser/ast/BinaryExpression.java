@@ -4,6 +4,7 @@ import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.MapValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
@@ -89,7 +90,10 @@ public final class BinaryExpression implements Expression {
             case Types.NUMBER: return add((NumberValue) value1, value2);
             case Types.STRING: return new StringValue(value1.asString() + value2.asString());
             case Types.ARRAY: return ArrayValue.add((ArrayValue) value1, value2);
-            case Types.MAP: /* TODO: merge maps */
+            case Types.MAP:
+                if (value2.type() != Types.MAP)
+                    throw new TypeException("Cannot merge non map value to map");
+                return MapValue.merge((MapValue) value1, (MapValue) value2);
             case Types.FUNCTION: /* TODO: combining functions */
             default:
                 // Concatenation strings

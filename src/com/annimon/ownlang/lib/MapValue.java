@@ -14,6 +14,13 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     
     public static final MapValue EMPTY = new MapValue(1);
     
+    public static MapValue merge(MapValue map1, MapValue map2) {
+        final MapValue result = new MapValue(map1.size() + map2.size());
+        result.map.putAll(map1.map);
+        result.map.putAll(map2.map);
+        return result;
+    }
+    
     private final Map<Value, Value> map;
 
     public MapValue(int size) {

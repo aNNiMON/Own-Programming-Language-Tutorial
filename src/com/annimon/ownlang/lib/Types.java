@@ -10,7 +10,7 @@ public final class Types {
             MAP = 4,
             FUNCTION = 5;
     
-    private static int FIRST = OBJECT, LAST = FUNCTION;
+    private static final int FIRST = OBJECT, LAST = FUNCTION;
     private static final String[] NAMES = {"object", "number", "string", "array", "map", "function"};
     
     public static String typeToString(int type) {

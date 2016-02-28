@@ -31,6 +31,12 @@ public final class files implements Module {
         
         Functions.set("fopen", new fopen());
         Functions.set("listFiles", new listFiles());
+        Functions.set("delete", new delete());
+        Functions.set("exists", new exists());
+        Functions.set("isDirectory", new isDirectory());
+        Functions.set("isFile", new isFile());
+        Functions.set("mkdir", new mkdir());
+        Functions.set("fileSize", new fileSize());
         Functions.set("readBoolean", new readBoolean());
         Functions.set("readByte", new readByte());
         Functions.set("readBytes", new readBytes());
@@ -125,6 +131,48 @@ public final class files implements Module {
                 result.set(i, new StringValue(files[i]));
             }
             return result;
+        }
+    }
+    
+    private static class delete extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.delete());
+        }
+    }
+    
+    private static class exists extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.exists());
+        }
+    }
+    
+    private static class isDirectory extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.isDirectory());
+        }
+    }
+    
+    private static class isFile extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.isFile());
+        }
+    }
+    
+    private static class mkdir extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.mkdir());
+        }
+    }
+    
+    private static class fileSize extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return new NumberValue(fileInfo.file.length());
         }
     }
     

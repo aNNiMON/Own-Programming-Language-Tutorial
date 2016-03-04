@@ -1,5 +1,6 @@
 package com.annimon.ownlang;
 
+import com.annimon.ownlang.exceptions.LexerException;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
@@ -9,22 +10,26 @@ import com.annimon.ownlang.parser.visitors.AssignValidator;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author aNNiMON
  */
 public final class Main {
+    
+    private static final String VERSION = "1.1.0";
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
             try {
                 run(SourceLoader.readSource("program.own"), true, true, true);
             } catch (IOException ioe) {
-                System.out.println("OwnLang version 1.1.0\n\n" +
+                System.out.println("OwnLang version " + VERSION + "\n\n" +
                         "Usage: ownlang [options]\n" +
                         "  options:\n" +
                         "      -f, --file [input]  Run program file. Required.\n" +
+                        "      -r, --repl          Enter to a REPL mode\n" +
                         "      -a, --showast       Show AST of program\n" +
                         "      -t, --showtokens    Show lexical tokens\n" +
                         "      -m, --showtime      Show elapsed time of parsing and execution");
@@ -50,6 +55,11 @@ public final class Main {
                 case "--showtime":
                     showMeasurements = true;
                     break;
+                    
+                case "-r":
+                case "--repl":
+                    repl();
+                    return;
                     
                 case "-f":
                 case "--file":
@@ -105,5 +115,43 @@ public final class Main {
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }
         }
+    }
+    
+    private static void repl() {
+        final StringBuilder buffer = new StringBuilder();
+        final Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to OwnLang " + VERSION + " REPL\n"
+                + "Type in expressions to have them evaluated.\n"
+                + "Type :reset to clear buffer.\n"
+                + "Type :exit to exit REPL.");
+        while (true) {
+            System.out.print((buffer.length() == 0) ? "\n> " : "  ");
+            
+            if (!scanner.hasNextLine()) break;
+            
+            final String line = scanner.nextLine();
+            if (":exit".equalsIgnoreCase(line)) break;
+            if (":reset".equalsIgnoreCase(line)) {
+                buffer.setLength(0);
+                continue;
+            }
+            
+            buffer.append(line).append(System.lineSeparator());
+            try {
+                final List<Token> tokens = Lexer.tokenize(buffer.toString());
+                final Parser parser = new Parser(tokens);
+                final Statement program = parser.parse();
+                if (parser.getParseErrors().hasErrors()) {
+                    continue;
+                }
+                program.execute();
+            } catch (LexerException lex) {
+                continue;
+            } catch (Exception ex) {
+                Console.handleException(Thread.currentThread(), ex);
+            }
+            buffer.setLength(0);
+        }
+        scanner.close();
     }
 }

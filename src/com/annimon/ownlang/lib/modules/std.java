@@ -39,8 +39,8 @@ public final class std implements Module {
         Functions.set("newarray", new std_newarray());
         Functions.set("sort", new std_sort());
         Functions.set("arrayCombine", new std_arrayCombine());
-        Functions.set("arrayKeyExists ", new std_arrayKeyExists());
-        Functions.set("arrayKeys ", new std_arrayKeys());
-        Functions.set("arrayValues ", new std_arrayValues());
+        Functions.set("arrayKeyExists", new std_arrayKeyExists());
+        Functions.set("arrayKeys", new std_arrayKeys());
+        Functions.set("arrayValues", new std_arrayValues());
     }
 }

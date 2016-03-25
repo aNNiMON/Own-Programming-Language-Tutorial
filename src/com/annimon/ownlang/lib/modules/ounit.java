@@ -28,6 +28,7 @@ public final class ounit implements Module {
     private static class assertEquals implements Function {
         @Override
         public Value execute(Value... args) {
+            Arguments.check(2, args.length);
             if (args[0].equals(args[1])) return NumberValue.ONE;
             throw new OUnitAssertionException("Values are not equals: "
                     + "1: " + args[0] + ", 2: " + args[1]);
@@ -37,6 +38,7 @@ public final class ounit implements Module {
     private static class assertNotEquals implements Function {
         @Override
         public Value execute(Value... args) {
+            Arguments.check(2, args.length);
             if (!args[0].equals(args[1])) return NumberValue.ONE;
             throw new OUnitAssertionException("Values are equals: " + args[0]);
         }
@@ -45,6 +47,7 @@ public final class ounit implements Module {
     private static class assertSameType implements Function {
         @Override
         public Value execute(Value... args) {
+            Arguments.check(2, args.length);
             if (args[0].type() == args[1].type()) return NumberValue.ONE;
             throw new OUnitAssertionException("Types mismatch. "
                     + "1: " + Types.typeToString(args[0].type())
@@ -55,6 +58,7 @@ public final class ounit implements Module {
     private static class assertTrue implements Function {
         @Override
         public Value execute(Value... args) {
+            Arguments.check(1, args.length);
             if (args[0].asInt() != 0) return NumberValue.ONE;
             throw new OUnitAssertionException("Expected true, but found false.");
         }
@@ -63,6 +67,7 @@ public final class ounit implements Module {
     private static class assertFalse implements Function {
         @Override
         public Value execute(Value... args) {
+            Arguments.check(1, args.length);
             if (args[0].asInt() == 0) return NumberValue.ONE;
             throw new OUnitAssertionException("Expected false, but found true.");
         }

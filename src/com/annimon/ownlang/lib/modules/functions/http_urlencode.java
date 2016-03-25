@@ -1,6 +1,6 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Value;
@@ -11,7 +11,7 @@ public final class http_urlencode implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length == 0) throw new ArgumentsMismatchException("At least one arg expected");
+        Arguments.checkOrOr(1, 2, args.length);
         
         String charset = "UTF-8";
         if (args.length >= 2) {

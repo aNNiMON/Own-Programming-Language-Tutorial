@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules.functions;
 
+import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Value;
@@ -12,6 +13,7 @@ public final class std_rand implements Function {
 
     @Override
     public Value execute(Value... args) {
+        Arguments.checkRange(0, 2, args.length);
         if (args.length == 0) return new NumberValue(RND.nextDouble());
 
         int from = 0;

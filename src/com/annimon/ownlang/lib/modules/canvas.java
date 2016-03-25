@@ -88,7 +88,7 @@ public final class canvas implements Module {
     
     private static Function intConsumer4Convert(IntConsumer4 consumer) {
         return args -> {
-            if (args.length != 4) throw new ArgumentsMismatchException("Four args expected");
+            Arguments.check(4, args.length);
             consumer.accept(args[0].asInt(), args[1].asInt(), args[2].asInt(), args[3].asInt());
             return NumberValue.ZERO;
         };
@@ -181,7 +181,7 @@ public final class canvas implements Module {
         
         @Override
         public Value execute(Value... args) {
-            if (args.length != 3) throw new ArgumentsMismatchException("Three args expected");
+            Arguments.check(3, args.length);
             int x = args[1].asInt();
             int y = args[2].asInt();
             graphics.drawString(args[0].asString(), x, y);

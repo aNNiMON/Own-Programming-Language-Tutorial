@@ -8,7 +8,7 @@ public final class std_join implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length < 1) throw new ArgumentsMismatchException("At least one argument expected");
+        Arguments.checkRange(1, 4, args.length);
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected in first argument");
         }

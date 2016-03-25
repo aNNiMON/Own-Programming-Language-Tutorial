@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import java.util.Iterator;
 import org.json.*;
@@ -9,7 +8,7 @@ public final class json_decode implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length != 1) throw new ArgumentsMismatchException("One argument expected");
+        Arguments.check(1, args.length);
         try {
             final String jsonRaw = args[0].asString();
             final Object root = new JSONTokener(jsonRaw).nextValue();

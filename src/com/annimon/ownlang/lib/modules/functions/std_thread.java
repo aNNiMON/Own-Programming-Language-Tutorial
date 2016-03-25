@@ -1,16 +1,13 @@
 package com.annimon.ownlang.lib.modules.functions;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 
 public final class std_thread implements Function {
 
     @Override
     public Value execute(Value... args) {
-        // Создаём новый поток и передаём параметры, если есть.
-        // Функция может передаваться как напрямую, так и по имени
-        if (args.length == 0) throw new ArgumentsMismatchException("At least one arg expected");
+        Arguments.checkAtLeast(1, args.length);
         
         Function body;
         if (args[0].type() == Types.FUNCTION) {

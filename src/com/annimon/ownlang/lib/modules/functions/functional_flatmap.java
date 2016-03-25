@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.util.ArrayList;
@@ -10,8 +9,7 @@ public final class functional_flatmap implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length < 2) throw new ArgumentsMismatchException("At least two arguments expected");
-        
+        Arguments.check(2, args.length);
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected in first argument");
         }

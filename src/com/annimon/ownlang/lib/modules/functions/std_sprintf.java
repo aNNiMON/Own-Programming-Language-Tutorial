@@ -1,13 +1,12 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 
 public final class std_sprintf implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length < 1) throw new ArgumentsMismatchException("At least one argument expected");
+        Arguments.checkAtLeast(1, args.length);
         
         final String format = args[0].asString();
         final Object[] values = new Object[args.length - 1];

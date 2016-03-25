@@ -69,7 +69,7 @@ public final class files implements Module {
 
         @Override
         public Value execute(Value... args) {
-            if (args.length < 1) throw new ArgumentsMismatchException("At least one argument expected");
+            Arguments.checkAtLeast(1, args.length);
             
             final File file = new File(args[0].asString());
             try {

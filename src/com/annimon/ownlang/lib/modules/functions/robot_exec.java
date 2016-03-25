@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 
 public final class robot_exec implements Function {
@@ -15,7 +14,7 @@ public final class robot_exec implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length == 0) throw new ArgumentsMismatchException("At least one argument expected");
+        Arguments.checkAtLeast(1, args.length);
         
         try {
             final Process process;

@@ -1,13 +1,12 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 
 public final class std_replacefirst implements Function {
     
     @Override
     public Value execute(Value... args) {
-        if (args.length != 3) throw new ArgumentsMismatchException("Three arguments expected");
+        Arguments.check(3, args.length);
         
         final String input = args[0].asString();
         final String regex = args[1].asString();

@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 
@@ -10,7 +9,7 @@ public final class functional_foreach implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length != 2) throw new ArgumentsMismatchException("Two args expected");
+        Arguments.check(2, args.length);
         
         if (args[1].type() != Types.FUNCTION) {
             throw new TypeException("Function expected in second arg");

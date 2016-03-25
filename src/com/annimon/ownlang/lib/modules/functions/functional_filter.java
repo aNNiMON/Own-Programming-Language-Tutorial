@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.util.ArrayList;
@@ -12,11 +11,11 @@ public final class functional_filter implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length < 2) throw new ArgumentsMismatchException("At least two args expected");
-        
+        Arguments.check(2, args.length);
         if (args[1].type() != Types.FUNCTION) {
-            throw new TypeException("Function expected in second arg");
+            throw new TypeException("Function expected in second argument");
         }
+
         final Value container = args[0];
         final Function consumer = ((FunctionValue) args[1]).getValue();
         if (container.type() == Types.ARRAY) {

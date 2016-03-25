@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.lib.modules.functions.robot_exec;
 import com.annimon.ownlang.lib.modules.functions.robot_fromclipboard;
@@ -43,14 +42,14 @@ public final class robot implements Module {
         Functions.set("mouseRelease", convertFunction(awtRobot::mouseRelease));
         Functions.set("mouseWheel", convertFunction(awtRobot::mouseWheel));
         Functions.set("mouseMove", (args) -> {
-            if (args.length != 2) throw new ArgumentsMismatchException("Two arguments expected");
+            Arguments.check(2, args.length);
             try {
                 awtRobot.mouseMove(args[0].asInt(), args[1].asInt());
             } catch (IllegalArgumentException iae) { }
             return NumberValue.ZERO;
         });
         Functions.set("typeText", (args) -> {
-            if (args.length != 1) throw new ArgumentsMismatchException("One argument expected");
+            Arguments.check(1, args.length);
             try {
                 typeText(args[0].asString());
             } catch (IllegalArgumentException iae) { }
@@ -87,7 +86,7 @@ public final class robot implements Module {
     
     private static Function convertFunction(RobotIntConsumer consumer) {
         return args -> {
-            if (args.length != 1) throw new ArgumentsMismatchException("One argument expected");
+            Arguments.check(1, args.length);
             try {
                 consumer.accept(args[0].asInt());
             } catch (IllegalArgumentException iae) { }

@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 
@@ -10,10 +9,10 @@ public final class functional_reduce implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length != 3) throw new ArgumentsMismatchException("Three args expected");
+        Arguments.check(3, args.length);
         
         if (args[2].type() != Types.FUNCTION) {
-            throw new TypeException("Function expected in third arg");
+            throw new TypeException("Function expected in third argument");
         }
         final Value container = args[0];
         final Value identity = args[1];

@@ -66,7 +66,7 @@ public final class http_http implements Function {
                 return process(url, method, args[2], (MapValue) args[3], (FunctionValue) args[4]);
                 
             default:
-                throw new ArgumentsMismatchException("Wrong number of arguments");
+                throw new ArgumentsMismatchException("From 1 to 5 arguments expected, got " + args.length);
         }
     }
     

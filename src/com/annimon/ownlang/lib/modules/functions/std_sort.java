@@ -9,7 +9,7 @@ public final class std_sort implements Function {
 
     @Override
     public Value execute(Value... args) {
-        if (args.length < 1) throw new ArgumentsMismatchException("At least one argument expected");
+        Arguments.checkAtLeast(1, args.length);
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected in first argument");
         }

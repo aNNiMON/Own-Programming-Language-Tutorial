@@ -1,6 +1,7 @@
 package com.annimon.ownlang;
 
 import com.annimon.ownlang.exceptions.LexerException;
+import com.annimon.ownlang.parser.Beautifier;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
@@ -38,12 +39,18 @@ public final class Main {
         }
         
         boolean showTokens = false, showAst = false, showMeasurements = false;
+        boolean beautifyMode = false;
         String input = null;
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-a":
                 case "--showast":
                     showAst = true;
+                    break;
+
+                case "-b":
+                case "--beautify":
+                    beautifyMode = true;
                     break;
                     
                 case "-t":
@@ -75,6 +82,10 @@ public final class Main {
         }
         if (input == null) {
             throw new IllegalArgumentException("Empty input");
+        }
+        if (beautifyMode) {
+            System.out.println(Beautifier.beautify(input));
+            return;
         }
         run(input, showTokens, showAst, showMeasurements);
     }

@@ -47,7 +47,7 @@ public final class MatchExpression implements Expression, Statement {
                         return evalResult(p.result);
                     }
                 } else {
-                    Variables.set(pattern.variable, value);
+                    Variables.define(pattern.variable, value);
                     if (optMatches(p)) {
                         final Value result = evalResult(p.result);;
                         Variables.remove(pattern.variable);
@@ -84,7 +84,7 @@ public final class MatchExpression implements Expression, Statement {
 
             case 1: // match arr { case [x]: x = arr ... }
                 final String variable = parts.get(0);
-                Variables.set(variable, array);
+                Variables.define(variable, array);
                 if (optMatches(p)) {
                     return true;
                 }
@@ -107,7 +107,7 @@ public final class MatchExpression implements Expression, Statement {
     private boolean matchListPatternEqualsSize(ListPattern p, List<String> parts, int partsSize, ArrayValue array) {
         // Set variables
         for (int i = 0; i < partsSize; i++) {
-            Variables.set(parts.get(i), array.get(i));
+            Variables.define(parts.get(i), array.get(i));
         }
         if (optMatches(p)) {
             // Clean up will be provided after evaluate result
@@ -124,14 +124,14 @@ public final class MatchExpression implements Expression, Statement {
         // Set element variables
         final int lastPart = partsSize - 1;
         for (int i = 0; i < lastPart; i++) {
-            Variables.set(parts.get(i), array.get(i));
+            Variables.define(parts.get(i), array.get(i));
         }
         // Set tail variable
         final ArrayValue tail = new ArrayValue(arraySize - partsSize + 1);
         for (int i = lastPart; i < arraySize; i++) {
             tail.set(i - lastPart, array.get(i));
         }
-        Variables.set(parts.get(lastPart), tail);
+        Variables.define(parts.get(lastPart), tail);
         // Check optional condition
         if (optMatches(p)) {
             // Clean up will be provided after evaluate result

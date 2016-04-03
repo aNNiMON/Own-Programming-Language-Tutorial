@@ -41,7 +41,7 @@ public final class DestructuringAssignmentStatement implements Statement {
         for (int i = 0; i < size; i++) {
             final String variable = variables.get(i);
             if (variable != null) {
-                Variables.set(variable, array.get(i));
+                Variables.define(variable, array.get(i));
             }
         }
     }
@@ -50,7 +50,7 @@ public final class DestructuringAssignmentStatement implements Statement {
         for (Map.Entry<Value, Value> entry : map) {
             final String variable = variables.get(i);
             if (variable != null) {
-                Variables.set(variable, new ArrayValue(
+                Variables.define(variable, new ArrayValue(
                         new Value[] { entry.getKey(), entry.getValue() }
                 ));
             }

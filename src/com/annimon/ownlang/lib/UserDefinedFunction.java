@@ -44,12 +44,12 @@ public final class UserDefinedFunction implements Function {
         try {
             Variables.push();
             for (int i = 0; i < size; i++) {
-                Variables.set(getArgsName(i), values[i]);
+                Variables.define(getArgsName(i), values[i]);
             }
             // Optional args if exists
             for (int i = size; i < totalArgsCount; i++) {
                 final Argument arg = arguments.get(i);
-                Variables.set(arg.getName(), arg.getValueExpr().eval());
+                Variables.define(arg.getName(), arg.getValueExpr().eval());
             }
             body.execute();
             return NumberValue.ZERO;

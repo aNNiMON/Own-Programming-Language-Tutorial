@@ -1,7 +1,6 @@
 package com.annimon.ownlang.lib;
 
 import java.util.Map;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -10,44 +9,105 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class Variables {
 
-    private static final Stack<Map<String, Value>> stack;
-    private static Map<String, Value> variables;
-    
+    private static final Object lock = new Object();
+
+    private static class Scope {
+        public final Scope parent;
+        public final Map<String, Value> variables;
+
+        public Scope() {
+            this(null);
+        }
+
+        public Scope(Scope parent) {
+            this.parent = parent;
+            variables = new ConcurrentHashMap<>();
+        }
+    }
+
+    private static class ScopeFindData {
+        public boolean isFound;
+        public Scope scope;
+    }
+
+    private static volatile Scope scope;
     static {
-        stack = new Stack<>();
-        variables = new ConcurrentHashMap<>();
+        scope = new Scope();
         Variables.clear();
     }
     
     public static void clear() {
-        stack.clear();
-        variables.clear();
-        variables.put("true", NumberValue.ONE);
-        variables.put("false", NumberValue.ZERO);
+        scope.variables.clear();
+        scope.variables.put("true", NumberValue.ONE);
+        scope.variables.put("false", NumberValue.ZERO);
     }
     
     public static void push() {
-        stack.push(new ConcurrentHashMap<>(variables));
+        synchronized (lock) {
+            final Scope newScope = new Scope(scope);
+            scope = newScope;
+        }
     }
     
     public static void pop() {
-        variables = stack.pop();
+        synchronized (lock) {
+            if (scope.parent != null) {
+                scope = scope.parent;
+            }
+        }
     }
     
     public static boolean isExists(String key) {
-        return variables.containsKey(key);
+        synchronized (lock) {
+            return findScope(key).isFound;
+        }
     }
     
     public static Value get(String key) {
-        if (!isExists(key)) return NumberValue.ZERO;
-        return variables.get(key);
+        synchronized (lock) {
+            final ScopeFindData scopeData = findScope(key);
+            if (scopeData.isFound) {
+                return scopeData.scope.variables.get(key);
+            }
+        }
+        return NumberValue.ZERO;
     }
     
     public static void set(String key, Value value) {
-        variables.put(key, value);
+        synchronized (lock) {
+            findScope(key).scope.variables.put(key, value);
+        }
     }
     
+    public static void define(String key, Value value) {
+        synchronized (lock) {
+            scope.variables.put(key, value);
+        }
+    }
+
     public static void remove(String key) {
-        variables.remove(key);
+        synchronized (lock) {
+            findScope(key).scope.variables.remove(key);
+        }
+    }
+
+    /*
+     * Find scope where variable exists.
+     */
+    private static ScopeFindData findScope(String variable) {
+        final ScopeFindData result = new ScopeFindData();
+
+        Scope current = scope;
+        do {
+            if (current.variables.containsKey(variable)) {
+                result.isFound = true;
+                result.scope = current;
+                return result;
+            }
+        } while ((current = current.parent) != null);
+        
+        result.isFound = false;
+        result.scope = scope;
+        return result;
     }
 }

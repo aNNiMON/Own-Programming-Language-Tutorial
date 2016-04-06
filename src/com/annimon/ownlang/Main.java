@@ -1,5 +1,6 @@
 package com.annimon.ownlang;
 
+import com.annimon.ownlang.utils.TimeMeasurement;
 import com.annimon.ownlang.exceptions.LexerException;
 import com.annimon.ownlang.parser.Beautifier;
 import com.annimon.ownlang.parser.Lexer;

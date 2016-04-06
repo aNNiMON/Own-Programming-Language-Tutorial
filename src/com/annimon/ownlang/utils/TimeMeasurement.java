@@ -1,4 +1,4 @@
-package com.annimon.ownlang;
+package com.annimon.ownlang.utils;
 
 import java.util.HashMap;
 import java.util.Map;

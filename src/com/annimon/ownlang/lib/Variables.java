@@ -41,6 +41,10 @@ public final class Variables {
         scope.variables.put("true", NumberValue.ONE);
         scope.variables.put("false", NumberValue.ZERO);
     }
+
+    public static Map<String, Value> variables() {
+        return scope.variables;
+    }
     
     public static void push() {
         synchronized (lock) {

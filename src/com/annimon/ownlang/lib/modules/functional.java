@@ -18,6 +18,7 @@ public final class functional implements Module {
         Functions.set("filter", new functional_filter());
         Functions.set("sortby", new functional_sortby());
         
+        Functions.set("chain", new functional_chain());
         Functions.set("combine", new functional_combine());
         
         Variables.set("IDENTITY", new FunctionValue(args -> args[0]));

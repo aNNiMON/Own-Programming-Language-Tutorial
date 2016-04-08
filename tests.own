@@ -1,4 +1,5 @@
 use "ounit"
+use "functional"
 
 def testAdditionOnNumbers() {
   assertEquals(6, 0 + 1 + 2 + 3)
@@ -54,6 +55,16 @@ def testFibonacci() {
   }
   assertEquals(3, fib(4))
   assertEquals(21, fib(8))
+}
+
+def testFunctionalChain() {
+  data = [1,2,3,4,5,6,7]
+  result = chain(data,
+    ::filter, def(x) = x <= 4,
+    ::sortby, def(x) = -x,
+    ::map,    def(x) = x * 2,
+  )
+  assertEquals([8,6,4,2], result)
 }
 
 println runTests()

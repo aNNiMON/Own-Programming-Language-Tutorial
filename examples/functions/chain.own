@@ -1,0 +1,10 @@
+use "functional"
+
+data = [1,2,3,4,5,6,7,8,9]
+chain(data,
+  ::filter,  def(x) = x % 2 == 0,
+  ::map,     def(x) = [x, x * x, x * x * x],
+  ::sortby,  def(x) = -x[2],
+  ::foreach, ::echo
+)
+

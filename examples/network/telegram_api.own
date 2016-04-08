@@ -1,0 +1,36 @@
+use "std"
+use "http"
+use "json"
+use "functional"
+
+// Telegram API example
+
+token = "YOUR_TOKEN"
+
+def toParams(obj) {
+  str = ""
+  for k, v : obj
+    str += k + "=" + v + "&"
+  return str
+}
+def createRawUrl(method, params, token = "") = "https://api.telegram.org/bot" + token + "/" + method + "?"+params+"access_token="+token
+def createUrl(method, params, token = "") = createRawUrl(method, toParams(params), token)
+def invokeJson(method, params, callback) = http(createUrl(method, params, token), combine(::jsondecode, callback))
+def invoke(method, params, callback) = http(createUrl(method, params, token), callback)
+
+def sendMessage(text = "", chatId = 1) {
+  invoke("sendMessage", {
+    "chat_id": chatId,
+    "text": text
+  }, ::echo)
+}
+
+def getUpdates() = invoke("getUpdates", {}, ::echo)
+
+
+// Get updates in chat
+getUpdates()
+// Send message to chatId 1
+sendMessage("Hello", 1)
+// Send message to channel
+sendMessage("Hello", "@telegram_channel")

@@ -288,14 +288,18 @@ public final class files implements Module {
     }
     
     private static class readText extends FileFunction {
+
+        private static final int BUFFER_SIZE = 4096;
+
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            final StringBuilder sb = new StringBuilder();
-            int ch;
-            while ((ch = fileInfo.reader.read()) != -1) {
-                sb.append((char) ch);
+            final StringBuilder result = new StringBuilder();
+            final char[] buffer = new char[BUFFER_SIZE];
+            int readed;
+            while ((readed = fileInfo.reader.read(buffer, 0, BUFFER_SIZE)) != -1) {
+                result.append(buffer, 0, readed);
             }
-            return new StringValue(sb.toString());
+            return new StringValue(result.toString());
         }
     }
     

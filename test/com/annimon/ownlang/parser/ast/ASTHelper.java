@@ -64,7 +64,7 @@ public final class ASTHelper {
     
     
     public static NumberValue number(Number value) {
-        return new NumberValue(value);
+        return NumberValue.of(value);
     }
     
     public static StringValue string(String value) {

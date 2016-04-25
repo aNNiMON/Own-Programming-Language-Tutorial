@@ -8,6 +8,6 @@ public final class std_time implements Function {
 
     @Override
     public Value execute(Value... args) {
-        return new NumberValue(System.currentTimeMillis());
+        return NumberValue.of(System.currentTimeMillis());
     }
 }

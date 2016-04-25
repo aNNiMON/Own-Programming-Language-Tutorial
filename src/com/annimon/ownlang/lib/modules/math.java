@@ -11,7 +11,7 @@ import java.util.function.DoubleUnaryOperator;
  */
 public final class math implements Module {
     
-    private static final DoubleFunction<NumberValue> doubleToNumber = v -> new NumberValue(v);
+    private static final DoubleFunction<NumberValue> doubleToNumber = NumberValue::of;
 
     @Override
     public void init() {
@@ -51,8 +51,8 @@ public final class math implements Module {
         Functions.set("toRadians", functionConvert(Math::toRadians));
         Functions.set("ulp", functionConvert(Math::ulp));
 
-        Variables.set("PI", new NumberValue(Math.PI));
-        Variables.set("E", new NumberValue(Math.E));
+        Variables.set("PI", NumberValue.of(Math.PI));
+        Variables.set("E", NumberValue.of(Math.E));
     }
     
     private static Function functionConvert(DoubleUnaryOperator op) {

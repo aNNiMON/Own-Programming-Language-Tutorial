@@ -32,6 +32,6 @@ public final class std_length implements Function {
                 length = 0;
                 
         }
-        return new NumberValue(length);
+        return NumberValue.of(length);
     }
 }

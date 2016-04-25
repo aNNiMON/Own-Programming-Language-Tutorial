@@ -106,7 +106,7 @@ public final class http_http implements Function {
             final MapValue map = new MapValue(10);
             map.set(new StringValue("text"), new StringValue(response.body().string()));
             map.set(new StringValue("message"), new StringValue(response.message()));
-            map.set(new StringValue("code"), new NumberValue(response.code()));
+            map.set(new StringValue("code"), NumberValue.of(response.code()));
             final MapValue headers = new MapValue(response.headers().size());
             for (Map.Entry<String, List<String>> entry : response.headers().toMultimap().entrySet()) {
                 final int valuesSize = entry.getValue().size();
@@ -117,7 +117,7 @@ public final class http_http implements Function {
                 headers.set(new StringValue(entry.getKey()), values);
             }
             map.set(new StringValue("headers"), headers);
-            map.set(new StringValue("content_length"), new NumberValue(response.body().contentLength()));
+            map.set(new StringValue("content_length"), NumberValue.of(response.body().contentLength()));
             map.set(CONTENT_TYPE, new StringValue(response.body().contentType().toString()));
             return map;
         }

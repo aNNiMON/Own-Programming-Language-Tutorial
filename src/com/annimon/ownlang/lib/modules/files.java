@@ -101,7 +101,7 @@ public final class files implements Module {
             
             final int key = files.size();
             files.put(key, new FileInfo(file, dis, dos, reader, writer));
-            return new NumberValue(key);
+            return NumberValue.of(key);
         }
     }
     
@@ -172,7 +172,7 @@ public final class files implements Module {
     private static class fileSize extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.file.length());
+            return NumberValue.of(fileInfo.file.length());
         }
     }
     
@@ -186,7 +186,7 @@ public final class files implements Module {
     private static class readByte extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readByte());
+            return NumberValue.of(fileInfo.dis.readByte());
         }
     }
     
@@ -203,9 +203,9 @@ public final class files implements Module {
             final byte[] buffer = new byte[length];
             final int readed = fileInfo.dis.read(buffer, offset, length);
             for (int i = 0; i < readed; i++) {
-                array.set(i, new NumberValue(buffer[i]));
+                array.set(i, NumberValue.of(buffer[i]));
             }
-            return new NumberValue(readed);
+            return NumberValue.of(readed);
         }
     }
     
@@ -225,7 +225,7 @@ public final class files implements Module {
             final int size = bytes.length;
             final ArrayValue result = new ArrayValue(size);
             for (int i = 0; i < size; i++) {
-                result.set(i, new NumberValue(bytes[i]));
+                result.set(i, NumberValue.of(bytes[i]));
             }
             return result;
         }
@@ -234,42 +234,42 @@ public final class files implements Module {
     private static class readChar extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue((short)fileInfo.dis.readChar());
+            return NumberValue.of((short)fileInfo.dis.readChar());
         }
     }
     
     private static class readShort extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readShort());
+            return NumberValue.of(fileInfo.dis.readShort());
         }
     }
     
     private static class readInt extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readInt());
+            return NumberValue.of(fileInfo.dis.readInt());
         }
     }
     
     private static class readLong extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readLong());
+            return NumberValue.of(fileInfo.dis.readLong());
         }
     }
     
     private static class readFloat extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readFloat());
+            return NumberValue.of(fileInfo.dis.readFloat());
         }
     }
     
     private static class readDouble extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return new NumberValue(fileInfo.dis.readDouble());
+            return NumberValue.of(fileInfo.dis.readDouble());
         }
     }
     

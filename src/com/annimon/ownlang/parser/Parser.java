@@ -345,12 +345,12 @@ public final class Parser {
             if (match(TokenType.NUMBER)) {
                 // case 0.5: 
                 pattern = new MatchExpression.ConstantPattern(
-                        new NumberValue(createNumber(current.getText(), 10))
+                        NumberValue.of(createNumber(current.getText(), 10))
                 );
             } else if (match(TokenType.HEX_NUMBER)) {
                 // case #FF: 
                 pattern = new MatchExpression.ConstantPattern(
-                        new NumberValue(createNumber(current.getText(), 16))
+                        NumberValue.of(createNumber(current.getText(), 16))
                 );
             } else if (match(TokenType.TEXT)) {
                 // case "text":

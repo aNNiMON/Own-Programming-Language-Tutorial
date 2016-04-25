@@ -60,15 +60,15 @@ public final class robot implements Module {
         Functions.set("execProcess", new robot_exec(robot_exec.Mode.EXEC));
         Functions.set("execProcessAndWait", new robot_exec(robot_exec.Mode.EXEC_AND_WAIT));
         
-        Variables.set("VK_DOWN", new NumberValue(KeyEvent.VK_DOWN));
-        Variables.set("VK_LEFT", new NumberValue(KeyEvent.VK_LEFT));
-        Variables.set("VK_RIGHT", new NumberValue(KeyEvent.VK_RIGHT));
-        Variables.set("VK_FIRE", new NumberValue(KeyEvent.VK_ENTER));
-        Variables.set("VK_ESCAPE", new NumberValue(KeyEvent.VK_ESCAPE));
+        Variables.set("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
+        Variables.set("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
+        Variables.set("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
+        Variables.set("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
+        Variables.set("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
         
-        Variables.set("BUTTON1", new NumberValue(InputEvent.BUTTON1_MASK));
-        Variables.set("BUTTON2", new NumberValue(InputEvent.BUTTON2_MASK));
-        Variables.set("BUTTON3", new NumberValue(InputEvent.BUTTON3_MASK));
+        Variables.set("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK));
+        Variables.set("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK));
+        Variables.set("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK));
     }
     
     private static void initialize() {

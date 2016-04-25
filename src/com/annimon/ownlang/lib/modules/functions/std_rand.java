@@ -14,7 +14,7 @@ public final class std_rand implements Function {
     @Override
     public Value execute(Value... args) {
         Arguments.checkRange(0, 2, args.length);
-        if (args.length == 0) return new NumberValue(RND.nextDouble());
+        if (args.length == 0) return NumberValue.of(RND.nextDouble());
 
         int from = 0;
         int to = 100;
@@ -24,6 +24,6 @@ public final class std_rand implements Function {
             from = args[0].asInt();
             to = args[1].asInt();
         }
-        return new NumberValue(RND.nextInt(to - from) + from);
+        return NumberValue.of(RND.nextInt(to - from) + from);
     }
 }

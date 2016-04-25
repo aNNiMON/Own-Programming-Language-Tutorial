@@ -181,61 +181,61 @@ public final class canvasfx implements Module {
 
         final MapValue arcType = new MapValue(ArcType.values().length);
         for (ArcType value : ArcType.values()) {
-            arcType.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            arcType.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("ArcType", arcType);
         
         final MapValue fillRule = new MapValue(FillRule.values().length);
         for (FillRule value : FillRule.values()) {
-            fillRule.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            fillRule.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("FillRule", fillRule);
         
         final MapValue blendMode = new MapValue(BlendMode.values().length);
         for (BlendMode value : BlendMode.values()) {
-            blendMode.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            blendMode.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("BlendMode", blendMode);
         
         final MapValue lineCap = new MapValue(StrokeLineCap.values().length);
         for (StrokeLineCap value : StrokeLineCap.values()) {
-            lineCap.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            lineCap.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("StrokeLineCap", lineCap);
         
         final MapValue lineJoin = new MapValue(StrokeLineJoin.values().length);
         for (StrokeLineJoin value : StrokeLineJoin.values()) {
-            lineJoin.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            lineJoin.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("StrokeLineJoin", lineJoin);
         
         final MapValue textAlignment = new MapValue(TextAlignment.values().length);
         for (TextAlignment value : TextAlignment.values()) {
-            textAlignment.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            textAlignment.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("TextAlignment", textAlignment);
         
         final MapValue vPos = new MapValue(VPos.values().length);
         for (VPos value : VPos.values()) {
-            vPos.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            vPos.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("VPos", vPos);
         
         final MapValue events = new MapValue(Events.values().length);
         for (Events value : Events.values()) {
-            events.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            events.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("Events", events);
         
         final MapValue mouseButton = new MapValue(MouseButton.values().length);
         for (MouseButton value : MouseButton.values()) {
-            mouseButton.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            mouseButton.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("MouseButton", mouseButton);
         
         final MapValue keyCodes = new MapValue(KeyCode.values().length);
         for (KeyCode value : KeyCode.values()) {
-            keyCodes.set(new StringValue(value.name()), new NumberValue(value.ordinal()));
+            keyCodes.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
         }
         Variables.set("KeyCode", keyCodes);
     }
@@ -805,49 +805,49 @@ public final class canvasfx implements Module {
     private static class getFillRule implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getFillRule().ordinal());
+            return NumberValue.of(graphics.getFillRule().ordinal());
         }
     }
     
     private static class getGlobalAlpha implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getGlobalAlpha());
+            return NumberValue.of(graphics.getGlobalAlpha());
         }
     }
     
     private static class getGlobalBlendMode implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getGlobalBlendMode().ordinal());
+            return NumberValue.of(graphics.getGlobalBlendMode().ordinal());
         }
     }
     
     private static class getLineCap implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getLineCap().ordinal());
+            return NumberValue.of(graphics.getLineCap().ordinal());
         }
     }
     
     private static class getLineJoin implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getLineJoin().ordinal());
+            return NumberValue.of(graphics.getLineJoin().ordinal());
         }
     }
     
     private static class getLineWidth implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getLineWidth());
+            return NumberValue.of(graphics.getLineWidth());
         }
     }
     
     private static class getMiterLimit implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getMiterLimit());
+            return NumberValue.of(graphics.getMiterLimit());
         }
     }
     
@@ -861,14 +861,14 @@ public final class canvasfx implements Module {
     private static class getTextAlign implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getTextAlign().ordinal());
+            return NumberValue.of(graphics.getTextAlign().ordinal());
         }
     }
     
     private static class getTextBaseline implements Function {
         @Override
         public Value execute(Value... args) {
-            return new NumberValue(graphics.getTextBaseline().ordinal());
+            return NumberValue.of(graphics.getTextBaseline().ordinal());
         }
     }
     
@@ -1258,15 +1258,15 @@ public final class canvasfx implements Module {
     
     private static void handleMouseEvent(MouseEvent e, final Function handler) {
         final MapValue map = new MapValue(25);
-        map.set(new StringValue("button"), new NumberValue(e.getButton().ordinal()));
-        map.set(new StringValue("clickCount"), new NumberValue(e.getClickCount()));
-        map.set(new StringValue("sceneX"), new NumberValue(e.getSceneX()));
-        map.set(new StringValue("sceneY"), new NumberValue(e.getSceneY()));
-        map.set(new StringValue("screenX"), new NumberValue(e.getScreenX()));
-        map.set(new StringValue("screenY"), new NumberValue(e.getScreenY()));
-        map.set(new StringValue("x"), new NumberValue(e.getX()));
-        map.set(new StringValue("y"), new NumberValue(e.getY()));
-        map.set(new StringValue("z"), new NumberValue(e.getZ()));
+        map.set(new StringValue("button"), NumberValue.of(e.getButton().ordinal()));
+        map.set(new StringValue("clickCount"), NumberValue.of(e.getClickCount()));
+        map.set(new StringValue("sceneX"), NumberValue.of(e.getSceneX()));
+        map.set(new StringValue("sceneY"), NumberValue.of(e.getSceneY()));
+        map.set(new StringValue("screenX"), NumberValue.of(e.getScreenX()));
+        map.set(new StringValue("screenY"), NumberValue.of(e.getScreenY()));
+        map.set(new StringValue("x"), NumberValue.of(e.getX()));
+        map.set(new StringValue("y"), NumberValue.of(e.getY()));
+        map.set(new StringValue("z"), NumberValue.of(e.getZ()));
         map.set(new StringValue("isAltDown"), NumberValue.fromBoolean(e.isAltDown()));
         map.set(new StringValue("isConsumed"), NumberValue.fromBoolean(e.isConsumed()));
         map.set(new StringValue("isControlDown"), NumberValue.fromBoolean(e.isControlDown()));
@@ -1285,7 +1285,7 @@ public final class canvasfx implements Module {
     
     private static void handleKeyEvent(final KeyEvent e, final Function handler) {
         final MapValue map = new MapValue(10);
-        map.set(new StringValue("code"), new NumberValue(e.getCode().ordinal()));
+        map.set(new StringValue("code"), NumberValue.of(e.getCode().ordinal()));
         map.set(new StringValue("character"), new StringValue(e.getCharacter()));
         map.set(new StringValue("text"), new StringValue(e.getText()));
         map.set(new StringValue("isAltDown"), NumberValue.fromBoolean(e.isAltDown()));
@@ -1299,13 +1299,13 @@ public final class canvasfx implements Module {
     
     private static void handleDragEvent(final DragEvent e, final Function handler) {
         final MapValue map = new MapValue(10);
-        map.set(new StringValue("sceneX"), new NumberValue(e.getSceneX()));
-        map.set(new StringValue("sceneY"), new NumberValue(e.getSceneY()));
-        map.set(new StringValue("screenX"), new NumberValue(e.getScreenX()));
-        map.set(new StringValue("screenY"), new NumberValue(e.getScreenY()));
-        map.set(new StringValue("x"), new NumberValue(e.getX()));
-        map.set(new StringValue("y"), new NumberValue(e.getY()));
-        map.set(new StringValue("z"), new NumberValue(e.getZ()));
+        map.set(new StringValue("sceneX"), NumberValue.of(e.getSceneX()));
+        map.set(new StringValue("sceneY"), NumberValue.of(e.getSceneY()));
+        map.set(new StringValue("screenX"), NumberValue.of(e.getScreenX()));
+        map.set(new StringValue("screenY"), NumberValue.of(e.getScreenY()));
+        map.set(new StringValue("x"), NumberValue.of(e.getX()));
+        map.set(new StringValue("y"), NumberValue.of(e.getY()));
+        map.set(new StringValue("z"), NumberValue.of(e.getZ()));
         map.set(new StringValue("isAccepted"), NumberValue.fromBoolean(e.isAccepted()));
         map.set(new StringValue("isConsumed"), NumberValue.fromBoolean(e.isConsumed()));
         map.set(new StringValue("isDropCompleted"), NumberValue.fromBoolean(e.isDropCompleted()));

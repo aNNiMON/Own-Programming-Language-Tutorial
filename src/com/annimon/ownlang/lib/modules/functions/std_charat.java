@@ -10,6 +10,6 @@ public final class std_charat implements Function {
         final String input = args[0].asString();
         final int index = args[1].asInt();
         
-        return new NumberValue((short)input.charAt(index));
+        return NumberValue.of((short)input.charAt(index));
     }
 }

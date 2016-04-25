@@ -12,6 +12,6 @@ public final class std_lastindexof implements Function {
         final String what = args[1].asString();
         final int index = (args.length == 3) ? args[2].asInt() : 0;
         
-        return new NumberValue(input.lastIndexOf(what, index));
+        return NumberValue.of(input.lastIndexOf(what, index));
     }
 }

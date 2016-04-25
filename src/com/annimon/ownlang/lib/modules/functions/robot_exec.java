@@ -32,7 +32,7 @@ public final class robot_exec implements Function {
             
             switch (mode) {
                 case EXEC_AND_WAIT:
-                    return new NumberValue(process.waitFor());
+                    return NumberValue.of(process.waitFor());
                 case EXEC:
                 default:
                     return NumberValue.ZERO;

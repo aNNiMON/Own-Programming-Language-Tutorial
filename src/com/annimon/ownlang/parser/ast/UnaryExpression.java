@@ -90,32 +90,32 @@ public final class UnaryExpression implements Expression, Statement {
         if (value.type() == Types.NUMBER) {
             final Number number = (Number) value.raw();
             if (number instanceof Double) {
-                return new NumberValue(number.doubleValue() + 1);
+                return NumberValue.of(number.doubleValue() + 1);
             }
             if (number instanceof Float) {
-                return new NumberValue(number.floatValue() + 1);
+                return NumberValue.of(number.floatValue() + 1);
             }
             if (number instanceof Long) {
-                return new NumberValue(number.longValue() + 1);
+                return NumberValue.of(number.longValue() + 1);
             }
         }
-        return new NumberValue(value.asInt() + 1);
+        return NumberValue.of(value.asInt() + 1);
     }
     
     private Value decrement(Value value) {
         if (value.type() == Types.NUMBER) {
             final Number number = (Number) value.raw();
             if (number instanceof Double) {
-                return new NumberValue(number.doubleValue() - 1);
+                return NumberValue.of(number.doubleValue() - 1);
             }
             if (number instanceof Float) {
-                return new NumberValue(number.floatValue() - 1);
+                return NumberValue.of(number.floatValue() - 1);
             }
             if (number instanceof Long) {
-                return new NumberValue(number.longValue() - 1);
+                return NumberValue.of(number.longValue() - 1);
             }
         }
-        return new NumberValue(value.asInt() - 1);
+        return NumberValue.of(value.asInt() - 1);
     }
     
     private Value negate(Value value) {
@@ -126,26 +126,26 @@ public final class UnaryExpression implements Expression, Statement {
         if (value.type() == Types.NUMBER) {
             final Number number = (Number) value.raw();
             if (number instanceof Double) {
-                return new NumberValue(-number.doubleValue());
+                return NumberValue.of(-number.doubleValue());
             }
             if (number instanceof Float) {
-                return new NumberValue(-number.floatValue());
+                return NumberValue.of(-number.floatValue());
             }
             if (number instanceof Long) {
-                return new NumberValue(-number.longValue());
+                return NumberValue.of(-number.longValue());
             }
         }
-        return new NumberValue(-value.asInt());
+        return NumberValue.of(-value.asInt());
     }
     
     private Value complement(Value value) {
         if (value.type() == Types.NUMBER) {
             final Number number = (Number) value.raw();
             if (number instanceof Long) {
-                return new NumberValue(~number.longValue());
+                return NumberValue.of(~number.longValue());
             }
         }
-        return new NumberValue(~value.asInt());
+        return NumberValue.of(~value.asInt());
     }
     
     private Value not(Value value) {

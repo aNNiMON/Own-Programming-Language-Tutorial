@@ -46,12 +46,12 @@ public final class canvas implements Module {
         Functions.set("color", new SetColor());
         Functions.set("repaint", new Repaint());
         
-        Variables.set("VK_UP", new NumberValue(KeyEvent.VK_UP));
-        Variables.set("VK_DOWN", new NumberValue(KeyEvent.VK_DOWN));
-        Variables.set("VK_LEFT", new NumberValue(KeyEvent.VK_LEFT));
-        Variables.set("VK_RIGHT", new NumberValue(KeyEvent.VK_RIGHT));
-        Variables.set("VK_FIRE", new NumberValue(KeyEvent.VK_ENTER));
-        Variables.set("VK_ESCAPE", new NumberValue(KeyEvent.VK_ESCAPE));
+        Variables.set("VK_UP", NumberValue.of(KeyEvent.VK_UP));
+        Variables.set("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
+        Variables.set("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
+        Variables.set("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
+        Variables.set("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
+        Variables.set("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
         
         lastKey = NumberValue.MINUS_ONE;
         mouseHover = new ArrayValue(new Value[] { NumberValue.ZERO, NumberValue.ZERO });
@@ -106,7 +106,7 @@ public final class canvas implements Module {
             addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    lastKey = new NumberValue(e.getKeyCode());
+                    lastKey = NumberValue.of(e.getKeyCode());
                 }
                 @Override
                 public void keyReleased(KeyEvent e) {
@@ -116,8 +116,8 @@ public final class canvas implements Module {
             addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
-                    mouseHover.set(0, new NumberValue(e.getX()));
-                    mouseHover.set(1, new NumberValue(e.getY()));
+                    mouseHover.set(0, NumberValue.of(e.getX()));
+                    mouseHover.set(1, NumberValue.of(e.getY()));
                 }
             });
         }

@@ -15,7 +15,7 @@ public final class ValueExpression implements Expression {
     public final Value value;
     
     public ValueExpression(Number value) {
-        this.value = new NumberValue(value);
+        this.value = NumberValue.of(value);
     }
     
     public ValueExpression(String value) {

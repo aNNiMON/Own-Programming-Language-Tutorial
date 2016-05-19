@@ -13,5 +13,6 @@ public final class http implements Module {
     public void init() {
         Functions.set("urlencode", new http_urlencode());
         Functions.set("http", new http_http());
+        Functions.set("download", new http_download());
     }
 }

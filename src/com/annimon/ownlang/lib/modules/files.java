@@ -31,6 +31,7 @@ public final class files implements Module {
         Functions.set("fopen", new fopen());
         Functions.set("listFiles", new listFiles());
         Functions.set("delete", new delete());
+        Functions.set("rename", new rename());
         Functions.set("exists", new exists());
         Functions.set("isDirectory", new isDirectory());
         Functions.set("isFile", new isFile());
@@ -51,6 +52,7 @@ public final class files implements Module {
         Functions.set("readText", new readText());
         Functions.set("writeBoolean", new writeBoolean());
         Functions.set("writeByte", new writeByte());
+        Functions.set("writeBytes", new writeBytes());
         Functions.set("writeChar", new writeChar());
         Functions.set("writeShort", new writeShort());
         Functions.set("writeInt", new writeInt());
@@ -159,6 +161,16 @@ public final class files implements Module {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
             return NumberValue.fromBoolean(fileInfo.file.mkdir());
+        }
+    }
+
+    private static class rename extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final File dest = files.get(args[1].asInt()).file;
+            System.out.println(fileInfo.file);
+            System.out.println(dest);
+            return NumberValue.fromBoolean(fileInfo.file.renameTo(dest));
         }
     }
     
@@ -303,6 +315,24 @@ public final class files implements Module {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
             fileInfo.dos.writeByte((byte) args[1].asInt());
+            return NumberValue.ONE;
+        }
+    }
+
+    private static class writeBytes extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final ArrayValue array = (ArrayValue) args[1];
+            int offset = 0, length = array.size();
+            final byte[] bytes = new byte[length];
+            for (int i = 0; i < length; i++) {
+                bytes[i] = (byte) (array.get(i).asInt() & 0xFF);
+            }
+            if (args.length > 3) {
+                offset = args[2].asInt();
+                length = args[3].asInt();
+            }
+            fileInfo.dos.write(bytes, offset, length);
             return NumberValue.ONE;
         }
     }

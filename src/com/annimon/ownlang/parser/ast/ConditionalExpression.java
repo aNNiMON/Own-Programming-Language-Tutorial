@@ -57,12 +57,12 @@ public final class ConditionalExpression implements Expression {
         final Value value2 = expr2.eval();
         
         double number1, number2;
-        if (value1.type() == Types.STRING) {
-            number1 = value1.asString().compareTo(value2.asString());
-            number2 = 0;
-        } else {
+        if (value1.type() == Types.NUMBER) {
             number1 = value1.asNumber();
             number2 = value2.asNumber();
+        } else {
+            number1 = value1.compareTo(value2);
+            number2 = 0;
         }
         
         boolean result;

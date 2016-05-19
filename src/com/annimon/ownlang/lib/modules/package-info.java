@@ -1,6 +1,7 @@
 @Modules(modules = {
     canvas.class,
     canvasfx.class,
+    date.class,
     files.class,
     functional.class,
     http.class,

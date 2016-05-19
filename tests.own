@@ -1,5 +1,6 @@
 use "ounit"
 use "functional"
+use "date"
 
 def testAdditionOnNumbers() {
   assertEquals(6, 0 + 1 + 2 + 3)
@@ -65,6 +66,45 @@ def testFunctionalChain() {
     ::map,    def(x) = x * 2,
   )
   assertEquals([8,6,4,2], result)
+}
+
+def testDateParse() {
+  d = parseDate("2016/05/10", newFormat("yyyy/MM/dd"))
+  assertEquals(2016, d.year)
+  assertEquals(4, d.month)
+  assertEquals(10, d.day)
+  assertEquals(0, d.hour)
+}
+
+// --- Date
+def testNewDate() {
+  d = newDate(2016, 04, 10)
+  assertEquals(2016, d.year)
+  assertEquals(4, d.month)
+  assertEquals(10, d.day)
+  assertEquals(0, d.hour)
+  assertEquals(0, d.minute)
+  assertEquals(0, d.second)
+  assertEquals(0, d.millisecond)
+}
+
+def testCompareDates() {
+  assertTrue(newDate(2016, 04, 10) > newDate(2015, 03, 11))
+  assertTrue(newDate(2012, 04, 10) < newDate(2015, 03, 11))
+  assertTrue(newDate(2015, 03, 11, 0, 0, 0) == newDate(2015, 03, 11))
+}
+
+def testDateFormat() {
+  d = formatDate(newDate(2016, 04, 10), newFormat("yyyy/MM/dd HH:mm:ss"))
+  assertEquals("2016/05/10 00:00:00", d)
+}
+
+def testDateParse() {
+  d = parseDate("2016/05/10", newFormat("yyyy/MM/dd"))
+  assertEquals(2016, d.year)
+  assertEquals(4, d.month)
+  assertEquals(10, d.day)
+  assertEquals(0, d.hour)
 }
 
 println runTests()

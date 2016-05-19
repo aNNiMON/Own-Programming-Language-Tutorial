@@ -18,6 +18,7 @@ public final class std implements Module {
         Functions.set("time", new std_time());
         Functions.set("sleep", new std_sleep());
         Functions.set("thread", new std_thread());
+        Functions.set("sync", new std_sync());
         
         // String
         Functions.set("sprintf", new std_sprintf());

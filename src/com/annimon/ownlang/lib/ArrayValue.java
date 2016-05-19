@@ -10,6 +10,24 @@ import java.util.List;
  * @author aNNiMON
  */
 public final class ArrayValue implements Value, Iterable<Value> {
+
+    public static ArrayValue of(byte[] array) {
+        final int size = array.length;
+        final ArrayValue result = new ArrayValue(size);
+        for (int i = 0; i < size; i++) {
+            result.set(i, NumberValue.of(array[i]));
+        }
+        return result;
+    }
+
+    public static ArrayValue of(String[] array) {
+        final int size = array.length;
+        final ArrayValue result = new ArrayValue(size);
+        for (int i = 0; i < size; i++) {
+            result.set(i, new StringValue(array[i]));
+        }
+        return result;
+    }
     
     public static ArrayValue add(ArrayValue array, Value value) {
         final int last = array.elements.length;

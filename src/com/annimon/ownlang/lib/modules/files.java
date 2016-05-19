@@ -10,7 +10,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -124,13 +123,7 @@ public final class files implements Module {
     private static class listFiles extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            final String[] files = fileInfo.file.list();
-            final int size = files.length;
-            final ArrayValue result = new ArrayValue(size);
-            for (int i = 0; i < size; i++) {
-                result.set(i, new StringValue(files[i]));
-            }
-            return result;
+            return ArrayValue.of(fileInfo.file.list());
         }
     }
     
@@ -221,13 +214,7 @@ public final class files implements Module {
             }
             baos.flush();
             baos.close();
-            final byte[] bytes = baos.toByteArray();
-            final int size = bytes.length;
-            final ArrayValue result = new ArrayValue(size);
-            for (int i = 0; i < size; i++) {
-                result.set(i, NumberValue.of(bytes[i]));
-            }
-            return result;
+            return ArrayValue.of(baos.toByteArray());
         }
     }
     

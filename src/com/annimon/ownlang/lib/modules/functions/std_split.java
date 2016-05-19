@@ -13,11 +13,6 @@ public final class std_split implements Function {
         final int limit = (args.length == 3) ? args[2].asInt() : 0;
 
         final String[] parts = input.split(regex, limit);
-        final ArrayValue result = new ArrayValue(parts.length);
-        for (int i = 0; i < parts.length; i++) {
-            result.set(i, new StringValue(parts[i]));
-        }
-
-        return result;
+        return ArrayValue.of(parts);
     }
 }

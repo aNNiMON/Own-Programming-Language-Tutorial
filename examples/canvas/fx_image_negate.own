@@ -1,0 +1,22 @@
+use "std"
+use "canvasfx"
+
+graphics = window("JavaFX Image negation demo", 400, 400)
+imgSource = createImage("http://lorempixel.com/400/200/")
+pixels = imgSource.getPixels()
+size = length(pixels)
+for i = 0, i < size, i++ {
+  pixel = pixels[i]
+  r = (pixel >> 16) & 0xFF
+  g = (pixel >> 8) & 0xFF
+  b = pixel & 0xFF
+  r = 255 - r
+  g = 255 - g
+  b = 255 - b
+  pixels[i] = 0xFF000000 | (r << 16) | (g << 8) | b
+}
+imgNegate = createImage(imgSource.width, imgSource.height, pixels)
+
+graphics.drawImage(imgSource, 0, 0)
+graphics.drawImage(imgNegate, 0, 200)
+repaint()

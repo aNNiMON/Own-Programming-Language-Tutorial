@@ -4,6 +4,7 @@ import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.awt.Dimension;
 import java.lang.reflect.Modifier;
+import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,11 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -117,6 +123,7 @@ public final class canvasfx implements Module {
         
         Functions.set("addEventFilter", new addEventFilter());
         Functions.set("addEventHandler", new addEventHandler());
+        Functions.set("createImage", new createImage());
 
         final MapValue arcType = new MapValue(ArcType.values().length);
         for (ArcType value : ArcType.values()) {
@@ -571,6 +578,83 @@ public final class canvasfx implements Module {
     }
 //</editor-fold>
     
+    private static class ImageFXValue extends MapValue {
+
+        private final Image image;
+
+        public ImageFXValue(Image image) {
+            super(8);
+            this.image = image;
+            init();
+        }
+
+        private void init() {
+            set(new StringValue("width"), NumberValue.of(image.getWidth()));
+            set(new StringValue("height"), NumberValue.of(image.getHeight()));
+            set(new StringValue("preserveRatio"), NumberValue.fromBoolean(image.isPreserveRatio()));
+            set(new StringValue("smooth"), NumberValue.fromBoolean(image.isSmooth()));
+            set(new StringValue("getPixels"), new FunctionValue(this::getPixels));
+        }
+
+        private Value getPixels(Value... args) {
+            final int w = (int) image.getWidth();
+            final int h = (int) image.getHeight();
+            final int size = w * h;
+            final PixelReader pr = image.getPixelReader();
+            final WritablePixelFormat<IntBuffer> format = WritablePixelFormat.getIntArgbInstance();
+            final int[] buffer = new int[size];
+            pr.getPixels(0, 0, w, h, format, buffer, 0, w);
+
+            final ArrayValue result = new ArrayValue(size);
+            for (int i = 0; i < size; i++) {
+                result.set(i, NumberValue.of(buffer[i]));
+            }
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "JavaFX Image " + image;
+        }
+    }
+
+    private static class createImage implements Function {
+
+        @Override
+        public Value execute(Value... args) {
+            Arguments.checkAtLeast(1, args.length);
+            final Image result;
+            switch (args.length) {
+                case 1:
+                    // createImage(url)
+                    result = new Image(args[0].asString());
+                    break;
+                case 2:
+                default:
+                    // createImage(width, height)
+                    result = new WritableImage(args[0].asInt(), args[1].asInt());
+                    break;
+                case 3:
+                    // createImage(w, h, pixels)
+                    final int w = args[0].asInt();
+                    final int h = args[1].asInt();
+                    final int size = w * h;
+                    final WritableImage writableImage = new WritableImage(w, h);
+                    final PixelWriter pw = writableImage.getPixelWriter();
+                    final WritablePixelFormat<IntBuffer> format = WritablePixelFormat.getIntArgbInstance();
+                    final int[] buffer = new int[size];
+                    final ArrayValue array = (ArrayValue) args[2];
+                    for (int i = 0; i < size; i++) {
+                        buffer[i] = array.get(i).asInt();
+                    }
+                    pw.setPixels(0, 0, w, h, format, buffer, 0, w);
+                    result = writableImage;
+
+            }
+            return new ImageFXValue(result);
+        }
+    }
+
     public static class GraphicsFXValue extends MapValue {
 
         private final GraphicsContext graphics;
@@ -592,6 +676,7 @@ public final class canvasfx implements Module {
             functions.put("clearRect", this::clearRect);
             functions.put("clip", this::clip);
             functions.put("closePath", this::closePath);
+            functions.put("drawImage", this::drawImage);
             functions.put("fill", this::fill);
             functions.put("fillArc", this::fillArc);
             functions.put("fillOval", this::fillOval);
@@ -703,6 +788,36 @@ public final class canvasfx implements Module {
 
         public Value closePath(Value... args) {
             graphics.closePath();
+            return NumberValue.ZERO;
+        }
+
+        public Value drawImage(Value... args) {
+            Arguments.checkAtLeast(3, args.length);
+            if (!(args[0] instanceof ImageFXValue)) {
+                throw new TypeException("ImageFX expected");
+            }
+            final Image image = ((ImageFXValue) args[0]).image;
+
+            if (args.length >= 9) {
+                graphics.drawImage(image,
+                        args[1].asNumber(), args[2].asNumber(),
+                        args[3].asNumber(), args[4].asNumber(),
+                        args[5].asNumber(), args[6].asNumber(),
+                        args[7].asNumber(), args[8].asNumber()
+                        );
+                return NumberValue.ZERO;
+            }
+
+            if (args.length >= 5) {
+                // x y w h
+                graphics.drawImage(image,
+                        args[1].asNumber(), args[2].asNumber(),
+                        args[3].asNumber(), args[4].asNumber()
+                        );
+                return NumberValue.ZERO;
+            }
+            
+            graphics.drawImage(image, args[1].asNumber(), args[2].asNumber());
             return NumberValue.ZERO;
         }
 

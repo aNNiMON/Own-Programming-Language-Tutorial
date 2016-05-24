@@ -5,6 +5,7 @@ import com.annimon.ownlang.lib.*;
 import java.awt.Dimension;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
@@ -116,68 +117,6 @@ public final class canvasfx implements Module {
         
         Functions.set("addEventFilter", new addEventFilter());
         Functions.set("addEventHandler", new addEventHandler());
-        Functions.set("applyEffect", new applyEffect());
-        Functions.set("appendSVGPath", new appendSVGPath());
-        Functions.set("arc", new arc());
-        Functions.set("arcTo", new arcTo());
-        Functions.set("beginPath", new beginPath());
-        Functions.set("bezierCurveTo", new bezierCurveTo());
-        Functions.set("clearRect", new clearRect());
-        Functions.set("clip", new clip());
-        Functions.set("closePath", new closePath());
-        Functions.set("fill", new fill());
-        Functions.set("fillArc", new fillArc());
-        Functions.set("fillOval", new fillOval());
-        Functions.set("fillPolygon", new fillPolygon());
-        Functions.set("fillRect", new fillRect());
-        Functions.set("fillRoundRect", new fillRoundRect());
-        Functions.set("fillText", new fillText());
-        Functions.set("getGlobalAlpha", new getGlobalAlpha());
-        Functions.set("getLineWidth", new getLineWidth());
-        Functions.set("getMiterLimit", new getMiterLimit());
-        Functions.set("getFill", new getFill());
-        Functions.set("getFillRule", new getFillRule());
-        Functions.set("getGlobalAlpha", new getGlobalAlpha());
-        Functions.set("getGlobalBlendMode", new getGlobalBlendMode());
-        Functions.set("getLineCap", new getLineCap());
-        Functions.set("getLineJoin", new getLineJoin());
-        Functions.set("getLineWidth", new getLineWidth());
-        Functions.set("getMiterLimit", new getMiterLimit());
-        Functions.set("getStroke", new getStroke());
-        Functions.set("getTextAlign", new getTextAlign());
-        Functions.set("getTextBaseline", new getTextBaseline());
-        Functions.set("isPointInPath", new isPointInPath());
-        Functions.set("lineTo", new lineTo());
-        Functions.set("moveTo", new moveTo());
-        Functions.set("quadraticCurveTo", new quadraticCurveTo());
-        Functions.set("rect", new rect());
-        Functions.set("restore", new restore());
-        Functions.set("rotate", new rotate());
-        Functions.set("save", new save());
-        Functions.set("scale", new scale());
-        Functions.set("setEffect", new setEffect());
-        Functions.set("setFill", new setFill());
-        Functions.set("setFillRule", new setFillRule());
-        Functions.set("setGlobalAlpha", new setGlobalAlpha());
-        Functions.set("setGlobalBlendMode", new setGlobalBlendMode());
-        Functions.set("setLineCap", new setLineCap());
-        Functions.set("setLineJoin", new setLineJoin());
-        Functions.set("setLineWidth", new setLineWidth());
-        Functions.set("setMiterLimit", new setMiterLimit());
-        Functions.set("setStroke", new setStroke());
-        Functions.set("setTextAlign", new setTextAlign());
-        Functions.set("setTextBaseline", new setTextBaseline());
-        Functions.set("stroke", new stroke());
-        Functions.set("strokeArc", new strokeArc());
-        Functions.set("strokeLine", new strokeLine());
-        Functions.set("strokeOval", new strokeOval());
-        Functions.set("strokePolygon", new strokePolygon());
-        Functions.set("strokePolyline", new strokePolyline());
-        Functions.set("strokeRect", new strokeRect());
-        Functions.set("strokeRoundRect", new strokeRoundRect());
-        Functions.set("strokeText", new strokeText());
-        Functions.set("transform", new transform());
-        Functions.set("translate", new translate());
 
         final MapValue arcType = new MapValue(ArcType.values().length);
         for (ArcType value : ArcType.values()) {
@@ -632,119 +571,161 @@ public final class canvasfx implements Module {
     }
 //</editor-fold>
     
-    private static class applyEffect implements Function {
-        @Override
-        public Value execute(Value... args) {
+    public static class GraphicsFXValue extends MapValue {
+
+        private final GraphicsContext graphics;
+
+        public GraphicsFXValue(GraphicsContext graphics) {
+            super(64);
+            this.graphics = graphics;
+            init();
+        }
+
+        private void init() {
+            Map<String, Function> functions = new HashMap<>();
+            functions.put("applyEffect", this::applyEffect);
+            functions.put("appendSVGPath", this::appendSVGPath);
+            functions.put("arc", this::arc);
+            functions.put("arcTo", this::arcTo);
+            functions.put("beginPath", this::beginPath);
+            functions.put("bezierCurveTo", this::bezierCurveTo);
+            functions.put("clearRect", this::clearRect);
+            functions.put("clip", this::clip);
+            functions.put("closePath", this::closePath);
+            functions.put("fill", this::fill);
+            functions.put("fillArc", this::fillArc);
+            functions.put("fillOval", this::fillOval);
+            functions.put("fillPolygon", this::fillPolygon);
+            functions.put("fillRect", this::fillRect);
+            functions.put("fillRoundRect", this::fillRoundRect);
+            functions.put("fillText", this::fillText);
+            functions.put("getGlobalAlpha", this::getGlobalAlpha);
+            functions.put("getLineWidth", this::getLineWidth);
+            functions.put("getMiterLimit", this::getMiterLimit);
+            functions.put("getFill", this::getFill);
+            functions.put("getFillRule", this::getFillRule);
+            functions.put("getGlobalAlpha", this::getGlobalAlpha);
+            functions.put("getGlobalBlendMode", this::getGlobalBlendMode);
+            functions.put("getLineCap", this::getLineCap);
+            functions.put("getLineJoin", this::getLineJoin);
+            functions.put("getLineWidth", this::getLineWidth);
+            functions.put("getMiterLimit", this::getMiterLimit);
+            functions.put("getStroke", this::getStroke);
+            functions.put("getTextAlign", this::getTextAlign);
+            functions.put("getTextBaseline", this::getTextBaseline);
+            functions.put("isPointInPath", this::isPointInPath);
+            functions.put("lineTo", this::lineTo);
+            functions.put("moveTo", this::moveTo);
+            functions.put("quadraticCurveTo", this::quadraticCurveTo);
+            functions.put("rect", this::rect);
+            functions.put("restore", this::restore);
+            functions.put("rotate", this::rotate);
+            functions.put("save", this::save);
+            functions.put("scale", this::scale);
+            functions.put("setEffect", this::setEffect);
+            functions.put("setFill", this::setFill);
+            functions.put("setFillRule", this::setFillRule);
+            functions.put("setGlobalAlpha", this::setGlobalAlpha);
+            functions.put("setGlobalBlendMode", this::setGlobalBlendMode);
+            functions.put("setLineCap", this::setLineCap);
+            functions.put("setLineJoin", this::setLineJoin);
+            functions.put("setLineWidth", this::setLineWidth);
+            functions.put("setMiterLimit", this::setMiterLimit);
+            functions.put("setStroke", this::setStroke);
+            functions.put("setTextAlign", this::setTextAlign);
+            functions.put("setTextBaseline", this::setTextBaseline);
+            functions.put("stroke", this::stroke);
+            functions.put("strokeArc", this::strokeArc);
+            functions.put("strokeLine", this::strokeLine);
+            functions.put("strokeOval", this::strokeOval);
+            functions.put("strokePolygon", this::strokePolygon);
+            functions.put("strokePolyline", this::strokePolyline);
+            functions.put("strokeRect", this::strokeRect);
+            functions.put("strokeRoundRect", this::strokeRoundRect);
+            functions.put("strokeText", this::strokeText);
+            functions.put("transform", this::transform);
+            functions.put("translate", this::translate);
+
+            for (Map.Entry<String, Function> entry : functions.entrySet()) {
+                set(new StringValue(entry.getKey()), new FunctionValue(entry.getValue()));
+            }
+        }
+
+        public Value applyEffect(Value... args) {
             if (args[0].type() != FX_EFFECT_TYPE) {
                 throw new TypeException("Effect expected, found " + Types.typeToString(args[0].type()));
             }
             graphics.applyEffect((Effect) args[0].raw());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class appendSVGPath implements Function {
-        @Override
-        public Value execute(Value... args) {
-            graphics.appendSVGPath(args[0].asString());
-            return NumberValue.ZERO;
-        }
-    }
-    
-    private static class arc implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value arc(Value... args) {
             graphics.arc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class arcTo implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value appendSVGPath(Value... args) {
+            graphics.appendSVGPath(args[0].asString());
+            return NumberValue.ZERO;
+        }
+
+        public Value arcTo(Value... args) {
             graphics.arcTo(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class beginPath implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value beginPath(Value... args) {
             graphics.beginPath();
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class bezierCurveTo implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value bezierCurveTo(Value... args) {
             graphics.bezierCurveTo(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class clearRect implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value clearRect(Value... args) {
             graphics.clearRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class clip implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value clip(Value... args) {
             graphics.clip();
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class closePath implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value closePath(Value... args) {
             graphics.closePath();
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class fill implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value fill(Value... args) {
             graphics.fill();
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class fillArc implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value fillArc(Value... args) {
             graphics.fillArc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber(),
                     ArcType.values()[args[6].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class fillOval implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value fillOval(Value... args) {
             graphics.fillOval(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class fillPolygon implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value fillPolygon(Value... args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -755,34 +736,25 @@ public final class canvasfx implements Module {
                 xPoints[i] = xarr.get(i).asNumber();
                 yPoints[i] = yarr.get(i).asNumber();
             }
-            
+
             graphics.fillPolygon(xPoints, yPoints, args[2].asInt());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class fillRect implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value fillRect(Value... args) {
             graphics.fillRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class fillRoundRect implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value fillRoundRect(Value... args) {
             graphics.fillRoundRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber() );
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class fillText implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value fillText(Value... args) {
             if (args.length < 4) {
                 // str x y
                 graphics.fillText(args[0].asString(), args[1].asNumber(),
@@ -793,297 +765,186 @@ public final class canvasfx implements Module {
             }
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class getFill implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getFill(Value... args) {
             return new ColorValue((Color)graphics.getFill());
         }
-    }
-    
-    private static class getFillRule implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getFillRule(Value... args) {
             return NumberValue.of(graphics.getFillRule().ordinal());
         }
-    }
-    
-    private static class getGlobalAlpha implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getGlobalAlpha(Value... args) {
             return NumberValue.of(graphics.getGlobalAlpha());
         }
-    }
-    
-    private static class getGlobalBlendMode implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getGlobalBlendMode(Value... args) {
             return NumberValue.of(graphics.getGlobalBlendMode().ordinal());
         }
-    }
-    
-    private static class getLineCap implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getLineCap(Value... args) {
             return NumberValue.of(graphics.getLineCap().ordinal());
         }
-    }
-    
-    private static class getLineJoin implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getLineJoin(Value... args) {
             return NumberValue.of(graphics.getLineJoin().ordinal());
         }
-    }
-    
-    private static class getLineWidth implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getLineWidth(Value... args) {
             return NumberValue.of(graphics.getLineWidth());
         }
-    }
-    
-    private static class getMiterLimit implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getMiterLimit(Value... args) {
             return NumberValue.of(graphics.getMiterLimit());
         }
-    }
-    
-    private static class getStroke implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getStroke(Value... args) {
             return new ColorValue((Color)graphics.getStroke());
         }
-    }
-    
-    private static class getTextAlign implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getTextAlign(Value... args) {
             return NumberValue.of(graphics.getTextAlign().ordinal());
         }
-    }
-    
-    private static class getTextBaseline implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value getTextBaseline(Value... args) {
             return NumberValue.of(graphics.getTextBaseline().ordinal());
         }
-    }
-    
-    private static class isPointInPath implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value isPointInPath(Value... args) {
             return NumberValue.fromBoolean(graphics.isPointInPath(args[0].asNumber(), args[1].asNumber()));
         }
-    }
-    
-    private static class lineTo implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value lineTo(Value... args) {
             graphics.lineTo(args[0].asNumber(), args[1].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class moveTo implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value moveTo(Value... args) {
             graphics.moveTo(args[0].asNumber(), args[1].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class quadraticCurveTo implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value quadraticCurveTo(Value... args) {
             graphics.quadraticCurveTo(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class rect implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value rect(Value... args) {
             graphics.rect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class restore implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value restore(Value... args) {
             graphics.restore();
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class rotate implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value rotate(Value... args) {
             graphics.rotate(args[0].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class save implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value save(Value... args) {
             graphics.save();
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class scale implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value scale(Value... args) {
             graphics.scale(args[0].asNumber(), args[1].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setEffect implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setEffect(Value... args) {
             if (args[0].type() != FX_EFFECT_TYPE) {
                 throw new TypeException("Effect expected, found " + Types.typeToString(args[0].type()));
             }
             graphics.setEffect((Effect) args[0].raw());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setFill implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setFill(Value... args) {
             graphics.setFill((Color) args[0].raw());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setFillRule implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setFillRule(Value... args) {
             graphics.setFillRule(FillRule.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setGlobalAlpha implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setGlobalAlpha(Value... args) {
             graphics.setGlobalAlpha(args[0].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setGlobalBlendMode implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setGlobalBlendMode(Value... args) {
             graphics.setGlobalBlendMode(BlendMode.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setLineCap implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setLineCap(Value... args) {
             graphics.setLineCap(StrokeLineCap.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setLineJoin implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setLineJoin(Value... args) {
             graphics.setLineJoin(StrokeLineJoin.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setLineWidth implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setLineWidth(Value... args) {
             graphics.setLineWidth(args[0].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setMiterLimit implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setMiterLimit(Value... args) {
             graphics.setMiterLimit(args[0].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setStroke implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setStroke(Value... args) {
             graphics.setStroke((Color) args[0].raw());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setTextAlign implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setTextAlign(Value... args) {
             graphics.setTextAlign(TextAlignment.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class setTextBaseline implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value setTextBaseline(Value... args) {
             graphics.setTextBaseline(VPos.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class stroke implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value stroke(Value... args) {
             graphics.stroke();
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokeArc implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokeArc(Value... args) {
             graphics.strokeArc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber(),
                     ArcType.values()[args[6].asInt()]);
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokeLine implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokeLine(Value... args) {
             graphics.strokeLine(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokeOval implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokeOval(Value... args) {
             graphics.strokeOval(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokePolygon implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokePolygon(Value... args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -1094,15 +955,12 @@ public final class canvasfx implements Module {
                 xPoints[i] = xarr.get(i).asNumber();
                 yPoints[i] = yarr.get(i).asNumber();
             }
-            
+
             graphics.strokePolygon(xPoints, yPoints, args[2].asInt());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokePolyline implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokePolyline(Value... args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -1113,34 +971,25 @@ public final class canvasfx implements Module {
                 xPoints[i] = xarr.get(i).asNumber();
                 yPoints[i] = yarr.get(i).asNumber();
             }
-            
+
             graphics.strokePolyline(xPoints, yPoints, args[2].asInt());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokeRect implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokeRect(Value... args) {
             graphics.strokeRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokeRoundRect implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokeRoundRect(Value... args) {
             graphics.strokeRoundRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber() );
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class strokeText implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value strokeText(Value... args) {
             if (args.length < 4) {
                 // str x y
                 graphics.strokeText(args[0].asString(), args[1].asNumber(),
@@ -1151,26 +1000,25 @@ public final class canvasfx implements Module {
             }
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class transform implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value transform(Value... args) {
             graphics.transform(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
             return NumberValue.ZERO;
         }
-    }
-    
-    private static class translate implements Function {
-        @Override
-        public Value execute(Value... args) {
+
+        public Value translate(Value... args) {
             graphics.translate(args[0].asNumber(), args[1].asNumber());
             return NumberValue.ZERO;
         }
-    }
 
+        @Override
+        public String toString() {
+            return "GraphicsFXValue " + asString();
+        }
+    }
+    
     private static class CreateWindow implements Function {
 
         @Override
@@ -1212,7 +1060,7 @@ public final class canvasfx implements Module {
                 root.getChildren().add(canvas);
                 panel.setScene(scene);
             });
-            return NumberValue.ZERO;
+            return new GraphicsFXValue(graphics);
         }
     }
     

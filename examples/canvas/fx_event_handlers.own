@@ -2,7 +2,7 @@ use "canvasfx"
 use "std"
 
 w = 800   h = 600
-window("JavaFX Event handler example", w, h)
+g = window("JavaFX Event handler example", w, h)
 
 addEventHandler(Events.MOUSE_MOVED, ::onMouseMoved)
 addEventHandler(Events.MOUSE_DRAGGED, ::onMouseMoved)
@@ -11,8 +11,8 @@ addEventHandler(Events.KEY_PRESSED, def(e) {
 })
 
 def onMouseMoved(e) {
-  setFill(Color.rgb(rand(255), rand(255), rand(255), rand()))
+  g.setFill(Color.rgb(rand(255), rand(255), rand(255), rand()))
   m = 1 + e.isPrimaryButtonDown + e.isSecondaryButtonDown
   radius = m * rand(30, 50)
-  fillOval(e.x - radius/2, e.y - radius/2, radius, radius)
+  g.fillOval(e.x - radius/2, e.y - radius/2, radius, radius)
 }

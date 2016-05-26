@@ -88,13 +88,13 @@ public final class BinaryExpression implements Expression {
     private Value add(Value value1, Value value2) {
         switch (value1.type()) {
             case Types.NUMBER: return add((NumberValue) value1, value2);
-            case Types.STRING: return new StringValue(value1.asString() + value2.asString());
             case Types.ARRAY: return ArrayValue.add((ArrayValue) value1, value2);
             case Types.MAP:
                 if (value2.type() != Types.MAP)
                     throw new TypeException("Cannot merge non map value to map");
                 return MapValue.merge((MapValue) value1, (MapValue) value2);
             case Types.FUNCTION: /* TODO: combining functions */
+            case Types.STRING:
             default:
                 // Concatenation strings
                 return new StringValue(value1.asString() + value2.asString());

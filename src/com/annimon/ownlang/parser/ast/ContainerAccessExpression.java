@@ -89,13 +89,6 @@ public final class ContainerAccessExpression implements Expression, Accessible {
         return indices.get(index).eval();
     }
     
-    private ArrayValue consumeArray(Value value) {
-        if (value.type() != Types.ARRAY) {
-            throw new TypeException("Array expected");
-        }
-        return (ArrayValue) value;
-    }
-    
     public MapValue consumeMap(Value value) {
         if (value.type() != Types.MAP) {
             throw new TypeException("Map expected");

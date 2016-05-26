@@ -20,8 +20,8 @@ public final class MapExpression implements Expression {
     public Value eval() {
         final int size = elements.size();
         final MapValue map = new MapValue(size);
-        for (Expression key : elements.keySet()) {
-            map.set(key.eval(), elements.get(key).eval());
+        for (Map.Entry<Expression, Expression> entry : elements.entrySet()) {
+            map.set(entry.getKey().eval(), entry.getValue().eval());
         }
         return map;
     }

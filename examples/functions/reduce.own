@@ -1,0 +1,4 @@
+use "functional"
+
+nums = [1,2,3,4,5]
+println "Sum: " + reduce(nums, 0, def(x, y) = x + y)

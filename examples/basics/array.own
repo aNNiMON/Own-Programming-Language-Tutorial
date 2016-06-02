@@ -1,5 +1,6 @@
 arr1 = [1, 2, 3, 4, 5]
 println arr1[0]
+println arr1[1]
 println arr1
 
 use "std"
@@ -8,9 +9,11 @@ arr2[2] = 9
 arr2 = arr2 :: 4
 println arr2
 
+// Append array
 arr3 = arr1 :: arr2
-arr4 = arr1 << arr2
 println arr3
+// Merge array
+arr4 = arr1 << arr2
 println arr4
 
 

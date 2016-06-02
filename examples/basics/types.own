@@ -1,0 +1,11 @@
+use "std"
+use "types"
+
+println typeof(1)
+println typeof("1")
+println typeof([])
+println typeof({})
+println typeof(def() = 0)
+
+println typeof(number("1"))
+println typeof(string(1))

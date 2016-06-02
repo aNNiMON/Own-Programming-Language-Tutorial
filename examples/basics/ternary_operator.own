@@ -1,0 +1,5 @@
+println "Ternary operator"
+a = 0
+b = 1
+println (a ? "text1" : "text2")
+println (b ? "text3" : "text4")

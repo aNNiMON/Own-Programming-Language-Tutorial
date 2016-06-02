@@ -23,14 +23,15 @@ println match1("test")
 println match1("Two")
 println match1([2])
 
-// Recursive factorial
+
+println "\nRecursive factorial"
 println factorial(6)
 def factorial(n) = match n {
   case 0: 1
   case _: n * factorial(n - 1)
 }
 
-// Pattern matching on arrays
+println "\nPattern matching on arrays"
 println printArrayRecursive([1, 2, 3, 4, 5, 6, 7])
 def printArrayRecursive(arr) = match arr {
   case [head :: tail]: "[" + head + ", " + printArrayRecursive(tail) + "]"

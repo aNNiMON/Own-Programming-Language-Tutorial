@@ -1,0 +1,17 @@
+use "std"
+use "functional"
+
+nums = [1,2,3,4,5]
+println "Sort numbers in descending order"
+numsDesc = sortby(nums, def(x) = -x)
+foreach(numsDesc, ::echo)
+
+str = ["http", "android", "types", "std", "canvas"]
+println "\nSort strings in ascending order"
+strSorted = sortby(str, IDENTITY)
+foreach(strSorted, ::echo)
+
+println "\nSort strings by length"
+strSortedByLength = sortby(str, def(x) = length(x))
+//strSortedByLength = sortby(str, ::length) // short syntax
+foreach(strSortedByLength, ::echo)

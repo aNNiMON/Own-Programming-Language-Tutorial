@@ -1,0 +1,23 @@
+use "std"
+use "math"
+use "functional"
+
+add = def(a,b) = a + b
+sub = def(a,b) = a - b
+mul = def(a,b) = a * b
+div = def(a,b) = a / b
+cube = def(x) = x * mul(x, x)
+println mul(8, 5)
+println cube(2)
+
+functions = [add, sub, mul, div]
+for f : functions {
+  println f
+  println f(6, 3)
+}
+
+
+map = {"+" : add, "-" : sub, "*" : mul, "/" : div}
+map["%"] = def(x,y) = x % y
+map["pow"] = def(x,y) = pow(x, y)
+foreach(map, def(op, func) = echo (4, op, 5, "=", func(4,5)))

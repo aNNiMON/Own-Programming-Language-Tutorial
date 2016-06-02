@@ -1,0 +1,11 @@
+use "std"
+use "http"
+
+http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
+  println "Added: " + v
+  http("http://jsonplaceholder.typicode.com/users/2", "PATCH", {"name": "Patched Name"}, ::http_get_demo)
+})
+def http_get_demo(v) {
+  println "Updated: " + v
+  http("http://jsonplaceholder.typicode.com/users", ::echo)
+}

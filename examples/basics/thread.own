@@ -3,8 +3,8 @@ use "std"
 def thread1() {
     i = 0
     while (i < 100) {
-        print "i = " + i + "\n"
-        i = i + 1
+        println "i = " + i
+        i++
         sleep(100)
     }
 }
@@ -14,8 +14,8 @@ thread(::thread1)
 
 k = 0
 while (k < 10) {
-    print "k = " + k + "\n"
-    k = k + 1
+    println "k = " + k
+    k++
     sleep(1000)
 }
 

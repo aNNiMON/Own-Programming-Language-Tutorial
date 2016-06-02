@@ -1,7 +1,0 @@
-use "std"
-
-// Ternary operator
-a = 0
-b = 1
-print (a ? "text1" : "text2") + "\n"
-print (b ? "text3" : "text4") + "\n"

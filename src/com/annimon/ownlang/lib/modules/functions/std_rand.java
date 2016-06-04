@@ -16,6 +16,20 @@ public final class std_rand implements Function {
         Arguments.checkRange(0, 2, args.length);
         if (args.length == 0) return NumberValue.of(RND.nextDouble());
 
+        final Object raw = args[0].raw();
+        if (raw instanceof Long) {
+            long from = 0L;
+            long to = 100L;
+            if (args.length == 1) {
+                to = (long) raw;
+            } else if (args.length == 2) {
+                from = (long) raw;
+                to = ((NumberValue) args[1]).asLong();
+            }
+            final long randomLong = RND.nextLong() >>> 1;
+            return NumberValue.of(randomLong % (to - from) + from);
+        }
+
         int from = 0;
         int to = 100;
         if (args.length == 1) {

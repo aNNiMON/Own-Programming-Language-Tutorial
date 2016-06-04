@@ -22,6 +22,12 @@ public final class Main {
     
     private static final String VERSION = "1.1.0";
 
+    private static String[] ownlangArgs = new String[0];
+
+    public static String[] getOwnlangArgs() {
+        return ownlangArgs;
+    }
+
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
             try {
@@ -73,12 +79,17 @@ public final class Main {
                 case "--file":
                     if (i + 1 < args.length)  {
                         input = SourceLoader.readSource(args[i + 1]);
+                        createOwnLangArgs(args, i + 2);
                         i++;
                     }
                     break;
                 
                 default:
-                    input = args[i];
+                    if (input == null) {
+                        input = args[i];
+                        createOwnLangArgs(args, i + 1);
+                    }
+                    break;
             }
         }
         if (input == null) {
@@ -89,6 +100,12 @@ public final class Main {
             return;
         }
         run(input, showTokens, showAst, showMeasurements);
+    }
+
+    private static void createOwnLangArgs(String[] javaArgs, int index) {
+        if (index >= javaArgs.length) return;
+        ownlangArgs = new String[javaArgs.length - index];
+        System.arraycopy(javaArgs, index, ownlangArgs, 0, ownlangArgs.length);
     }
         
     private static void run(String input, boolean showTokens, boolean showAst, boolean showMeasurements) {

@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.Main;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.lib.modules.functions.*;
 
@@ -11,6 +12,8 @@ public final class std implements Module {
 
     @Override
     public void init() {
+        Variables.set("ARGS", ArrayValue.of(Main.getOwnlangArgs()));
+
         Functions.set("echo", new std_echo());
         Functions.set("readln", new std_readln());
         Functions.set("length", new std_length());

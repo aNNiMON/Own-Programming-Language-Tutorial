@@ -1,0 +1,167 @@
+use "std"
+use "math"
+use "types"
+use "canvasfx"
+
+// Constants
+CELL_NONE = -100
+CELL_MINE = -200
+// Colors
+BACKGROUND_COLOR = Color.new(#FF283593)
+OPENED_CELL_COLOR = Color.new(0xFF9FA8DA)
+DEFAULT_CELL_COLOR = Color.new(#FF5C6BC0)
+MINE_CELL_COLOR = Color.new(#FF1A237E)
+FLAG_COLOR = Color.new(#FF7A231E)
+
+// Parameters
+WIDTH = 400  HEIGHT = 400
+TABLE_WIDTH = 6
+TABLE_HEIGHT = 6
+
+// Other
+isGameFinished = false
+gridStepX = WIDTH / double(TABLE_WIDTH)
+gridStepY = HEIGHT / double(TABLE_HEIGHT)
+
+// Graphics and event listeners initialization
+g = window("MineSweeper", WIDTH, HEIGHT)
+addEventHandler(Events.MOUSE_CLICKED, ::onMouseClicked)
+
+// Create table with mines
+TABLE = []
+FLAGS = []
+newGame()
+def newGame() {
+  isGameFinished = false
+  TABLE = newarray(TABLE_HEIGHT, TABLE_WIDTH)
+  FLAGS = newarray(TABLE_HEIGHT, TABLE_WIDTH)
+  for i = 0, i < TABLE_WIDTH, i++
+    for j = 0, j < TABLE_HEIGHT, j++
+      TABLE[j][i] = CELL_NONE
+  maxMines = int(sqrt(rand(1, 4) * TABLE_WIDTH * TABLE_HEIGHT))
+  for i = 0, i < maxMines, i++
+    TABLE[rand(TABLE_HEIGHT)][rand(TABLE_WIDTH)] = CELL_MINE
+  
+  g.setStroke(Color.DARKSLATEGREY)
+  g.setLineWidth(5)
+  g.setTextAlign(TextAlignment.CENTER)
+  g.setFill(BACKGROUND_COLOR)
+  g.fillRect(0, 0, WIDTH, HEIGHT)
+  drawGameTable()
+}
+
+def drawGameTable(showBombs = false) {
+  for i = 0, i < TABLE_WIDTH, i++ {
+    for j = 0, j < TABLE_HEIGHT, j++ {
+      match TABLE[j][i] {
+        case CELL_NONE: g.setFill(DEFAULT_CELL_COLOR)
+        case CELL_MINE if showBombs: g.setFill(MINE_CELL_COLOR)
+        case CELL_MINE if !showBombs: g.setFill(DEFAULT_CELL_COLOR)
+        case _ : g.setFill(OPENED_CELL_COLOR)
+      }
+      if (FLAGS[j][i] && (TABLE[j][i] == CELL_NONE || TABLE[j][i] == CELL_MINE) {
+        g.setFill(FLAG_COLOR)
+      }
+      g.fillRect(i * gridStepX + 1, j * gridStepY + 1, gridStepX - 2, gridStepY - 2)
+      if (TABLE[j][i] >= 0) {
+        g.setFill(Color.BLACK)
+        g.fillText(TABLE[j][i], i * gridStepX + gridStepX / 2, j * gridStepY + gridStepY / 2)
+      }
+    }
+  }
+}
+
+def drawWin() {
+  drawGameTable(true)
+  g.setFill(Color.new(#60FFFFFF))
+  g.fillRect(0, 0, WIDTH, HEIGHT)
+  g.setFill(Color.DARKGREEN)
+  g.fillText("YOU WIN", WIDTH / 2, HEIGHT / 2)
+}
+
+def drawGameOver() {
+  drawGameTable(true)
+  g.setFill(Color.new(#60000000))
+  g.fillRect(0, 0, WIDTH, HEIGHT)
+  g.setFill(Color.PINK)
+  g.fillText("Game Over", WIDTH / 2, HEIGHT / 2)
+}
+
+
+def onMouseClicked(e) {
+  if (isGameFinished) {
+    newGame()
+    return 0
+  }
+  tableX = int(e.x / gridStepX)
+  tableY = int(e.y / gridStepY)
+  if (tableX < 0 || tableY < 0 ||
+      tableX >= TABLE_WIDTH || tableY >= TABLE_HEIGHT) return 0
+
+  if (e.button == MouseButton.SECONDARY) {
+    FLAGS[tableY][tableX] = 1 - FLAGS[tableY][tableX]
+    drawGameTable()
+    return 0
+  }
+  if (TABLE[tableY][tableX] == CELL_MINE) {
+    isGameFinished = true
+    drawGameOver()
+    return 0
+  }
+  updateCell(tableX, tableY)
+  if (gameFinished()) {
+    isGameFinished = true
+    drawWin()
+    return 0
+  }
+  drawGameTable()
+}
+
+def updateCell(tx, ty, visited = []) {
+  if (tx < 0 || ty < 0 ||
+      tx >= TABLE_WIDTH || ty >= TABLE_HEIGHT) return visited
+  for v : visited {
+    if [tx, ty] == v return visited
+  }
+  minesCount = calculateMinesCount(tx, ty)
+  TABLE[ty][tx] = minesCount
+  if (minesCount != 0) return visited
+  visited ::= [tx, ty]
+  if (tx >= 1 && ty >= 1) visited = updateCell(tx - 1, ty - 1, visited)
+  if (ty >= 1) visited = updateCell(tx, ty - 1, visited)
+  if (tx < WIDTH - 1 && ty >= 1) visited = updateCell(tx + 1, ty - 1, visited)
+  
+  if (tx >= 1) visited = updateCell(tx - 1, ty, visited)
+  if (tx < WIDTH - 1) visited = updateCell(tx + 1, ty, visited)
+  
+  if (tx >= 1 && ty < HEIGHT - 1) visited = updateCell(tx - 1, ty + 1, visited)
+  if (ty < HEIGHT - 1) visited = updateCell(tx, ty + 1, visited)
+  if (tx < WIDTH - 1 && ty < HEIGHT - 1) visited = updateCell(tx + 1, ty + 1, visited)
+  return visited
+}
+
+def calculateMinesCount(x, y) {
+  count = 0
+  for dx = -1, dx <= 1, dx++ {
+    for dy = -1, dy <= 1, dy++ {
+      // Skip center [x, y] cell
+      if ( (dx == 0) && (dy == 0) ) continue
+      
+      xx = x + dx
+      yy = y + dy
+      if (xx < 0 || yy < 0 ||
+          xx >= TABLE_WIDTH || yy >= TABLE_HEIGHT) continue
+      count += (TABLE[yy][xx] == CELL_MINE ? 1 : 0)
+    }
+  }
+  return count
+}
+
+def gameFinished() {
+  for i = 0, i < TABLE_WIDTH, i++ {
+    for j = 0, j < TABLE_HEIGHT, j++ {
+      if (TABLE[j][i] == CELL_NONE) return false
+    }
+  }
+  return true
+}

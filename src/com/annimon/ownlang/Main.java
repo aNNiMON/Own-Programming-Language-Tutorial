@@ -8,7 +8,6 @@ import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
-import com.annimon.ownlang.parser.visitors.AssignValidator;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
 import java.io.IOException;
 import java.util.List;
@@ -31,28 +30,33 @@ public final class Main {
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
             try {
-                run(SourceLoader.readSource("program.own"), true, true, true);
+                final Options options = new Options();
+                options.showAst = true;
+                options.showTokens = true;
+                options.showMeasurements = true;
+                run(SourceLoader.readSource("program.own"), options);
             } catch (IOException ioe) {
                 System.out.println("OwnLang version " + VERSION + "\n\n" +
                         "Usage: ownlang [options]\n" +
                         "  options:\n" +
                         "      -f, --file [input]  Run program file. Required.\n" +
                         "      -r, --repl          Enter to a REPL mode\n" +
+                        "      -b, --beautify      Beautify source code\n" +
                         "      -a, --showast       Show AST of program\n" +
                         "      -t, --showtokens    Show lexical tokens\n" +
                         "      -m, --showtime      Show elapsed time of parsing and execution");
             }
             return;
         }
-        
-        boolean showTokens = false, showAst = false, showMeasurements = false;
+
+        final Options options = new Options();
         boolean beautifyMode = false;
         String input = null;
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-a":
                 case "--showast":
-                    showAst = true;
+                    options.showAst = true;
                     break;
 
                 case "-b":
@@ -62,12 +66,12 @@ public final class Main {
                     
                 case "-t":
                 case "--showtokens":
-                    showTokens = true;
+                    options.showTokens = true;
                     break;
                     
                 case "-m":
                 case "--showtime":
-                    showMeasurements = true;
+                    options.showMeasurements = true;
                     break;
                     
                 case "-r":
@@ -99,7 +103,7 @@ public final class Main {
             System.out.println(Beautifier.beautify(input));
             return;
         }
-        run(input, showTokens, showAst, showMeasurements);
+        run(input, options);
     }
 
     private static void createOwnLangArgs(String[] javaArgs, int index) {
@@ -108,12 +112,12 @@ public final class Main {
         System.arraycopy(javaArgs, index, ownlangArgs, 0, ownlangArgs.length);
     }
         
-    private static void run(String input, boolean showTokens, boolean showAst, boolean showMeasurements) {
+    private static void run(String input, Options options) {
         final TimeMeasurement measurement = new TimeMeasurement();
         measurement.start("Tokenize time");
         final List<Token> tokens = Lexer.tokenize(input);
         measurement.stop("Tokenize time");
-        if (showTokens) {
+        if (options.showTokens) {
             for (int i = 0; i < tokens.size(); i++) {
                 System.out.println(i + " " + tokens.get(i));
             }
@@ -123,7 +127,7 @@ public final class Main {
         final Parser parser = new Parser(tokens);
         final Statement program = parser.parse();
         measurement.stop("Parse time");
-        if (showAst) {
+        if (options.showAst) {
             System.out.println(program.toString());
         }
         if (parser.getParseErrors().hasErrors()) {
@@ -131,14 +135,13 @@ public final class Main {
             return;
         }
         program.accept(new FunctionAdder());
-        program.accept(new AssignValidator());
         try {
             measurement.start("Execution time");
             program.execute();
         } catch (Exception ex) {
             Console.handleException(Thread.currentThread(), ex);
         } finally {
-            if (showMeasurements) {
+            if (options.showMeasurements) {
                 measurement.stop("Execution time");
                 System.out.println("======================");
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
@@ -182,5 +185,15 @@ public final class Main {
             buffer.setLength(0);
         }
         scanner.close();
+    }
+
+    private static class Options {
+        boolean showTokens, showAst, showMeasurements;
+
+        public Options() {
+            showTokens = false;
+            showAst = false;
+            showMeasurements = false;
+        }
     }
 }

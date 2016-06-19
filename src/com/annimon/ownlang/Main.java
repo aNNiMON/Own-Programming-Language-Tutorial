@@ -4,6 +4,7 @@ import com.annimon.ownlang.utils.TimeMeasurement;
 import com.annimon.ownlang.exceptions.LexerException;
 import com.annimon.ownlang.parser.Beautifier;
 import com.annimon.ownlang.parser.Lexer;
+import com.annimon.ownlang.parser.Linter;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
@@ -34,6 +35,7 @@ public final class Main {
                 options.showAst = true;
                 options.showTokens = true;
                 options.showMeasurements = true;
+                options.lintMode = true;
                 run(SourceLoader.readSource("program.own"), options);
             } catch (IOException ioe) {
                 System.out.println("OwnLang version " + VERSION + "\n\n" +
@@ -41,6 +43,7 @@ public final class Main {
                         "  options:\n" +
                         "      -f, --file [input]  Run program file. Required.\n" +
                         "      -r, --repl          Enter to a REPL mode\n" +
+                        "      -l, --lint          Find bugs in code\n" +
                         "      -b, --beautify      Beautify source code\n" +
                         "      -a, --showast       Show AST of program\n" +
                         "      -t, --showtokens    Show lexical tokens\n" +
@@ -78,6 +81,11 @@ public final class Main {
                 case "--repl":
                     repl();
                     return;
+
+                case "-l":
+                case "--lint":
+                    options.lintMode = true;
+                    return;
                     
                 case "-f":
                 case "--file":
@@ -113,6 +121,7 @@ public final class Main {
     }
         
     private static void run(String input, Options options) {
+        options.validate();
         final TimeMeasurement measurement = new TimeMeasurement();
         measurement.start("Tokenize time");
         final List<Token> tokens = Lexer.tokenize(input);
@@ -132,6 +141,10 @@ public final class Main {
         }
         if (parser.getParseErrors().hasErrors()) {
             System.out.println(parser.getParseErrors());
+            return;
+        }
+        if (options.lintMode) {
+            Linter.lint(program);
             return;
         }
         program.accept(new FunctionAdder());
@@ -189,11 +202,21 @@ public final class Main {
 
     private static class Options {
         boolean showTokens, showAst, showMeasurements;
+        boolean lintMode;
 
         public Options() {
             showTokens = false;
             showAst = false;
             showMeasurements = false;
+            lintMode = false;
+        }
+
+        public void validate() {
+            if (lintMode == true) {
+                showTokens = false;
+                showAst = false;
+                showMeasurements = false;
+            }
         }
     }
 }

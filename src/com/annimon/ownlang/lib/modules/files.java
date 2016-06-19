@@ -27,16 +27,38 @@ public final class files implements Module {
     @Override
     public void init() {
         files = new HashMap<>();
+        Variables.set("FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction()));
         
         Functions.set("fopen", new fopen());
-        Functions.set("listFiles", new listFiles());
+        Functions.set("flush", new flush());
+        Functions.set("fclose", new fclose());
+        
+        // Operations
         Functions.set("delete", new delete());
+        Functions.set("listFiles", new listFiles());
+        Functions.set("mkdir", new mkdir());
+        Functions.set("mkdirs", new mkdirs());
         Functions.set("rename", new rename());
-        Functions.set("exists", new exists());
+
+        // Permissions and statuses
+        Functions.set("canExecute", new canExecute());
+        Functions.set("canRead", new canRead());
+        Functions.set("canWrite", new canWrite());
         Functions.set("isDirectory", new isDirectory());
         Functions.set("isFile", new isFile());
-        Functions.set("mkdir", new mkdir());
+        Functions.set("isHidden", new isHidden());
+        Functions.set("setExecutable", new setExecutable());
+        Functions.set("setReadable", new setReadable());
+        Functions.set("setReadOnly", new setReadOnly());
+        Functions.set("setWritable", new setWritable());
+
+        Functions.set("exists", new exists());
         Functions.set("fileSize", new fileSize());
+        Functions.set("getParent", new getParent());
+        Functions.set("lastModified", new lastModified());
+        Functions.set("setLastModified", new setLastModified());
+
+        // IO
         Functions.set("readBoolean", new readBoolean());
         Functions.set("readByte", new readByte());
         Functions.set("readBytes", new readBytes());
@@ -62,8 +84,27 @@ public final class files implements Module {
         Functions.set("writeUTF", new writeUTF());
         Functions.set("writeLine", new writeLine());
         Functions.set("writeText", new writeText());
-        Functions.set("flush", new flush());
-        Functions.set("fclose", new fclose());
+    }
+
+    private static class filesComparatorFunction implements Function {
+
+        @Override
+        public Value execute(Value... args) {
+            Arguments.checkAtLeast(2, args.length);
+            
+            final int fd1 = args[0].asInt();
+            final int fd2 = args[1].asInt();
+            if (!files.containsKey(fd1)) {
+                return NumberValue.of(files.containsKey(fd2) ? 1 : 0);
+            }
+            if (!files.containsKey(fd2)) {
+                return NumberValue.of(files.containsKey(fd1) ? -1 : 0);
+            }
+
+            final File file1 = files.get(fd1).file;
+            final File file2 = files.get(fd2).file;
+            return NumberValue.of(file1.compareTo(file2));
+        }
     }
     
     private static class fopen implements Function {
@@ -129,6 +170,27 @@ public final class files implements Module {
             return ArrayValue.of(fileInfo.file.list());
         }
     }
+
+    private static class canExecute extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.canExecute());
+        }
+    }
+
+    private static class canRead extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.canRead());
+        }
+    }
+
+    private static class canWrite extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.canWrite());
+        }
+    }
     
     private static class delete extends FileFunction {
         @Override
@@ -143,7 +205,7 @@ public final class files implements Module {
             return NumberValue.fromBoolean(fileInfo.file.exists());
         }
     }
-    
+
     private static class isDirectory extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
@@ -157,11 +219,25 @@ public final class files implements Module {
             return NumberValue.fromBoolean(fileInfo.file.isFile());
         }
     }
-    
+
+    private static class isHidden extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.isHidden());
+        }
+    }
+
     private static class mkdir extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
             return NumberValue.fromBoolean(fileInfo.file.mkdir());
+        }
+    }
+
+    private static class mkdirs extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.mkdirs());
         }
     }
 
@@ -177,6 +253,69 @@ public final class files implements Module {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
             return NumberValue.of(fileInfo.file.length());
+        }
+    }
+
+    private static class getParent extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final String parent = fileInfo.file.getParent();
+            return new StringValue(parent == null ? "" : parent);
+        }
+    }
+
+    private static class lastModified extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.of(fileInfo.file.lastModified());
+        }
+    }
+
+    private static class setLastModified extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final long time;
+            if (args[1].type() == Types.NUMBER) {
+                time = ((NumberValue)args[1]).asLong();
+            } else {
+                time = (long) args[1].asNumber();
+            }
+            fileInfo.file.setLastModified(time);
+            return NumberValue.ONE;
+        }
+    }
+
+    private static class setReadOnly extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            return NumberValue.fromBoolean(fileInfo.file.setReadOnly());
+        }
+    }
+
+    private static class setExecutable extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final boolean ownerOnly = (args.length >= 3) ? (args[2].asInt() != 0) : true;
+            return NumberValue.fromBoolean(
+                    fileInfo.file.setExecutable(args[1].asInt() != 0, ownerOnly));
+        }
+    }
+
+    private static class setReadable extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final boolean ownerOnly = (args.length >= 3) ? (args[2].asInt() != 0) : true;
+            return NumberValue.fromBoolean(
+                    fileInfo.file.setReadable(args[1].asInt() != 0, ownerOnly));
+        }
+    }
+
+    private static class setWritable extends FileFunction {
+        @Override
+        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
+            final boolean ownerOnly = (args.length >= 3) ? (args[2].asInt() != 0) : true;
+            return NumberValue.fromBoolean(
+                    fileInfo.file.setWritable(args[1].asInt() != 0, ownerOnly));
         }
     }
     

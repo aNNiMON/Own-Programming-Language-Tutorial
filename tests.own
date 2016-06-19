@@ -121,6 +121,7 @@ def testFiles() {
   assertEquals(1002003004005006007, readLong(f))
   assertEquals(float(fpNumber), readFloat(f))
   assertEquals(-1, readInt(f)) // EOF
+  assertEquals(0, FILES_COMPARATOR(f, f))
   fclose(f)
 
   f = fopen("test.file", "i")

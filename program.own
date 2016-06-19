@@ -253,3 +253,6 @@ println formatDate(d, newFormat("yyyy-MM-dd HH:mm:ss, EEEE"))
 println parseDate("2016/05/10", newFormat("yyyy/MM/dd"))
 println toTimestamp(d)
 println newDate(toTimestamp(d) - 100000)
+
+try(def() = try + 2)
+println try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))

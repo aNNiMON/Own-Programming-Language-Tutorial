@@ -94,10 +94,11 @@ public final class files implements Module {
             
             DataOutputStream dos = null;
             BufferedWriter writer = null;
+            final boolean append = mode.contains("+");
             if (mode.contains("wb")) {
-                dos = new DataOutputStream(new FileOutputStream(file));
+                dos = new DataOutputStream(new FileOutputStream(file, append));
             } else if (mode.contains("w")) {
-                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8"));
             }
             
             final int key = files.size();
@@ -115,7 +116,7 @@ public final class files implements Module {
             try {
                 return execute(files.get(key), args);
             } catch (IOException ioe) {
-                return NumberValue.ZERO;
+                return NumberValue.MINUS_ONE;
             }
         }
         
@@ -168,8 +169,6 @@ public final class files implements Module {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
             final File dest = files.get(args[1].asInt()).file;
-            System.out.println(fileInfo.file);
-            System.out.println(dest);
             return NumberValue.fromBoolean(fileInfo.file.renameTo(dest));
         }
     }
@@ -367,7 +366,13 @@ public final class files implements Module {
     private static class writeLong extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            fileInfo.dos.writeLong((long) args[1].asNumber());
+            final long value;
+            if (args[1].type() == Types.NUMBER) {
+                value = ((NumberValue)args[1]).asLong();
+            } else {
+                value = (long) args[1].asNumber();
+            }
+            fileInfo.dos.writeLong(value);
             return NumberValue.ONE;
         }
     }
@@ -375,7 +380,13 @@ public final class files implements Module {
     private static class writeFloat extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            fileInfo.dos.writeFloat((float) args[1].asNumber());
+            final float value;
+            if (args[1].type() == Types.NUMBER) {
+                value = ((NumberValue)args[1]).asFloat();
+            } else {
+                value = (float) args[1].asNumber();
+            }
+            fileInfo.dos.writeFloat(value);
             return NumberValue.ONE;
         }
     }

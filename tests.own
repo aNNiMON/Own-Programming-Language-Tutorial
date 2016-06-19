@@ -1,6 +1,8 @@
 use "ounit"
+use "types"
 use "functional"
 use "date"
+use "files"
 
 def testAdditionOnNumbers() {
   assertEquals(6, 0 + 1 + 2 + 3)
@@ -68,13 +70,6 @@ def testFunctionalChain() {
   assertEquals([8,6,4,2], result)
 }
 
-def testDateParse() {
-  d = parseDate("2016/05/10", newFormat("yyyy/MM/dd"))
-  assertEquals(2016, d.year)
-  assertEquals(4, d.month)
-  assertEquals(10, d.day)
-  assertEquals(0, d.hour)
-}
 
 // --- Date
 def testNewDate() {
@@ -105,6 +100,32 @@ def testDateParse() {
   assertEquals(4, d.month)
   assertEquals(10, d.day)
   assertEquals(0, d.hour)
+}
+
+// --- Files
+def testFiles() {
+  // writeLong
+  f = fopen("test.file", "wb")
+  writeLong(f, 1002003004005006007)
+  flush(f)
+  fclose(f)
+
+  // append & writeFloat
+  fpNumber = 100200.3004005006007
+  f = fopen("test.file", "wb+")
+  writeFloat(f, fpNumber)
+  flush(f)
+  fclose(f)
+
+  f = fopen("test.file", "rb")
+  assertEquals(1002003004005006007, readLong(f))
+  assertEquals(float(fpNumber), readFloat(f))
+  assertEquals(-1, readInt(f)) // EOF
+  fclose(f)
+
+  f = fopen("test.file", "i")
+  delete(f)
+  fclose(f)
 }
 
 println runTests()

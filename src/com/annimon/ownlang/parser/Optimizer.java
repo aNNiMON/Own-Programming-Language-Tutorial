@@ -3,6 +3,7 @@ package com.annimon.ownlang.parser;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.ConstantFolding;
 import com.annimon.ownlang.parser.visitors.DeadCodeElimination;
+import com.annimon.ownlang.parser.visitors.ExpressionSimplification;
 
 public final class Optimizer {
 
@@ -18,14 +19,17 @@ public final class Optimizer {
         
         final ConstantFolding constantFolding = new ConstantFolding();
         final DeadCodeElimination deadCodeElimination = new DeadCodeElimination();
+        final ExpressionSimplification expressionSimplification = new ExpressionSimplification();
 
         Statement result = statement;
         for (int i = 0; i < level; i++) {
             result = (Statement) result.accept(constantFolding, null);
             result = (Statement) result.accept(deadCodeElimination, null);
+            result = (Statement) result.accept(expressionSimplification, null);
         }
         System.out.print(constantFolding.summaryInfo());
         System.out.print(deadCodeElimination.summaryInfo());
+        System.out.print(expressionSimplification.summaryInfo());
         System.out.println();
         return result;
     }

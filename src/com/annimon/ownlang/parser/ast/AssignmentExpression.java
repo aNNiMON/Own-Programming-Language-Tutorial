@@ -40,6 +40,11 @@ public final class AssignmentExpression implements Expression, Statement {
     }
 
     @Override
+    public <R, T> R accept(ResultVisitor<R, T> visitor, T t) {
+        return visitor.visit(this, t);
+    }
+
+    @Override
     public String toString() {
         final String op = (operation == null) ? "" : operation.toString();
         return String.format("%s %s= %s", target, op, expression);

@@ -1,15 +1,16 @@
 package com.annimon.ownlang;
 
-import com.annimon.ownlang.utils.TimeMeasurement;
 import com.annimon.ownlang.exceptions.LexerException;
 import com.annimon.ownlang.parser.Beautifier;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Linter;
+import com.annimon.ownlang.parser.Optimizer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
+import com.annimon.ownlang.utils.TimeMeasurement;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -35,7 +36,8 @@ public final class Main {
                 options.showAst = true;
                 options.showTokens = true;
                 options.showMeasurements = true;
-                options.lintMode = true;
+                options.lintMode = false;
+                options.optimizationLevel = 2;
                 run(SourceLoader.readSource("program.own"), options);
             } catch (IOException ioe) {
                 System.out.println("OwnLang version " + VERSION + "\n\n" +
@@ -44,6 +46,7 @@ public final class Main {
                         "      -f, --file [input]  Run program file. Required.\n" +
                         "      -r, --repl          Enter to a REPL mode\n" +
                         "      -l, --lint          Find bugs in code\n" +
+                        "      -o N, --optimize N  Perform optimization with N passes\n" +
                         "      -b, --beautify      Beautify source code\n" +
                         "      -a, --showast       Show AST of program\n" +
                         "      -t, --showtokens    Show lexical tokens\n" +
@@ -77,6 +80,20 @@ public final class Main {
                     options.showMeasurements = true;
                     break;
                     
+                case "-o":
+                case "--optimize":
+                    if (i + 1 < args.length) {
+                        try {
+                            options.optimizationLevel = Integer.parseInt(args[i + 1]);
+                        } catch (NumberFormatException nfe) {
+                            options.optimizationLevel = 2;
+                        }
+                        i++;
+                    } else {
+                        options.optimizationLevel = 2;
+                    }
+                    return;
+
                 case "-r":
                 case "--repl":
                     repl();
@@ -134,18 +151,29 @@ public final class Main {
         
         measurement.start("Parse time");
         final Parser parser = new Parser(tokens);
-        final Statement program = parser.parse();
+        final Statement parsedProgram = parser.parse();
         measurement.stop("Parse time");
         if (options.showAst) {
-            System.out.println(program.toString());
+            System.out.println(parsedProgram.toString());
         }
         if (parser.getParseErrors().hasErrors()) {
             System.out.println(parser.getParseErrors());
             return;
         }
         if (options.lintMode) {
-            Linter.lint(program);
+            Linter.lint(parsedProgram);
             return;
+        }
+        final Statement program;
+        if (options.optimizationLevel > 0) {
+            measurement.start("Optimization time");
+            program = Optimizer.optimize(parsedProgram, options.optimizationLevel);
+            measurement.stop("Optimization time");
+            if (options.showAst) {
+                System.out.println(program.toString());
+            }
+        } else {
+            program = parsedProgram;
         }
         program.accept(new FunctionAdder());
         try {
@@ -203,12 +231,14 @@ public final class Main {
     private static class Options {
         boolean showTokens, showAst, showMeasurements;
         boolean lintMode;
+        int optimizationLevel;
 
         public Options() {
             showTokens = false;
             showAst = false;
             showMeasurements = false;
             lintMode = false;
+            optimizationLevel = 1;
         }
 
         public void validate() {
@@ -216,6 +246,7 @@ public final class Main {
                 showTokens = false;
                 showAst = false;
                 showMeasurements = false;
+                optimizationLevel = 0;
             }
         }
     }

@@ -50,6 +50,11 @@ public final class IncludeStatement implements Statement {
     }
 
     @Override
+    public <R, T> R accept(ResultVisitor<R, T> visitor, T t) {
+        return visitor.visit(this, t);
+    }
+
+    @Override
     public String toString() {
         return "include " + expression;
     }

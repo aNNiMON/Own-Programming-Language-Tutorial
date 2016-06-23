@@ -41,6 +41,11 @@ public final class ValueExpression implements Expression {
     }
 
     @Override
+    public <R, T> R accept(ResultVisitor<R, T> visitor, T t) {
+        return visitor.visit(this, t);
+    }
+
+    @Override
     public String toString() {
         return value.asString();
     }

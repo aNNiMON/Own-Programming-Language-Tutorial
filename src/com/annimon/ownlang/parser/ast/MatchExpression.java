@@ -169,6 +169,11 @@ public final class MatchExpression implements Expression, Statement {
     }
 
     @Override
+    public <R, T> R accept(ResultVisitor<R, T> visitor, T t) {
+        return visitor.visit(this, t);
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("match ").append(expression).append(" {");

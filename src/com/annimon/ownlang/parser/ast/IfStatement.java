@@ -31,6 +31,11 @@ public final class IfStatement implements Statement {
     }
 
     @Override
+    public <R, T> R accept(ResultVisitor<R, T> visitor, T t) {
+        return visitor.visit(this, t);
+    }
+
+    @Override
     public String toString() {
         final StringBuilder result = new StringBuilder();
         result.append("if ").append(expression).append(' ').append(ifStatement);

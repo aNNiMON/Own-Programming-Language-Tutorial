@@ -39,6 +39,11 @@ public final class VariableExpression implements Expression, Accessible {
     }
 
     @Override
+    public <R, T> R accept(ResultVisitor<R, T> visitor, T t) {
+        return visitor.visit(this, t);
+    }
+
+    @Override
     public String toString() {
         return name;
     }

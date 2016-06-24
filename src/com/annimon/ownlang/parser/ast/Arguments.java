@@ -44,8 +44,12 @@ public final class Arguments implements Iterable<Argument> {
     public String toString() {
         final StringBuilder result = new StringBuilder();
         result.append('(');
-        for (Argument arg : arguments) {
-            result.append(arg).append(", ");
+        final Iterator<Argument> it = arguments.iterator();
+        if (it.hasNext()) {
+            result.append(it.next());
+            while (it.hasNext()) {
+                result.append(", ").append(it.next());
+            }
         }
         result.append(')');
         return result.toString();

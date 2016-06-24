@@ -4,6 +4,7 @@ import com.annimon.ownlang.exceptions.VariableDoesNotExistsException;
 import com.annimon.ownlang.exceptions.UnknownFunctionException;
 import com.annimon.ownlang.lib.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -78,6 +79,20 @@ public final class FunctionalExpression implements Expression, Statement {
 
     @Override
     public String toString() {
-        return functionExpr + "(" + arguments.toString() + ")";
+        final StringBuilder sb = new StringBuilder();
+        if (functionExpr instanceof ValueExpression && ((ValueExpression)functionExpr).value.type() == Types.STRING) {
+            sb.append(((ValueExpression)functionExpr).value.asString()).append('(');
+        } else {
+            sb.append(functionExpr).append('(');
+        }
+        final Iterator<Expression> it = arguments.iterator();
+        if (it.hasNext()) {
+            sb.append(it.next());
+            while (it.hasNext()) {
+                sb.append(", ").append(it.next());
+            }
+        }
+        sb.append(')');
+        return sb.toString();
     }
 }

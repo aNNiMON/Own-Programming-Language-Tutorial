@@ -16,7 +16,7 @@ public final class PrintlnStatement implements Statement {
 
     @Override
     public void execute() {
-        Console.println(expression.eval());
+        Console.println(expression.eval().asString());
     }
     
     @Override

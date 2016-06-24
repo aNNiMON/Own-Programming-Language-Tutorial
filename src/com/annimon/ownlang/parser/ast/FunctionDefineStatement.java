@@ -36,6 +36,9 @@ public final class FunctionDefineStatement implements Statement {
 
     @Override
     public String toString() {
+        if (body instanceof ReturnStatement) {
+            return String.format("def %s%s = %s", name, arguments, ((ReturnStatement)body).expression);
+        }
         return String.format("def %s%s %s", name, arguments, body);
     }
 }

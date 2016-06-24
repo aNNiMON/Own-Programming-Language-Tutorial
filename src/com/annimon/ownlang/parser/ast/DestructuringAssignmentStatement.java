@@ -70,6 +70,18 @@ public final class DestructuringAssignmentStatement implements Statement {
 
     @Override
     public String toString() {
-        return variables.toString();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("extract(");
+        final Iterator<String> it = variables.iterator();
+        if (it.hasNext()) {
+            String variable = it.next();
+            sb.append(variable == null ? "" : variable);
+            while (it.hasNext()) {
+                variable = it.next();
+                sb.append(", ").append(variable == null ? "" : variable);
+            }
+        }
+        sb.append(") = ").append(containerExpression);
+        return sb.toString();
     }
 }

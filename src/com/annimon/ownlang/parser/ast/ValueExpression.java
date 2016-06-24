@@ -4,6 +4,7 @@ import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
+import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
 /**
@@ -47,6 +48,9 @@ public final class ValueExpression implements Expression {
 
     @Override
     public String toString() {
-        return value.asString();
+        if (value.type() == Types.STRING) {
+            return "\"" + value.asString() + "\"";
+        }
+        return value.toString();
     }
 }

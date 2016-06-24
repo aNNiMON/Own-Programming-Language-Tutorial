@@ -92,7 +92,7 @@ public final class Main {
                     } else {
                         options.optimizationLevel = 2;
                     }
-                    return;
+                    break;
 
                 case "-r":
                 case "--repl":

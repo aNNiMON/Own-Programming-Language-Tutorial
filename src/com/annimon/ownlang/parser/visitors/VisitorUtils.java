@@ -17,8 +17,16 @@ import java.util.Set;
 
 public final class VisitorUtils {
 
+    public static boolean isValue(Node node) {
+        return (node instanceof ValueExpression);
+    }
+
+    public static boolean isVariable(Node node) {
+        return (node instanceof VariableExpression);
+    }
+
     public static Statement includeProgram(IncludeStatement s) {
-        if (!(s.expression instanceof ValueExpression)) return null;
+        if (!isValue(s)) return null;
         try {
             return s.loadProgram(s.expression.eval().asString());
         } catch (IOException ex) {
@@ -27,7 +35,7 @@ public final class VisitorUtils {
     }
 
     public static boolean isIntegerValue(Node node, int valueToCheck) {
-        if (!(node instanceof ValueExpression)) return false;
+        if (!isValue(node)) return false;
 
         final Value value = ((ValueExpression) node).value;
         if (value.type() != Types.NUMBER) return false;
@@ -40,7 +48,7 @@ public final class VisitorUtils {
     }
 
     public static boolean isSameVariables(Node n1, Node n2) {
-        if ( (n1 instanceof VariableExpression) && (n2 instanceof VariableExpression) ) {
+        if (isVariable(n1) && isVariable(n2)) {
             final VariableExpression v1 = (VariableExpression) n1;
             final VariableExpression v2 = (VariableExpression) n2;
             return v1.name.equals(v2.name);

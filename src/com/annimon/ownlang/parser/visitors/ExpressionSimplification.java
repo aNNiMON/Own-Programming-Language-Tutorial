@@ -1,25 +1,31 @@
 package com.annimon.ownlang.parser.visitors;
 
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.parser.Optimizer;
 import com.annimon.ownlang.parser.ast.BinaryExpression;
 import com.annimon.ownlang.parser.ast.ConditionalExpression;
+import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
 import com.annimon.ownlang.parser.ast.ValueExpression;
-import com.annimon.ownlang.parser.ast.VariableExpression;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isIntegerValue;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isSameVariables;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Performs expression simplification.
  */
 public class ExpressionSimplification extends OptimizationVisitor<Void> implements Optimizer.Info {
 
+    private static final Set<String> OPERATORS = VisitorUtils.operators();
+
     private int simplificationsCount;
+
+    private final Set<String> overloadedOperators;
 
     public ExpressionSimplification() {
         simplificationsCount = 0;
+        overloadedOperators = new HashSet<>();
     }
 
     @Override
@@ -39,6 +45,9 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
 
     @Override
     public Node visit(BinaryExpression s, Void t) {
+        if (overloadedOperators.contains(s.operation.toString())) {
+            return super.visit(s, t);
+        }
         // operations with 0
         final boolean expr1IsZero = isIntegerValue(s.expr1, 0);
         if (expr1IsZero || isIntegerValue(s.expr2, 0)) {
@@ -108,6 +117,9 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
 
     @Override
     public Node visit(ConditionalExpression s, Void t) {
+        if (overloadedOperators.contains(s.operation.getName())) {
+            return super.visit(s, t);
+        }
         if (isIntegerValue(s.expr1, 0) && s.operation == ConditionalExpression.Operator.AND) {
             // 0 && x2 to 0
             simplificationsCount++;
@@ -121,26 +133,11 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
         return super.visit(s, t);
     }
 
-
-    private boolean isIntegerValue(Node node, int valueToCheck) {
-        if (!(node instanceof ValueExpression)) return false;
-
-        final Value value = ((ValueExpression) node).value;
-        if (value.type() != Types.NUMBER) return false;
-
-        final Number number = ((NumberValue) value).raw();
-        if ( (number instanceof Integer) || (number instanceof Short) || (number instanceof Byte)) {
-            return number.intValue() == valueToCheck;
+    @Override
+    public Node visit(FunctionDefineStatement s, Void t) {
+        if (OPERATORS.contains(s.name)) {
+            overloadedOperators.add(s.name);
         }
-        return false;
-    }
-
-    private boolean isSameVariables(Node n1, Node n2) {
-        if ( (n1 instanceof VariableExpression) && (n2 instanceof VariableExpression) ) {
-            final VariableExpression v1 = (VariableExpression) n1;
-            final VariableExpression v2 = (VariableExpression) n2;
-            return v1.name.equals(v2.name);
-        }
-        return false;
+        return super.visit(s, t);
     }
 }

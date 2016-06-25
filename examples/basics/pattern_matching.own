@@ -38,3 +38,28 @@ def printArrayRecursive(arr) = match arr {
   case []: "[]"
   case last: "[" + last + ", []]"
 }
+
+println "\nPattern matching on arrays by value"
+def tupleMatch(x) = match x {
+  case (0, 0): "00"
+  case (1, 0): "10"
+  case (0, 1): "01"
+  case (1, 1): "11"
+  case (2, _): "2?"
+  case _: "unknown"
+}
+println tupleMatch([0, 1])
+println tupleMatch([1, 1])
+println tupleMatch([2, 1])
+println tupleMatch([3, 9])
+
+
+println "\nFizzBuzz with pattern matching"
+for i = 1, i <= 100, i++ {
+  println match [i % 3 == 0, i % 5 == 0] {
+    case (true, false): "Fizz"
+    case (false, true): "Buzz"
+    case (true, true): "FizzBuzz"
+    case _: i
+  }
+}

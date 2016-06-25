@@ -7,6 +7,7 @@ import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * @author aNNiMON
  */
 public final class MatchExpression implements Expression, Statement {
-    
+
     public final Expression expression;
     public final List<Pattern> patterns;
 
@@ -22,12 +23,12 @@ public final class MatchExpression implements Expression, Statement {
         this.expression = expression;
         this.patterns = patterns;
     }
-    
+
     @Override
     public void execute() {
         eval();
     }
-    
+
     @Override
     public Value eval() {
         final Value value = expression.eval();
@@ -41,7 +42,7 @@ public final class MatchExpression implements Expression, Statement {
             if (p instanceof VariablePattern) {
                 final VariablePattern pattern = (VariablePattern) p;
                 if (pattern.variable.equals("_")) return evalResult(p.result);
-                
+
                 if (Variables.isExists(pattern.variable)) {
                     if (match(value, Variables.get(pattern.variable)) && optMatches(p)) {
                         return evalResult(p.result);
@@ -49,7 +50,7 @@ public final class MatchExpression implements Expression, Statement {
                 } else {
                     Variables.define(pattern.variable, value);
                     if (optMatches(p)) {
-                        final Value result = evalResult(p.result);;
+                        final Value result = evalResult(p.result);
                         Variables.remove(pattern.variable);
                         return result;
                     }
@@ -67,10 +68,29 @@ public final class MatchExpression implements Expression, Statement {
                     return result;
                 }
             }
+            if ((value.type() == Types.ARRAY) && (p instanceof TuplePattern)) {
+                final TuplePattern pattern = (TuplePattern) p;
+                if (matchTuplePattern((ArrayValue) value, pattern) && optMatches(p)) {
+                    return evalResult(p.result);
+                }
+            }
         }
         throw new PatternMatchingException("No pattern were matched");
     }
-    
+
+    private boolean matchTuplePattern(ArrayValue array, TuplePattern p) {
+        if (p.values.size() != array.size()) return false;
+
+        final int size = array.size();
+        for (int i = 0; i < size; i++) {
+            final Expression expr = p.values.get(i);
+            if ( (expr != TuplePattern.ANY) && (expr.eval().compareTo(array.get(i)) != 0) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private boolean matchListPattern(ArrayValue array, ListPattern p) {
         final List<String> parts = p.parts;
         final int partsSize = parts.size();
@@ -90,7 +110,7 @@ public final class MatchExpression implements Expression, Statement {
                 }
                 Variables.remove(variable);
                 return false;
-                
+
             default: { // match arr { case [...]: .. }
                 if (partsSize == arraySize) {
                     // match [0, 1, 2] { case [a::b::c]: a=0, b=1, c=2 ... }
@@ -102,7 +122,7 @@ public final class MatchExpression implements Expression, Statement {
                 return false;
             }
         }
-    } 
+    }
 
     private boolean matchListPatternEqualsSize(ListPattern p, List<String> parts, int partsSize, ArrayValue array) {
         // Set variables
@@ -119,7 +139,7 @@ public final class MatchExpression implements Expression, Statement {
         }
         return false;
     }
-    
+
     private boolean matchListPatternWithTail(ListPattern p, List<String> parts, int partsSize, ArrayValue array, int arraySize) {
         // Set element variables
         final int lastPart = partsSize - 1;
@@ -143,17 +163,17 @@ public final class MatchExpression implements Expression, Statement {
         }
         return false;
     }
-    
+
     private boolean match(Value value, Value constant) {
         if (value.type() != constant.type()) return false;
         return value.equals(constant);
     }
-    
+
     private boolean optMatches(Pattern pattern) {
         if (pattern.optCondition == null) return true;
         return pattern.optCondition.eval() != NumberValue.ZERO;
     }
-    
+
     private Value evalResult(Statement s) {
         try {
             s.execute();
@@ -162,7 +182,7 @@ public final class MatchExpression implements Expression, Statement {
         }
         return NumberValue.ZERO;
     }
-    
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
@@ -183,15 +203,15 @@ public final class MatchExpression implements Expression, Statement {
         sb.append("\n}");
         return sb.toString();
     }
-    
+
     public static abstract class Pattern {
         public Statement result;
         public Expression optCondition;
     }
-    
+
     public static class ConstantPattern extends Pattern {
         public Value constant;
-        
+
         public ConstantPattern(Value pattern) {
             this.constant = pattern;
         }
@@ -201,10 +221,10 @@ public final class MatchExpression implements Expression, Statement {
             return constant + ": " + result;
         }
     }
-    
+
     public static class VariablePattern extends Pattern {
         public String variable;
-        
+
         public VariablePattern(String pattern) {
             this.variable = pattern;
         }
@@ -214,14 +234,14 @@ public final class MatchExpression implements Expression, Statement {
             return variable + ": " + result;
         }
     }
-    
+
     public static class ListPattern extends Pattern {
         public List<String> parts;
-        
+
         public ListPattern() {
             this(new ArrayList<String>());
         }
-        
+
         public ListPattern(List<String> parts) {
             this.parts = parts;
         }
@@ -232,7 +252,73 @@ public final class MatchExpression implements Expression, Statement {
 
         @Override
         public String toString() {
-            return parts + ": " + result;
+            final Iterator<String> it = parts.iterator();
+            if (it.hasNext()) {
+                final StringBuilder sb = new StringBuilder();
+                sb.append("[").append(it.next());
+                while (it.hasNext()) {
+                    sb.append(" :: ").append(it.next());
+                }
+                sb.append("]: ").append(result);
+                return sb.toString();
+            }
+            return "[]: " + result;
         }
+    }
+
+    public static class TuplePattern extends Pattern {
+        public List<Expression> values;
+
+        public TuplePattern() {
+            this(new ArrayList<Expression>());
+        }
+
+        public TuplePattern(List<Expression> parts) {
+            this.values = parts;
+        }
+
+        public void addAny() {
+            values.add(ANY);
+        }
+
+        public void add(Expression value) {
+            values.add(value);
+        }
+
+        @Override
+        public String toString() {
+            final Iterator<Expression> it = values.iterator();
+            if (it.hasNext()) {
+                final StringBuilder sb = new StringBuilder();
+                sb.append("(").append(it.next());
+                while (it.hasNext()) {
+                    sb.append(", ").append(it.next());
+                }
+                sb.append("): ").append(result);
+                return sb.toString();
+            }
+            return "(): " + result;
+        }
+
+        private static final Expression ANY = new Expression() {
+            @Override
+            public Value eval() {
+                return NumberValue.ONE;
+            }
+
+            @Override
+            public void accept(Visitor visitor) {
+            }
+
+            @Override
+            public <R, T> R accept(ResultVisitor<R, T> visitor, T input) {
+                return null;
+            }
+
+            @Override
+            public String toString() {
+                return "_";
+            }
+        };
     }
 }

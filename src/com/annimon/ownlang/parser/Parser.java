@@ -368,6 +368,19 @@ public final class Parser {
                     match(TokenType.COLONCOLON);
                 }
                 pattern = listPattern;
+            } else if (match(TokenType.LPAREN)) {
+                // case (1, 2):
+                final MatchExpression.TuplePattern tuplePattern = new MatchExpression.TuplePattern();
+                while (!match(TokenType.RPAREN)) {
+                    if ("_".equals(get(0).getText())) {
+                        tuplePattern.addAny();
+                        consume(TokenType.WORD);
+                    } else {
+                        tuplePattern.add(expression());
+                    }
+                    match(TokenType.COMMA);
+                }
+                pattern = tuplePattern;
             }
             
             if (pattern == null) {

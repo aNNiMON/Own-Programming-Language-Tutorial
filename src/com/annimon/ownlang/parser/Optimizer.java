@@ -7,6 +7,7 @@ import com.annimon.ownlang.parser.optimization.ConstantFolding;
 import com.annimon.ownlang.parser.optimization.ConstantPropagation;
 import com.annimon.ownlang.parser.optimization.DeadCodeElimination;
 import com.annimon.ownlang.parser.optimization.ExpressionSimplification;
+import com.annimon.ownlang.parser.optimization.InstructionCombining;
 import com.annimon.ownlang.parser.optimization.Optimizable;
 import com.annimon.ownlang.parser.optimization.SummaryOptimization;
 
@@ -19,11 +20,12 @@ public final class Optimizer {
             new ConstantFolding(),
             new ConstantPropagation(),
             new DeadCodeElimination(),
-            new ExpressionSimplification()
+            new ExpressionSimplification(),
+            new InstructionCombining()
         });
 
         Node result = statement;
-        if (true || level >= 9) {
+        if (level >= 9) {
             int iteration = 0, lastModifications = 0;
             do {
                 lastModifications = optimization.optimizationsCount();

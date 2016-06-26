@@ -56,6 +56,13 @@ public final class VisitorUtils {
         return value.asInt() == valueToCheck;
     }
 
+    public static boolean isConstantValue(Node node) {
+        if (!isValue(node)) return false;
+
+        final int type = ((ValueExpression) node).value.type();
+        return ( (type == Types.NUMBER) || (type == Types.STRING) );
+    }
+
     public static boolean isSameVariables(Node n1, Node n2) {
         if (isVariable(n1) && isVariable(n2)) {
             final VariableExpression v1 = (VariableExpression) n1;

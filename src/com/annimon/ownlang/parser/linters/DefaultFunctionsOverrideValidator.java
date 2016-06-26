@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser.visitors;
+package com.annimon.ownlang.parser.linters;
 
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.Functions;

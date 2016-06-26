@@ -5,8 +5,9 @@ import com.annimon.ownlang.parser.ast.ExprStatement;
 import com.annimon.ownlang.parser.ast.IfStatement;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.TernaryExpression;
-import com.annimon.ownlang.parser.ast.ValueExpression;
 import com.annimon.ownlang.parser.ast.WhileStatement;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValueAsInt;
 
 /**
  * Performs dead code elimination.
@@ -41,7 +42,7 @@ public class DeadCodeElimination extends OptimizationVisitor<Void> implements Op
 
     @Override
     public Node visit(IfStatement s, Void t) {
-        if (s.expression instanceof ValueExpression) {
+        if (isValue(s.expression)) {
             ifStatementEliminatedCount++;
             // true statement
             if (s.expression.eval().asInt() != 0) {
@@ -58,7 +59,7 @@ public class DeadCodeElimination extends OptimizationVisitor<Void> implements Op
 
     @Override
     public Node visit(TernaryExpression s, Void t) {
-        if (s.condition instanceof ValueExpression) {
+        if (isValue(s.condition)) {
             ternaryExpressionEliminatedCount++;
             if (s.condition.eval().asInt() != 0) {
                 return s.trueExpr;
@@ -70,11 +71,9 @@ public class DeadCodeElimination extends OptimizationVisitor<Void> implements Op
 
     @Override
     public Node visit(WhileStatement s, Void t) {
-        if (s.condition instanceof ValueExpression) {
-            if (s.condition.eval().asInt() == 0) {
-                whileStatementEliminatedCount++;
-                return new ExprStatement(s.condition);
-            }
+        if (isValueAsInt(s.condition, 0)) {
+            whileStatementEliminatedCount++;
+            return new ExprStatement(s.condition);
         }
         return super.visit(s, t);
     }

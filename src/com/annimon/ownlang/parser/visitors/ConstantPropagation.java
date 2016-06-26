@@ -76,14 +76,7 @@ public class ConstantPropagation implements Optimizer.Info {
             }
 
             final String variableName = ((VariableExpression) s.target).name;
-            final VariableInfo var;
-            if (t.containsKey(variableName)) {
-                var = t.get(variableName);
-                var.modifications++;
-            } else {
-                var = new VariableInfo();
-                var.modifications = 1;
-            }
+            final VariableInfo var = variableInfo(t, variableName);
 
             if (s.operation == null && isValue(s.expression)) {
                 var.value = ((ValueExpression) s.expression).value;
@@ -96,16 +89,7 @@ public class ConstantPropagation implements Optimizer.Info {
         public Node visit(DestructuringAssignmentStatement s, Map<String, VariableInfo> t) {
             for (String variableName : s.variables) {
                 if (variableName == null) continue;
-
-                final VariableInfo var;
-                if (t.containsKey(variableName)) {
-                    var = t.get(variableName);
-                    var.modifications++;
-                } else {
-                    var = new VariableInfo();
-                    var.modifications = 1;
-                }
-                t.put(variableName, var);
+                t.put(variableName, variableInfo(t, variableName));
             }
             return super.visit(s, t);
         }
@@ -114,15 +98,7 @@ public class ConstantPropagation implements Optimizer.Info {
         public Node visit(FunctionDefineStatement s, Map<String, VariableInfo> t) {
             for (Argument argument : s.arguments) {
                 final String variableName = argument.getName();
-                final VariableInfo var;
-                if (t.containsKey(variableName)) {
-                    var = t.get(variableName);
-                    var.modifications++;
-                } else {
-                    var = new VariableInfo();
-                    var.modifications = 1;
-                }
-                t.put(variableName, var);
+                t.put(variableName, variableInfo(t, variableName));
             }
             return super.visit(s, t);
         }
@@ -131,6 +107,18 @@ public class ConstantPropagation implements Optimizer.Info {
         public Node visit(MatchExpression s, Map<String, VariableInfo> t) {
             // no visit match expression
             return s;
+        }
+
+        private VariableInfo variableInfo(Map<String, VariableInfo> t, final String variableName) {
+            final VariableInfo var;
+            if (t.containsKey(variableName)) {
+                var = t.get(variableName);
+                var.modifications++;
+            } else {
+                var = new VariableInfo();
+                var.modifications = 1;
+            }
+            return var;
         }
     }
 

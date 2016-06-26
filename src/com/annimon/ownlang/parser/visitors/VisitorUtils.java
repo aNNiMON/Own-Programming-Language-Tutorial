@@ -47,6 +47,15 @@ public final class VisitorUtils {
         return false;
     }
 
+    public static boolean isValueAsInt(Node node, int valueToCheck) {
+        if (!isValue(node)) return false;
+
+        final Value value = ((ValueExpression) node).value;
+        if (value.type() != Types.NUMBER) return false;
+
+        return value.asInt() == valueToCheck;
+    }
+
     public static boolean isSameVariables(Node n1, Node n2) {
         if (isVariable(n1) && isVariable(n2)) {
             final VariableExpression v1 = (VariableExpression) n1;

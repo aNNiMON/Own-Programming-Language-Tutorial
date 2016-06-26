@@ -1,7 +1,6 @@
 package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
-import com.annimon.ownlang.parser.Optimizer;
 import com.annimon.ownlang.parser.ast.BinaryExpression;
 import com.annimon.ownlang.parser.ast.ConditionalExpression;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
@@ -15,7 +14,7 @@ import java.util.Set;
 /**
  * Performs constant folding optimization.
  */
-public class ConstantFolding extends OptimizationVisitor<Void> implements Optimizer.Info {
+public class ConstantFolding extends OptimizationVisitor<Void> implements Optimizable {
 
     private static final Set<String> OPERATORS = VisitorUtils.operators();
 
@@ -27,6 +26,11 @@ public class ConstantFolding extends OptimizationVisitor<Void> implements Optimi
 
     public ConstantFolding() {
         overloadedOperators = new HashSet<>();
+    }
+
+    @Override
+    public Node optimize(Node node) {
+        return node.accept(this, null);
     }
 
     @Override

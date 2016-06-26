@@ -1,6 +1,5 @@
 package com.annimon.ownlang.parser.optimization;
 
-import com.annimon.ownlang.parser.Optimizer;
 import com.annimon.ownlang.parser.ast.ExprStatement;
 import com.annimon.ownlang.parser.ast.IfStatement;
 import com.annimon.ownlang.parser.ast.Node;
@@ -12,11 +11,16 @@ import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValueAsInt;
 /**
  * Performs dead code elimination.
  */
-public class DeadCodeElimination extends OptimizationVisitor<Void> implements Optimizer.Info {
+public class DeadCodeElimination extends OptimizationVisitor<Void> implements Optimizable {
 
     private int ifStatementEliminatedCount;
     private int ternaryExpressionEliminatedCount;
     private int whileStatementEliminatedCount;
+
+    @Override
+    public Node optimize(Node node) {
+        return node.accept(this, null);
+    }
 
     @Override
     public int optimizationsCount() {

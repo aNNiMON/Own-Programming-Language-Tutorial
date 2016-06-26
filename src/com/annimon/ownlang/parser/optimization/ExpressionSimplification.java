@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser.visitors;
+package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.parser.Optimizer;
 import com.annimon.ownlang.parser.ast.BinaryExpression;
@@ -7,6 +7,7 @@ import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
 import com.annimon.ownlang.parser.ast.ValueExpression;
+import com.annimon.ownlang.parser.visitors.VisitorUtils;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isIntegerValue;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isSameVariables;
 import java.util.HashSet;

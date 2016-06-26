@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser.visitors;
+package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;

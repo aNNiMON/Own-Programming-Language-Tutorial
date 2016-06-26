@@ -1,10 +1,10 @@
 package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.parser.ast.Statement;
-import com.annimon.ownlang.parser.visitors.ConstantFolding;
-import com.annimon.ownlang.parser.visitors.ConstantPropagation;
-import com.annimon.ownlang.parser.visitors.DeadCodeElimination;
-import com.annimon.ownlang.parser.visitors.ExpressionSimplification;
+import com.annimon.ownlang.parser.optimization.ConstantFolding;
+import com.annimon.ownlang.parser.optimization.ConstantPropagation;
+import com.annimon.ownlang.parser.optimization.DeadCodeElimination;
+import com.annimon.ownlang.parser.optimization.ExpressionSimplification;
 
 public final class Optimizer {
 

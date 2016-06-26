@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser.visitors;
+package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.parser.Optimizer;
 import com.annimon.ownlang.parser.ast.ExprStatement;

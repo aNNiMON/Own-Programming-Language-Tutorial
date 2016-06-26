@@ -2,13 +2,17 @@ package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.parser.ast.AssignmentExpression;
+import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.ExprStatement;
+import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.IfStatement;
 import com.annimon.ownlang.parser.ast.Node;
+import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.TernaryExpression;
 import com.annimon.ownlang.parser.ast.ValueExpression;
 import com.annimon.ownlang.parser.ast.VariableExpression;
 import com.annimon.ownlang.parser.ast.WhileStatement;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isConstantValue;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValueAsInt;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isVariable;
@@ -22,6 +26,7 @@ public class DeadCodeElimination extends OptimizationVisitor<Map<String, Variabl
     private int ifStatementEliminatedCount;
     private int ternaryExpressionEliminatedCount;
     private int whileStatementEliminatedCount;
+    private int assignmentExpressionEliminatedCount;
 
     @Override
     public Node optimize(Node node) {
@@ -32,7 +37,7 @@ public class DeadCodeElimination extends OptimizationVisitor<Map<String, Variabl
     @Override
     public int optimizationsCount() {
         return ifStatementEliminatedCount + ternaryExpressionEliminatedCount
-                + whileStatementEliminatedCount;
+                + whileStatementEliminatedCount + assignmentExpressionEliminatedCount;
     }
 
     @Override
@@ -47,6 +52,9 @@ public class DeadCodeElimination extends OptimizationVisitor<Map<String, Variabl
         }
         if (whileStatementEliminatedCount > 0) {
             sb.append("\nEliminated WhileStatement: ").append(whileStatementEliminatedCount);
+        }
+        if (whileStatementEliminatedCount > 0) {
+            sb.append("\nEliminated AssignmentExpression: ").append(assignmentExpressionEliminatedCount);
         }
         return sb.toString();
     }
@@ -104,9 +112,37 @@ public class DeadCodeElimination extends OptimizationVisitor<Map<String, Variabl
         switch (info.value.type()) {
             case Types.NUMBER:
             case Types.STRING:
+                assignmentExpressionEliminatedCount++;
                 return new ValueExpression(info.value);
             default:
                 return super.visit(s, t);
         }
+    }
+
+    @Override
+    public Node visit(BlockStatement s, Map<String, VariableInfo> t) {
+        final BlockStatement result = new BlockStatement();
+        boolean changed = false;
+        for (Statement statement : s.statements) {
+            final Node node = statement.accept(this, t);
+            if (node != statement) {
+                changed = true;
+            }
+            if (node instanceof ExprStatement
+                    && isConstantValue( ((ExprStatement) node).expr )) {
+                changed = true;
+                continue;
+            }
+
+            if (node instanceof Statement) {
+                result.add((Statement) node);
+            } else if (node instanceof Expression) {
+                result.add(new ExprStatement((Expression) node));
+            }
+        }
+        if (changed) {
+            return result;
+        }
+        return super.visit(s, t);
     }
 }

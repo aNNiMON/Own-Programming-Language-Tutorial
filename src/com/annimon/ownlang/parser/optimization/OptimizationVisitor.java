@@ -207,7 +207,8 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
             elseStatement = null;
         }
         if (expression != s.expression || ifStatement != s.ifStatement || elseStatement != s.elseStatement) {
-            return new IfStatement((Expression) expression, consumeStatement(ifStatement), consumeStatement(elseStatement));
+            return new IfStatement((Expression) expression, consumeStatement(ifStatement),
+                    (elseStatement == null ? null : consumeStatement(elseStatement)) );
         }
         return s;
     }

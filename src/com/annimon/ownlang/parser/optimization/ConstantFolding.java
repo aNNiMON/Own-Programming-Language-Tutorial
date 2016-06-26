@@ -66,7 +66,6 @@ public class ConstantFolding extends OptimizationVisitor<Void> implements Optimi
             try {
                 return new ValueExpression(s.eval());
             } catch (OperationIsNotSupportedException op) {
-                System.err.println(s);
                 binaryExpressionFoldingCount--;
             }
         }

@@ -1,12 +1,12 @@
-package com.annimon.ownlang.parser.visitors;
+package com.annimon.ownlang.parser.optimization;
 
-import com.annimon.ownlang.parser.Optimizer;
 import com.annimon.ownlang.parser.ast.BinaryExpression;
 import com.annimon.ownlang.parser.ast.ConditionalExpression;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
 import com.annimon.ownlang.parser.ast.ValueExpression;
+import com.annimon.ownlang.parser.visitors.VisitorUtils;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isIntegerValue;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isSameVariables;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Performs expression simplification.
  */
-public class ExpressionSimplification extends OptimizationVisitor<Void> implements Optimizer.Info {
+public class ExpressionSimplification extends OptimizationVisitor<Void> implements Optimizable {
 
     private static final Set<String> OPERATORS = VisitorUtils.operators();
 
@@ -26,6 +26,11 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
     public ExpressionSimplification() {
         simplificationsCount = 0;
         overloadedOperators = new HashSet<>();
+    }
+
+    @Override
+    public Node optimize(Node node) {
+        return node.accept(this, null);
     }
 
     @Override

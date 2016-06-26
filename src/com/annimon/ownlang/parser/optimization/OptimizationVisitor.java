@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser.visitors;
+package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.parser.ast.*;
 import java.util.ArrayList;

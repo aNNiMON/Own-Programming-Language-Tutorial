@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.optimization.ConstantFolding;
@@ -22,10 +23,20 @@ public final class Optimizer {
         });
 
         Node result = statement;
-        for (int i = 0; i < level; i++) {
-            result = optimization.optimize(result);
+        if (true || level >= 9) {
+            int iteration = 0, lastModifications = 0;
+            do {
+                lastModifications = optimization.optimizationsCount();
+                result = optimization.optimize(result);
+                iteration++;
+            } while (lastModifications != optimization.optimizationsCount());
+            Console.print("Performs " + iteration + " optimization iterations");
+        } else {
+            for (int i = 0; i < level; i++) {
+                result = optimization.optimize(result);
+            }
         }
-        System.out.println(optimization.summaryInfo());
+        Console.println(optimization.summaryInfo());
         return (Statement) result;
     }
 }

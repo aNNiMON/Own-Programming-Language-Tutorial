@@ -1,11 +1,13 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.Value;
+
 /**
  * Wrapper for expressions, which can be used as statements.
  * 
  * @author aNNiMON
  */
-public final class ExprStatement implements Statement {
+public final class ExprStatement implements Expression, Statement {
     
     public final Expression expr;
     
@@ -16,6 +18,11 @@ public final class ExprStatement implements Statement {
     @Override
     public void execute() {
         expr.eval();
+    }
+
+    @Override
+    public Value eval() {
+        return expr.eval();
     }
     
     @Override

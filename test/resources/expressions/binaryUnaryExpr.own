@@ -1,0 +1,27 @@
+def testAdditionOnNumbers() {
+  assertEquals(6, 0 + 1 + 2 + 3)
+}
+
+def testSubtractionOnNumbers() {
+  assertEquals(-6, 0 - 1 - 2 - 3)
+}
+
+def testPrefixIncrement() {
+  a = 8
+  assertEquals(9, ++a)
+  assertEquals(9, a)
+}
+
+def testPostfixIncrement() {
+  a = 8
+  assertEquals(8, a++)
+  assertEquals(9, a)
+}
+
+def testStringReversing() {
+  assertEquals("tset", -"test")
+}
+
+def testStringMultiplication() {
+  assertEquals("******", "*" * 6)
+}

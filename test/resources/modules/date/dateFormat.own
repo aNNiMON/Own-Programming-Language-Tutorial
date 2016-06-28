@@ -1,0 +1,6 @@
+use "date"
+
+def testDateFormat() {
+  d = formatDate(newDate(2016, 04, 10), newFormat("yyyy/MM/dd HH:mm:ss"))
+  assertEquals("2016/05/10 00:00:00", d)
+}

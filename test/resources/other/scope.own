@@ -1,0 +1,10 @@
+def testScope() {
+  x = 5
+  def func() {
+    assertEquals(5, x)
+    x += 10
+    assertEquals(15, x)
+  }
+  func();
+  assertEquals(15, x)
+}

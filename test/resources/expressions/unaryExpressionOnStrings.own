@@ -1,0 +1,3 @@
+def testStringReversing() {
+  assertEquals("tset", -"test")
+}

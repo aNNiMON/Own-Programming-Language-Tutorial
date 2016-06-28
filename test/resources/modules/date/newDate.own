@@ -1,0 +1,12 @@
+use "date"
+
+def testNewDate() {
+  d = newDate(2016, 04, 10)
+  assertEquals(2016, d.year)
+  assertEquals(4, d.month)
+  assertEquals(10, d.day)
+  assertEquals(0, d.hour)
+  assertEquals(0, d.minute)
+  assertEquals(0, d.second)
+  assertEquals(0, d.millisecond)
+}

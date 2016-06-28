@@ -1,0 +1,7 @@
+use "date"
+
+def testCompareDates() {
+  assertTrue(newDate(2016, 04, 10) > newDate(2015, 03, 11))
+  assertTrue(newDate(2012, 04, 10) < newDate(2015, 03, 11))
+  assertTrue(newDate(2015, 03, 11, 0, 0, 0) == newDate(2015, 03, 11))
+}

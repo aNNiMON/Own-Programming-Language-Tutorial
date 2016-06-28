@@ -1,0 +1,37 @@
+def testAdditionOnNumbers() {
+  assertEquals(4, 2 + 2)
+  assertEquals(6, 0 + 1 + 2 + 3)
+}
+
+def testSubtractionOnNumbers() {
+  assertEquals(0, 2 - 2)
+  assertEquals(-6, 0 - 1 - 2 - 3)
+  assertEquals(110, 100 - (20 - 30))
+}
+
+def testMultiplicationOnNumbers() {
+  assertEquals(4, 2 * 2)
+  assertEquals(30, 5 * (-2 * -3))
+}
+
+def testDivisionOnNumbers() {
+  assertEquals(3, 6 / 2)
+  assertEquals(30, -900 / (60 / -2))
+}
+
+def testRemainder() {
+  assertEquals(2, 10 % 4)
+  assertEquals(5, 15 % (40 % 30))
+}
+
+def testAND() {
+  assertEquals(0x04, 0x04 & 0x0F)
+  assertEquals(0x00, 0x04 & 0x08)
+  assertEquals(8, 12 & 9)
+}
+
+def testOR() {
+  assertEquals(12, 4 | 8)
+  assertEquals(0x0F, 3 | 12)
+  assertEquals(0x0E, 10 | 4)
+}

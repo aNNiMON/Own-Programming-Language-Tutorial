@@ -1,0 +1,8 @@
+def testStringConcatenation() {
+  assertEquals("22", "2" + "2")
+  assertEquals("22", "2" + 2)
+}
+
+def testStringMultiplication() {
+  assertEquals("******", "*" * 6)
+}

@@ -1,0 +1,9 @@
+use "date"
+
+def testDateParse() {
+  d = parseDate("2016/05/10", newFormat("yyyy/MM/dd"))
+  assertEquals(2016, d.year)
+  assertEquals(4, d.month)
+  assertEquals(10, d.day)
+  assertEquals(0, d.hour)
+}

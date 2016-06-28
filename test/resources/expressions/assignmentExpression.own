@@ -1,0 +1,30 @@
+def testSimpleAssignment() {
+  a = 8
+  b = "str"
+  assertEquals(8, a)
+  assertEquals("str", b)
+}
+
+def testPrefixIncrement() {
+  a = 8
+  assertEquals(9, ++a)
+  assertEquals(9, a)
+}
+
+def testPostfixIncrement() {
+  a = 8
+  assertEquals(8, a++)
+  assertEquals(9, a)
+}
+
+def testPrefixDecrement() {
+  a = 8
+  assertEquals(7, --a)
+  assertEquals(7, a)
+}
+
+def testPostfixDecrement() {
+  a = 8
+  assertEquals(8, a--)
+  assertEquals(7, a)
+}

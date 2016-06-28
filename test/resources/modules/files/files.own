@@ -1,0 +1,28 @@
+use "files"
+use "types"
+
+def testFiles() {
+  // writeLong
+  f = fopen("test.file", "wb")
+  writeLong(f, 1002003004005006007)
+  flush(f)
+  fclose(f)
+
+  // append & writeFloat
+  fpNumber = 100200.3004005006007
+  f = fopen("test.file", "wb+")
+  writeFloat(f, fpNumber)
+  flush(f)
+  fclose(f)
+
+  f = fopen("test.file", "rb")
+  assertEquals(1002003004005006007, readLong(f))
+  assertEquals(float(fpNumber), readFloat(f))
+  assertEquals(-1, readInt(f)) // EOF
+  assertEquals(0, FILES_COMPARATOR(f, f))
+  fclose(f)
+
+  f = fopen("test.file", "i")
+  delete(f)
+  fclose(f)
+}

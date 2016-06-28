@@ -1,0 +1,6 @@
+def func() = "function"
+var = def() = "variable"
+def consumer(x) = x();
+
+assertEquals("function", consumer(::func))
+assertEquals("variable", consumer(var))

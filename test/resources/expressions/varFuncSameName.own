@@ -1,0 +1,5 @@
+def function() = "function"
+function = "variable"
+
+assertEquals("variable", function)
+assertEquals("function", function())

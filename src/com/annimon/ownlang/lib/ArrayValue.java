@@ -6,10 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * Represents array type.
+ * 
  * @author aNNiMON
  */
-public final class ArrayValue implements Value, Iterable<Value> {
+public class ArrayValue implements Value, Iterable<Value> {
 
     public static ArrayValue of(byte[] array) {
         final int size = array.length;

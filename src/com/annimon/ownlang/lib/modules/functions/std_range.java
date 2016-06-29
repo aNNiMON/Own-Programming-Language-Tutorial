@@ -57,10 +57,6 @@ public final class std_range implements Function {
             this.from = from;
             this.to = to;
             this.step = step;
-            // x = range(0, 10, 2)
-            // 0, 2, 4, 6, 8    |  0..10 step 2
-            // 0, 3, 6, 9    |  0..10 step 3
-            // 0, 4, 8    |  0..10 step 4
             final long base = (from < to) ? (to - from) : (from - to);
             final long absStep = (step < 0) ? -step : step;
             this.size = (int) (base / absStep + (base % absStep == 0 ? 0 : 1));
@@ -147,6 +143,9 @@ public final class std_range implements Function {
                         value += stepInt;
                         return NumberValue.of(result);
                     }
+
+                    @Override
+                    public void remove() { }
                 };
             }
             return new Iterator<Value>() {
@@ -164,6 +163,9 @@ public final class std_range implements Function {
                     value += step;
                     return NumberValue.of(result);
                 }
+
+                @Override
+                public void remove() { }
             };
         }
 

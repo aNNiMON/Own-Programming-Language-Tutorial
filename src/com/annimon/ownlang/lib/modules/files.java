@@ -280,8 +280,7 @@ public final class files implements Module {
             } else {
                 time = (long) args[1].asNumber();
             }
-            fileInfo.file.setLastModified(time);
-            return NumberValue.ONE;
+            return NumberValue.fromBoolean(fileInfo.file.setLastModified(time));
         }
     }
 

@@ -43,6 +43,7 @@ public final class Parser {
         assignOperator.put(TokenType.LTLTEQ, BinaryExpression.Operator.LSHIFT);
         assignOperator.put(TokenType.GTGTEQ, BinaryExpression.Operator.RSHIFT);
         assignOperator.put(TokenType.GTGTGTEQ, BinaryExpression.Operator.URSHIFT);
+        assignOperator.put(TokenType.ATEQ, BinaryExpression.Operator.AT);
     }
 
     private final List<Token> tokens;
@@ -445,7 +446,9 @@ public final class Parser {
             final Expression falseExpr = expression();
             return new TernaryExpression(result, trueExpr, falseExpr);
         }
-        
+        if (match(TokenType.QUESTIONCOLON)) {
+            return new BinaryExpression(BinaryExpression.Operator.ELVIS, result, expression());
+        }
         return result;
     }
     
@@ -574,6 +577,10 @@ public final class Parser {
                 expression = new BinaryExpression(BinaryExpression.Operator.URSHIFT, expression, additive());
                 continue;
             }
+            if (match(TokenType.DOTDOT)) {
+                expression = new BinaryExpression(BinaryExpression.Operator.RANGE, expression, additive());
+                continue;
+            }
             break;
         }
         
@@ -596,6 +603,10 @@ public final class Parser {
                 result = new BinaryExpression(BinaryExpression.Operator.PUSH, result, multiplicative());
                 continue;
             }
+            if (match(TokenType.AT)) {
+                result = new BinaryExpression(BinaryExpression.Operator.AT, result, multiplicative());
+                continue;
+            }
             break;
         }
         
@@ -616,6 +627,10 @@ public final class Parser {
             }
             if (match(TokenType.PERCENT)) {
                 result = new BinaryExpression(BinaryExpression.Operator.REMAINDER, result, unary());
+                continue;
+            }
+            if (match(TokenType.STARSTAR)) {
+                result = new BinaryExpression(BinaryExpression.Operator.POWER, result, unary());
                 continue;
             }
             break;

@@ -75,6 +75,12 @@ public final class Lexer {
         OPERATORS.put("<<", TokenType.LTLT);
         OPERATORS.put(">>", TokenType.GTGT);
         OPERATORS.put(">>>", TokenType.GTGTGT);
+
+        OPERATORS.put("@", TokenType.AT);
+        OPERATORS.put("@=", TokenType.ATEQ);
+        OPERATORS.put("..", TokenType.DOTDOT);
+        OPERATORS.put("**", TokenType.STARSTAR);
+        OPERATORS.put("?:", TokenType.QUESTIONCOLON);
     }
     
     private static final Map<String, TokenType> KEYWORDS;

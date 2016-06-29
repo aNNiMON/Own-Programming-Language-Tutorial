@@ -29,7 +29,13 @@ public final class BinaryExpression implements Expression {
         XOR("^"),
         LSHIFT("<<"),
         RSHIFT(">>"),
-        URSHIFT(">>>");
+        URSHIFT(">>>"),
+
+        // Addition operators for future usage or overloading
+        AT("@"),
+        RANGE(".."),
+        POWER("**"),
+        ELVIS("?:");
         
         private final String name;
 

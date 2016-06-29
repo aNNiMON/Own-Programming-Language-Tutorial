@@ -44,9 +44,15 @@ foreach(arr, def(v) {
   print v
 })
 
-println "\n\nfunctional loop on map"
+println "\n\nFunctional loop on map"
 foreach(object, ::echo)
 foreach(object, def(k, v) {
   print " " + k + " : " + v
 })
 println ""
+
+// Range loop
+println "\n\nRange loop"
+for x : range(10) {
+  print x
+}

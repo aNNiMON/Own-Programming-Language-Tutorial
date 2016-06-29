@@ -120,7 +120,7 @@ public final class Lexer {
         while (pos < length) {
             final char current = peek(0);
             if (Character.isDigit(current)) tokenizeNumber();
-            else if (Character.isJavaIdentifierStart(current)) tokenizeWord();
+            else if (isOwnLangIdentifierStart(current)) tokenizeWord();
             else if (current == '`') tokenizeExtendedWord();
             else if (current == '"') tokenizeText();
             else if (current == '#') {
@@ -208,9 +208,10 @@ public final class Lexer {
     
     private void tokenizeWord() {
         clearBuffer();
-        char current = peek(0);
+        buffer.append(peek(0));
+        char current = next();
         while (true) {
-            if (!Character.isLetterOrDigit(current) && (current != '_')  && (current != '$')) {
+            if (!isOwnLangIdentifierPart(current)) {
                 break;
             }
             buffer.append(current);
@@ -224,7 +225,7 @@ public final class Lexer {
             addToken(TokenType.WORD, word);
         }
     }
-    
+
     private void tokenizeExtendedWord() {
         next();// skip `
         clearBuffer();
@@ -305,6 +306,14 @@ public final class Lexer {
         }
         next(); // *
         next(); // /
+    }
+
+    private boolean isOwnLangIdentifierStart(char current) {
+        return (Character.isLetter(current) || (current == '_') || (current == '$'));
+    }
+
+    private boolean isOwnLangIdentifierPart(char current) {
+        return (Character.isLetterOrDigit(current) || (current == '_') || (current == '$'));
     }
     
     private void clearBuffer() {

@@ -122,6 +122,34 @@ public class LexerTest {
         String input = "/* 1234 \n";
         Lexer.tokenize(input);
     }
+
+    @Test(expected = LexerException.class)
+    public void testExtendedWordError() {
+        String input = "` 1234";
+        Lexer.tokenize(input);
+    }
+
+    @Test
+    public void testUnicodeCharacterIdentifier() {
+        String input = "€ = 1";
+        List<Token> expList = list(EQ, NUMBER);
+        List<Token> result = Lexer.tokenize(input);
+        assertTokens(expList, result);
+    }
+
+    @Test
+    public void testUnicodeCharacterExtendedWordIdentifier() {
+        String input = "`€` = 1";
+        List<Token> expList = list(WORD, EQ, NUMBER);
+        List<Token> result = Lexer.tokenize(input);
+        assertTokens(expList, result);
+    }
+
+    @Test
+    public void testUnicodeCharacterEOF() {
+        String input = "€";
+        assertTrue(Lexer.tokenize(input).isEmpty());
+    }
     
     private static void assertTokens(List<Token> expList, List<Token> result) {
         final int length = expList.size();

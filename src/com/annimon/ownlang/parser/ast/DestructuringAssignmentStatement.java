@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author aNNiMON
  */
-public final class DestructuringAssignmentStatement implements Statement {
+public final class DestructuringAssignmentStatement extends InterruptableNode implements Statement {
     
     public final List<String> variables;
     public final Expression containerExpression;
@@ -25,6 +25,7 @@ public final class DestructuringAssignmentStatement implements Statement {
     
     @Override
     public void execute() {
+        super.interruptionCheck();
         final Value container = containerExpression.eval();
         switch (container.type()) {
             case Types.ARRAY:

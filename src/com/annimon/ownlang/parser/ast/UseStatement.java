@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.modules.Module;
  *
  * @author aNNiMON
  */
-public final class UseStatement implements Statement {
+public final class UseStatement extends InterruptableNode implements Statement {
 
     private static final String PACKAGE = "com.annimon.ownlang.lib.modules.";
     
@@ -18,6 +18,7 @@ public final class UseStatement implements Statement {
     
     @Override
     public void execute() {
+        super.interruptionCheck();
         try {
             final String moduleName = expression.eval().asString();
             final Module module = (Module) Class.forName(PACKAGE + moduleName).newInstance();

@@ -4,7 +4,7 @@ package com.annimon.ownlang.parser.ast;
  *
  * @author aNNiMON
  */
-public final class IfStatement implements Statement {
+public final class IfStatement extends InterruptableNode implements Statement {
     
     public final Expression expression;
     public final Statement ifStatement, elseStatement;
@@ -17,6 +17,7 @@ public final class IfStatement implements Statement {
     
     @Override
     public void execute() {
+        super.interruptionCheck();
         final int result = expression.eval().asInt();
         if (result != 0) {
             ifStatement.execute();

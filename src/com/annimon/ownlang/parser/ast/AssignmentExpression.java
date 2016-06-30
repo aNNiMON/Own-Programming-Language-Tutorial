@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.Value;
  *
  * @author aNNiMON
  */
-public final class AssignmentExpression implements Expression, Statement {
+public final class AssignmentExpression extends InterruptableNode implements Expression, Statement {
 
     public final Accessible target;
     public final BinaryExpression.Operator operation;
@@ -25,6 +25,7 @@ public final class AssignmentExpression implements Expression, Statement {
 
     @Override
     public Value eval() {
+        super.interruptionCheck();
         if (operation == null) {
             // Simple assignment
             return target.set(expression.eval());

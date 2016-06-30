@@ -4,7 +4,7 @@ package com.annimon.ownlang.parser.ast;
  *
  * @author aNNiMON
  */
-public final class DoWhileStatement implements Statement {
+public final class DoWhileStatement extends InterruptableNode implements Statement {
     
     public final Expression condition;
     public final Statement statement;
@@ -16,6 +16,7 @@ public final class DoWhileStatement implements Statement {
     
     @Override
     public void execute() {
+        super.interruptionCheck();
         do {
             try {
                 statement.execute();

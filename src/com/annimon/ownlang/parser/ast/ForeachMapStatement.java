@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author aNNiMON
  */
-public final class ForeachMapStatement implements Statement {
+public final class ForeachMapStatement extends InterruptableNode implements Statement {
     
     public final String key, value;
     public final Expression container;
@@ -23,6 +23,7 @@ public final class ForeachMapStatement implements Statement {
 
     @Override
     public void execute() {
+        super.interruptionCheck();
         final Value previousVariableValue1 = Variables.isExists(key) ? Variables.get(key) : null;
         final Value previousVariableValue2 = Variables.isExists(value) ? Variables.get(value) : null;
         final Iterable<Map.Entry<Value, Value>> iterator = (Iterable<Map.Entry<Value, Value>>) container.eval();

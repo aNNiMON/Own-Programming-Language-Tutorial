@@ -1,6 +1,7 @@
 package com.annimon.ownlang;
 
 import com.annimon.ownlang.exceptions.LexerException;
+import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.parser.Beautifier;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Linter;
@@ -167,7 +168,7 @@ public final class Main {
         final Statement program;
         if (options.optimizationLevel > 0) {
             measurement.start("Optimization time");
-            program = Optimizer.optimize(parsedProgram, options.optimizationLevel);
+            program = Optimizer.optimize(parsedProgram, options.optimizationLevel, options.showAst);
             measurement.stop("Optimization time");
             if (options.showAst) {
                 System.out.println(program.toString());
@@ -179,6 +180,8 @@ public final class Main {
         try {
             measurement.start("Execution time");
             program.execute();
+        } catch (StoppedException ex) {
+            // skip
         } catch (Exception ex) {
             Console.handleException(Thread.currentThread(), ex);
         } finally {
@@ -220,6 +223,8 @@ public final class Main {
                 program.execute();
             } catch (LexerException lex) {
                 continue;
+            } catch (StoppedException ex) {
+                // skip
             } catch (Exception ex) {
                 Console.handleException(Thread.currentThread(), ex);
             }

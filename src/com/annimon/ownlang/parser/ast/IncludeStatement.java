@@ -12,16 +12,17 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class IncludeStatement implements Statement {
+public final class IncludeStatement extends InterruptableNode implements Statement {
 
     public final Expression expression;
     
     public IncludeStatement(Expression expression) {
         this.expression = expression;
     }
-    
+
     @Override
     public void execute() {
+        super.interruptionCheck();
         try {
             final Statement program = loadProgram(expression.eval().asString());
             if (program != null) {

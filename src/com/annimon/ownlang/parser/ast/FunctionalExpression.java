@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class FunctionalExpression implements Expression, Statement {
+public final class FunctionalExpression extends InterruptableNode implements Expression, Statement {
     
     public final Expression functionExpr;
     public final List<Expression> arguments;
@@ -32,6 +32,7 @@ public final class FunctionalExpression implements Expression, Statement {
     
     @Override
     public Value eval() {
+        super.interruptionCheck();
         final int size = arguments.size();
         final Value[] values = new Value[size];
         for (int i = 0; i < size; i++) {

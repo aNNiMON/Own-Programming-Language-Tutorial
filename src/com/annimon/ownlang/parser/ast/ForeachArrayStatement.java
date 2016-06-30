@@ -7,7 +7,7 @@ import com.annimon.ownlang.lib.Variables;
  *
  * @author aNNiMON
  */
-public final class ForeachArrayStatement implements Statement {
+public final class ForeachArrayStatement extends InterruptableNode implements Statement {
     
     public final String variable;
     public final Expression container;
@@ -21,6 +21,7 @@ public final class ForeachArrayStatement implements Statement {
 
     @Override
     public void execute() {
+        super.interruptionCheck();
         final Value previousVariableValue = Variables.isExists(variable) ? Variables.get(variable) : null;
         final Iterable<Value> iterator = (Iterable<Value>) container.eval();
         for (Value value : iterator) {

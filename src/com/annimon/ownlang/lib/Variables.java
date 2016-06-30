@@ -32,18 +32,18 @@ public final class Variables {
 
     private static volatile Scope scope;
     static {
-        scope = new Scope();
         Variables.clear();
-    }
-    
-    public static void clear() {
-        scope.variables.clear();
-        scope.variables.put("true", NumberValue.ONE);
-        scope.variables.put("false", NumberValue.ZERO);
     }
 
     public static Map<String, Value> variables() {
         return scope.variables;
+    }
+
+    public static void clear() {
+        scope = new Scope();
+        scope.variables.clear();
+        scope.variables.put("true", NumberValue.ONE);
+        scope.variables.put("false", NumberValue.ZERO);
     }
     
     public static void push() {

@@ -7,7 +7,7 @@ import com.annimon.ownlang.lib.Value;
  * 
  * @author aNNiMON
  */
-public final class ExprStatement implements Expression, Statement {
+public final class ExprStatement extends InterruptableNode implements Expression, Statement {
     
     public final Expression expr;
     
@@ -17,14 +17,15 @@ public final class ExprStatement implements Expression, Statement {
 
     @Override
     public void execute() {
+        super.interruptionCheck();
         expr.eval();
     }
-
+    
     @Override
     public Value eval() {
         return expr.eval();
     }
-    
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);

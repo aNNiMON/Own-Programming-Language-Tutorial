@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class BlockStatement implements Statement {
+public final class BlockStatement extends InterruptableNode implements Statement {
     
     public final List<Statement> statements;
 
@@ -21,6 +21,7 @@ public final class BlockStatement implements Statement {
 
     @Override
     public void execute() {
+        super.interruptionCheck();
         for (Statement statement : statements) {
             statement.execute();
         }

@@ -13,7 +13,7 @@ import com.annimon.ownlang.parser.optimization.SummaryOptimization;
 
 public final class Optimizer {
 
-    public static Statement optimize(Statement statement, int level) {
+    public static Statement optimize(Statement statement, int level, boolean showSummary) {
         if (level == 0) return statement;
 
         final Optimizable optimization = new SummaryOptimization(new Optimizable[] {
@@ -32,13 +32,16 @@ public final class Optimizer {
                 result = optimization.optimize(result);
                 iteration++;
             } while (lastModifications != optimization.optimizationsCount());
-            Console.print("Performs " + iteration + " optimization iterations");
+            if (showSummary)
+                Console.print("Performs " + iteration + " optimization iterations");
         } else {
             for (int i = 0; i < level; i++) {
                 result = optimization.optimize(result);
             }
         }
-        Console.println(optimization.summaryInfo());
+        if (showSummary) {
+            Console.println(optimization.summaryInfo());
+        }
         return (Statement) result;
     }
 }

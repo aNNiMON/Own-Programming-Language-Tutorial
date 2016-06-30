@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class MatchExpression implements Expression, Statement {
+public final class MatchExpression extends InterruptableNode implements Expression, Statement {
 
     public final Expression expression;
     public final List<Pattern> patterns;
@@ -31,6 +31,7 @@ public final class MatchExpression implements Expression, Statement {
 
     @Override
     public Value eval() {
+        super.interruptionCheck();
         final Value value = expression.eval();
         for (Pattern p : patterns) {
             if (p instanceof ConstantPattern) {
@@ -239,7 +240,7 @@ public final class MatchExpression implements Expression, Statement {
         public List<String> parts;
 
         public ListPattern() {
-            this(new ArrayList<String>());
+            this(new ArrayList<>());
         }
 
         public ListPattern(List<String> parts) {

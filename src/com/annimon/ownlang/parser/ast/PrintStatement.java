@@ -6,7 +6,7 @@ import com.annimon.ownlang.Console;
  *
  * @author aNNiMON
  */
-public final class PrintStatement implements Statement {
+public final class PrintStatement extends InterruptableNode implements Statement {
     
     public final Expression expression;
 
@@ -16,6 +16,7 @@ public final class PrintStatement implements Statement {
 
     @Override
     public void execute() {
+        super.interruptionCheck();
         Console.print(expression.eval().asString());
     }
     

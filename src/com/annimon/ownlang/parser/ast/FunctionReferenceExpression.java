@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.*;
  *
  * @author aNNiMON
  */
-public final class FunctionReferenceExpression implements Expression {
+public final class FunctionReferenceExpression extends InterruptableNode implements Expression {
 
     public final String name;
 
@@ -16,6 +16,7 @@ public final class FunctionReferenceExpression implements Expression {
 
     @Override
     public FunctionValue eval() {
+        super.interruptionCheck();
         return new FunctionValue(Functions.get(name));
     }
     

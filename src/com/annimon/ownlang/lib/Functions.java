@@ -14,7 +14,11 @@ public final class Functions {
     static {
         functions = new HashMap<>();
     }
-    
+
+    public static void clear() {
+        functions.clear();
+    }
+
     public static Map<String, Function> getFunctions() {
         return functions;
     }

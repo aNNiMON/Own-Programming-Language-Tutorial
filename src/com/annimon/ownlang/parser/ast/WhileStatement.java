@@ -4,7 +4,7 @@ package com.annimon.ownlang.parser.ast;
  *
  * @author aNNiMON
  */
-public final class WhileStatement implements Statement {
+public final class WhileStatement extends InterruptableNode implements Statement {
     
     public final Expression condition;
     public final Statement statement;
@@ -16,6 +16,7 @@ public final class WhileStatement implements Statement {
     
     @Override
     public void execute() {
+        super.interruptionCheck();
         while (condition.eval().asInt() != 0) {
             try {
                 statement.execute();

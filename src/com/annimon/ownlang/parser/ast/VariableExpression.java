@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.Variables;
  *
  * @author aNNiMON
  */
-public final class VariableExpression implements Expression, Accessible {
+public final class VariableExpression extends InterruptableNode implements Expression, Accessible {
     
     public final String name;
     
@@ -18,6 +18,7 @@ public final class VariableExpression implements Expression, Accessible {
 
     @Override
     public Value eval() {
+        super.interruptionCheck();
         return get();
     }
     

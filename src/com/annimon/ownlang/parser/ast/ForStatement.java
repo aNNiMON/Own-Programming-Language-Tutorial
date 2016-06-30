@@ -4,7 +4,7 @@ package com.annimon.ownlang.parser.ast;
  *
  * @author aNNiMON
  */
-public final class ForStatement implements Statement {
+public final class ForStatement extends InterruptableNode implements Statement {
     
     public final Statement initialization;
     public final Expression termination;
@@ -20,6 +20,7 @@ public final class ForStatement implements Statement {
 
     @Override
     public void execute() {
+        super.interruptionCheck();
         for (initialization.execute(); termination.eval().asInt() != 0; increment.execute()) {
             try {
                 statement.execute();

@@ -54,7 +54,7 @@ public class ProgramsTest {
     @Before
     public void initialize() {
         Variables.clear();
-        Functions.getFunctions().clear();
+        Functions.clear();
         // Let's mock junit methods as ounit functions
         Functions.set("assertEquals", (args) -> {
             assertEquals(args[0], args[1]);

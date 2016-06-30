@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public final class Main {
     
-    private static final String VERSION = "1.1.0";
+    private static final String VERSION = "1.2.0";
 
     private static String[] ownlangArgs = new String[0];
 
@@ -34,11 +34,11 @@ public final class Main {
         if (args.length == 0) {
             try {
                 final Options options = new Options();
-                options.showAst = true;
-                options.showTokens = true;
-                options.showMeasurements = true;
+                options.showAst = false;
+                options.showTokens = false;
+                options.showMeasurements = false;
                 options.lintMode = false;
-                options.optimizationLevel = 2;
+                options.optimizationLevel = 0;
                 run(SourceLoader.readSource("program.own"), options);
             } catch (IOException ioe) {
                 System.out.println("OwnLang version " + VERSION + "\n\n" +
@@ -243,7 +243,7 @@ public final class Main {
             showAst = false;
             showMeasurements = false;
             lintMode = false;
-            optimizationLevel = 1;
+            optimizationLevel = 0;
         }
 
         public void validate() {

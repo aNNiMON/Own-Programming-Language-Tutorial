@@ -203,7 +203,7 @@ public final class Lexer {
         clearBuffer();
         while (true) {
             final String text = buffer.toString();
-            if (!OPERATORS.containsKey(text + current) && !text.isEmpty()) {
+            if (!text.isEmpty() && !OPERATORS.containsKey(text + current)) {
                 addToken(OPERATORS.get(text));
                 return;
             }
@@ -237,9 +237,9 @@ public final class Lexer {
         clearBuffer();
         char current = peek(0);
         while (true) {
+            if (current == '`') break;
             if (current == '\0') throw error("Reached end of file while parsing extended word.");
             if (current == '\n' || current == '\r') throw error("Reached end of line while parsing extended word.");
-            if (current == '`') break;
             buffer.append(current);
             current = next();
         }
@@ -252,7 +252,6 @@ public final class Lexer {
         clearBuffer();
         char current = peek(0);
         while (true) {
-            if (current == '\0') throw error("Reached end of file while parsing text string.");
             if (current == '\\') {
                 current = next();
                 switch (current) {
@@ -288,6 +287,7 @@ public final class Lexer {
                 continue;
             }
             if (current == '"') break;
+            if (current == '\0') throw error("Reached end of file while parsing text string.");
             buffer.append(current);
             current = next();
         }
@@ -306,8 +306,8 @@ public final class Lexer {
     private void tokenizeMultilineComment() {
         char current = peek(0);
         while (true) {
-            if (current == '\0') throw error("Reached end of file while parsing multiline comment");
             if (current == '*' && peek(1) == '/') break;
+            if (current == '\0') throw error("Reached end of file while parsing multiline comment");
             current = next();
         }
         next(); // *

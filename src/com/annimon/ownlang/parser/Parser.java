@@ -6,6 +6,7 @@ import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,10 @@ public final class Parser {
     }
     
     private static final Token EOF = new Token(TokenType.EOF, "", -1, -1);
-    
-    private static final Map<TokenType, BinaryExpression.Operator> assignOperator;
+
+    private static final EnumMap<TokenType, BinaryExpression.Operator> assignOperator;
     static {
-        assignOperator = new HashMap<>(BinaryExpression.Operator.values().length + 1);
+        assignOperator = new EnumMap(TokenType.class);
         assignOperator.put(TokenType.EQ, null);
         assignOperator.put(TokenType.PLUSEQ, BinaryExpression.Operator.ADD);
         assignOperator.put(TokenType.MINUSEQ, BinaryExpression.Operator.SUBTRACT);

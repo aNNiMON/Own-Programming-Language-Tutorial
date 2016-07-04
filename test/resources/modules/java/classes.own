@@ -1,0 +1,49 @@
+use "std"
+use "java"
+
+def testCheckNull() {
+  assertTrue(isNull(null))
+  assertFalse(isNull(`byte[].class`))
+  assertTrue(null == null)
+}
+
+def testFieldAccess() {
+  data = createObject()
+  assertEquals(3228, data.intValue)
+  assertEquals([1, 2, 3], data.intArrayValue)
+  assertTrue(isNull(data.nullObject))
+  assertEquals("str", data.stringValue)
+  assertEquals(["abc", "test"], data.stringArrayValue)
+  assertObjectArray(data.objectArray)
+}
+
+def testCast() {
+  data = createObject()
+  assertObjectArray( `Object[].class`.cast(data.compoundObject) )
+}
+
+def testInvokeMethod() {
+  data = createObject()
+  data.method()
+  assertEquals("result", data.methodWithResult())
+}
+
+def testInvokeMethodSameName() {
+  data = createObject()
+  data.set(1)
+  data.set("text")
+
+  assertEquals(1, data.getValue())
+  assertEquals("text", data.getText())
+}
+
+
+def createObject() {
+  dataClass = newClass("interop.Data")
+  return dataClass.new()
+}
+
+def assertObjectArray(obj) {
+  assertEquals(5, length(obj))
+  assertEquals([3228, [1, 2, 3], null, "str", ["abc", "test"]], obj)
+}

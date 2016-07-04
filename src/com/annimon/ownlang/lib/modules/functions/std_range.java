@@ -82,9 +82,9 @@ public final class std_range implements Function {
 
         private boolean isIntegerRange() {
             if (to > 0) {
-                return (to < Integer.MAX_VALUE) && (from > Integer.MIN_VALUE && to < Integer.MAX_VALUE);
+                return (from > Integer.MIN_VALUE && to < Integer.MAX_VALUE);
             }
-            return (to > Integer.MIN_VALUE) && (to > Integer.MIN_VALUE && from < Integer.MAX_VALUE);
+            return (to > Integer.MIN_VALUE && from < Integer.MAX_VALUE);
         }
 
         @Override

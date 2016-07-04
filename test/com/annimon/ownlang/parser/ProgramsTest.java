@@ -73,7 +73,7 @@ public class ProgramsTest {
             return NumberValue.ONE;
         });
         Functions.set("assertFalse", (args) -> {
-            assertFalse(args[0].asInt() == 0);
+            assertFalse(args[0].asInt() != 0);
             return NumberValue.ONE;
         });
     }

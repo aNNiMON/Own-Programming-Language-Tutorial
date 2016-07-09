@@ -17,6 +17,6 @@ public final class Types {
         if (FIRST <= type && type <= LAST) {
             return NAMES[type];
         }
-        return "unknown";
+        return "unknown (" + type + ")";
     }
 }

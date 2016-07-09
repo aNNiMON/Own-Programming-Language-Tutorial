@@ -197,7 +197,7 @@ public final class jdbc implements Module {
         private final PreparedStatement ps;
 
         public StatementValue(Statement statement) {
-            super(50);
+            super(55);
             this.statement = statement;
             if (statement instanceof PreparedStatement) {
                 ps = (PreparedStatement) statement;
@@ -208,6 +208,7 @@ public final class jdbc implements Module {
         }
 
         private void init() {
+            set(new StringValue("addBatch"), new FunctionValue(this::addBatch));
             set(new StringValue("execute"), new FunctionValue(this::execute));
             set(new StringValue("executeQuery"), new FunctionValue(this::executeQuery));
             set(new StringValue("executeUpdate"), new FunctionValue(this::executeUpdate));
@@ -240,7 +241,6 @@ public final class jdbc implements Module {
             set(new StringValue("getResultSetType"), intFunction(statement::getResultSetType));
             set(new StringValue("getUpdateCount"), intFunction(statement::getUpdateCount));
 
-            set(new StringValue("addBatch"), updateData(statement::addBatch, (args) -> args[0].asString()));
             set(new StringValue("setCursorName"), updateData(statement::setCursorName, (args) -> args[0].asString()));
             set(new StringValue("setEscapeProcessing"), updateData(statement::setEscapeProcessing, (args) -> args[0].asInt() != 0));
             set(new StringValue("setLargeMaxRows"), updateData(statement::setLargeMaxRows, (args) -> getNumber(args[0]).longValue()));
@@ -249,6 +249,8 @@ public final class jdbc implements Module {
             set(new StringValue("getResultSet"), objectFunction(statement::getResultSet, ResultSetValue::new));
 
             if (ps != null) {
+                set(new StringValue("clearParameters"), voidFunction(ps::clearParameters));
+
                 set(new StringValue("setBigDecimal"), updateData(ps::setBigDecimal, (args) -> new BigDecimal(args[1].asString())));
                 set(new StringValue("setBoolean"), updateData(ps::setBoolean, (args) -> args[1].asInt() != 0));
                 set(new StringValue("setByte"), updateData(ps::setByte, (args) -> getNumber(args[1]).byteValue()));
@@ -274,9 +276,23 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value execute(Value... args) {
-            Arguments.checkOrOr(1, 2, args.length);
+        private Value addBatch(Value... args) {
+            if (ps != null) Arguments.checkOrOr(0, 1, args.length);
+            else Arguments.check(1, args.length);
             try {
+                if (args.length == 0 && ps != null) ps.addBatch();
+                else statement.addBatch(args[0].asString());
+                return NumberValue.ONE;
+            } catch (SQLException sqlex) {
+                throw new RuntimeException(sqlex);
+            }
+        }
+
+        private Value execute(Value... args) {
+            if (ps != null) Arguments.checkRange(0, 2, args.length);
+            else Arguments.checkOrOr(1, 2, args.length);
+            try {
+                if (args.length == 0 && ps != null) return NumberValue.fromBoolean(ps.execute());
                 final String sql = args[0].asString();
                 if (args.length == 1) return NumberValue.fromBoolean(statement.execute(sql));
 
@@ -291,8 +307,10 @@ public final class jdbc implements Module {
         }
 
         private Value executeQuery(Value... args) {
-            Arguments.check(1, args.length);
+            if (ps != null) Arguments.checkOrOr(0, 1, args.length);
+            else Arguments.check(1, args.length);
             try {
+                if (args.length == 0 && ps != null) return new ResultSetValue(ps.executeQuery());
                 return new ResultSetValue(statement.executeQuery(args[0].asString()));
             } catch (SQLException sqlex) {
                 return NumberValue.ZERO;
@@ -300,8 +318,10 @@ public final class jdbc implements Module {
         }
 
         private Value executeUpdate(Value... args) {
-            Arguments.checkOrOr(1, 2, args.length);
+            if (ps != null) Arguments.checkRange(0, 2, args.length);
+            else Arguments.checkOrOr(1, 2, args.length);
             try {
+                if (args.length == 0 && ps != null) return NumberValue.of(ps.executeUpdate());
                 final String sql = args[0].asString();
                 if (args.length == 1) return NumberValue.of(statement.executeUpdate(sql));
 
@@ -316,8 +336,10 @@ public final class jdbc implements Module {
         }
 
         private Value executeLargeUpdate(Value... args) {
-            Arguments.checkOrOr(1, 2, args.length);
+            if (ps != null) Arguments.checkRange(0, 2, args.length);
+            else Arguments.checkOrOr(1, 2, args.length);
             try {
+                if (args.length == 0 && ps != null) return NumberValue.of(ps.executeLargeUpdate());
                 final String sql = args[0].asString();
                 if (args.length == 1) return NumberValue.of(statement.executeLargeUpdate(sql));
 

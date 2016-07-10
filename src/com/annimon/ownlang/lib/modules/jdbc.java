@@ -10,6 +10,7 @@ import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.Variables;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -34,6 +35,31 @@ public final class jdbc implements Module {
 
     @Override
     public void init() {
+        Variables.define("TRANSACTION_NONE", NumberValue.of(Connection.TRANSACTION_NONE));
+        Variables.define("TRANSACTION_READ_COMMITTED", NumberValue.of(Connection.TRANSACTION_READ_COMMITTED));
+        Variables.define("TRANSACTION_READ_UNCOMMITTED", NumberValue.of(Connection.TRANSACTION_READ_UNCOMMITTED));
+        Variables.define("TRANSACTION_REPEATABLE_READ", NumberValue.of(Connection.TRANSACTION_REPEATABLE_READ));
+        Variables.define("TRANSACTION_SERIALIZABLE", NumberValue.of(Connection.TRANSACTION_SERIALIZABLE));
+
+        Variables.define("CLOSE_ALL_RESULTS", NumberValue.of(Statement.CLOSE_ALL_RESULTS));
+        Variables.define("CLOSE_CURRENT_RESULT", NumberValue.of(Statement.CLOSE_CURRENT_RESULT));
+        Variables.define("EXECUTE_FAILED", NumberValue.of(Statement.EXECUTE_FAILED));
+        Variables.define("KEEP_CURRENT_RESULT", NumberValue.of(Statement.KEEP_CURRENT_RESULT));
+        Variables.define("NO_GENERATED_KEYS", NumberValue.of(Statement.NO_GENERATED_KEYS));
+        Variables.define("RETURN_GENERATED_KEYS", NumberValue.of(Statement.RETURN_GENERATED_KEYS));
+        Variables.define("SUCCESS_NO_INFO", NumberValue.of(Statement.SUCCESS_NO_INFO));
+
+        Variables.define("CLOSE_CURSORS_AT_COMMIT", NumberValue.of(ResultSet.CLOSE_CURSORS_AT_COMMIT));
+        Variables.define("CONCUR_READ_ONLY", NumberValue.of(ResultSet.CONCUR_READ_ONLY));
+        Variables.define("CONCUR_UPDATABLE", NumberValue.of(ResultSet.CONCUR_UPDATABLE));
+        Variables.define("FETCH_FORWARD", NumberValue.of(ResultSet.FETCH_FORWARD));
+        Variables.define("FETCH_REVERSE", NumberValue.of(ResultSet.FETCH_REVERSE));
+        Variables.define("FETCH_UNKNOWN", NumberValue.of(ResultSet.FETCH_UNKNOWN));
+        Variables.define("HOLD_CURSORS_OVER_COMMIT", NumberValue.of(ResultSet.HOLD_CURSORS_OVER_COMMIT));
+        Variables.define("TYPE_FORWARD_ONLY", NumberValue.of(ResultSet.TYPE_FORWARD_ONLY));
+        Variables.define("TYPE_SCROLL_INSENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_INSENSITIVE));
+        Variables.define("TYPE_SCROLL_SENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_SENSITIVE));
+
         Functions.set("getConnection", getConnectionFunction());
         Functions.set("sqlite", getConnectionFunction("jdbc:sqlite:"));
         Functions.set("mysql", getConnectionFunction("jdbc:", () -> Class.forName("com.mysql.jdbc.Driver")));
@@ -75,21 +101,6 @@ public final class jdbc implements Module {
                 throw new RuntimeException(ex);
             }
         };
-    }
-
-    private static Value getConnection(Value... args) {
-        try {
-            switch (args.length) {
-                case 1:
-                    return new ConnectionValue(getConnection(args[0].asString()));
-                case 3:
-                    return new ConnectionValue(getConnection(args[0].asString(), args[1].asString(), args[2].asString()));
-                default:
-                    throw new ArgumentsMismatchException("Wrong number of arguments");
-            }
-        } catch (SQLException sqlex) {
-            throw new RuntimeException(sqlex);
-        }
     }
 
     private static Connection getConnection(String url) throws SQLException {
@@ -247,6 +258,9 @@ public final class jdbc implements Module {
             set(new StringValue("setPoolable"), updateData(statement::setPoolable, (args) -> args[0].asInt() != 0));
 
             set(new StringValue("getResultSet"), objectFunction(statement::getResultSet, ResultSetValue::new));
+            set(new StringValue("getGeneratedKeys"), objectFunction(statement::getGeneratedKeys, ResultSetValue::new));
+            set(new StringValue("executeBatch"), objectFunction(statement::executeBatch, jdbc::intArrayToValue));
+            set(new StringValue("executeLargeBatch"), objectFunction(statement::executeLargeBatch, jdbc::longArrayToValue));
 
             if (ps != null) {
                 set(new StringValue("clearParameters"), voidFunction(ps::clearParameters));
@@ -727,6 +741,22 @@ public final class jdbc implements Module {
         final byte[] result = new byte[size];
         for (int i = 0; i < size; i++) {
             result[i] = getNumber(array.get(i)).byteValue();
+        }
+        return result;
+    }
+
+    private static Value intArrayToValue(int[] array) {
+        final ArrayValue result = new ArrayValue(array.length);
+        for (int i = 0; i < array.length; i++) {
+            result.set(i, NumberValue.of(array[i]));
+        }
+        return result;
+    }
+
+    private static Value longArrayToValue(long[] array) {
+        final ArrayValue result = new ArrayValue(array.length);
+        for (int i = 0; i < array.length; i++) {
+            result.set(i, NumberValue.of(array[i]));
         }
         return result;
     }

@@ -1,5 +1,11 @@
 # OwnLang
 
+[![Build Status](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial.svg?branch=latest)](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial)
+
+| Free | Pro | Desktop |
+| :--: | :-: | :-----: |
+| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v1.2.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v1.2.0)
+
 OwnLang - dynamic functional programming language inspired by Scala and Python. Available for PC, Android and Java ME devices.
 
 ## Key features

@@ -29,9 +29,10 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(AssignmentExpression s, T t) {
-        final Node node = s.expression.accept(this, t);
-        if (node != s.expression) {
-            return new AssignmentExpression(s.operation, s.target, (Expression) node);
+        final Node exprNode = s.expression.accept(this, t);
+        final Node targetNode = s.target.accept(this, t);
+        if ( (exprNode != s.expression || targetNode != s.target) && (targetNode instanceof Accessible) ) {
+            return new AssignmentExpression(s.operation, (Accessible) targetNode, (Expression) exprNode);
         }
         return s;
     }

@@ -208,6 +208,16 @@ public final class MatchExpression extends InterruptableNode implements Expressi
     public static abstract class Pattern {
         public Statement result;
         public Expression optCondition;
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder();
+            if (optCondition != null) {
+                sb.append(" if ").append(optCondition);
+            }
+            sb.append(": ").append(result);
+            return sb.toString();
+        }
     }
 
     public static class ConstantPattern extends Pattern {
@@ -219,7 +229,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
 
         @Override
         public String toString() {
-            return constant + ": " + result;
+            return constant.toString().concat(super.toString());
         }
     }
 
@@ -232,7 +242,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
 
         @Override
         public String toString() {
-            return variable + ": " + result;
+            return variable.concat(super.toString());
         }
     }
 
@@ -260,10 +270,10 @@ public final class MatchExpression extends InterruptableNode implements Expressi
                 while (it.hasNext()) {
                     sb.append(" :: ").append(it.next());
                 }
-                sb.append("]: ").append(result);
+                sb.append("]").append(super.toString());
                 return sb.toString();
             }
-            return "[]: " + result;
+            return "[]".concat(super.toString());
         }
     }
 
@@ -291,14 +301,14 @@ public final class MatchExpression extends InterruptableNode implements Expressi
             final Iterator<Expression> it = values.iterator();
             if (it.hasNext()) {
                 final StringBuilder sb = new StringBuilder();
-                sb.append("(").append(it.next());
+                sb.append('(').append(it.next());
                 while (it.hasNext()) {
                     sb.append(", ").append(it.next());
                 }
-                sb.append("): ").append(result);
+                sb.append(')').append(super.toString());
                 return sb.toString();
             }
-            return "(): " + result;
+            return "()".concat(super.toString());
         }
 
         private static final Expression ANY = new Expression() {
@@ -318,7 +328,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
 
             @Override
             public String toString() {
-                return "_";
+                return "_".concat(super.toString());
             }
         };
     }

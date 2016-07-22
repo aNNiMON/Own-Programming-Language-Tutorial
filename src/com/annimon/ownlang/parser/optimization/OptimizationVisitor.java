@@ -265,6 +265,28 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
                     }
                 }
             }
+            
+            if (pattern instanceof MatchExpression.TuplePattern) {
+                final MatchExpression.TuplePattern tuple = (MatchExpression.TuplePattern) pattern;
+                final List<Expression> newValues = new ArrayList<>(tuple.values.size());
+                boolean valuesChanged = false;
+                for (Expression value : tuple.values) {
+                    final Node node = value.accept(this, t);
+                    if (node != value) {
+                        valuesChanged = true;
+                        value = (Expression) node;
+                    }
+                    newValues.add(value);
+                }
+                if (valuesChanged) {
+                    changed = true;
+                    final Expression optCondition = pattern.optCondition;
+                    final Statement result = pattern.result;
+                    pattern = new MatchExpression.TuplePattern(newValues);
+                    pattern.optCondition = optCondition;
+                    pattern.result = result;
+                }
+            }
 
             final Node patternResult = pattern.result.accept(this, t);
             if (patternResult != pattern.result) {

@@ -4,12 +4,12 @@ import com.annimon.ownlang.exceptions.StoppedException;
 
 public abstract class InterruptableNode implements Node {
 
-    public static final int RUNNIMG = 0, PAUSED = 1, STOPPED = 2;
+    public static final int RUNNING = 0, PAUSED = 1, STOPPED = 2;
 
     private static volatile int state;
 
     public static void run() {
-        state = RUNNIMG;
+        state = RUNNING;
     }
 
     public static void pause() {
@@ -21,7 +21,7 @@ public abstract class InterruptableNode implements Node {
     }
 
     protected void interruptionCheck() {
-        if (state == RUNNIMG) return;
+        if (state == RUNNING) return;
         if (state == STOPPED) {
             throw new StoppedException();
         }

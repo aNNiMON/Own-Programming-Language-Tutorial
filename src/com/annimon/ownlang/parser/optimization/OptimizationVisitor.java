@@ -1,6 +1,8 @@
 package com.annimon.ownlang.parser.optimization;
 
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.parser.ast.*;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -246,11 +248,37 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         boolean changed = expression != s.expression;
         final List<MatchExpression.Pattern> patterns = new ArrayList<>(s.patterns.size());
         for (MatchExpression.Pattern pattern : s.patterns) {
+            if (pattern instanceof MatchExpression.VariablePattern) {
+                final String variable = ((MatchExpression.VariablePattern) pattern).variable;
+                final VariableExpression expr = new VariableExpression(variable);
+                final Node node = expr.accept(this, t);
+                if (node != expr) {
+                    if (isValue(node)) {
+                        changed = true;
+                        final Value value = ((ValueExpression) node).value;
+                        final Expression optCondition = pattern.optCondition;
+                        final Statement result = pattern.result;
+                        pattern = new MatchExpression.ConstantPattern(value);
+                        pattern.optCondition = optCondition;
+                        pattern.result = result;
+                    }
+                }
+            }
+
             final Node patternResult = pattern.result.accept(this, t);
             if (patternResult != pattern.result) {
                 changed = true;
                 pattern.result = consumeStatement(patternResult);
             }
+
+            if (pattern.optCondition != null) {
+                Node optCond = pattern.optCondition.accept(this, t);
+                if (optCond != pattern.optCondition) {
+                    changed = true;
+                    pattern.optCondition = (Expression) optCond;
+                }
+            }
+
             patterns.add(pattern);
         }
         if (changed) {

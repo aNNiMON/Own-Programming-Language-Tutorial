@@ -87,14 +87,6 @@ public final class canvasfx implements Module {
     }
 
     public static void initConstants() {
-    }
-
-    @Override
-    public void init() {
-        initConstants();
-        Functions.set("window", new CreateWindow());
-        Functions.set("repaint", new Repaint());
-        
         // Color class
         final Map<Value, Value> colors = Arrays.stream(Color.class.getDeclaredFields())
                 .filter(f -> Modifier.isStatic(f.getModifiers()))
@@ -110,6 +102,73 @@ public final class canvasfx implements Module {
         colors.put(new StringValue("hsb"), new FunctionValue(new hsbColor()));
         colors.put(new StringValue("web"), new FunctionValue(new webColor()));
         Variables.set("Color", new MapValue(colors));
+
+        final MapValue arcType = new MapValue(ArcType.values().length);
+        for (ArcType value : ArcType.values()) {
+            arcType.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("ArcType", arcType);
+
+        final MapValue fillRule = new MapValue(FillRule.values().length);
+        for (FillRule value : FillRule.values()) {
+            fillRule.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("FillRule", fillRule);
+
+        final MapValue blendMode = new MapValue(BlendMode.values().length);
+        for (BlendMode value : BlendMode.values()) {
+            blendMode.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("BlendMode", blendMode);
+
+        final MapValue lineCap = new MapValue(StrokeLineCap.values().length);
+        for (StrokeLineCap value : StrokeLineCap.values()) {
+            lineCap.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("StrokeLineCap", lineCap);
+
+        final MapValue lineJoin = new MapValue(StrokeLineJoin.values().length);
+        for (StrokeLineJoin value : StrokeLineJoin.values()) {
+            lineJoin.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("StrokeLineJoin", lineJoin);
+
+        final MapValue textAlignment = new MapValue(TextAlignment.values().length);
+        for (TextAlignment value : TextAlignment.values()) {
+            textAlignment.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("TextAlignment", textAlignment);
+
+        final MapValue vPos = new MapValue(VPos.values().length);
+        for (VPos value : VPos.values()) {
+            vPos.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("VPos", vPos);
+
+        final MapValue events = new MapValue(Events.values().length);
+        for (Events value : Events.values()) {
+            events.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("Events", events);
+
+        final MapValue mouseButton = new MapValue(MouseButton.values().length);
+        for (MouseButton value : MouseButton.values()) {
+            mouseButton.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("MouseButton", mouseButton);
+
+        final MapValue keyCodes = new MapValue(KeyCode.values().length);
+        for (KeyCode value : KeyCode.values()) {
+            keyCodes.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+        }
+        Variables.set("KeyCode", keyCodes);
+    }
+
+    @Override
+    public void init() {
+        initConstants();
+        Functions.set("window", new CreateWindow());
+        Functions.set("repaint", new Repaint());
         
         Functions.set("BlendEffect", new BlendEffect());
         Functions.set("BloomEffect", new BloomEffect());
@@ -130,66 +189,6 @@ public final class canvasfx implements Module {
         Functions.set("addEventFilter", new addEventFilter());
         Functions.set("addEventHandler", new addEventHandler());
         Functions.set("createImage", new createImage());
-
-        final MapValue arcType = new MapValue(ArcType.values().length);
-        for (ArcType value : ArcType.values()) {
-            arcType.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("ArcType", arcType);
-        
-        final MapValue fillRule = new MapValue(FillRule.values().length);
-        for (FillRule value : FillRule.values()) {
-            fillRule.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("FillRule", fillRule);
-        
-        final MapValue blendMode = new MapValue(BlendMode.values().length);
-        for (BlendMode value : BlendMode.values()) {
-            blendMode.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("BlendMode", blendMode);
-        
-        final MapValue lineCap = new MapValue(StrokeLineCap.values().length);
-        for (StrokeLineCap value : StrokeLineCap.values()) {
-            lineCap.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("StrokeLineCap", lineCap);
-        
-        final MapValue lineJoin = new MapValue(StrokeLineJoin.values().length);
-        for (StrokeLineJoin value : StrokeLineJoin.values()) {
-            lineJoin.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("StrokeLineJoin", lineJoin);
-        
-        final MapValue textAlignment = new MapValue(TextAlignment.values().length);
-        for (TextAlignment value : TextAlignment.values()) {
-            textAlignment.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("TextAlignment", textAlignment);
-        
-        final MapValue vPos = new MapValue(VPos.values().length);
-        for (VPos value : VPos.values()) {
-            vPos.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("VPos", vPos);
-        
-        final MapValue events = new MapValue(Events.values().length);
-        for (Events value : Events.values()) {
-            events.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("Events", events);
-        
-        final MapValue mouseButton = new MapValue(MouseButton.values().length);
-        for (MouseButton value : MouseButton.values()) {
-            mouseButton.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("MouseButton", mouseButton);
-        
-        final MapValue keyCodes = new MapValue(KeyCode.values().length);
-        for (KeyCode value : KeyCode.values()) {
-            keyCodes.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
-        }
-        Variables.set("KeyCode", keyCodes);
     }
     
     private static class ColorValue implements Value {

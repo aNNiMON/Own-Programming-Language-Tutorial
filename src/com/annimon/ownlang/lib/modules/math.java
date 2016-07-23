@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
@@ -10,12 +11,19 @@ import java.util.function.UnaryOperator;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class math implements Module {
 
     private static final DoubleFunction<NumberValue> doubleToNumber = NumberValue::of;
 
+    public static void initConstants() {
+        Variables.set("PI", NumberValue.of(Math.PI));
+        Variables.set("E", NumberValue.of(Math.E));
+    }
+
     @Override
     public void init() {
+        initConstants();
         Functions.set("abs", math::abs);
         Functions.set("acos", functionConvert(Math::acos));
         Functions.set("asin", functionConvert(Math::asin));
@@ -52,9 +60,6 @@ public final class math implements Module {
         Functions.set("toDegrees", functionConvert(Math::toDegrees));
         Functions.set("toRadians", functionConvert(Math::toRadians));
         Functions.set("ulp", functionConvert(Math::ulp, Math::ulp));
-
-        Variables.set("PI", NumberValue.of(Math.PI));
-        Variables.set("E", NumberValue.of(Math.E));
     }
 
     private static Value abs(Value... args) {

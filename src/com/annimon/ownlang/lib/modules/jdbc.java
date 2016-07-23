@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
@@ -31,10 +32,10 @@ import java.util.function.Function;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class jdbc implements Module {
 
-    @Override
-    public void init() {
+    public static void initConstants() {
         Variables.define("TRANSACTION_NONE", NumberValue.of(Connection.TRANSACTION_NONE));
         Variables.define("TRANSACTION_READ_COMMITTED", NumberValue.of(Connection.TRANSACTION_READ_COMMITTED));
         Variables.define("TRANSACTION_READ_UNCOMMITTED", NumberValue.of(Connection.TRANSACTION_READ_UNCOMMITTED));
@@ -59,7 +60,11 @@ public final class jdbc implements Module {
         Variables.define("TYPE_FORWARD_ONLY", NumberValue.of(ResultSet.TYPE_FORWARD_ONLY));
         Variables.define("TYPE_SCROLL_INSENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_INSENSITIVE));
         Variables.define("TYPE_SCROLL_SENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_SENSITIVE));
+    }
 
+    @Override
+    public void init() {
+        initConstants();
         Functions.set("getConnection", getConnectionFunction());
         Functions.set("sqlite", getConnectionFunction("jdbc:sqlite:"));
         Functions.set("mysql", getConnectionFunction("jdbc:", () -> Class.forName("com.mysql.jdbc.Driver")));

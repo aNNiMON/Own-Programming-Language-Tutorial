@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.text.DateFormat;
@@ -13,6 +14,7 @@ import java.util.Locale;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class date implements Module {
 
     private static final int DATE_DATE_FORMAT = 9829;
@@ -26,13 +28,16 @@ public final class date implements Module {
             SECOND = new StringValue("second"),
             MILLISECOND = new StringValue("millisecond");
 
-    @Override
-    public void init() {
+    public static void initConstants() {
         Variables.set("STYLE_FULL", NumberValue.of(DateFormat.FULL));
         Variables.set("STYLE_LONG", NumberValue.of(DateFormat.LONG));
         Variables.set("STYLE_MEDIUM", NumberValue.of(DateFormat.MEDIUM));
         Variables.set("STYLE_SHORT", NumberValue.of(DateFormat.SHORT));
+    }
 
+    @Override
+    public void init() {
+        initConstants();
         Functions.set("newDate", new date_newDate());
         Functions.set("newFormat", new date_newFormat());
         Functions.set("formatDate", new date_format());

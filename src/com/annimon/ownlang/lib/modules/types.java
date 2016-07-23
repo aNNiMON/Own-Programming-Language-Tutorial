@@ -1,22 +1,27 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 
 /**
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class types implements Module {
 
-    @Override
-    public void init() {
+    public static void initConstants() {
         Variables.set("OBJECT", NumberValue.of(Types.OBJECT));
         Variables.set("NUMBER", NumberValue.of(Types.NUMBER));
         Variables.set("STRING", NumberValue.of(Types.STRING));
         Variables.set("ARRAY", NumberValue.of(Types.ARRAY));
         Variables.set("MAP", NumberValue.of(Types.MAP));
         Variables.set("FUNCTION", NumberValue.of(Types.FUNCTION));
-        
+    }
+
+    @Override
+    public void init() {
+        initConstants();
         Functions.set("typeof", args -> NumberValue.of(args[0].type()));
         Functions.set("string", args -> new StringValue(args[0].asString()));
         Functions.set("number", args -> NumberValue.of(args[0].asNumber()));

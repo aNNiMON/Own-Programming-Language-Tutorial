@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.lib.modules.functions.robot_exec;
 import com.annimon.ownlang.lib.modules.functions.robot_fromclipboard;
@@ -15,6 +16,7 @@ import java.util.Map;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class robot implements Module {
     
     private static final int CLICK_DELAY = 200;
@@ -28,9 +30,22 @@ public final class robot implements Module {
     }
     
     private static Robot awtRobot;
-    
+
+    public static void initConstants() {
+        Variables.set("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
+        Variables.set("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
+        Variables.set("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
+        Variables.set("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
+        Variables.set("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
+
+        Variables.set("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK));
+        Variables.set("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK));
+        Variables.set("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK));
+    }
+
     @Override
     public void init() {
+        initConstants();
         initialize();
         
         Functions.set("click", convertFunction(robot::click));
@@ -59,16 +74,6 @@ public final class robot implements Module {
         Functions.set("fromClipboard", new robot_fromclipboard());
         Functions.set("execProcess", new robot_exec(robot_exec.Mode.EXEC));
         Functions.set("execProcessAndWait", new robot_exec(robot_exec.Mode.EXEC_AND_WAIT));
-        
-        Variables.set("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
-        Variables.set("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
-        Variables.set("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
-        Variables.set("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
-        Variables.set("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
-        
-        Variables.set("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK));
-        Variables.set("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK));
-        Variables.set("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK));
     }
     
     private static void initialize() {

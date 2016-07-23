@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import java.io.BufferedReader;
@@ -20,13 +21,18 @@ import java.util.Map;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class files implements Module {
 
     private static Map<Integer, FileInfo> files;
-    
+
+    public static void initConstants() {
+    }
+
     @Override
     public void init() {
         files = new HashMap<>();
+        initConstants();
         Variables.set("FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction()));
         
         Functions.set("fopen", new fopen());

@@ -1,6 +1,7 @@
 package com.annimon.ownlang.lib.modules;
 
 import com.annimon.ownlang.Main;
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.lib.modules.functions.*;
 
@@ -8,12 +9,16 @@ import com.annimon.ownlang.lib.modules.functions.*;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class std implements Module {
+
+    public static void initConstants() {
+        Variables.set("ARGS", ArrayValue.of(Main.getOwnlangArgs()));
+    }
 
     @Override
     public void init() {
-        Variables.set("ARGS", ArrayValue.of(Main.getOwnlangArgs()));
-
+        initConstants();
         Functions.set("echo", new std_echo());
         Functions.set("readln", new std_readln());
         Functions.set("length", new std_length());

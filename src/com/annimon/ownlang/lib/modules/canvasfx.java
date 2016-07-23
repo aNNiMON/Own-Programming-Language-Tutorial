@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.awt.Dimension;
@@ -42,6 +43,7 @@ import javax.swing.JFrame;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class canvasfx implements Module {
     
     private static final int FX_EFFECT_TYPE = 5301;
@@ -84,8 +86,12 @@ public final class canvasfx implements Module {
         }
     }
 
+    public static void initConstants() {
+    }
+
     @Override
     public void init() {
+        initConstants();
         Functions.set("window", new CreateWindow());
         Functions.set("repaint", new Repaint());
         

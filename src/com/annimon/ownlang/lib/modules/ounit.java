@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
  */
 public final class ounit implements Module {
 
+    public static void initConstants() {
+    }
+
     @Override
     public void init() {
+        initConstants();
         Functions.set("assertEquals", new assertEquals());
         Functions.set("assertNotEquals", new assertNotEquals());
         Functions.set("assertSameType", new assertSameType());

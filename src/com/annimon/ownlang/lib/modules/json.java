@@ -9,8 +9,12 @@ import com.annimon.ownlang.lib.modules.functions.*;
  */
 public final class json implements Module {
 
+    public static void initConstants() {
+    }
+
     @Override
     public void init() {
+        initConstants();
         Functions.set("jsonencode", new json_encode());
         Functions.set("jsondecode", new json_decode());
     }

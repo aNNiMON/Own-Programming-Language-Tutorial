@@ -1,6 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,6 +20,7 @@ import javax.swing.JPanel;
  *
  * @author aNNiMON
  */
+@ConstantInitializer
 public final class canvas implements Module {
     
     private static JFrame frame;
@@ -30,8 +31,18 @@ public final class canvas implements Module {
     private static NumberValue lastKey;
     private static ArrayValue mouseHover;
 
+    public static void initConstants() {
+        Variables.set("VK_UP", NumberValue.of(KeyEvent.VK_UP));
+        Variables.set("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
+        Variables.set("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
+        Variables.set("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
+        Variables.set("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
+        Variables.set("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
+    }
+
     @Override
     public void init() {
+        initConstants();
         Functions.set("window", new CreateWindow());
         Functions.set("prompt", new Prompt());
         Functions.set("keypressed", new KeyPressed());
@@ -45,14 +56,7 @@ public final class canvas implements Module {
         Functions.set("drawstring", new DrawString());
         Functions.set("color", new SetColor());
         Functions.set("repaint", new Repaint());
-        
-        Variables.set("VK_UP", NumberValue.of(KeyEvent.VK_UP));
-        Variables.set("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
-        Variables.set("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
-        Variables.set("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
-        Variables.set("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
-        Variables.set("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
-        
+
         lastKey = NumberValue.MINUS_ONE;
         mouseHover = new ArrayValue(new Value[] { NumberValue.ZERO, NumberValue.ZERO });
     }

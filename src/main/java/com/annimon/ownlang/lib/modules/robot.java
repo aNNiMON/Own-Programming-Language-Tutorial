@@ -32,15 +32,15 @@ public final class robot implements Module {
     private static Robot awtRobot;
 
     public static void initConstants() {
-        Variables.set("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
-        Variables.set("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
-        Variables.set("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
-        Variables.set("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
-        Variables.set("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
+        Variables.define("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
+        Variables.define("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
+        Variables.define("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
+        Variables.define("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
+        Variables.define("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
 
-        Variables.set("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK));
-        Variables.set("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK));
-        Variables.set("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK));
+        Variables.define("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK));
+        Variables.define("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK));
+        Variables.define("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK));
     }
 
     @Override

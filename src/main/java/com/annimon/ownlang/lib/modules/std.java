@@ -13,7 +13,7 @@ import com.annimon.ownlang.lib.modules.functions.*;
 public final class std implements Module {
 
     public static void initConstants() {
-        Variables.set("ARGS", ArrayValue.of(Main.getOwnlangArgs()));
+        Variables.define("ARGS", ArrayValue.of(Main.getOwnlangArgs()));
     }
 
     @Override

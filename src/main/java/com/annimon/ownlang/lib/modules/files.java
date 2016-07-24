@@ -27,13 +27,13 @@ public final class files implements Module {
     private static Map<Integer, FileInfo> files;
 
     public static void initConstants() {
+        Variables.define("FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction()));
     }
 
     @Override
     public void init() {
         files = new HashMap<>();
         initConstants();
-        Variables.set("FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction()));
         
         Functions.set("fopen", new fopen());
         Functions.set("flush", new flush());

@@ -12,7 +12,7 @@ import com.annimon.ownlang.lib.modules.functions.*;
 public final class functional implements Module {
 
     public static void initConstants() {
-        Variables.set("IDENTITY", new FunctionValue(args -> args[0]));
+        Variables.define("IDENTITY", new FunctionValue(args -> args[0]));
     }
 
     @Override

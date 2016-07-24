@@ -29,10 +29,10 @@ public final class date implements Module {
             MILLISECOND = new StringValue("millisecond");
 
     public static void initConstants() {
-        Variables.set("STYLE_FULL", NumberValue.of(DateFormat.FULL));
-        Variables.set("STYLE_LONG", NumberValue.of(DateFormat.LONG));
-        Variables.set("STYLE_MEDIUM", NumberValue.of(DateFormat.MEDIUM));
-        Variables.set("STYLE_SHORT", NumberValue.of(DateFormat.SHORT));
+        Variables.define("STYLE_FULL", NumberValue.of(DateFormat.FULL));
+        Variables.define("STYLE_LONG", NumberValue.of(DateFormat.LONG));
+        Variables.define("STYLE_MEDIUM", NumberValue.of(DateFormat.MEDIUM));
+        Variables.define("STYLE_SHORT", NumberValue.of(DateFormat.SHORT));
     }
 
     @Override

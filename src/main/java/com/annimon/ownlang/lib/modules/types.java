@@ -11,12 +11,12 @@ import com.annimon.ownlang.lib.*;
 public final class types implements Module {
 
     public static void initConstants() {
-        Variables.set("OBJECT", NumberValue.of(Types.OBJECT));
-        Variables.set("NUMBER", NumberValue.of(Types.NUMBER));
-        Variables.set("STRING", NumberValue.of(Types.STRING));
-        Variables.set("ARRAY", NumberValue.of(Types.ARRAY));
-        Variables.set("MAP", NumberValue.of(Types.MAP));
-        Variables.set("FUNCTION", NumberValue.of(Types.FUNCTION));
+        Variables.define("OBJECT", NumberValue.of(Types.OBJECT));
+        Variables.define("NUMBER", NumberValue.of(Types.NUMBER));
+        Variables.define("STRING", NumberValue.of(Types.STRING));
+        Variables.define("ARRAY", NumberValue.of(Types.ARRAY));
+        Variables.define("MAP", NumberValue.of(Types.MAP));
+        Variables.define("FUNCTION", NumberValue.of(Types.FUNCTION));
     }
 
     @Override

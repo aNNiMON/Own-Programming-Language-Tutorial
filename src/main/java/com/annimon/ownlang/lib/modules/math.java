@@ -17,8 +17,8 @@ public final class math implements Module {
     private static final DoubleFunction<NumberValue> doubleToNumber = NumberValue::of;
 
     public static void initConstants() {
-        Variables.set("PI", NumberValue.of(Math.PI));
-        Variables.set("E", NumberValue.of(Math.E));
+        Variables.define("PI", NumberValue.of(Math.PI));
+        Variables.define("E", NumberValue.of(Math.E));
     }
 
     @Override

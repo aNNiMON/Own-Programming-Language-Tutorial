@@ -1,11 +1,23 @@
-apply plugin: "java"
+apply plugin: 'java'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-project.ext.mainClass = 'com.annimon.ownlang.Main'
 
-dependencies{
-    compile fileTree(dir: 'libs', include: '*.jar')
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'com.annimon.ownlang.Main'
+}
+
+repositories {
+    jcenter()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.sf.proguard:proguard-gradle:5.2.1'
+    }
 }
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -15,23 +27,35 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 }
 
+task runOptimizing(dependsOn: classes, type: JavaExec) {
+    main = project.mainClass
+    classpath = sourceSets.main.runtimeClasspath
+    ignoreExitValue = true
+    args '-o 9 -m -a -f program.own'.split(' ')
+}
+
 task dist(dependsOn: classes, type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from {configurations.compile.collect {zipTree(it)}}
     from files(sourceSets.main.resources)
     libsDirName = "$rootProject.projectDir/dist"
-    
+
     manifest {
         attributes 'Main-Class': project.mainClass
     }
 }
 
-repositories {
-    jcenter()
+task proguard(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
+    configuration "$rootProject.projectDir/proguard.properties"
+    injars "$rootProject.projectDir/dist/OwnLang.jar"
+    outjars "$rootProject.projectDir/store/OwnLang.jar"
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.openjdk.jmh', name: 'jmh-core', version: '1.12'
-    testCompile group: 'org.openjdk.jmh', name: 'jmh-generator-annprocess', version: '1.12'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'org.json:json:20160212'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.openjdk.jmh:jmh-core:1.12'
+    testCompile 'org.openjdk.jmh:jmh-generator-annprocess:1.12'
 }

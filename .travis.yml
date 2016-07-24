@@ -14,5 +14,5 @@ before_install:
  - chmod +x gradlew
  
 after_success:
- - ./gradlew dist
+ - ./gradlew proguard
  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "latest" && curl -F "file=@dist/Own-Programming-Language-Tutorial.jar" http://projects.annimon.com/samples/php/travis/upload.php?mode=ownlang

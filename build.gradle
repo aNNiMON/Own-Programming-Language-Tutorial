@@ -4,11 +4,6 @@ sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 project.ext.mainClass = 'com.annimon.ownlang.Main'
 
-sourceSets {
-    main.java.srcDir "src/"
-    test.java.srcDir "test/"
-}
-
 dependencies{
     compile fileTree(dir: 'libs', include: '*.jar')
 }

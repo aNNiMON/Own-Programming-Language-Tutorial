@@ -56,6 +56,6 @@ dependencies {
     compile 'org.json:json:20160212'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.openjdk.jmh:jmh-core:1.12'
-    testCompile 'org.openjdk.jmh:jmh-generator-annprocess:1.12'
+    testCompile 'org.openjdk.jmh:jmh-core:1.13'
+    testCompile 'org.openjdk.jmh:jmh-generator-annprocess:1.13'
 }

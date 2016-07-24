@@ -24,7 +24,7 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class ProgramsTest {
 
-    private static final String RES_DIR = "test/resources";
+    private static final String RES_DIR = "src/test/resources";
 
     private final String programPath;
 

@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.optimization;
 
+import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.ast.Accessible;
 import com.annimon.ownlang.parser.ast.Argument;
 import com.annimon.ownlang.parser.ast.AssignmentExpression;
@@ -11,6 +13,7 @@ import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.MatchExpression;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
+import com.annimon.ownlang.parser.ast.UseStatement;
 import com.annimon.ownlang.parser.ast.ValueExpression;
 import com.annimon.ownlang.parser.ast.VariableExpression;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
@@ -21,9 +24,23 @@ import java.util.Map;
 public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableInfo>> {
 
     public static Map<String, VariableInfo> getInfo(Node node) {
+        return getInfo(node, false);
+    }
+
+    public static Map<String, VariableInfo> getInfo(Node node, boolean grabModuleConstants) {
         Map<String, VariableInfo> variableInfos = new HashMap<>();
-        node.accept(new VariablesGrabber(), variableInfos);
+        node.accept(new VariablesGrabber(grabModuleConstants), variableInfos);
         return variableInfos;
+    }
+
+    private final boolean grabModuleConstants;
+
+    public VariablesGrabber() {
+        this(false);
+    }
+
+    public VariablesGrabber(boolean grabModuleConstants) {
+        this.grabModuleConstants = grabModuleConstants;
     }
 
     @Override
@@ -95,6 +112,27 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
                 final String variableName = ((ContainerAccessExpression) s.expr1).variable;
                 t.put(variableName, variableInfo(t, variableName));
             }
+        }
+        return super.visit(s, t);
+    }
+
+    @Override
+    public Node visit(UseStatement s, Map<String, VariableInfo> t) {
+        if (grabModuleConstants) {
+            // To get module variables we need  to store current variables, clear all, then load module.
+            final Map<String, Value> currentVariables = new HashMap<>(Variables.variables());
+            Variables.variables().clear();
+            if (isValue(s.expression)) {
+                s.loadConstants();
+            }
+            // Grab module variables
+            for (Map.Entry<String, Value> entry : Variables.variables().entrySet()) {
+                final VariableInfo var = variableInfo(t, entry.getKey());
+                var.value = entry.getValue();
+                t.put(entry.getKey(), var);
+            }
+            // Restore previous variables
+            Variables.variables().putAll(currentVariables);
         }
         return super.visit(s, t);
     }

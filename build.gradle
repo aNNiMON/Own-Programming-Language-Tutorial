@@ -31,6 +31,7 @@ task runOptimizing(dependsOn: classes, type: JavaExec) {
     main = project.mainClass
     classpath = sourceSets.main.runtimeClasspath
     ignoreExitValue = true
+    // args '-o 9 -m -a -f examples/game/minesweeper.own'.split(' ')
     args '-o 9 -m -a -f program.own'.split(' ')
 }
 

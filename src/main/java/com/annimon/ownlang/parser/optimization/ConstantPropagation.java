@@ -23,7 +23,7 @@ public class ConstantPropagation extends OptimizationVisitor<Map<String, Value>>
     public Node optimize(Node node) {
         final Map<String, VariableInfo> variables = new HashMap<>();
         // Find variables
-        node.accept(new VariablesGrabber(), variables);
+        node.accept(new VariablesGrabber(true), variables);
         // Filter only string/number values with 1 modification
         final Map<String, Value> candidates = new HashMap<>();
         for (Map.Entry<String, VariableInfo> e : variables.entrySet()) {

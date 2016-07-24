@@ -207,9 +207,9 @@ public final class canvasfx implements Module {
         @Override
         public int asInt() {
             final int a = (int) (color.getOpacity() * 255) & 0xFF;
-            final int r = (int) (color.getRed()* 255) & 0xFF;
-            final int g = (int) (color.getGreen()* 255) & 0xFF;
-            final int b = (int) (color.getBlue()* 255) & 0xFF;
+            final int r = (int) (color.getRed() * 255) & 0xFF;
+            final int g = (int) (color.getGreen() * 255) & 0xFF;
+            final int b = (int) (color.getBlue() * 255) & 0xFF;
             return ((a << 24) | (r << 16) | (g << 8) | b);
         }
         

@@ -10,8 +10,10 @@ public final class std_lastindexof implements Function {
         
         final String input = args[0].asString();
         final String what = args[1].asString();
-        final int index = (args.length == 3) ? args[2].asInt() : 0;
-        
+        if (args.length == 2) {
+            return NumberValue.of(input.lastIndexOf(what));
+        }
+        final int index = args[2].asInt();
         return NumberValue.of(input.lastIndexOf(what, index));
     }
 }

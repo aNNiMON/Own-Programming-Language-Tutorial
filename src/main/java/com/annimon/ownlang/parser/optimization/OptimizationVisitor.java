@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.optimization;
 
+import com.annimon.ownlang.lib.Types;
+import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.parser.ast.*;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
@@ -160,9 +162,12 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(FunctionDefineStatement s, T t) {
+        final Arguments newArgs = new Arguments();
+        boolean changed = visit(s.arguments, newArgs, t);
+
         final Node body = s.body.accept(this, t);
-        if (body != s.body) {
-            return new FunctionDefineStatement(s.name, s.arguments, consumeStatement(body));
+        if (changed || body != s.body) {
+            return new FunctionDefineStatement(s.name, newArgs, consumeStatement(body));
         }
         return s;
     }
@@ -359,6 +364,13 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(ValueExpression s, T t) {
+        if ( (s.value.type() == Types.FUNCTION) && (s.value.raw() instanceof UserDefinedFunction) ) {
+            final UserDefinedFunction function = (UserDefinedFunction) s.value.raw();
+            final UserDefinedFunction accepted = visit(function, t);
+            if (accepted != function) {
+                return new ValueExpression(accepted);
+            }
+        }
         return s;
     }
 
@@ -384,6 +396,36 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
             return new UseStatement((Expression) expression);
         }
         return s;
+    }
+
+    public UserDefinedFunction visit(UserDefinedFunction s, T t) {
+        final Arguments newArgs = new Arguments();
+        boolean changed = visit(s.arguments, newArgs, t);
+
+        final Node body = s.body.accept(this, t);
+        if (changed || body != s.body) {
+            return new UserDefinedFunction(newArgs, consumeStatement(body));
+        }
+        return s;
+    }
+
+
+
+    protected boolean visit(final Arguments in, final Arguments out, T t) {
+        boolean changed = false;
+        for (Argument argument : in) {
+            final Expression valueExpr = argument.getValueExpr();
+            if (valueExpr == null) {
+                out.addRequired(argument.getName());
+            } else {
+                final Node expr = valueExpr.accept(this, t);
+                if (expr != valueExpr) {
+                    changed = true;
+                }
+                out.addOptional(argument.getName(), (Expression) expr);
+            }
+        }
+        return changed;
     }
 
     protected Statement consumeStatement(Node node) {

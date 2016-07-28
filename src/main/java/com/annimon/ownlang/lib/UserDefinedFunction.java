@@ -12,8 +12,8 @@ import com.annimon.ownlang.parser.ast.Statement;
  */
 public final class UserDefinedFunction implements Function {
     
-    private final Arguments arguments;
-    private final Statement body;
+    public final Arguments arguments;
+    public final Statement body;
     
     public UserDefinedFunction(Arguments arguments, Statement body) {
         this.arguments = arguments;

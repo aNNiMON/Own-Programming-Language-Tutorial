@@ -1,12 +1,15 @@
 package com.annimon.ownlang.parser.optimization;
 
+import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.ast.Accessible;
 import com.annimon.ownlang.parser.ast.Argument;
+import com.annimon.ownlang.parser.ast.Arguments;
 import com.annimon.ownlang.parser.ast.AssignmentExpression;
 import com.annimon.ownlang.parser.ast.ContainerAccessExpression;
 import com.annimon.ownlang.parser.ast.DestructuringAssignmentStatement;
+import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.ForeachArrayStatement;
 import com.annimon.ownlang.parser.ast.ForeachMapStatement;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
@@ -82,15 +85,6 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
     }
 
     @Override
-    public Node visit(FunctionDefineStatement s, Map<String, VariableInfo> t) {
-        for (Argument argument : s.arguments) {
-            final String variableName = argument.getName();
-            t.put(variableName, variableInfo(t, variableName));
-        }
-        return super.visit(s, t);
-    }
-
-    @Override
     public Node visit(MatchExpression s, Map<String, VariableInfo> t) {
         for (MatchExpression.Pattern pattern : s.patterns) {
             if (pattern instanceof MatchExpression.VariablePattern) {
@@ -135,6 +129,20 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
             Variables.variables().putAll(currentVariables);
         }
         return super.visit(s, t);
+    }
+
+    @Override
+    protected boolean visit(Arguments in, Arguments out, Map<String, VariableInfo> t) {
+        for (Argument argument : in) {
+            final String variableName = argument.getName();
+            final VariableInfo var = variableInfo(t, variableName);
+            final Expression expr = argument.getValueExpr();
+            if (expr != null && isValue(expr)) {
+                var.value = ((ValueExpression) expr).value;
+            }
+            t.put(variableName, var);
+        }
+        return super.visit(in, out, t);
     }
 
 

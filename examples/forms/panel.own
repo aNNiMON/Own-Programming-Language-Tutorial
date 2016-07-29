@@ -1,0 +1,37 @@
+use "forms"
+
+// Create Panel with BoxLayout
+panel = newPanel()
+panel.setLayout(boxLayout(panel, BoxLayout.PAGE_AXIS))
+// String label (alias to JLabel)
+panel.add("String label")
+
+// Add label
+label = newLabel("Label")
+label.setHorizontalAlignment(SwingConstants.CENTER)
+panel.add(label)
+
+// Add text field
+textField = newTextField("Some text")
+textField.setColumns(20)
+panel.add(textField)
+
+// Add button
+button = newButton("Button")
+panel.add(button)
+
+// Add another button
+clearBtn = newButton("Clear panel")
+clearBtn.onClick(def() {
+  panel.removeAll()
+  panel.revalidate()
+  panel.repaint()
+})
+panel.add(clearBtn)
+
+window = newWindow("Panel Example")
+window.setLocation(400, 200)
+window.add(panel)
+window.pack()
+window.setAlwaysOnTop()
+window.setVisible()

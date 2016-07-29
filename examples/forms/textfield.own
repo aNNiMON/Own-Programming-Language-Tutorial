@@ -1,0 +1,23 @@
+use "std"
+use "forms"
+
+textField = newTextField("Some text")
+
+button = newButton("Click me")
+button.onClick(def() {
+  println "TextField text: " + textField.getText()
+  textField.setText(textField.getText() + " Let's add new line")
+})
+
+window = newWindow("Text field example")
+window.add(textField)
+window.add(button, BorderLayout.SOUTH)
+window.pack()
+window.setLocationByPlatform()
+window.setVisible()
+
+textField.onAction(def() = echo("I am a TextField"))
+textField.addKeyListener(def(type, event) {
+   println sprintf("%s %d %s",
+       type, event.keyCode, toChar(event.keyChar))
+})

@@ -25,49 +25,49 @@ public final class forms implements Module {
 
         // SwinfConstants
         final MapValue swing = new MapValue(20);
-        swing.set(new StringValue("BOTTOM"), NumberValue.of(SwingConstants.BOTTOM));
-        swing.set(new StringValue("CENTER"), NumberValue.of(SwingConstants.CENTER));
-        swing.set(new StringValue("EAST"), NumberValue.of(SwingConstants.EAST));
-        swing.set(new StringValue("HORIZONTAL"), NumberValue.of(SwingConstants.HORIZONTAL));
-        swing.set(new StringValue("LEADING"), NumberValue.of(SwingConstants.LEADING));
-        swing.set(new StringValue("LEFT"), NumberValue.of(SwingConstants.LEFT));
-        swing.set(new StringValue("NEXT"), NumberValue.of(SwingConstants.NEXT));
-        swing.set(new StringValue("NORTH"), NumberValue.of(SwingConstants.NORTH));
-        swing.set(new StringValue("NORTH_EAST"), NumberValue.of(SwingConstants.NORTH_EAST));
-        swing.set(new StringValue("NORTH_WEST"), NumberValue.of(SwingConstants.NORTH_WEST));
-        swing.set(new StringValue("PREVIOUS"), NumberValue.of(SwingConstants.PREVIOUS));
-        swing.set(new StringValue("RIGHT"), NumberValue.of(SwingConstants.RIGHT));
-        swing.set(new StringValue("SOUTH"), NumberValue.of(SwingConstants.SOUTH));
-        swing.set(new StringValue("SOUTH_EAST"), NumberValue.of(SwingConstants.SOUTH_EAST));
-        swing.set(new StringValue("SOUTH_WEST"), NumberValue.of(SwingConstants.SOUTH_WEST));
-        swing.set(new StringValue("TOP"), NumberValue.of(SwingConstants.TOP));
-        swing.set(new StringValue("TRAILING"), NumberValue.of(SwingConstants.TRAILING));
-        swing.set(new StringValue("VERTICAL"), NumberValue.of(SwingConstants.VERTICAL));
-        swing.set(new StringValue("WEST"), NumberValue.of(SwingConstants.WEST));
+        swing.set("BOTTOM", NumberValue.of(SwingConstants.BOTTOM));
+        swing.set("CENTER", NumberValue.of(SwingConstants.CENTER));
+        swing.set("EAST", NumberValue.of(SwingConstants.EAST));
+        swing.set("HORIZONTAL", NumberValue.of(SwingConstants.HORIZONTAL));
+        swing.set("LEADING", NumberValue.of(SwingConstants.LEADING));
+        swing.set("LEFT", NumberValue.of(SwingConstants.LEFT));
+        swing.set("NEXT", NumberValue.of(SwingConstants.NEXT));
+        swing.set("NORTH", NumberValue.of(SwingConstants.NORTH));
+        swing.set("NORTH_EAST", NumberValue.of(SwingConstants.NORTH_EAST));
+        swing.set("NORTH_WEST", NumberValue.of(SwingConstants.NORTH_WEST));
+        swing.set("PREVIOUS", NumberValue.of(SwingConstants.PREVIOUS));
+        swing.set("RIGHT", NumberValue.of(SwingConstants.RIGHT));
+        swing.set("SOUTH", NumberValue.of(SwingConstants.SOUTH));
+        swing.set("SOUTH_EAST", NumberValue.of(SwingConstants.SOUTH_EAST));
+        swing.set("SOUTH_WEST", NumberValue.of(SwingConstants.SOUTH_WEST));
+        swing.set("TOP", NumberValue.of(SwingConstants.TOP));
+        swing.set("TRAILING", NumberValue.of(SwingConstants.TRAILING));
+        swing.set("VERTICAL", NumberValue.of(SwingConstants.VERTICAL));
+        swing.set("WEST", NumberValue.of(SwingConstants.WEST));
         Variables.define("SwingConstants", swing);
 
         // LayoutManagers constants
         final MapValue border = new MapValue(13);
-        border.set(new StringValue("AFTER_LAST_LINE"), new StringValue(BorderLayout.AFTER_LAST_LINE));
-        border.set(new StringValue("AFTER_LINE_ENDS"), new StringValue(BorderLayout.AFTER_LINE_ENDS));
-        border.set(new StringValue("BEFORE_FIRST_LINE"), new StringValue(BorderLayout.BEFORE_FIRST_LINE));
-        border.set(new StringValue("BEFORE_LINE_BEGINS"), new StringValue(BorderLayout.BEFORE_LINE_BEGINS));
-        border.set(new StringValue("CENTER"), new StringValue(BorderLayout.CENTER));
-        border.set(new StringValue("EAST"), new StringValue(BorderLayout.EAST));
-        border.set(new StringValue("LINE_END"), new StringValue(BorderLayout.LINE_END));
-        border.set(new StringValue("LINE_START"), new StringValue(BorderLayout.LINE_START));
-        border.set(new StringValue("NORTH"), new StringValue(BorderLayout.NORTH));
-        border.set(new StringValue("PAGE_END"), new StringValue(BorderLayout.PAGE_END));
-        border.set(new StringValue("PAGE_START"), new StringValue(BorderLayout.PAGE_START));
-        border.set(new StringValue("SOUTH"), new StringValue(BorderLayout.SOUTH));
-        border.set(new StringValue("WEST"), new StringValue(BorderLayout.WEST));
+        border.set("AFTER_LAST_LINE", new StringValue(BorderLayout.AFTER_LAST_LINE));
+        border.set("AFTER_LINE_ENDS", new StringValue(BorderLayout.AFTER_LINE_ENDS));
+        border.set("BEFORE_FIRST_LINE", new StringValue(BorderLayout.BEFORE_FIRST_LINE));
+        border.set("BEFORE_LINE_BEGINS", new StringValue(BorderLayout.BEFORE_LINE_BEGINS));
+        border.set("CENTER", new StringValue(BorderLayout.CENTER));
+        border.set("EAST", new StringValue(BorderLayout.EAST));
+        border.set("LINE_END", new StringValue(BorderLayout.LINE_END));
+        border.set("LINE_START", new StringValue(BorderLayout.LINE_START));
+        border.set("NORTH", new StringValue(BorderLayout.NORTH));
+        border.set("PAGE_END", new StringValue(BorderLayout.PAGE_END));
+        border.set("PAGE_START", new StringValue(BorderLayout.PAGE_START));
+        border.set("SOUTH", new StringValue(BorderLayout.SOUTH));
+        border.set("WEST", new StringValue(BorderLayout.WEST));
         Variables.define("BorderLayout", border);
 
         final MapValue box = new MapValue(4);
-        box.set(new StringValue("LINE_AXIS"), NumberValue.of(BoxLayout.LINE_AXIS));
-        box.set(new StringValue("PAGE_AXIS"), NumberValue.of(BoxLayout.PAGE_AXIS));
-        box.set(new StringValue("X_AXIS"), NumberValue.of(BoxLayout.X_AXIS));
-        box.set(new StringValue("Y_AXIS"), NumberValue.of(BoxLayout.Y_AXIS));
+        box.set("LINE_AXIS", NumberValue.of(BoxLayout.LINE_AXIS));
+        box.set("PAGE_AXIS", NumberValue.of(BoxLayout.PAGE_AXIS));
+        box.set("X_AXIS", NumberValue.of(BoxLayout.X_AXIS));
+        box.set("Y_AXIS", NumberValue.of(BoxLayout.Y_AXIS));
         Variables.define("BoxLayout", box);
     }
 

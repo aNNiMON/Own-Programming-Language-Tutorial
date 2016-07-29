@@ -4,7 +4,6 @@ import com.annimon.ownlang.lib.Arguments;
 import static com.annimon.ownlang.lib.Converters.*;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import java.awt.Component;
@@ -22,15 +21,15 @@ public abstract class ContainerValue extends ComponentValue {
     }
 
     private void init() {
-        set(new StringValue("add"), new FunctionValue(this::add));
-        set(new StringValue("remove"), new FunctionValue(this::remove));
-        set(new StringValue("removeAll"), voidToVoid(container::removeAll));
-        set(new StringValue("getAlignmentX"), voidToFloat(container::getAlignmentX));
-        set(new StringValue("getAlignmentY"), voidToFloat(container::getAlignmentY));
-        set(new StringValue("getComponentCount"), voidToInt(container::getComponentCount));
-        set(new StringValue("isFocusCycleRoot"), voidToBoolean(container::isFocusCycleRoot));
-        set(new StringValue("isValidateRoot"), voidToBoolean(container::isValidateRoot));
-        set(new StringValue("setLayout"), new FunctionValue(this::setLayout));
+        set("add", new FunctionValue(this::add));
+        set("remove", new FunctionValue(this::remove));
+        set("removeAll", voidToVoid(container::removeAll));
+        set("getAlignmentX", voidToFloat(container::getAlignmentX));
+        set("getAlignmentY", voidToFloat(container::getAlignmentY));
+        set("getComponentCount", voidToInt(container::getComponentCount));
+        set("isFocusCycleRoot", voidToBoolean(container::isFocusCycleRoot));
+        set("isValidateRoot", voidToBoolean(container::isValidateRoot));
+        set("setLayout", new FunctionValue(this::setLayout));
     }
 
     private Value add(Value... args) {

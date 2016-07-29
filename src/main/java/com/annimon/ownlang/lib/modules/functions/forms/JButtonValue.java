@@ -5,7 +5,6 @@ import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import javax.swing.JButton;
@@ -21,8 +20,8 @@ public class JButtonValue extends JComponentValue {
     }
 
     private void init() {
-        set(new StringValue("onClick"), new FunctionValue(this::addActionListener));
-        set(new StringValue("addActionListener"), new FunctionValue(this::addActionListener));
+        set("onClick", new FunctionValue(this::addActionListener));
+        set("addActionListener", new FunctionValue(this::addActionListener));
     }
 
     private Value addActionListener(Value... args) {

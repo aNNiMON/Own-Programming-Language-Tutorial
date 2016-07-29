@@ -6,7 +6,6 @@ import static com.annimon.ownlang.lib.Converters.*;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import javax.swing.JTextField;
@@ -22,22 +21,22 @@ public class JTextFieldValue extends JComponentValue {
     }
 
     private void init() {
-        set(new StringValue("onAction"), new FunctionValue(this::addActionListener));
-        set(new StringValue("addActionListener"), new FunctionValue(this::addActionListener));
-        set(new StringValue("getCaretPosition"), voidToInt(textField::getCaretPosition));
-        set(new StringValue("getColumns"), voidToInt(textField::getColumns));
-        set(new StringValue("getHorizontalAlignment"), voidToInt(textField::getHorizontalAlignment));
-        set(new StringValue("getSelectionEnd"), voidToInt(textField::getSelectionEnd));
-        set(new StringValue("getSelectionStart"), voidToInt(textField::getSelectionStart));
-        set(new StringValue("getScrollOffset"), voidToInt(textField::getScrollOffset));
-        set(new StringValue("getText"), voidToString(textField::getText));
-        set(new StringValue("setCaretPosition"), intToVoid(textField::setCaretPosition));
-        set(new StringValue("setColumns"), intToVoid(textField::setColumns));
-        set(new StringValue("setHorizontalAlignment"), intToVoid(textField::setHorizontalAlignment));
-        set(new StringValue("setScrollOffset"), intToVoid(textField::setScrollOffset));
-        set(new StringValue("setSelectionEnd"), intToVoid(textField::setSelectionEnd));
-        set(new StringValue("setSelectionStart"), intToVoid(textField::setSelectionStart));
-        set(new StringValue("setText"), stringToVoid(textField::setText));
+        set("onAction", new FunctionValue(this::addActionListener));
+        set("addActionListener", new FunctionValue(this::addActionListener));
+        set("getCaretPosition", voidToInt(textField::getCaretPosition));
+        set("getColumns", voidToInt(textField::getColumns));
+        set("getHorizontalAlignment", voidToInt(textField::getHorizontalAlignment));
+        set("getSelectionEnd", voidToInt(textField::getSelectionEnd));
+        set("getSelectionStart", voidToInt(textField::getSelectionStart));
+        set("getScrollOffset", voidToInt(textField::getScrollOffset));
+        set("getText", voidToString(textField::getText));
+        set("setCaretPosition", intToVoid(textField::setCaretPosition));
+        set("setColumns", intToVoid(textField::setColumns));
+        set("setHorizontalAlignment", intToVoid(textField::setHorizontalAlignment));
+        set("setScrollOffset", intToVoid(textField::setScrollOffset));
+        set("setSelectionEnd", intToVoid(textField::setSelectionEnd));
+        set("setSelectionStart", intToVoid(textField::setSelectionStart));
+        set("setText", stringToVoid(textField::setText));
     }
 
     private Value addActionListener(Value... args) {

@@ -30,47 +30,47 @@ public abstract class ComponentValue extends MapValue {
     }
 
     private void init() {
-        set(new StringValue("onKeyAction"), new FunctionValue(this::addKeyListener));
-        set(new StringValue("addKeyListener"), new FunctionValue(this::addKeyListener));
-        set(new StringValue("getFocusTraversalKeysEnabled"), voidToBoolean(component::getFocusTraversalKeysEnabled));
-        set(new StringValue("getHeight"), voidToInt(component::getHeight));
-        set(new StringValue("getIgnoreRepaint"), voidToBoolean(component::getIgnoreRepaint));
-        set(new StringValue("getLocation"), new FunctionValue(this::getLocation));
-        set(new StringValue("getLocationOnScreen"), new FunctionValue(this::getLocationOnScreen));
-        set(new StringValue("getMinimumSize"), dimensionFunction(component::getMinimumSize));
-        set(new StringValue("getMaximumSize"), dimensionFunction(component::getMaximumSize));
-        set(new StringValue("getName"), voidToString(component::getName));
-        set(new StringValue("getPreferredSize"), dimensionFunction(component::getPreferredSize));
-        set(new StringValue("getSize"), dimensionFunction(component::getSize));
-        set(new StringValue("getWidth"), voidToInt(component::getWidth));
-        set(new StringValue("getX"), voidToInt(component::getX));
-        set(new StringValue("getY"), voidToInt(component::getY));
-        set(new StringValue("hasFocus"), voidToBoolean(component::hasFocus));
-        set(new StringValue("invalidate"), voidToVoid(component::invalidate));
+        set("onKeyAction", new FunctionValue(this::addKeyListener));
+        set("addKeyListener", new FunctionValue(this::addKeyListener));
+        set("getFocusTraversalKeysEnabled", voidToBoolean(component::getFocusTraversalKeysEnabled));
+        set("getHeight", voidToInt(component::getHeight));
+        set("getIgnoreRepaint", voidToBoolean(component::getIgnoreRepaint));
+        set("getLocation", new FunctionValue(this::getLocation));
+        set("getLocationOnScreen", new FunctionValue(this::getLocationOnScreen));
+        set("getMinimumSize", dimensionFunction(component::getMinimumSize));
+        set("getMaximumSize", dimensionFunction(component::getMaximumSize));
+        set("getName", voidToString(component::getName));
+        set("getPreferredSize", dimensionFunction(component::getPreferredSize));
+        set("getSize", dimensionFunction(component::getSize));
+        set("getWidth", voidToInt(component::getWidth));
+        set("getX", voidToInt(component::getX));
+        set("getY", voidToInt(component::getY));
+        set("hasFocus", voidToBoolean(component::hasFocus));
+        set("invalidate", voidToVoid(component::invalidate));
 
-        set(new StringValue("isDisplayable"), voidToBoolean(component::isDisplayable));
-        set(new StringValue("isDoubleBuffered"), voidToBoolean(component::isDoubleBuffered));
-        set(new StringValue("isEnabled"), voidToBoolean(component::isEnabled));
-        set(new StringValue("isFocusOwner"), voidToBoolean(component::isFocusOwner));
-        set(new StringValue("isFocusable"), voidToBoolean(component::isFocusable));
-        set(new StringValue("isLightweight"), voidToBoolean(component::isLightweight));
-        set(new StringValue("isOpaque"), voidToBoolean(component::isOpaque));
-        set(new StringValue("isShowing"), voidToBoolean(component::isShowing));
-        set(new StringValue("isValid"), voidToBoolean(component::isValid));
-        set(new StringValue("isVisible"), voidToBoolean(component::isVisible));
+        set("isDisplayable", voidToBoolean(component::isDisplayable));
+        set("isDoubleBuffered", voidToBoolean(component::isDoubleBuffered));
+        set("isEnabled", voidToBoolean(component::isEnabled));
+        set("isFocusOwner", voidToBoolean(component::isFocusOwner));
+        set("isFocusable", voidToBoolean(component::isFocusable));
+        set("isLightweight", voidToBoolean(component::isLightweight));
+        set("isOpaque", voidToBoolean(component::isOpaque));
+        set("isShowing", voidToBoolean(component::isShowing));
+        set("isValid", voidToBoolean(component::isValid));
+        set("isVisible", voidToBoolean(component::isVisible));
 
-        set(new StringValue("requestFocus"), voidToVoid(component::requestFocus));
-        set(new StringValue("requestFocusInWindow"), voidToBoolean(component::requestFocusInWindow));
-        set(new StringValue("repaint"), voidToVoid(component::repaint));
-        set(new StringValue("revalidate"), voidToVoid(component::revalidate));
-        set(new StringValue("setMaximumSize"), voidDimensionFunction(component::setMaximumSize));
-        set(new StringValue("setMinimumSize"), voidDimensionFunction(component::setMinimumSize));
-        set(new StringValue("setName"), stringToVoid(component::setName));
-        set(new StringValue("setPreferredSize"), voidDimensionFunction(component::setPreferredSize));
-        set(new StringValue("setSize"), voidDimensionFunction(component::setSize));
-        set(new StringValue("setVisible"), booleanOptToVoid(component::setVisible));
-        set(new StringValue("setLocation"), new FunctionValue(this::setLocation));
-        set(new StringValue("validate"), voidToVoid(component::validate));
+        set("requestFocus", voidToVoid(component::requestFocus));
+        set("requestFocusInWindow", voidToBoolean(component::requestFocusInWindow));
+        set("repaint", voidToVoid(component::repaint));
+        set("revalidate", voidToVoid(component::revalidate));
+        set("setMaximumSize", voidDimensionFunction(component::setMaximumSize));
+        set("setMinimumSize", voidDimensionFunction(component::setMinimumSize));
+        set("setName", stringToVoid(component::setName));
+        set("setPreferredSize", voidDimensionFunction(component::setPreferredSize));
+        set("setSize", voidDimensionFunction(component::setSize));
+        set("setVisible", booleanOptToVoid(component::setVisible));
+        set("setLocation", new FunctionValue(this::setLocation));
+        set("validate", voidToVoid(component::validate));
     }
 
     private Value addKeyListener(Value... args) {
@@ -99,19 +99,19 @@ public abstract class ComponentValue extends MapValue {
 
             private void handleKeyEvent(String type, final KeyEvent e) {
                 final MapValue map = new MapValue(15);
-                map.set(new StringValue("extendedKeyCode"), NumberValue.of(e.getExtendedKeyCode()));
-                map.set(new StringValue("keyChar"), NumberValue.of(e.getKeyChar()));
-                map.set(new StringValue("keyCode"), NumberValue.of(e.getKeyCode()));
-                map.set(new StringValue("keyLocation"), NumberValue.of(e.getKeyLocation()));
-                map.set(new StringValue("id"), NumberValue.of(e.getID()));
-                map.set(new StringValue("isActionKey"), NumberValue.fromBoolean(e.isActionKey()));
-                map.set(new StringValue("isAltDown"), NumberValue.fromBoolean(e.isAltDown()));
-                map.set(new StringValue("isAltGraphDown"), NumberValue.fromBoolean(e.isAltGraphDown()));
-                map.set(new StringValue("isConsumed"), NumberValue.fromBoolean(e.isConsumed()));
-                map.set(new StringValue("isControlDown"), NumberValue.fromBoolean(e.isControlDown()));
-                map.set(new StringValue("isMetaDown"), NumberValue.fromBoolean(e.isMetaDown()));
-                map.set(new StringValue("isShiftDown"), NumberValue.fromBoolean(e.isShiftDown()));
-                map.set(new StringValue("modifiers"), NumberValue.of(e.getModifiers()));
+                map.set("extendedKeyCode", NumberValue.of(e.getExtendedKeyCode()));
+                map.set("keyChar", NumberValue.of(e.getKeyChar()));
+                map.set("keyCode", NumberValue.of(e.getKeyCode()));
+                map.set("keyLocation", NumberValue.of(e.getKeyLocation()));
+                map.set("id", NumberValue.of(e.getID()));
+                map.set("isActionKey", NumberValue.fromBoolean(e.isActionKey()));
+                map.set("isAltDown", NumberValue.fromBoolean(e.isAltDown()));
+                map.set("isAltGraphDown", NumberValue.fromBoolean(e.isAltGraphDown()));
+                map.set("isConsumed", NumberValue.fromBoolean(e.isConsumed()));
+                map.set("isControlDown", NumberValue.fromBoolean(e.isControlDown()));
+                map.set("isMetaDown", NumberValue.fromBoolean(e.isMetaDown()));
+                map.set("isShiftDown", NumberValue.fromBoolean(e.isShiftDown()));
+                map.set("modifiers", NumberValue.of(e.getModifiers()));
                 action.execute(new StringValue(type), map);
             }
         });

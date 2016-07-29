@@ -1,7 +1,6 @@
 package com.annimon.ownlang.lib.modules.functions.forms;
 
 import static com.annimon.ownlang.lib.Converters.*;
-import com.annimon.ownlang.lib.StringValue;
 import javax.swing.JFrame;
 
 public class JFrameValue extends ContainerValue {
@@ -15,14 +14,14 @@ public class JFrameValue extends ContainerValue {
     }
 
     private void init() {
-        set(new StringValue("dispose"), voidToVoid(frame::dispose));
-        set(new StringValue("getTitle"), voidToString(frame::getTitle));
-        set(new StringValue("getDefaultCloseOperation"), voidToInt(frame::getDefaultCloseOperation));
-        set(new StringValue("pack"), voidToVoid(frame::pack));
-        set(new StringValue("setAlwaysOnTop"), booleanOptToVoid(frame::setAlwaysOnTop));
-        set(new StringValue("setDefaultCloseOperation"), intToVoid(frame::setDefaultCloseOperation));
-        set(new StringValue("setLocationByPlatform"), booleanOptToVoid(frame::setLocationByPlatform));
-        set(new StringValue("setResizable"), booleanOptToVoid(frame::setResizable));
-        set(new StringValue("setTitle"), stringToVoid(frame::setTitle));
+        set("dispose", voidToVoid(frame::dispose));
+        set("getTitle", voidToString(frame::getTitle));
+        set("getDefaultCloseOperation", voidToInt(frame::getDefaultCloseOperation));
+        set("pack", voidToVoid(frame::pack));
+        set("setAlwaysOnTop", booleanOptToVoid(frame::setAlwaysOnTop));
+        set("setDefaultCloseOperation", intToVoid(frame::setDefaultCloseOperation));
+        set("setLocationByPlatform", booleanOptToVoid(frame::setLocationByPlatform));
+        set("setResizable", booleanOptToVoid(frame::setResizable));
+        set("setTitle", stringToVoid(frame::setTitle));
     }
 }

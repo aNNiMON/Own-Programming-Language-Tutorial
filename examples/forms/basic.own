@@ -1,0 +1,6 @@
+use "forms"
+
+window = newWindow("Basic form example")
+window.add("Hello, world")
+window.pack()
+window.setVisible()

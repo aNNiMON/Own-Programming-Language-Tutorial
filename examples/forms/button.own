@@ -1,0 +1,11 @@
+use "forms"
+
+button = newButton("Click me")
+button.onClick(def() {
+  println "Oh, you clicked me."
+})
+
+window = newWindow("Button example")
+window.add(button)
+window.pack()
+window.setVisible()

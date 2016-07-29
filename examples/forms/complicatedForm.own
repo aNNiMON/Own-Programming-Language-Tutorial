@@ -1,0 +1,38 @@
+use "std"
+use "forms"
+
+actionsPanel = newPanel()
+actionsPanel.setLayout(boxLayout(actionsPanel, BoxLayout.PAGE_AXIS))
+actionsPanel.add("Actions:")
+actionsPanel.add(newButton("Action 1"))
+actionsPanel.add(newButton("Action 2"))
+actionsPanel.add(newButton("Action 3"))
+actionsPanel.add(newButton("Action 4"))
+
+enterTextLabel = newLabel("Enter a text", SwingConstants.CENTER)
+
+textField = newTextField()
+textField.addKeyListener(def(type, event) {
+   lengthLabel.setText(length(textField.getText()))
+})
+
+statusPanel = newPanel()
+statusPanel.setLayout(boxLayout(statusPanel, BoxLayout.LINE_AXIS))
+statusPanel.add("Length: ")
+lengthLabel = newLabel()
+statusPanel.add(lengthLabel)
+
+mainPanel = newPanel(borderLayout(10, 10))
+mainPanel.setPreferredSize(400, 250)
+mainPanel.add(actionsPanel, BorderLayout.WEST)
+mainPanel.add(enterTextLabel, BorderLayout.NORTH)
+mainPanel.add(textField, BorderLayout.CENTER)
+mainPanel.add(statusPanel, BorderLayout.SOUTH)
+
+
+window = newWindow("Complicated Form Example")
+window.setMinimumSize(200, 220)
+window.setLocationByPlatform()
+window.add(mainPanel)
+window.pack()
+window.setVisible()

@@ -47,6 +47,10 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     public Value get(Value key) {
         return map.get(key);
     }
+
+    public void set(String key, Value value) {
+        set(new StringValue(key), value);
+    }
     
     public void set(Value key, Value value) {
         map.put(key, value);

@@ -96,7 +96,7 @@ public final class OptimizationDumper {
 
     private static void writeContent(File file, ThrowableConsumer<Writer> consumer) throws IOException {
         try (OutputStream out = new FileOutputStream(file);
-             OutputStreamWriter writer = new OutputStreamWriter(out)) {
+             OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8")) {
             consumer.accept(writer);
         }
     }

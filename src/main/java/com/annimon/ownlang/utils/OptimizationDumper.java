@@ -10,6 +10,7 @@ import com.annimon.ownlang.parser.optimization.DeadCodeElimination;
 import com.annimon.ownlang.parser.optimization.ExpressionSimplification;
 import com.annimon.ownlang.parser.optimization.InstructionCombining;
 import com.annimon.ownlang.parser.optimization.Optimizable;
+import com.annimon.ownlang.parser.visitors.PrintVisitor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,25 +46,30 @@ public final class OptimizationDumper {
         int optimizationPasses = 1;
         int lastBatchModificationCount;
         int batchModificationCount = 0;
-        result.put("Source", node.toString());
+        result.put("Source", nodeToString(node));
         do {
             lastBatchModificationCount = batchModificationCount;
             batchModificationCount = 0;
             for (Optimizable optimization : OPTIMIZATIONS) {
-                final String lastSource = node.toString();
+                final String lastSource = nodeToString(node);
                 node = optimization.optimize(node);
-                final String currentSource = node.toString();
+                final String currentSource = nodeToString(node);
                 if (!lastSource.equals(currentSource)) {
                     final String optName = String.format("%s, %d pass",
                             optimization.getClass().getSimpleName(),
                             optimizationPasses);
-                    result.put(optName, node.toString());
+                    result.put(optName, nodeToString(node));
                 }
                 batchModificationCount += optimization.optimizationsCount();
             }
             optimizationPasses++;
         } while (lastBatchModificationCount != batchModificationCount);
         return result;
+    }
+
+    private static String nodeToString(Node n) {
+//        return n.toString();
+        return n.accept(new PrintVisitor(), new StringBuilder()).toString();
     }
 
     private static void writeStepsToFile(Map<String, String> optimizationSteps) throws IOException {
@@ -84,12 +90,14 @@ public final class OptimizationDumper {
 
     private static void writeSummary(final Map<String, String> optimizationSteps) throws IOException {
         final StringBuilder sb = new StringBuilder();
+        sb.append("[pr]");
         for (Map.Entry<String, String> entry : optimizationSteps.entrySet()) {
             sb.append(entry.getKey());
-            sb.append("\n\n");
+            sb.append("\n[code own]");
             sb.append(entry.getValue());
-            sb.append("\n\n-----------\n\n");
+            sb.append("[/code][sl]\n");
         }
+        sb.append("[/pr]");
         writeContent(new File(WORK_DIR, "summary.txt"),
                 writer -> writer.write(sb.toString()));
     }

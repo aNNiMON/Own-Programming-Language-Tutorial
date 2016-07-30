@@ -1,9 +1,12 @@
 package com.annimon.ownlang.parser.visitors;
 
+import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Types;
+import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import java.util.Iterator;
+import java.util.Map;
 
 public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder> {
 
@@ -15,13 +18,21 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(ArrayExpression s, StringBuilder t) {
+        t.append('[');
+        final Iterator<Expression> it = s.elements.iterator();
+        if (it.hasNext()) {
+            it.next().accept(this, t);
+            while (it.hasNext()) {
+                t.append(", ");
+                it.next().accept(this, t);
+            }
+        }
+        t.append(']');
         return t;
     }
 
     @Override
     public StringBuilder visit(AssignmentExpression s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
         ((Node) s.target).accept(this, t);
         t.append(' ').append((s.operation == null) ? "" : s.operation);
         t.append("= ");
@@ -39,25 +50,30 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(BlockStatement s, StringBuilder t) {
-        if (indent > 0) {
+        decreaseIndent();
+        if (indent >= 0) {
             t.append('{');
         }
         increaseIndent();
+
         for (Statement statement : s.statements) {
+            newLine(t);
+            printIndent(t);
             statement.accept(this, t);
         }
+
         decreaseIndent();
-        if (indent > 0) {
+        if (indent >= 0) {
             newLine(t);
+            printIndent(t);
             t.append('}');
         }
+        increaseIndent();
         return t;
     }
 
     @Override
     public StringBuilder visit(BreakStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
         t.append("break");
         return t;
     }
@@ -72,104 +88,157 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(ContainerAccessExpression s, StringBuilder t) {
+        visitVariable(s.variable, t);
+        for (Expression index : s.indices) {
+            t.append('[');
+            index.accept(this, t);
+            t.append(']');
+        }
         return t;
     }
 
     @Override
     public StringBuilder visit(ContinueStatement s, StringBuilder t) {
-        printIndent(t);
         t.append("continue");
-        newLine(t);
         return t;
     }
 
     @Override
     public StringBuilder visit(DoWhileStatement s, StringBuilder t) {
+        t.append("do ");
+
+        increaseIndent();
+        s.statement.accept(this, t);
+        decreaseIndent();
+
+        t.append(" while (");
+        s.condition.accept(this, t);
+        t.append(")");
         return t;
     }
 
     @Override
     public StringBuilder visit(DestructuringAssignmentStatement s, StringBuilder t) {
-        printIndent(t);
-        t.append("extract (");
+        t.append("extract(");
         final Iterator<String> it = s.variables.iterator();
         if (it.hasNext()) {
-            String variable = it.next();
-            t.append(variable == null ? " " : variable);
+            visitNullableVariable(it.next(), t);
             while (it.hasNext()) {
-                variable = it.next();
-                t.append(variable == null ? " " : variable);
+                t.append(", ");
+                visitNullableVariable(it.next(), t);
             }
         }
         t.append(") = ");
         s.containerExpression.accept(this, t);
-        newLine(t);
-        return t;
-    }
-
-    @Override
-    public StringBuilder visit(ForStatement s, StringBuilder t) {
-        return t;
-    }
-
-    @Override
-    public StringBuilder visit(ForeachArrayStatement s, StringBuilder t) {
-        return t;
-    }
-
-    @Override
-    public StringBuilder visit(ForeachMapStatement s, StringBuilder t) {
-        return t;
-    }
-
-    @Override
-    public StringBuilder visit(FunctionDefineStatement s, StringBuilder t) {
-        return t;
-    }
-
-    @Override
-    public StringBuilder visit(FunctionReferenceExpression s, StringBuilder t) {
         return t;
     }
 
     @Override
     public StringBuilder visit(ExprStatement s, StringBuilder t) {
-        printIndent(t);
         s.expr.accept(this, t);
-        newLine(t);
+        return t;
+    }
+
+    @Override
+    public StringBuilder visit(ForStatement s, StringBuilder t) {
+        t.append("for (");
+        s.initialization.accept(this, t);
+        t.append(", ");
+        s.termination.accept(this, t);
+        t.append(", ");
+        s.increment.accept(this, t);
+        t.append(") ");
+
+        increaseIndent();
+        s.statement.accept(this, t);
+        decreaseIndent();
+        return t;
+    }
+
+    @Override
+    public StringBuilder visit(ForeachArrayStatement s, StringBuilder t) {
+        t.append("for (");
+        visitVariable(s.variable, t);
+        t.append(" : ");
+        s.container.accept(this, t);
+        t.append(") ");
+
+        increaseIndent();
+        s.body.accept(this, t);
+        decreaseIndent();
+        return t;
+    }
+
+    @Override
+    public StringBuilder visit(ForeachMapStatement s, StringBuilder t) {
+        t.append("for (");
+        visitVariable(s.key, t);
+        t.append(", ");
+        visitVariable(s.value, t);
+        t.append(" : ");
+        s.container.accept(this, t);
+        t.append(") ");
+
+        increaseIndent();
+        s.body.accept(this, t);
+        decreaseIndent();
+        return t;
+    }
+
+    @Override
+    public StringBuilder visit(FunctionDefineStatement s, StringBuilder t) {
+        t.append("def ");
+        visitVariable(s.name, t);
+        t.append(s.arguments);
+        return visitFunctionBody(s.body, t);
+    }
+
+    @Override
+    public StringBuilder visit(FunctionReferenceExpression s, StringBuilder t) {
+        t.append("::");
+        visitVariable(s.name, t);
         return t;
     }
 
     @Override
     public StringBuilder visit(FunctionalExpression s, StringBuilder t) {
+        if (s.functionExpr instanceof ValueExpression && ((ValueExpression)s.functionExpr).value.type() == Types.STRING) {
+            t.append(((ValueExpression)s.functionExpr).value.asString());
+        } else {
+            s.functionExpr.accept(this, t);
+        }
+        t.append("(");
+        boolean firstElement = true;
+        for (Expression expr : s.arguments) {
+            if (firstElement) firstElement = false;
+            else t.append(", ");
+            expr.accept(this, t);
+        }
+        t.append(")");
         return t;
     }
 
     @Override
     public StringBuilder visit(IfStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
         t.append("if (");
         s.expression.accept(this, t);
         t.append(") ");
+
         increaseIndent();
         s.ifStatement.accept(this, t);
         decreaseIndent();
+
         if (s.elseStatement != null) {
             newLine(t);
             printIndent(t);
             t.append("else ");
-            increaseIndent();
             s.elseStatement.accept(this, t);
-            decreaseIndent();
         }
         return t;
     }
 
     @Override
     public StringBuilder visit(IncludeStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
         t.append("include ");
         s.expression.accept(this, t);
         return t;
@@ -177,18 +246,51 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(MapExpression s, StringBuilder t) {
+        if (s.elements.isEmpty()) {
+            t.append("{ }");
+            return t;
+        }
+        t.append('{');
+        increaseIndent();
+        boolean firstElement = true;
+        for (Map.Entry<Expression, Expression> entry : s.elements.entrySet()) {
+            if (firstElement) firstElement = false;
+            else t.append(",");
+            newLine(t);
+            printIndent(t);
+            entry.getKey().accept(this, t);
+            t.append(" : ");
+            entry.getValue().accept(this, t);
+        }
+        decreaseIndent();
+        newLine(t);
+        printIndent(t);
+        t.append('}');
         return t;
     }
 
     @Override
     public StringBuilder visit(MatchExpression s, StringBuilder t) {
+        t.append("match ");
+        s.expression.accept(this, t);
+        t.append(" {");
+
+        increaseIndent();
+        for (MatchExpression.Pattern pattern : s.patterns) {
+            newLine(t);
+            printIndent(t);
+            t.append("case ");
+            t.append(pattern);
+        }
+        decreaseIndent();
+        newLine(t);
+        printIndent(t);
+        t.append("}");
         return t;
     }
 
     @Override
     public StringBuilder visit(PrintStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
         t.append("print ");
         s.expression.accept(this, t);
         return t;
@@ -196,8 +298,6 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(PrintlnStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
         t.append("println ");
         s.expression.accept(this, t);
         return t;
@@ -205,8 +305,6 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(ReturnStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
         t.append("return ");
         s.expression.accept(this, t);
         return t;
@@ -229,10 +327,18 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
             case DECREMENT_POSTFIX:
                 s.expr1.accept(this, t);
                 t.append(s.operation);
+                break;
             default:
                 t.append(s.operation);
                 s.expr1.accept(this, t);
         }
+        return t;
+    }
+
+    @Override
+    public StringBuilder visit(UseStatement s, StringBuilder t) {
+        t.append("use ");
+        s.expression.accept(this, t);
         return t;
     }
 
@@ -245,6 +351,16 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
                 str = str.replace("\t", "\\t");
                 t.append('"').append(str).append('"');
                 break;
+            case Types.FUNCTION:  {
+                final Function function = ((FunctionValue) s.value).getValue();
+                if (function instanceof UserDefinedFunction) {
+                    UserDefinedFunction f = (UserDefinedFunction) function;
+                    t.append("def");
+                    t.append(f.arguments);
+                    return visitFunctionBody(f.body, t);
+                } else t.append(function);
+                break;
+            }
             default:
                 t.append(s.value.raw());
                 break;
@@ -254,51 +370,61 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(VariableExpression s, StringBuilder t) {
+        return visitVariable(s.name, t);
+    }
+
+    @Override
+    public StringBuilder visit(WhileStatement s, StringBuilder t) {
+        t.append("while (");
+        s.condition.accept(this, t);
+        t.append(") ");
+
+        increaseIndent();
+        s.statement.accept(this, t);
+        decreaseIndent();
+        return t;
+    }
+
+    public StringBuilder visitNullableVariable(String name, StringBuilder t) {
+        if (name == null) {
+            t.append(' ');
+            return t;
+        }
+        return visitVariable(name, t);
+    }
+
+    public StringBuilder visitVariable(String name, StringBuilder t) {
         boolean extendedWordVariable = false;
-        for (char ch : s.name.toCharArray()) {
+        for (char ch : name.toCharArray()) {
             if (!Character.isLetterOrDigit(ch)) {
                 extendedWordVariable = true;
                 break;
             }
         }
         if (extendedWordVariable) {
-            t.append('`').append(s.name).append('`');
+            t.append('`').append(name).append('`');
         } else {
-            t.append(s.name);
+            t.append(name);
         }
         return t;
     }
 
-    @Override
-    public StringBuilder visit(WhileStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
-        t.append("while (");
-        s.condition.accept(this, t);
-        t.append(") {");
-        newLine(t);
-        increaseIndent();
-        s.statement.accept(this, t);
-        decreaseIndent();
-        newLine(t);
-        t.append('}');
+    private StringBuilder visitFunctionBody(Statement s, StringBuilder t) {
+        if (s instanceof ReturnStatement) {
+            t.append(" = ");
+            ((ReturnStatement)s).expression.accept(this, t);
+        } else {
+            increaseIndent();
+            s.accept(this, t);
+            decreaseIndent();
+        }
         return t;
     }
-
-    @Override
-    public StringBuilder visit(UseStatement s, StringBuilder t) {
-        newLine(t);
-        printIndent(t);
-        t.append("use ");
-        s.expression.accept(this, t);
-        return t;
-    }
-
 
     private void newLine(StringBuilder t) {
         t.append(System.lineSeparator());
     }
-    
+
     private void printIndent(StringBuilder sb) {
         for (int i = 0; i < indent; i++) {
             sb.append(' ');

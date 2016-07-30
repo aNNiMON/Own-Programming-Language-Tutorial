@@ -13,12 +13,12 @@ import com.annimon.ownlang.lib.modules.functions.*;
 public final class std implements Module {
 
     public static void initConstants() {
-        Variables.define("ARGS", ArrayValue.of(Main.getOwnlangArgs()));
     }
 
     @Override
     public void init() {
         initConstants();
+        Variables.define("ARGS", ArrayValue.of(Main.getOwnlangArgs())); // is not constant
         Functions.set("echo", new std_echo());
         Functions.set("readln", new std_readln());
         Functions.set("length", new std_length());

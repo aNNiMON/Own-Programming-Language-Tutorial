@@ -104,9 +104,9 @@ public final class http_http implements Function {
     private Value getResult(Response response, MapValue options) throws IOException {
         if (options.containsKey(EXTENDED_RESULT)) {
             final MapValue map = new MapValue(10);
-            map.set(new StringValue("text"), new StringValue(response.body().string()));
-            map.set(new StringValue("message"), new StringValue(response.message()));
-            map.set(new StringValue("code"), NumberValue.of(response.code()));
+            map.set("text", new StringValue(response.body().string()));
+            map.set("message", new StringValue(response.message()));
+            map.set("code", NumberValue.of(response.code()));
             final MapValue headers = new MapValue(response.headers().size());
             for (Map.Entry<String, List<String>> entry : response.headers().toMultimap().entrySet()) {
                 final int valuesSize = entry.getValue().size();
@@ -114,10 +114,10 @@ public final class http_http implements Function {
                 for (int i = 0; i < valuesSize; i++) {
                     values.set(i, new StringValue(entry.getValue().get(i)));
                 }
-                headers.set(new StringValue(entry.getKey()), values);
+                headers.set(entry.getKey(), values);
             }
-            map.set(new StringValue("headers"), headers);
-            map.set(new StringValue("content_length"), NumberValue.of(response.body().contentLength()));
+            map.set("headers", headers);
+            map.set("content_length", NumberValue.of(response.body().contentLength()));
             map.set(CONTENT_TYPE, new StringValue(response.body().contentType().toString()));
             return map;
         }

@@ -105,61 +105,61 @@ public final class canvasfx implements Module {
 
         final MapValue arcType = new MapValue(ArcType.values().length);
         for (ArcType value : ArcType.values()) {
-            arcType.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            arcType.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("ArcType", arcType);
 
         final MapValue fillRule = new MapValue(FillRule.values().length);
         for (FillRule value : FillRule.values()) {
-            fillRule.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            fillRule.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("FillRule", fillRule);
 
         final MapValue blendMode = new MapValue(BlendMode.values().length);
         for (BlendMode value : BlendMode.values()) {
-            blendMode.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            blendMode.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("BlendMode", blendMode);
 
         final MapValue lineCap = new MapValue(StrokeLineCap.values().length);
         for (StrokeLineCap value : StrokeLineCap.values()) {
-            lineCap.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            lineCap.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("StrokeLineCap", lineCap);
 
         final MapValue lineJoin = new MapValue(StrokeLineJoin.values().length);
         for (StrokeLineJoin value : StrokeLineJoin.values()) {
-            lineJoin.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            lineJoin.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("StrokeLineJoin", lineJoin);
 
         final MapValue textAlignment = new MapValue(TextAlignment.values().length);
         for (TextAlignment value : TextAlignment.values()) {
-            textAlignment.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            textAlignment.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("TextAlignment", textAlignment);
 
         final MapValue vPos = new MapValue(VPos.values().length);
         for (VPos value : VPos.values()) {
-            vPos.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            vPos.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("VPos", vPos);
 
         final MapValue events = new MapValue(Events.values().length);
         for (Events value : Events.values()) {
-            events.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            events.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("Events", events);
 
         final MapValue mouseButton = new MapValue(MouseButton.values().length);
         for (MouseButton value : MouseButton.values()) {
-            mouseButton.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            mouseButton.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("MouseButton", mouseButton);
 
         final MapValue keyCodes = new MapValue(KeyCode.values().length);
         for (KeyCode value : KeyCode.values()) {
-            keyCodes.set(new StringValue(value.name()), NumberValue.of(value.ordinal()));
+            keyCodes.set(value.name(), NumberValue.of(value.ordinal()));
         }
         Variables.define("KeyCode", keyCodes);
     }
@@ -594,11 +594,11 @@ public final class canvasfx implements Module {
         }
 
         private void init() {
-            set(new StringValue("width"), NumberValue.of(image.getWidth()));
-            set(new StringValue("height"), NumberValue.of(image.getHeight()));
-            set(new StringValue("preserveRatio"), NumberValue.fromBoolean(image.isPreserveRatio()));
-            set(new StringValue("smooth"), NumberValue.fromBoolean(image.isSmooth()));
-            set(new StringValue("getPixels"), new FunctionValue(this::getPixels));
+            set("width", NumberValue.of(image.getWidth()));
+            set("height", NumberValue.of(image.getHeight()));
+            set("preserveRatio", NumberValue.fromBoolean(image.isPreserveRatio()));
+            set("smooth", NumberValue.fromBoolean(image.isSmooth()));
+            set("getPixels", new FunctionValue(this::getPixels));
         }
 
         private Value getPixels(Value... args) {
@@ -737,7 +737,7 @@ public final class canvasfx implements Module {
             functions.put("translate", this::translate);
 
             for (Map.Entry<String, Function> entry : functions.entrySet()) {
-                set(new StringValue(entry.getKey()), new FunctionValue(entry.getValue()));
+                set(entry.getKey(), new FunctionValue(entry.getValue()));
             }
         }
 
@@ -1226,57 +1226,57 @@ public final class canvasfx implements Module {
     
     private static void handleMouseEvent(MouseEvent e, final Function handler) {
         final MapValue map = new MapValue(25);
-        map.set(new StringValue("button"), NumberValue.of(e.getButton().ordinal()));
-        map.set(new StringValue("clickCount"), NumberValue.of(e.getClickCount()));
-        map.set(new StringValue("sceneX"), NumberValue.of(e.getSceneX()));
-        map.set(new StringValue("sceneY"), NumberValue.of(e.getSceneY()));
-        map.set(new StringValue("screenX"), NumberValue.of(e.getScreenX()));
-        map.set(new StringValue("screenY"), NumberValue.of(e.getScreenY()));
-        map.set(new StringValue("x"), NumberValue.of(e.getX()));
-        map.set(new StringValue("y"), NumberValue.of(e.getY()));
-        map.set(new StringValue("z"), NumberValue.of(e.getZ()));
-        map.set(new StringValue("isAltDown"), NumberValue.fromBoolean(e.isAltDown()));
-        map.set(new StringValue("isConsumed"), NumberValue.fromBoolean(e.isConsumed()));
-        map.set(new StringValue("isControlDown"), NumberValue.fromBoolean(e.isControlDown()));
-        map.set(new StringValue("isDragDetect"), NumberValue.fromBoolean(e.isDragDetect()));
-        map.set(new StringValue("isMetaDown"), NumberValue.fromBoolean(e.isMetaDown()));
-        map.set(new StringValue("isMiddleButtonDown"), NumberValue.fromBoolean(e.isMiddleButtonDown()));
-        map.set(new StringValue("isPopupTrigger"), NumberValue.fromBoolean(e.isPopupTrigger()));
-        map.set(new StringValue("isPrimaryButtonDown"), NumberValue.fromBoolean(e.isPrimaryButtonDown()));
-        map.set(new StringValue("isSecondaryButtonDown"), NumberValue.fromBoolean(e.isSecondaryButtonDown()));
-        map.set(new StringValue("isShiftDown"), NumberValue.fromBoolean(e.isShiftDown()));
-        map.set(new StringValue("isShortcutDown"), NumberValue.fromBoolean(e.isShortcutDown()));
-        map.set(new StringValue("isStillSincePress"), NumberValue.fromBoolean(e.isStillSincePress()));
-        map.set(new StringValue("isSynthesized"), NumberValue.fromBoolean(e.isSynthesized()));
+        map.set("button", NumberValue.of(e.getButton().ordinal()));
+        map.set("clickCount", NumberValue.of(e.getClickCount()));
+        map.set("sceneX", NumberValue.of(e.getSceneX()));
+        map.set("sceneY", NumberValue.of(e.getSceneY()));
+        map.set("screenX", NumberValue.of(e.getScreenX()));
+        map.set("screenY", NumberValue.of(e.getScreenY()));
+        map.set("x", NumberValue.of(e.getX()));
+        map.set("y", NumberValue.of(e.getY()));
+        map.set("z", NumberValue.of(e.getZ()));
+        map.set("isAltDown", NumberValue.fromBoolean(e.isAltDown()));
+        map.set("isConsumed", NumberValue.fromBoolean(e.isConsumed()));
+        map.set("isControlDown", NumberValue.fromBoolean(e.isControlDown()));
+        map.set("isDragDetect", NumberValue.fromBoolean(e.isDragDetect()));
+        map.set("isMetaDown", NumberValue.fromBoolean(e.isMetaDown()));
+        map.set("isMiddleButtonDown", NumberValue.fromBoolean(e.isMiddleButtonDown()));
+        map.set("isPopupTrigger", NumberValue.fromBoolean(e.isPopupTrigger()));
+        map.set("isPrimaryButtonDown", NumberValue.fromBoolean(e.isPrimaryButtonDown()));
+        map.set("isSecondaryButtonDown", NumberValue.fromBoolean(e.isSecondaryButtonDown()));
+        map.set("isShiftDown", NumberValue.fromBoolean(e.isShiftDown()));
+        map.set("isShortcutDown", NumberValue.fromBoolean(e.isShortcutDown()));
+        map.set("isStillSincePress", NumberValue.fromBoolean(e.isStillSincePress()));
+        map.set("isSynthesized", NumberValue.fromBoolean(e.isSynthesized()));
         handler.execute(map);
     }
     
     private static void handleKeyEvent(final KeyEvent e, final Function handler) {
         final MapValue map = new MapValue(10);
-        map.set(new StringValue("code"), NumberValue.of(e.getCode().ordinal()));
-        map.set(new StringValue("character"), new StringValue(e.getCharacter()));
-        map.set(new StringValue("text"), new StringValue(e.getText()));
-        map.set(new StringValue("isAltDown"), NumberValue.fromBoolean(e.isAltDown()));
-        map.set(new StringValue("isConsumed"), NumberValue.fromBoolean(e.isConsumed()));
-        map.set(new StringValue("isControlDown"), NumberValue.fromBoolean(e.isControlDown()));
-        map.set(new StringValue("isMetaDown"), NumberValue.fromBoolean(e.isMetaDown()));
-        map.set(new StringValue("isShiftDown"), NumberValue.fromBoolean(e.isShiftDown()));
-        map.set(new StringValue("isShortcutDown"), NumberValue.fromBoolean(e.isShortcutDown()));
+        map.set("code", NumberValue.of(e.getCode().ordinal()));
+        map.set("character", new StringValue(e.getCharacter()));
+        map.set("text", new StringValue(e.getText()));
+        map.set("isAltDown", NumberValue.fromBoolean(e.isAltDown()));
+        map.set("isConsumed", NumberValue.fromBoolean(e.isConsumed()));
+        map.set("isControlDown", NumberValue.fromBoolean(e.isControlDown()));
+        map.set("isMetaDown", NumberValue.fromBoolean(e.isMetaDown()));
+        map.set("isShiftDown", NumberValue.fromBoolean(e.isShiftDown()));
+        map.set("isShortcutDown", NumberValue.fromBoolean(e.isShortcutDown()));
         handler.execute(map);
     }
     
     private static void handleDragEvent(final DragEvent e, final Function handler) {
         final MapValue map = new MapValue(10);
-        map.set(new StringValue("sceneX"), NumberValue.of(e.getSceneX()));
-        map.set(new StringValue("sceneY"), NumberValue.of(e.getSceneY()));
-        map.set(new StringValue("screenX"), NumberValue.of(e.getScreenX()));
-        map.set(new StringValue("screenY"), NumberValue.of(e.getScreenY()));
-        map.set(new StringValue("x"), NumberValue.of(e.getX()));
-        map.set(new StringValue("y"), NumberValue.of(e.getY()));
-        map.set(new StringValue("z"), NumberValue.of(e.getZ()));
-        map.set(new StringValue("isAccepted"), NumberValue.fromBoolean(e.isAccepted()));
-        map.set(new StringValue("isConsumed"), NumberValue.fromBoolean(e.isConsumed()));
-        map.set(new StringValue("isDropCompleted"), NumberValue.fromBoolean(e.isDropCompleted()));
+        map.set("sceneX", NumberValue.of(e.getSceneX()));
+        map.set("sceneY", NumberValue.of(e.getSceneY()));
+        map.set("screenX", NumberValue.of(e.getScreenX()));
+        map.set("screenY", NumberValue.of(e.getScreenY()));
+        map.set("x", NumberValue.of(e.getX()));
+        map.set("y", NumberValue.of(e.getY()));
+        map.set("z", NumberValue.of(e.getZ()));
+        map.set("isAccepted", NumberValue.fromBoolean(e.isAccepted()));
+        map.set("isConsumed", NumberValue.fromBoolean(e.isConsumed()));
+        map.set("isDropCompleted", NumberValue.fromBoolean(e.isDropCompleted()));
         handler.execute(map);
     }
     

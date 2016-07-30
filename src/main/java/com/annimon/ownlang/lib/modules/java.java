@@ -119,37 +119,37 @@ public final class java implements Module {
         }
 
         private void init(Class<?> clazz) {
-            set(new StringValue("isAnnotation"), NumberValue.fromBoolean(clazz.isAnnotation()));
-            set(new StringValue("isAnonymousClass"), NumberValue.fromBoolean(clazz.isAnonymousClass()));
-            set(new StringValue("isArray"), NumberValue.fromBoolean(clazz.isArray()));
-            set(new StringValue("isEnum"), NumberValue.fromBoolean(clazz.isEnum()));
-            set(new StringValue("isInterface"), NumberValue.fromBoolean(clazz.isInterface()));
-            set(new StringValue("isLocalClass"), NumberValue.fromBoolean(clazz.isLocalClass()));
-            set(new StringValue("isMemberClass"), NumberValue.fromBoolean(clazz.isMemberClass()));
-            set(new StringValue("isPrimitive"), NumberValue.fromBoolean(clazz.isPrimitive()));
-            set(new StringValue("isSynthetic"), NumberValue.fromBoolean(clazz.isSynthetic()));
+            set("isAnnotation", NumberValue.fromBoolean(clazz.isAnnotation()));
+            set("isAnonymousClass", NumberValue.fromBoolean(clazz.isAnonymousClass()));
+            set("isArray", NumberValue.fromBoolean(clazz.isArray()));
+            set("isEnum", NumberValue.fromBoolean(clazz.isEnum()));
+            set("isInterface", NumberValue.fromBoolean(clazz.isInterface()));
+            set("isLocalClass", NumberValue.fromBoolean(clazz.isLocalClass()));
+            set("isMemberClass", NumberValue.fromBoolean(clazz.isMemberClass()));
+            set("isPrimitive", NumberValue.fromBoolean(clazz.isPrimitive()));
+            set("isSynthetic", NumberValue.fromBoolean(clazz.isSynthetic()));
 
-            set(new StringValue("modifiers"), NumberValue.of(clazz.getModifiers()));
+            set("modifiers", NumberValue.of(clazz.getModifiers()));
 
-            set(new StringValue("canonicalName"), new StringValue(clazz.getCanonicalName()));
-            set(new StringValue("name"), new StringValue(clazz.getName()));
-            set(new StringValue("simpleName"), new StringValue(clazz.getSimpleName()));
-            set(new StringValue("typeName"), new StringValue(clazz.getTypeName()));
-            set(new StringValue("genericString"), new StringValue(clazz.toGenericString()));
+            set("canonicalName", new StringValue(clazz.getCanonicalName()));
+            set("name", new StringValue(clazz.getName()));
+            set("simpleName", new StringValue(clazz.getSimpleName()));
+            set("typeName", new StringValue(clazz.getTypeName()));
+            set("genericString", new StringValue(clazz.toGenericString()));
 
-            set(new StringValue("getComponentType"), new FunctionValue(v -> classOrNull(clazz.getComponentType()) ));
-            set(new StringValue("getDeclaringClass"), new FunctionValue(v -> classOrNull(clazz.getDeclaringClass()) ));
-            set(new StringValue("getEnclosingClass"), new FunctionValue(v -> classOrNull(clazz.getEnclosingClass()) ));
-            set(new StringValue("getSuperclass"), new FunctionValue(v -> new ClassValue(clazz.getSuperclass()) ));
+            set("getComponentType", new FunctionValue(v -> classOrNull(clazz.getComponentType()) ));
+            set("getDeclaringClass", new FunctionValue(v -> classOrNull(clazz.getDeclaringClass()) ));
+            set("getEnclosingClass", new FunctionValue(v -> classOrNull(clazz.getEnclosingClass()) ));
+            set("getSuperclass", new FunctionValue(v -> new ClassValue(clazz.getSuperclass()) ));
 
-            set(new StringValue("getClasses"), new FunctionValue(v -> array(clazz.getClasses()) ));
-            set(new StringValue("getDeclaredClasses"), new FunctionValue(v -> array(clazz.getDeclaredClasses()) ));
-            set(new StringValue("getInterfaces"), new FunctionValue(v -> array(clazz.getInterfaces()) ));
+            set("getClasses", new FunctionValue(v -> array(clazz.getClasses()) ));
+            set("getDeclaredClasses", new FunctionValue(v -> array(clazz.getDeclaredClasses()) ));
+            set("getInterfaces", new FunctionValue(v -> array(clazz.getInterfaces()) ));
 
-            set(new StringValue("asSubclass"), new FunctionValue(this::asSubclass));
-            set(new StringValue("isAssignableFrom"), new FunctionValue(this::isAssignableFrom));
-            set(new StringValue("new"), new FunctionValue(this::newInstance));
-            set(new StringValue("cast"), new FunctionValue(this::cast));
+            set("asSubclass", new FunctionValue(this::asSubclass));
+            set("isAssignableFrom", new FunctionValue(this::isAssignableFrom));
+            set("new", new FunctionValue(this::newInstance));
+            set("cast", new FunctionValue(this::cast));
         }
 
         private Value asSubclass(Value... args) {

@@ -128,29 +128,29 @@ public final class jdbc implements Module {
         }
 
         private void init() {
-            set(new StringValue("createStatement"), new FunctionValue(this::createStatement));
-            set(new StringValue("prepareStatement"), new FunctionValue(this::prepareStatement));
-            set(new StringValue("close"), new FunctionValue(this::close));
+            set("createStatement", new FunctionValue(this::createStatement));
+            set("prepareStatement", new FunctionValue(this::prepareStatement));
+            set("close", new FunctionValue(this::close));
 
-            set(new StringValue("clearWarnings"), voidFunction(connection::clearWarnings));
-            set(new StringValue("close"), voidFunction(connection::close));
-            set(new StringValue("commit"), voidFunction(connection::commit));
-            set(new StringValue("rollback"), voidFunction(connection::rollback));
+            set("clearWarnings", voidFunction(connection::clearWarnings));
+            set("close", voidFunction(connection::close));
+            set("commit", voidFunction(connection::commit));
+            set("rollback", voidFunction(connection::rollback));
 
-            set(new StringValue("setHoldability"), voidIntFunction(connection::setHoldability));
-            set(new StringValue("setTransactionIsolation"), voidIntFunction(connection::setTransactionIsolation));
+            set("setHoldability", voidIntFunction(connection::setHoldability));
+            set("setTransactionIsolation", voidIntFunction(connection::setTransactionIsolation));
 
-            set(new StringValue("getAutoCommit"), booleanFunction(connection::getAutoCommit));
-            set(new StringValue("isClosed"), booleanFunction(connection::isClosed));
-            set(new StringValue("isReadOnly"), booleanFunction(connection::isReadOnly));
+            set("getAutoCommit", booleanFunction(connection::getAutoCommit));
+            set("isClosed", booleanFunction(connection::isClosed));
+            set("isReadOnly", booleanFunction(connection::isReadOnly));
 
-            set(new StringValue("getHoldability"), intFunction(connection::getHoldability));
-            set(new StringValue("getNetworkTimeout"), intFunction(connection::getNetworkTimeout));
-            set(new StringValue("getTransactionIsolation"), intFunction(connection::getTransactionIsolation));
-            set(new StringValue("getUpdateCount"), intFunction(connection::getHoldability));
+            set("getHoldability", intFunction(connection::getHoldability));
+            set("getNetworkTimeout", intFunction(connection::getNetworkTimeout));
+            set("getTransactionIsolation", intFunction(connection::getTransactionIsolation));
+            set("getUpdateCount", intFunction(connection::getHoldability));
 
-            set(new StringValue("getCatalog"), stringFunction(connection::getCatalog));
-            set(new StringValue("getSchema"), stringFunction(connection::getSchema));
+            set("getCatalog", stringFunction(connection::getCatalog));
+            set("getSchema", stringFunction(connection::getSchema));
         }
 
         private Value createStatement(Value... args) {
@@ -224,68 +224,68 @@ public final class jdbc implements Module {
         }
 
         private void init() {
-            set(new StringValue("addBatch"), new FunctionValue(this::addBatch));
-            set(new StringValue("execute"), new FunctionValue(this::execute));
-            set(new StringValue("executeQuery"), new FunctionValue(this::executeQuery));
-            set(new StringValue("executeUpdate"), new FunctionValue(this::executeUpdate));
-            set(new StringValue("executeLargeUpdate"), new FunctionValue(this::executeLargeUpdate));
+            set("addBatch", new FunctionValue(this::addBatch));
+            set("execute", new FunctionValue(this::execute));
+            set("executeQuery", new FunctionValue(this::executeQuery));
+            set("executeUpdate", new FunctionValue(this::executeUpdate));
+            set("executeLargeUpdate", new FunctionValue(this::executeLargeUpdate));
 
-            set(new StringValue("cancel"), voidFunction(statement::cancel));
-            set(new StringValue("clearBatch"), voidFunction(statement::clearBatch));
-            set(new StringValue("clearWarnings"), voidFunction(statement::clearWarnings));
-            set(new StringValue("close"), voidFunction(statement::close));
-            set(new StringValue("closeOnCompletion"), voidFunction(statement::closeOnCompletion));
+            set("cancel", voidFunction(statement::cancel));
+            set("clearBatch", voidFunction(statement::clearBatch));
+            set("clearWarnings", voidFunction(statement::clearWarnings));
+            set("close", voidFunction(statement::close));
+            set("closeOnCompletion", voidFunction(statement::closeOnCompletion));
 
-            set(new StringValue("setFetchDirection"), voidIntFunction(statement::setFetchDirection));
-            set(new StringValue("setFetchSize"), voidIntFunction(statement::setFetchSize));
-            set(new StringValue("setMaxFieldSize"), voidIntFunction(statement::setMaxFieldSize));
-            set(new StringValue("setMaxRows"), voidIntFunction(statement::setMaxRows));
-            set(new StringValue("setQueryTimeout"), voidIntFunction(statement::setQueryTimeout));
+            set("setFetchDirection", voidIntFunction(statement::setFetchDirection));
+            set("setFetchSize", voidIntFunction(statement::setFetchSize));
+            set("setMaxFieldSize", voidIntFunction(statement::setMaxFieldSize));
+            set("setMaxRows", voidIntFunction(statement::setMaxRows));
+            set("setQueryTimeout", voidIntFunction(statement::setQueryTimeout));
 
-            set(new StringValue("getMoreResults"), booleanFunction(statement::getMoreResults));
-            set(new StringValue("isCloseOnCompletion"), booleanFunction(statement::isCloseOnCompletion));
-            set(new StringValue("isClosed"), booleanFunction(statement::isClosed));
-            set(new StringValue("isPoolable"), booleanFunction(statement::isPoolable));
+            set("getMoreResults", booleanFunction(statement::getMoreResults));
+            set("isCloseOnCompletion", booleanFunction(statement::isCloseOnCompletion));
+            set("isClosed", booleanFunction(statement::isClosed));
+            set("isPoolable", booleanFunction(statement::isPoolable));
 
-            set(new StringValue("getFetchDirection"), intFunction(statement::getFetchDirection));
-            set(new StringValue("getFetchSize"), intFunction(statement::getFetchSize));
-            set(new StringValue("getMaxFieldSize"), intFunction(statement::getMaxFieldSize));
-            set(new StringValue("getMaxRows"), intFunction(statement::getMaxRows));
-            set(new StringValue("getQueryTimeout"), intFunction(statement::getQueryTimeout));
-            set(new StringValue("getResultSetConcurrency"), intFunction(statement::getResultSetConcurrency));
-            set(new StringValue("getResultSetHoldability"), intFunction(statement::getResultSetHoldability));
-            set(new StringValue("getResultSetType"), intFunction(statement::getResultSetType));
-            set(new StringValue("getUpdateCount"), intFunction(statement::getUpdateCount));
+            set("getFetchDirection", intFunction(statement::getFetchDirection));
+            set("getFetchSize", intFunction(statement::getFetchSize));
+            set("getMaxFieldSize", intFunction(statement::getMaxFieldSize));
+            set("getMaxRows", intFunction(statement::getMaxRows));
+            set("getQueryTimeout", intFunction(statement::getQueryTimeout));
+            set("getResultSetConcurrency", intFunction(statement::getResultSetConcurrency));
+            set("getResultSetHoldability", intFunction(statement::getResultSetHoldability));
+            set("getResultSetType", intFunction(statement::getResultSetType));
+            set("getUpdateCount", intFunction(statement::getUpdateCount));
 
-            set(new StringValue("setCursorName"), updateData(statement::setCursorName, (args) -> args[0].asString()));
-            set(new StringValue("setEscapeProcessing"), updateData(statement::setEscapeProcessing, (args) -> args[0].asInt() != 0));
-            set(new StringValue("setLargeMaxRows"), updateData(statement::setLargeMaxRows, (args) -> getNumber(args[0]).longValue()));
-            set(new StringValue("setPoolable"), updateData(statement::setPoolable, (args) -> args[0].asInt() != 0));
+            set("setCursorName", updateData(statement::setCursorName, (args) -> args[0].asString()));
+            set("setEscapeProcessing", updateData(statement::setEscapeProcessing, (args) -> args[0].asInt() != 0));
+            set("setLargeMaxRows", updateData(statement::setLargeMaxRows, (args) -> getNumber(args[0]).longValue()));
+            set("setPoolable", updateData(statement::setPoolable, (args) -> args[0].asInt() != 0));
 
-            set(new StringValue("getResultSet"), objectFunction(statement::getResultSet, ResultSetValue::new));
-            set(new StringValue("getGeneratedKeys"), objectFunction(statement::getGeneratedKeys, ResultSetValue::new));
-            set(new StringValue("executeBatch"), objectFunction(statement::executeBatch, jdbc::intArrayToValue));
-            set(new StringValue("executeLargeBatch"), objectFunction(statement::executeLargeBatch, jdbc::longArrayToValue));
+            set("getResultSet", objectFunction(statement::getResultSet, ResultSetValue::new));
+            set("getGeneratedKeys", objectFunction(statement::getGeneratedKeys, ResultSetValue::new));
+            set("executeBatch", objectFunction(statement::executeBatch, jdbc::intArrayToValue));
+            set("executeLargeBatch", objectFunction(statement::executeLargeBatch, jdbc::longArrayToValue));
 
             if (ps != null) {
-                set(new StringValue("clearParameters"), voidFunction(ps::clearParameters));
+                set("clearParameters", voidFunction(ps::clearParameters));
 
-                set(new StringValue("setBigDecimal"), updateData(ps::setBigDecimal, (args) -> new BigDecimal(args[1].asString())));
-                set(new StringValue("setBoolean"), updateData(ps::setBoolean, (args) -> args[1].asInt() != 0));
-                set(new StringValue("setByte"), updateData(ps::setByte, (args) -> getNumber(args[1]).byteValue()));
-                set(new StringValue("setBytes"), updateData(ps::setBytes, (args) -> valueToByteArray(args[1])));
-                set(new StringValue("setDate"), updateData(ps::setDate, (args) -> new Date(getNumber(args[1]).longValue())));
-                set(new StringValue("setDouble"), updateData(ps::setDouble, (args) -> getNumber(args[1]).doubleValue()));
-                set(new StringValue("setFloat"), updateData(ps::setFloat, (args) -> getNumber(args[1]).floatValue()));
-                set(new StringValue("setInt"), updateData(ps::setInt, (args) -> args[1].asInt()));
-                set(new StringValue("setLong"), updateData(ps::setLong, (args) -> getNumber(args[1]).longValue()));
-                set(new StringValue("setNString"), updateData(ps::setNString, (args) -> args[1].asString()));
-                set(new StringValue("setNull"), updateData(ps::setNull, (args) -> args[1].asInt()));
-                set(new StringValue("setShort"), updateData(ps::setShort, (args) -> getNumber(args[1]).shortValue()));
-                set(new StringValue("setString"), updateData(ps::setString, (args) -> args[1].asString()));
-                set(new StringValue("setTime"), updateData(ps::setTime, (args) -> new Time(getNumber(args[1]).longValue())));
-                set(new StringValue("setTimestamp"), updateData(ps::setTimestamp, (args) -> new Timestamp(getNumber(args[1]).longValue())));
-                set(new StringValue("setURL"), updateData(ps::setURL, (args) -> {
+                set("setBigDecimal", updateData(ps::setBigDecimal, (args) -> new BigDecimal(args[1].asString())));
+                set("setBoolean", updateData(ps::setBoolean, (args) -> args[1].asInt() != 0));
+                set("setByte", updateData(ps::setByte, (args) -> getNumber(args[1]).byteValue()));
+                set("setBytes", updateData(ps::setBytes, (args) -> valueToByteArray(args[1])));
+                set("setDate", updateData(ps::setDate, (args) -> new Date(getNumber(args[1]).longValue())));
+                set("setDouble", updateData(ps::setDouble, (args) -> getNumber(args[1]).doubleValue()));
+                set("setFloat", updateData(ps::setFloat, (args) -> getNumber(args[1]).floatValue()));
+                set("setInt", updateData(ps::setInt, (args) -> args[1].asInt()));
+                set("setLong", updateData(ps::setLong, (args) -> getNumber(args[1]).longValue()));
+                set("setNString", updateData(ps::setNString, (args) -> args[1].asString()));
+                set("setNull", updateData(ps::setNull, (args) -> args[1].asInt()));
+                set("setShort", updateData(ps::setShort, (args) -> getNumber(args[1]).shortValue()));
+                set("setString", updateData(ps::setString, (args) -> args[1].asString()));
+                set("setTime", updateData(ps::setTime, (args) -> new Time(getNumber(args[1]).longValue())));
+                set("setTimestamp", updateData(ps::setTimestamp, (args) -> new Timestamp(getNumber(args[1]).longValue())));
+                set("setURL", updateData(ps::setURL, (args) -> {
                     try {
                         return new URL(args[1].asString());
                     } catch (IOException ioe) {
@@ -384,84 +384,84 @@ public final class jdbc implements Module {
         }
 
         private void init() {
-            set(new StringValue("findColumn"), new FunctionValue(this::findColumn));
+            set("findColumn", new FunctionValue(this::findColumn));
 
-            set(new StringValue("afterLast"), voidFunction(rs::afterLast));
-            set(new StringValue("beforeFirst"), voidFunction(rs::beforeFirst));
-            set(new StringValue("cancelRowUpdates"), voidFunction(rs::cancelRowUpdates));
-            set(new StringValue("clearWarnings"), voidFunction(rs::clearWarnings));
-            set(new StringValue("close"), voidFunction(rs::close));
-            set(new StringValue("deleteRow"), voidFunction(rs::deleteRow));
-            set(new StringValue("insertRow"), voidFunction(rs::insertRow));
-            set(new StringValue("moveToCurrentRow"), voidFunction(rs::moveToCurrentRow));
-            set(new StringValue("moveToInsertRow"), voidFunction(rs::moveToInsertRow));
-            set(new StringValue("refreshRow"), voidFunction(rs::refreshRow));
-            set(new StringValue("updateRow"), voidFunction(rs::updateRow));
+            set("afterLast", voidFunction(rs::afterLast));
+            set("beforeFirst", voidFunction(rs::beforeFirst));
+            set("cancelRowUpdates", voidFunction(rs::cancelRowUpdates));
+            set("clearWarnings", voidFunction(rs::clearWarnings));
+            set("close", voidFunction(rs::close));
+            set("deleteRow", voidFunction(rs::deleteRow));
+            set("insertRow", voidFunction(rs::insertRow));
+            set("moveToCurrentRow", voidFunction(rs::moveToCurrentRow));
+            set("moveToInsertRow", voidFunction(rs::moveToInsertRow));
+            set("refreshRow", voidFunction(rs::refreshRow));
+            set("updateRow", voidFunction(rs::updateRow));
 
-            set(new StringValue("absolute"), voidIntFunction(rs::absolute));
-            set(new StringValue("relative"), voidIntFunction(rs::relative));
-            set(new StringValue("setFetchDirection"), voidIntFunction(rs::setFetchDirection));
-            set(new StringValue("setFetchSize"), voidIntFunction(rs::setFetchSize));
+            set("absolute", voidIntFunction(rs::absolute));
+            set("relative", voidIntFunction(rs::relative));
+            set("setFetchDirection", voidIntFunction(rs::setFetchDirection));
+            set("setFetchSize", voidIntFunction(rs::setFetchSize));
 
-            set(new StringValue("first"), booleanFunction(rs::first));
-            set(new StringValue("isAfterLast"), booleanFunction(rs::isAfterLast));
-            set(new StringValue("isBeforeFirst"), booleanFunction(rs::isBeforeFirst));
-            set(new StringValue("isClosed"), booleanFunction(rs::isClosed));
-            set(new StringValue("isFirst"), booleanFunction(rs::isFirst));
-            set(new StringValue("isLast"), booleanFunction(rs::isLast));
-            set(new StringValue("last"), booleanFunction(rs::last));
-            set(new StringValue("next"), booleanFunction(rs::next));
-            set(new StringValue("previous"), booleanFunction(rs::previous));
-            set(new StringValue("rowDeleted"), booleanFunction(rs::rowDeleted));
-            set(new StringValue("rowInserted"), booleanFunction(rs::rowInserted));
-            set(new StringValue("rowUpdated"), booleanFunction(rs::rowUpdated));
-            set(new StringValue("wasNull"), booleanFunction(rs::wasNull));
+            set("first", booleanFunction(rs::first));
+            set("isAfterLast", booleanFunction(rs::isAfterLast));
+            set("isBeforeFirst", booleanFunction(rs::isBeforeFirst));
+            set("isClosed", booleanFunction(rs::isClosed));
+            set("isFirst", booleanFunction(rs::isFirst));
+            set("isLast", booleanFunction(rs::isLast));
+            set("last", booleanFunction(rs::last));
+            set("next", booleanFunction(rs::next));
+            set("previous", booleanFunction(rs::previous));
+            set("rowDeleted", booleanFunction(rs::rowDeleted));
+            set("rowInserted", booleanFunction(rs::rowInserted));
+            set("rowUpdated", booleanFunction(rs::rowUpdated));
+            set("wasNull", booleanFunction(rs::wasNull));
 
-            set(new StringValue("getConcurrency"), intFunction(rs::getConcurrency));
-            set(new StringValue("getFetchDirection"), intFunction(rs::getFetchDirection));
-            set(new StringValue("getFetchSize"), intFunction(rs::getFetchSize));
-            set(new StringValue("getHoldability"), intFunction(rs::getHoldability));
-            set(new StringValue("getRow"), intFunction(rs::getRow));
-            set(new StringValue("getType"), intFunction(rs::getType));
+            set("getConcurrency", intFunction(rs::getConcurrency));
+            set("getFetchDirection", intFunction(rs::getFetchDirection));
+            set("getFetchSize", intFunction(rs::getFetchSize));
+            set("getHoldability", intFunction(rs::getHoldability));
+            set("getRow", intFunction(rs::getRow));
+            set("getType", intFunction(rs::getType));
 
-            set(new StringValue("getCursorName"), stringFunction(rs::getCursorName));
-            set(new StringValue("getStatement"), objectFunction(rs::getStatement, StatementValue::new));
+            set("getCursorName", stringFunction(rs::getCursorName));
+            set("getStatement", objectFunction(rs::getStatement, StatementValue::new));
 
             // Results
-            set(new StringValue("getArray"), getObjectResult(rs::getArray, rs::getArray, jdbc::arrayToResultSetValue));
-            set(new StringValue("getBigDecimal"), getObjectResult(rs::getBigDecimal, rs::getBigDecimal, (bd) -> new StringValue(bd.toString())));
-            set(new StringValue("getBoolean"), getBooleanResult(rs::getBoolean, rs::getBoolean));
-            set(new StringValue("getByte"), getNumberResult(rs::getByte, rs::getByte));
-            set(new StringValue("getBytes"), getObjectResult(rs::getBytes, rs::getBytes, (bytes) -> ArrayValue.of(bytes)));
-            set(new StringValue("getDate"), getObjectResult(rs::getDate, rs::getDate, (date) -> NumberValue.of(date.getTime())));
-            set(new StringValue("getDouble"), getNumberResult(rs::getDouble, rs::getDouble));
-            set(new StringValue("getFloat"), getNumberResult(rs::getFloat, rs::getFloat));
-            set(new StringValue("getInt"), getNumberResult(rs::getInt, rs::getInt));
-            set(new StringValue("getLong"), getNumberResult(rs::getLong, rs::getLong));
-            set(new StringValue("getNString"), getStringResult(rs::getNString, rs::getNString));
-            set(new StringValue("getRowId"), getObjectResult(rs::getRowId, rs::getRowId, (rowid) -> ArrayValue.of(rowid.getBytes())));
-            set(new StringValue("getShort"), getNumberResult(rs::getShort, rs::getShort));
-            set(new StringValue("getString"), getStringResult(rs::getString, rs::getString));
-            set(new StringValue("getTime"), getObjectResult(rs::getTime, rs::getTime, (time) -> NumberValue.of(time.getTime())));
-            set(new StringValue("getTimestamp"), getObjectResult(rs::getTimestamp, rs::getTimestamp, (timestamp) -> NumberValue.of(timestamp.getTime())));
-            set(new StringValue("getURL"), getObjectResult(rs::getURL, rs::getURL, (url) -> new StringValue(url.toExternalForm())));
+            set("getArray", getObjectResult(rs::getArray, rs::getArray, jdbc::arrayToResultSetValue));
+            set("getBigDecimal", getObjectResult(rs::getBigDecimal, rs::getBigDecimal, (bd) -> new StringValue(bd.toString())));
+            set("getBoolean", getBooleanResult(rs::getBoolean, rs::getBoolean));
+            set("getByte", getNumberResult(rs::getByte, rs::getByte));
+            set("getBytes", getObjectResult(rs::getBytes, rs::getBytes, (bytes) -> ArrayValue.of(bytes)));
+            set("getDate", getObjectResult(rs::getDate, rs::getDate, (date) -> NumberValue.of(date.getTime())));
+            set("getDouble", getNumberResult(rs::getDouble, rs::getDouble));
+            set("getFloat", getNumberResult(rs::getFloat, rs::getFloat));
+            set("getInt", getNumberResult(rs::getInt, rs::getInt));
+            set("getLong", getNumberResult(rs::getLong, rs::getLong));
+            set("getNString", getStringResult(rs::getNString, rs::getNString));
+            set("getRowId", getObjectResult(rs::getRowId, rs::getRowId, (rowid) -> ArrayValue.of(rowid.getBytes())));
+            set("getShort", getNumberResult(rs::getShort, rs::getShort));
+            set("getString", getStringResult(rs::getString, rs::getString));
+            set("getTime", getObjectResult(rs::getTime, rs::getTime, (time) -> NumberValue.of(time.getTime())));
+            set("getTimestamp", getObjectResult(rs::getTimestamp, rs::getTimestamp, (timestamp) -> NumberValue.of(timestamp.getTime())));
+            set("getURL", getObjectResult(rs::getURL, rs::getURL, (url) -> new StringValue(url.toExternalForm())));
 
             // Update
-            set(new StringValue("updateNull"), new FunctionValue(this::updateNull));
-            set(new StringValue("updateBigDecimal"), updateData(rs::updateBigDecimal, rs::updateBigDecimal, (args) -> new BigDecimal(args[1].asString())));
-            set(new StringValue("updateBoolean"), updateData(rs::updateBoolean, rs::updateBoolean, (args) -> args[1].asInt() != 0));
-            set(new StringValue("updateByte"), updateData(rs::updateByte, rs::updateByte, (args) -> getNumber(args[1]).byteValue()));
-            set(new StringValue("updateBytes"), updateData(rs::updateBytes, rs::updateBytes, (args) -> valueToByteArray(args[1])));
-            set(new StringValue("updateDate"), updateData(rs::updateDate, rs::updateDate, (args) -> new Date(getNumber(args[1]).longValue())));
-            set(new StringValue("updateDouble"), updateData(rs::updateDouble, rs::updateDouble, (args) -> getNumber(args[1]).doubleValue()));
-            set(new StringValue("updateFloat"), updateData(rs::updateFloat, rs::updateFloat, (args) -> getNumber(args[1]).floatValue()));
-            set(new StringValue("updateInt"), updateData(rs::updateInt, rs::updateInt, (args) -> getNumber(args[1]).intValue()));
-            set(new StringValue("updateLong"), updateData(rs::updateLong, rs::updateLong, (args) -> getNumber(args[1]).longValue()));
-            set(new StringValue("updateNString"), updateData(rs::updateNString, rs::updateNString, (args) -> args[1].asString()));
-            set(new StringValue("updateShort"), updateData(rs::updateShort, rs::updateShort, (args) -> getNumber(args[1]).shortValue()));
-            set(new StringValue("updateString"), updateData(rs::updateString, rs::updateString, (args) -> args[1].asString()));
-            set(new StringValue("updateTime"), updateData(rs::updateTime, rs::updateTime, (args) -> new Time(getNumber(args[1]).longValue())));
-            set(new StringValue("updateTimestamp"), updateData(rs::updateTimestamp, rs::updateTimestamp, (args) -> new Timestamp(getNumber(args[1]).longValue())));
+            set("updateNull", new FunctionValue(this::updateNull));
+            set("updateBigDecimal", updateData(rs::updateBigDecimal, rs::updateBigDecimal, (args) -> new BigDecimal(args[1].asString())));
+            set("updateBoolean", updateData(rs::updateBoolean, rs::updateBoolean, (args) -> args[1].asInt() != 0));
+            set("updateByte", updateData(rs::updateByte, rs::updateByte, (args) -> getNumber(args[1]).byteValue()));
+            set("updateBytes", updateData(rs::updateBytes, rs::updateBytes, (args) -> valueToByteArray(args[1])));
+            set("updateDate", updateData(rs::updateDate, rs::updateDate, (args) -> new Date(getNumber(args[1]).longValue())));
+            set("updateDouble", updateData(rs::updateDouble, rs::updateDouble, (args) -> getNumber(args[1]).doubleValue()));
+            set("updateFloat", updateData(rs::updateFloat, rs::updateFloat, (args) -> getNumber(args[1]).floatValue()));
+            set("updateInt", updateData(rs::updateInt, rs::updateInt, (args) -> getNumber(args[1]).intValue()));
+            set("updateLong", updateData(rs::updateLong, rs::updateLong, (args) -> getNumber(args[1]).longValue()));
+            set("updateNString", updateData(rs::updateNString, rs::updateNString, (args) -> args[1].asString()));
+            set("updateShort", updateData(rs::updateShort, rs::updateShort, (args) -> getNumber(args[1]).shortValue()));
+            set("updateString", updateData(rs::updateString, rs::updateString, (args) -> args[1].asString()));
+            set("updateTime", updateData(rs::updateTime, rs::updateTime, (args) -> new Time(getNumber(args[1]).longValue())));
+            set("updateTimestamp", updateData(rs::updateTimestamp, rs::updateTimestamp, (args) -> new Timestamp(getNumber(args[1]).longValue())));
         }
 
         private Value findColumn(Value... args) {

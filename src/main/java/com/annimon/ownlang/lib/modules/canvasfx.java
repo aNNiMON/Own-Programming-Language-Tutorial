@@ -3,11 +3,11 @@ package com.annimon.ownlang.lib.modules;
 import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
+import static com.annimon.ownlang.lib.Converters.*;
 import java.awt.Dimension;
 import java.lang.reflect.Modifier;
 import java.nio.IntBuffer;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
@@ -598,7 +598,7 @@ public final class canvasfx implements Module {
             set("height", NumberValue.of(image.getHeight()));
             set("preserveRatio", NumberValue.fromBoolean(image.isPreserveRatio()));
             set("smooth", NumberValue.fromBoolean(image.isSmooth()));
-            set("getPixels", new FunctionValue(this::getPixels));
+            set("getPixels", this::getPixels);
         }
 
         private Value getPixels(Value... args) {
@@ -671,77 +671,71 @@ public final class canvasfx implements Module {
         }
 
         private void init() {
-            Map<String, Function> functions = new HashMap<>();
-            functions.put("applyEffect", this::applyEffect);
-            functions.put("appendSVGPath", this::appendSVGPath);
-            functions.put("arc", this::arc);
-            functions.put("arcTo", this::arcTo);
-            functions.put("beginPath", this::beginPath);
-            functions.put("bezierCurveTo", this::bezierCurveTo);
-            functions.put("clearRect", this::clearRect);
-            functions.put("clip", this::clip);
-            functions.put("closePath", this::closePath);
-            functions.put("drawImage", this::drawImage);
-            functions.put("fill", this::fill);
-            functions.put("fillArc", this::fillArc);
-            functions.put("fillOval", this::fillOval);
-            functions.put("fillPolygon", this::fillPolygon);
-            functions.put("fillRect", this::fillRect);
-            functions.put("fillRoundRect", this::fillRoundRect);
-            functions.put("fillText", this::fillText);
-            functions.put("getGlobalAlpha", this::getGlobalAlpha);
-            functions.put("getLineWidth", this::getLineWidth);
-            functions.put("getMiterLimit", this::getMiterLimit);
-            functions.put("getFill", this::getFill);
-            functions.put("getFillRule", this::getFillRule);
-            functions.put("getGlobalAlpha", this::getGlobalAlpha);
-            functions.put("getGlobalBlendMode", this::getGlobalBlendMode);
-            functions.put("getLineCap", this::getLineCap);
-            functions.put("getLineJoin", this::getLineJoin);
-            functions.put("getLineWidth", this::getLineWidth);
-            functions.put("getMiterLimit", this::getMiterLimit);
-            functions.put("getStroke", this::getStroke);
-            functions.put("getTextAlign", this::getTextAlign);
-            functions.put("getTextBaseline", this::getTextBaseline);
-            functions.put("isPointInPath", this::isPointInPath);
-            functions.put("lineTo", this::lineTo);
-            functions.put("moveTo", this::moveTo);
-            functions.put("quadraticCurveTo", this::quadraticCurveTo);
-            functions.put("rect", this::rect);
-            functions.put("restore", this::restore);
-            functions.put("rotate", this::rotate);
-            functions.put("save", this::save);
-            functions.put("scale", this::scale);
-            functions.put("setEffect", this::setEffect);
-            functions.put("setFill", this::setFill);
-            functions.put("setFillRule", this::setFillRule);
-            functions.put("setGlobalAlpha", this::setGlobalAlpha);
-            functions.put("setGlobalBlendMode", this::setGlobalBlendMode);
-            functions.put("setLineCap", this::setLineCap);
-            functions.put("setLineJoin", this::setLineJoin);
-            functions.put("setLineWidth", this::setLineWidth);
-            functions.put("setMiterLimit", this::setMiterLimit);
-            functions.put("setStroke", this::setStroke);
-            functions.put("setTextAlign", this::setTextAlign);
-            functions.put("setTextBaseline", this::setTextBaseline);
-            functions.put("stroke", this::stroke);
-            functions.put("strokeArc", this::strokeArc);
-            functions.put("strokeLine", this::strokeLine);
-            functions.put("strokeOval", this::strokeOval);
-            functions.put("strokePolygon", this::strokePolygon);
-            functions.put("strokePolyline", this::strokePolyline);
-            functions.put("strokeRect", this::strokeRect);
-            functions.put("strokeRoundRect", this::strokeRoundRect);
-            functions.put("strokeText", this::strokeText);
-            functions.put("transform", this::transform);
-            functions.put("translate", this::translate);
-
-            for (Map.Entry<String, Function> entry : functions.entrySet()) {
-                set(entry.getKey(), new FunctionValue(entry.getValue()));
-            }
+            set("applyEffect", this::applyEffect);
+            set("appendSVGPath", this::appendSVGPath);
+            set("arc", this::arc);
+            set("arcTo", this::arcTo);
+            set("beginPath", voidToVoid(graphics::beginPath));
+            set("bezierCurveTo", this::bezierCurveTo);
+            set("clearRect", double4ToVoid(graphics::clearRect));
+            set("clip", voidToVoid(graphics::clip));
+            set("closePath", voidToVoid(graphics::closePath));
+            set("drawImage", this::drawImage);
+            set("fill", voidToVoid(graphics::fill));
+            set("fillArc", this::fillArc);
+            set("fillOval", double4ToVoid(graphics::fillOval));
+            set("fillPolygon", this::fillPolygon);
+            set("fillRect", double4ToVoid(graphics::fillRect));
+            set("fillRoundRect", this::fillRoundRect);
+            set("fillText", this::fillText);
+            set("getFill", this::getFill);
+            set("getFillRule", this::getFillRule);
+            set("getGlobalAlpha", voidToDouble(graphics::getGlobalAlpha));
+            set("getGlobalBlendMode", this::getGlobalBlendMode);
+            set("getLineCap", this::getLineCap);
+            set("getLineDashOffset", voidToDouble(graphics::getLineDashOffset));
+            set("getLineJoin", this::getLineJoin);
+            set("getLineWidth", voidToDouble(graphics::getLineWidth));
+            set("getMiterLimit", voidToDouble(graphics::getMiterLimit));
+            set("getStroke", this::getStroke);
+            set("getTextAlign", this::getTextAlign);
+            set("getTextBaseline", this::getTextBaseline);
+            set("isPointInPath", this::isPointInPath);
+            set("lineTo", double2ToVoid(graphics::lineTo));
+            set("moveTo", double2ToVoid(graphics::moveTo));
+            set("quadraticCurveTo", double4ToVoid(graphics::quadraticCurveTo));
+            set("rect", double4ToVoid(graphics::rect));
+            set("restore", voidToVoid(graphics::restore));
+            set("rotate", doubleToVoid(graphics::rotate));
+            set("save", voidToVoid(graphics::save));
+            set("scale", double2ToVoid(graphics::scale));
+            set("setEffect", this::setEffect);
+            set("setFill", this::setFill);
+            set("setFillRule", this::setFillRule);
+            set("setGlobalAlpha", doubleToVoid(graphics::setGlobalAlpha));
+            set("setGlobalBlendMode", this::setGlobalBlendMode);
+            set("setLineCap", this::setLineCap);
+            set("setLineDashOffset", doubleToVoid(graphics::setLineDashOffset));
+            set("setLineJoin", this::setLineJoin);
+            set("setLineWidth", doubleToVoid(graphics::setLineWidth));
+            set("setMiterLimit", doubleToVoid(graphics::setMiterLimit));
+            set("setStroke", this::setStroke);
+            set("setTextAlign", this::setTextAlign);
+            set("setTextBaseline", this::setTextBaseline);
+            set("stroke", voidToVoid(graphics::stroke));
+            set("strokeArc", this::strokeArc);
+            set("strokeLine", double4ToVoid(graphics::strokeLine));
+            set("strokeOval", double4ToVoid(graphics::strokeOval));
+            set("strokePolygon", this::strokePolygon);
+            set("strokePolyline", this::strokePolyline);
+            set("strokeRect", double4ToVoid(graphics::strokeRect));
+            set("strokeRoundRect", this::strokeRoundRect);
+            set("strokeText", this::strokeText);
+            set("transform", this::transform);
+            set("translate", double2ToVoid(graphics::translate));
         }
 
-        public Value applyEffect(Value... args) {
+        private Value applyEffect(Value... args) {
             if (args[0].type() != FX_EFFECT_TYPE) {
                 throw new TypeException("Effect expected, found " + Types.typeToString(args[0].type()));
             }
@@ -749,54 +743,33 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value arc(Value... args) {
+        private Value arc(Value... args) {
             graphics.arc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
             return NumberValue.ZERO;
         }
 
-        public Value appendSVGPath(Value... args) {
+        private Value appendSVGPath(Value... args) {
             graphics.appendSVGPath(args[0].asString());
             return NumberValue.ZERO;
         }
 
-        public Value arcTo(Value... args) {
+        private Value arcTo(Value... args) {
             graphics.arcTo(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber());
             return NumberValue.ZERO;
         }
 
-        public Value beginPath(Value... args) {
-            graphics.beginPath();
-            return NumberValue.ZERO;
-        }
-
-        public Value bezierCurveTo(Value... args) {
+        private Value bezierCurveTo(Value... args) {
             graphics.bezierCurveTo(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
             return NumberValue.ZERO;
         }
 
-        public Value clearRect(Value... args) {
-            graphics.clearRect(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value clip(Value... args) {
-            graphics.clip();
-            return NumberValue.ZERO;
-        }
-
-        public Value closePath(Value... args) {
-            graphics.closePath();
-            return NumberValue.ZERO;
-        }
-
-        public Value drawImage(Value... args) {
+        private Value drawImage(Value... args) {
             Arguments.checkAtLeast(3, args.length);
             if (!(args[0] instanceof ImageFXValue)) {
                 throw new TypeException("ImageFX expected");
@@ -826,12 +799,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value fill(Value... args) {
-            graphics.fill();
-            return NumberValue.ZERO;
-        }
-
-        public Value fillArc(Value... args) {
+        private Value fillArc(Value... args) {
             graphics.fillArc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber(),
@@ -839,13 +807,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value fillOval(Value... args) {
-            graphics.fillOval(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value fillPolygon(Value... args) {
+        private Value fillPolygon(Value... args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -861,20 +823,14 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value fillRect(Value... args) {
-            graphics.fillRect(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value fillRoundRect(Value... args) {
+        private Value fillRoundRect(Value... args) {
             graphics.fillRoundRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber() );
             return NumberValue.ZERO;
         }
 
-        public Value fillText(Value... args) {
+        private Value fillText(Value... args) {
             if (args.length < 4) {
                 // str x y
                 graphics.fillText(args[0].asString(), args[1].asNumber(),
@@ -886,97 +842,43 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value getFill(Value... args) {
+        private Value getFill(Value... args) {
             return new ColorValue((Color)graphics.getFill());
         }
 
-        public Value getFillRule(Value... args) {
+        private Value getFillRule(Value... args) {
             return NumberValue.of(graphics.getFillRule().ordinal());
         }
 
-        public Value getGlobalAlpha(Value... args) {
-            return NumberValue.of(graphics.getGlobalAlpha());
-        }
-
-        public Value getGlobalBlendMode(Value... args) {
+        private Value getGlobalBlendMode(Value... args) {
             return NumberValue.of(graphics.getGlobalBlendMode().ordinal());
         }
 
-        public Value getLineCap(Value... args) {
+        private Value getLineCap(Value... args) {
             return NumberValue.of(graphics.getLineCap().ordinal());
         }
 
-        public Value getLineJoin(Value... args) {
+        private Value getLineJoin(Value... args) {
             return NumberValue.of(graphics.getLineJoin().ordinal());
         }
 
-        public Value getLineWidth(Value... args) {
-            return NumberValue.of(graphics.getLineWidth());
-        }
-
-        public Value getMiterLimit(Value... args) {
-            return NumberValue.of(graphics.getMiterLimit());
-        }
-
-        public Value getStroke(Value... args) {
+        private Value getStroke(Value... args) {
             return new ColorValue((Color)graphics.getStroke());
         }
 
-        public Value getTextAlign(Value... args) {
+        private Value getTextAlign(Value... args) {
             return NumberValue.of(graphics.getTextAlign().ordinal());
         }
 
-        public Value getTextBaseline(Value... args) {
+        private Value getTextBaseline(Value... args) {
             return NumberValue.of(graphics.getTextBaseline().ordinal());
         }
 
-        public Value isPointInPath(Value... args) {
+        private Value isPointInPath(Value... args) {
             return NumberValue.fromBoolean(graphics.isPointInPath(args[0].asNumber(), args[1].asNumber()));
         }
 
-        public Value lineTo(Value... args) {
-            graphics.lineTo(args[0].asNumber(), args[1].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value moveTo(Value... args) {
-            graphics.moveTo(args[0].asNumber(), args[1].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value quadraticCurveTo(Value... args) {
-            graphics.quadraticCurveTo(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value rect(Value... args) {
-            graphics.rect(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value restore(Value... args) {
-            graphics.restore();
-            return NumberValue.ZERO;
-        }
-
-        public Value rotate(Value... args) {
-            graphics.rotate(args[0].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value save(Value... args) {
-            graphics.save();
-            return NumberValue.ZERO;
-        }
-
-        public Value scale(Value... args) {
-            graphics.scale(args[0].asNumber(), args[1].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value setEffect(Value... args) {
+        private Value setEffect(Value... args) {
             if (args[0].type() != FX_EFFECT_TYPE) {
                 throw new TypeException("Effect expected, found " + Types.typeToString(args[0].type()));
             }
@@ -984,67 +886,47 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value setFill(Value... args) {
+        private Value setFill(Value... args) {
             graphics.setFill((Color) args[0].raw());
             return NumberValue.ZERO;
         }
 
-        public Value setFillRule(Value... args) {
+        private Value setFillRule(Value... args) {
             graphics.setFillRule(FillRule.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        public Value setGlobalAlpha(Value... args) {
-            graphics.setGlobalAlpha(args[0].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value setGlobalBlendMode(Value... args) {
+        private Value setGlobalBlendMode(Value... args) {
             graphics.setGlobalBlendMode(BlendMode.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        public Value setLineCap(Value... args) {
+        private Value setLineCap(Value... args) {
             graphics.setLineCap(StrokeLineCap.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        public Value setLineJoin(Value... args) {
+        private Value setLineJoin(Value... args) {
             graphics.setLineJoin(StrokeLineJoin.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        public Value setLineWidth(Value... args) {
-            graphics.setLineWidth(args[0].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value setMiterLimit(Value... args) {
-            graphics.setMiterLimit(args[0].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value setStroke(Value... args) {
+        private Value setStroke(Value... args) {
             graphics.setStroke((Color) args[0].raw());
             return NumberValue.ZERO;
         }
 
-        public Value setTextAlign(Value... args) {
+        private Value setTextAlign(Value... args) {
             graphics.setTextAlign(TextAlignment.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        public Value setTextBaseline(Value... args) {
+        private Value setTextBaseline(Value... args) {
             graphics.setTextBaseline(VPos.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        public Value stroke(Value... args) {
-            graphics.stroke();
-            return NumberValue.ZERO;
-        }
-
-        public Value strokeArc(Value... args) {
+        private Value strokeArc(Value... args) {
             graphics.strokeArc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber(),
@@ -1052,19 +934,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value strokeLine(Value... args) {
-            graphics.strokeLine(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value strokeOval(Value... args) {
-            graphics.strokeOval(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value strokePolygon(Value... args) {
+        private Value strokePolygon(Value... args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -1080,7 +950,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value strokePolyline(Value... args) {
+        private Value strokePolyline(Value... args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -1096,20 +966,14 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value strokeRect(Value... args) {
-            graphics.strokeRect(args[0].asNumber(), args[1].asNumber(),
-                    args[2].asNumber(), args[3].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value strokeRoundRect(Value... args) {
+        private Value strokeRoundRect(Value... args) {
             graphics.strokeRoundRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber() );
             return NumberValue.ZERO;
         }
 
-        public Value strokeText(Value... args) {
+        private Value strokeText(Value... args) {
             if (args.length < 4) {
                 // str x y
                 graphics.strokeText(args[0].asString(), args[1].asNumber(),
@@ -1121,15 +985,10 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        public Value transform(Value... args) {
+        private Value transform(Value... args) {
             graphics.transform(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
-            return NumberValue.ZERO;
-        }
-
-        public Value translate(Value... args) {
-            graphics.translate(args[0].asNumber(), args[1].asNumber());
             return NumberValue.ZERO;
         }
 

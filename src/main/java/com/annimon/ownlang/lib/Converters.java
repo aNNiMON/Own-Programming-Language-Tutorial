@@ -21,6 +21,10 @@ public final class Converters {
         float apply();
     }
 
+    public interface VoidToDoubleFunction {
+        double apply();
+    }
+
     public interface VoidToStringFunction {
         String apply();
     }
@@ -39,6 +43,18 @@ public final class Converters {
 
     public interface Float4ToVoidFunction {
         void apply(float f1, float f2, float f3, float f4);
+    }
+
+    public interface DoubleToVoidFunction {
+        void apply(double d);
+    }
+
+    public interface Double2ToVoidFunction {
+        void apply(double d1, double d2);
+    }
+
+    public interface Double4ToVoidFunction {
+        void apply(double d1, double d2, double d3, double d4);
     }
 
     public interface StringToVoidFunction {
@@ -62,6 +78,10 @@ public final class Converters {
     }
 
     public static FunctionValue voidToFloat(VoidToFloatFunction f) {
+        return new FunctionValue(args -> NumberValue.of(f.apply()));
+    }
+
+    public static FunctionValue voidToDouble(VoidToDoubleFunction f) {
         return new FunctionValue(args -> NumberValue.of(f.apply()));
     }
     
@@ -111,6 +131,31 @@ public final class Converters {
                     getNumber(args[1]).floatValue(),
                     getNumber(args[2]).floatValue(),
                     getNumber(args[3]).floatValue());
+            return NumberValue.ZERO;
+        });
+    }
+
+    public static FunctionValue doubleToVoid(DoubleToVoidFunction f) {
+        return new FunctionValue(args -> {
+            Arguments.check(1, args.length);
+            f.apply(args[0].asNumber());
+            return NumberValue.ZERO;
+        });
+    }
+
+    public static FunctionValue double2ToVoid(Double2ToVoidFunction f) {
+        return new FunctionValue(args -> {
+            Arguments.check(2, args.length);
+            f.apply(args[0].asNumber(), args[1].asNumber());
+            return NumberValue.ZERO;
+        });
+    }
+
+    public static FunctionValue double4ToVoid(Double4ToVoidFunction f) {
+        return new FunctionValue(args -> {
+            Arguments.check(4, args.length);
+            f.apply(args[0].asNumber(), args[1].asNumber(),
+                    args[2].asNumber(), args[3].asNumber());
             return NumberValue.ZERO;
         });
     }

@@ -29,6 +29,10 @@ public final class Converters {
         String apply();
     }
 
+    public interface VoidToEnumFunction<E extends Enum<E>> {
+        Enum<E> apply();
+    }
+
     public interface BooleanToVoidFunction {
         void apply(boolean b);
     }
@@ -87,6 +91,10 @@ public final class Converters {
     
     public static FunctionValue voidToString(VoidToStringFunction f) {
         return new FunctionValue(args -> new StringValue(f.apply()));
+    }
+
+    public static <E extends Enum<E>> FunctionValue enumOrdinal(VoidToEnumFunction<E> f) {
+        return new FunctionValue(args -> NumberValue.of(f.apply().ordinal()));
     }
 
     public static FunctionValue booleanToVoid(BooleanToVoidFunction f) {

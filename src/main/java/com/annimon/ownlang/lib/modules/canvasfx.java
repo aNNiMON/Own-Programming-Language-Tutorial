@@ -689,17 +689,17 @@ public final class canvasfx implements Module {
             set("fillRoundRect", this::fillRoundRect);
             set("fillText", this::fillText);
             set("getFill", this::getFill);
-            set("getFillRule", this::getFillRule);
+            set("getFillRule", enumOrdinal(graphics::getFillRule));
             set("getGlobalAlpha", voidToDouble(graphics::getGlobalAlpha));
-            set("getGlobalBlendMode", this::getGlobalBlendMode);
-            set("getLineCap", this::getLineCap);
+            set("getGlobalBlendMode", enumOrdinal(graphics::getGlobalBlendMode));
+            set("getLineCap", enumOrdinal(graphics::getLineCap));
             set("getLineDashOffset", voidToDouble(graphics::getLineDashOffset));
-            set("getLineJoin", this::getLineJoin);
+            set("getLineJoin", enumOrdinal(graphics::getLineJoin));
             set("getLineWidth", voidToDouble(graphics::getLineWidth));
             set("getMiterLimit", voidToDouble(graphics::getMiterLimit));
             set("getStroke", this::getStroke);
-            set("getTextAlign", this::getTextAlign);
-            set("getTextBaseline", this::getTextBaseline);
+            set("getTextAlign", enumOrdinal(graphics::getTextAlign));
+            set("getTextBaseline", enumOrdinal(graphics::getTextBaseline));
             set("isPointInPath", this::isPointInPath);
             set("lineTo", double2ToVoid(graphics::lineTo));
             set("moveTo", double2ToVoid(graphics::moveTo));
@@ -846,32 +846,8 @@ public final class canvasfx implements Module {
             return new ColorValue((Color)graphics.getFill());
         }
 
-        private Value getFillRule(Value... args) {
-            return NumberValue.of(graphics.getFillRule().ordinal());
-        }
-
-        private Value getGlobalBlendMode(Value... args) {
-            return NumberValue.of(graphics.getGlobalBlendMode().ordinal());
-        }
-
-        private Value getLineCap(Value... args) {
-            return NumberValue.of(graphics.getLineCap().ordinal());
-        }
-
-        private Value getLineJoin(Value... args) {
-            return NumberValue.of(graphics.getLineJoin().ordinal());
-        }
-
         private Value getStroke(Value... args) {
             return new ColorValue((Color)graphics.getStroke());
-        }
-
-        private Value getTextAlign(Value... args) {
-            return NumberValue.of(graphics.getTextAlign().ordinal());
-        }
-
-        private Value getTextBaseline(Value... args) {
-            return NumberValue.of(graphics.getTextBaseline().ordinal());
         }
 
         private Value isPointInPath(Value... args) {

@@ -1,4 +1,6 @@
 /.gradle/
+/build/
 /dist/
 /store/
+/optimizations/
 /nbproject/private/

@@ -16,3 +16,8 @@ before_install:
 after_success:
  - ./gradlew proguard
  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "latest" && curl -F "file=@store/OwnLang.jar" http://projects.annimon.com/samples/php/travis/upload.php?mode=ownlang
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer

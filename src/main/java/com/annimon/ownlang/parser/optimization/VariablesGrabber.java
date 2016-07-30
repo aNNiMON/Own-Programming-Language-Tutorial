@@ -1,6 +1,5 @@
 package com.annimon.ownlang.parser.optimization;
 
-import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.ast.Accessible;
@@ -9,10 +8,8 @@ import com.annimon.ownlang.parser.ast.Arguments;
 import com.annimon.ownlang.parser.ast.AssignmentExpression;
 import com.annimon.ownlang.parser.ast.ContainerAccessExpression;
 import com.annimon.ownlang.parser.ast.DestructuringAssignmentStatement;
-import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.ForeachArrayStatement;
 import com.annimon.ownlang.parser.ast.ForeachMapStatement;
-import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.MatchExpression;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
@@ -136,10 +133,11 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
         for (Argument argument : in) {
             final String variableName = argument.getName();
             final VariableInfo var = variableInfo(t, variableName);
+            /* No need to add value - it is optional arguments
             final Expression expr = argument.getValueExpr();
             if (expr != null && isValue(expr)) {
                 var.value = ((ValueExpression) expr).value;
-            }
+            }*/
             t.put(variableName, var);
         }
         return super.visit(in, out, t);

@@ -1,0 +1,23 @@
+def f1() = {"func": ::f2}
+def f2() = {
+  "functions" : {
+    "add" : def(a, b) = a + b
+    "mul" : def(a, b) = a * b
+    "negate" : def(a) = {"result" : -a}
+  }
+}
+def f3() = def() = def() = def() = "test"
+def f4() = def() = ::f1
+
+def testFunctionChain() {
+  assertEquals(5, f1().func().`functions`.add(2, 3))
+  assertEquals(6, f1().func().`functions`.mul(2, 3))
+}
+
+def testCallChain() {
+  assertEquals("test", f3()()()())
+}
+
+def testBoth() {
+  assertEquals(-123, f4()()().func().`functions`.negate(123).result)
+}

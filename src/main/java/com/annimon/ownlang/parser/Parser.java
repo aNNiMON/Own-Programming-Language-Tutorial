@@ -156,7 +156,7 @@ public final class Parser {
             return functionDefine();
         }
         if (match(TokenType.MATCH)) {
-            return new ExprStatement(match());
+            return match();
         }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return new ExprStatement(functionChain(qualifiedName()));

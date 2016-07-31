@@ -88,7 +88,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(ContainerAccessExpression s, StringBuilder t) {
-        visitVariable(s.variable, t);
+        s.root.accept(this, t);
         for (Expression index : s.indices) {
             t.append('[');
             index.accept(this, t);

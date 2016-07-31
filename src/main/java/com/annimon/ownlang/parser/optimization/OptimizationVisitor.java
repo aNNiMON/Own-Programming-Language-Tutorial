@@ -87,8 +87,10 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(ContainerAccessExpression s, T t) {
+        final Node root = s.root.accept(this, t);
+        boolean changed = (root != s.root);
+
         final List<Expression> indices = new ArrayList<>(s.indices.size());
-        boolean changed = false;
         for (Expression expression : s.indices) {
             final Node node = expression.accept(this, t);
             if (node != expression) {
@@ -97,7 +99,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
             indices.add((Expression) node);
         }
         if (changed) {
-            return new ContainerAccessExpression(s.variable, indices);
+            return new ContainerAccessExpression((Expression) root, indices);
         }
         return s;
     }

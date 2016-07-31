@@ -100,8 +100,11 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
                 t.put(variableName, variableInfo(t, variableName));
             }
             if (s.expr1 instanceof ContainerAccessExpression) {
-                final String variableName = ((ContainerAccessExpression) s.expr1).variable;
-                t.put(variableName, variableInfo(t, variableName));
+                ContainerAccessExpression conExpr = (ContainerAccessExpression) s.expr1;
+                if (conExpr.rootIsVariable()) {
+                    final String variableName = ((VariableExpression) conExpr.root).name;
+                    t.put(variableName, variableInfo(t, variableName));
+                }
             }
         }
         return super.visit(s, t);

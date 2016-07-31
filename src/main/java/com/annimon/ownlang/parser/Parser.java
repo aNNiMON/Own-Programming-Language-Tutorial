@@ -159,7 +159,7 @@ public final class Parser {
             return new ExprStatement(match());
         }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
-            return new ExprStatement(function(qualifiedName()));
+            return new ExprStatement(functionChain(qualifiedName()));
         }
         return assignmentStatement();
     }
@@ -297,6 +297,23 @@ public final class Parser {
         return statementOrBlock();
     }
     
+    private Expression functionChain(Expression qualifiedNameExpr) {
+        // f1().f2().f3() || f1().key
+        final Expression expr = function(qualifiedNameExpr);
+        if (lookMatch(0, TokenType.DOT)) {
+            final List<Expression> indices = variableSuffix();
+            if (indices == null | indices.isEmpty()) return expr;
+
+            if (lookMatch(0, TokenType.LPAREN)) {
+                // next function call
+                return functionChain(new ContainerAccessExpression(expr, indices));
+            }
+            // container access
+            return new ContainerAccessExpression(expr, indices);
+        }
+        return expr;
+    }
+
     private FunctionalExpression function(Expression qualifiedNameExpr) {
         // function(arg1, arg2, ...)
         consume(TokenType.LPAREN);
@@ -684,18 +701,18 @@ public final class Parser {
         }
         return variable();
     }
-    
+
     private Expression variable() {
         // function(...
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
-            return function(new ValueExpression(consume(TokenType.WORD).getText()));
+            return functionChain(new ValueExpression(consume(TokenType.WORD).getText()));
         }
         
         final Expression qualifiedNameExpr = qualifiedName();
         if (qualifiedNameExpr != null) {
             // variable(args) || arr["key"](args) || obj.key(args)
             if (lookMatch(0, TokenType.LPAREN)) {
-                return function(qualifiedNameExpr);
+                return functionChain(qualifiedNameExpr);
             }
             // postfix increment/decrement
             if (match(TokenType.PLUSPLUS)) {
@@ -727,7 +744,7 @@ public final class Parser {
         }
         return new ContainerAccessExpression(current.getText(), indices);
     }
-    
+
     private List<Expression> variableSuffix() {
         // .key1.arr1[expr1][expr2].key2
         if (!lookMatch(0, TokenType.DOT) && !lookMatch(0, TokenType.LBRACKET)) {

@@ -28,23 +28,23 @@ public final class Parser {
     
     private static final Token EOF = new Token(TokenType.EOF, "", -1, -1);
 
-    private static final EnumMap<TokenType, BinaryExpression.Operator> assignOperator;
+    private static final EnumMap<TokenType, BinaryExpression.Operator> ASSIGN_OPERATORS;
     static {
-        assignOperator = new EnumMap(TokenType.class);
-        assignOperator.put(TokenType.EQ, null);
-        assignOperator.put(TokenType.PLUSEQ, BinaryExpression.Operator.ADD);
-        assignOperator.put(TokenType.MINUSEQ, BinaryExpression.Operator.SUBTRACT);
-        assignOperator.put(TokenType.STAREQ, BinaryExpression.Operator.MULTIPLY);
-        assignOperator.put(TokenType.SLASHEQ, BinaryExpression.Operator.DIVIDE);
-        assignOperator.put(TokenType.PERCENTEQ, BinaryExpression.Operator.REMAINDER);
-        assignOperator.put(TokenType.AMPEQ, BinaryExpression.Operator.AND);
-        assignOperator.put(TokenType.CARETEQ, BinaryExpression.Operator.XOR);
-        assignOperator.put(TokenType.BAREQ, BinaryExpression.Operator.OR);
-        assignOperator.put(TokenType.COLONCOLONEQ, BinaryExpression.Operator.PUSH);
-        assignOperator.put(TokenType.LTLTEQ, BinaryExpression.Operator.LSHIFT);
-        assignOperator.put(TokenType.GTGTEQ, BinaryExpression.Operator.RSHIFT);
-        assignOperator.put(TokenType.GTGTGTEQ, BinaryExpression.Operator.URSHIFT);
-        assignOperator.put(TokenType.ATEQ, BinaryExpression.Operator.AT);
+        ASSIGN_OPERATORS = new EnumMap(TokenType.class);
+        ASSIGN_OPERATORS.put(TokenType.EQ, null);
+        ASSIGN_OPERATORS.put(TokenType.PLUSEQ, BinaryExpression.Operator.ADD);
+        ASSIGN_OPERATORS.put(TokenType.MINUSEQ, BinaryExpression.Operator.SUBTRACT);
+        ASSIGN_OPERATORS.put(TokenType.STAREQ, BinaryExpression.Operator.MULTIPLY);
+        ASSIGN_OPERATORS.put(TokenType.SLASHEQ, BinaryExpression.Operator.DIVIDE);
+        ASSIGN_OPERATORS.put(TokenType.PERCENTEQ, BinaryExpression.Operator.REMAINDER);
+        ASSIGN_OPERATORS.put(TokenType.AMPEQ, BinaryExpression.Operator.AND);
+        ASSIGN_OPERATORS.put(TokenType.CARETEQ, BinaryExpression.Operator.XOR);
+        ASSIGN_OPERATORS.put(TokenType.BAREQ, BinaryExpression.Operator.OR);
+        ASSIGN_OPERATORS.put(TokenType.COLONCOLONEQ, BinaryExpression.Operator.PUSH);
+        ASSIGN_OPERATORS.put(TokenType.LTLTEQ, BinaryExpression.Operator.LSHIFT);
+        ASSIGN_OPERATORS.put(TokenType.GTGTEQ, BinaryExpression.Operator.RSHIFT);
+        ASSIGN_OPERATORS.put(TokenType.GTGTGTEQ, BinaryExpression.Operator.URSHIFT);
+        ASSIGN_OPERATORS.put(TokenType.ATEQ, BinaryExpression.Operator.AT);
     }
 
     private final List<Token> tokens;
@@ -185,7 +185,7 @@ public final class Parser {
             } else {
                 variables.add(null);
             }
-            match(TokenType.COMMA);
+            consume(TokenType.COMMA);
         }
         consume(TokenType.EQ);
         return new DestructuringAssignmentStatement(variables, expression());
@@ -227,36 +227,37 @@ public final class Parser {
             // for key, value : arr || for (key, value : arr)
             return foreachMapStatement();
         }
-        
-        boolean openParen = match(TokenType.LPAREN); // необязательные скобки
+
+        // for (init, condition, increment) body
+        boolean optParentheses = match(TokenType.LPAREN);
         final Statement initialization = assignmentStatement();
         consume(TokenType.COMMA);
         final Expression termination = expression();
         consume(TokenType.COMMA);
         final Statement increment = assignmentStatement();
-        if (openParen) consume(TokenType.RPAREN); // скобки
+        if (optParentheses) consume(TokenType.RPAREN); // close opt parentheses
         final Statement statement = statementOrBlock();
         return new ForStatement(initialization, termination, increment, statement);
     }
     
     private ForeachArrayStatement foreachArrayStatement() {
-        boolean openParen = match(TokenType.LPAREN); // необязательные скобки
+        boolean optParentheses = match(TokenType.LPAREN);
         final String variable = consume(TokenType.WORD).getText();
         consume(TokenType.COLON);
         final Expression container = expression();
-        if (openParen) consume(TokenType.RPAREN); // скобки
+        if (optParentheses) consume(TokenType.RPAREN); // close opt parentheses
         final Statement statement = statementOrBlock();
         return new ForeachArrayStatement(variable, container, statement);
     }
     
     private ForeachMapStatement foreachMapStatement() {
-        boolean openParen = match(TokenType.LPAREN); // необязательные скобки
+        boolean optParentheses = match(TokenType.LPAREN);
         final String key = consume(TokenType.WORD).getText();
         consume(TokenType.COMMA);
         final String value = consume(TokenType.WORD).getText();
         consume(TokenType.COLON);
         final Expression container = expression();
-        if (openParen) consume(TokenType.RPAREN); // скобки
+        if (optParentheses) consume(TokenType.RPAREN); // close opt parentheses
         final Statement statement = statementOrBlock();
         return new ForeachMapStatement(key, value, container, statement);
     }
@@ -426,13 +427,13 @@ public final class Parser {
         }
         
         final TokenType currentType = get(0).getType();
-        if (!assignOperator.containsKey(currentType)) {
+        if (!ASSIGN_OPERATORS.containsKey(currentType)) {
             pos = position;
             return null;
         }
         match(currentType);
         
-        final BinaryExpression.Operator op = assignOperator.get(currentType);
+        final BinaryExpression.Operator op = ASSIGN_OPERATORS.get(currentType);
         final Expression expression = expression();
         
         return new AssignmentExpression(op, (Accessible) targetExpr, expression);

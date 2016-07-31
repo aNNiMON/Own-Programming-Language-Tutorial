@@ -298,8 +298,11 @@ public final class Parser {
     }
     
     private Expression functionChain(Expression qualifiedNameExpr) {
-        // f1().f2().f3() || f1().key
+        // f1()()() || f1().f2().f3() || f1().key
         final Expression expr = function(qualifiedNameExpr);
+        if (lookMatch(0, TokenType.LPAREN)) {
+            return functionChain(expr);
+        }
         if (lookMatch(0, TokenType.DOT)) {
             final List<Expression> indices = variableSuffix();
             if (indices == null | indices.isEmpty()) return expr;

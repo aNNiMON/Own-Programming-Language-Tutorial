@@ -1,0 +1,13 @@
+use "std"
+
+def testIndexOf() {
+  assertEquals(3, indexOf("123/456/789", "/"))
+}
+
+def testIndexOfIndex() {
+  assertEquals(7, indexOf("123/456/789", "/", 4))
+}
+
+def testIndexOfNonMatch() {
+  assertEquals(-1, indexOf("123", "/"))
+}

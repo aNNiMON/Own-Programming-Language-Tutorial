@@ -1,0 +1,13 @@
+use "std"
+
+def testLastIndexOf() {
+  assertEquals(8, lastIndexOf("/123/456/789", "/"))
+}
+
+def testLastIndexOfIndex() {
+  assertEquals(4, lastIndexOf("/123/456/789", "/", 6))
+}
+
+def testLastIndexOfNonMatch() {
+  assertEquals(-1, lastIndexOf("123", "/"))
+}

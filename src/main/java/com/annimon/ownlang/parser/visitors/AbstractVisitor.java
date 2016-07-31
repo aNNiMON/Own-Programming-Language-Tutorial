@@ -47,6 +47,7 @@ public abstract class AbstractVisitor implements Visitor {
     
     @Override
     public void visit(ContainerAccessExpression s) {
+        s.root.accept(this);
         for (Expression index : s.indices) {
             index.accept(this);
         }

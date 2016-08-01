@@ -22,9 +22,10 @@ public final class functional implements Module {
         Functions.set("map", new functional_map());
         Functions.set("flatmap", new functional_flatmap());
         Functions.set("reduce", new functional_reduce());
-        Functions.set("filter", new functional_filter());
+        Functions.set("filter", new functional_filter(false));
         Functions.set("sortby", new functional_sortby());
-        
+        Functions.set("takewhile", new functional_filter(true));
+
         Functions.set("chain", new functional_chain());
         Functions.set("combine", new functional_combine());
     }

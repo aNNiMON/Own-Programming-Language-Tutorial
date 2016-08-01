@@ -25,6 +25,7 @@ public final class functional implements Module {
         Functions.set("filter", new functional_filter(false));
         Functions.set("sortby", new functional_sortby());
         Functions.set("takewhile", new functional_filter(true));
+        Functions.set("dropwhile", new functional_dropwhile());
 
         Functions.set("chain", new functional_chain());
         Functions.set("combine", new functional_combine());

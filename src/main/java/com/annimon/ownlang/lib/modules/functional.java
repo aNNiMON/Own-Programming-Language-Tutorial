@@ -28,6 +28,7 @@ public final class functional implements Module {
         Functions.set("dropwhile", new functional_dropwhile());
 
         Functions.set("chain", new functional_chain());
+        Functions.set("stream", new functional_stream());
         Functions.set("combine", new functional_combine());
     }
 }

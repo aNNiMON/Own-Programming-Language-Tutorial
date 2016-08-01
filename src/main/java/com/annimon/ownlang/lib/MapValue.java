@@ -20,7 +20,7 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
         result.map.putAll(map2.map);
         return result;
     }
-    
+
     private final Map<Value, Value> map;
 
     public MapValue(int size) {
@@ -29,6 +29,18 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
 
     public MapValue(Map<Value, Value> map) {
         this.map = map;
+    }
+
+    public ArrayValue toPairs() {
+        final int size = map.size();
+        final ArrayValue result = new ArrayValue(size);
+        int index = 0;
+        for (Map.Entry<Value, Value> entry : map.entrySet()) {
+            result.set(index++, new ArrayValue(new Value[] {
+                entry.getKey(), entry.getValue()
+            }));
+        }
+        return result;
     }
     
     @Override

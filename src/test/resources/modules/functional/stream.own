@@ -1,11 +1,39 @@
 use "functional"
 
-def testFunctionalChain() {
+def testStream() {
   data = [1,2,3,4,5,6,7]
-  result = chain(data,
-    ::filter, def(x) = x <= 4,
-    ::sortby, def(x) = -x,
-    ::map,    def(x) = x * 2,
-  )
+  result = stream(data)
+    .filter(def(x) = x <= 4)
+    .sortBy(def(x) = -x)
+    .map(def(x) = x * 2)
+    .toArray()
   assertEquals([8,6,4,2], result)
+}
+
+def testSkip() {
+  data = [1,2,3,4,5,6,7]
+  assertEquals(7, stream(data).skip(0).count())
+  assertEquals(5, stream(data).skip(2).count())
+  assertEquals(0, stream(data).skip(7).count())
+  assertEquals(0, stream(data).skip(20).count())
+}
+
+def testLimit() {
+  data = [1,2,3,4,5,6,7]
+  assertEquals(0, stream(data).limit(0).count())
+  assertEquals(2, stream(data).limit(2).count())
+  assertEquals(7, stream(data).limit(7).count())
+  assertEquals(7, stream(data).limit(20).count())
+}
+
+def testTakeWhile() {
+  data = [2,4,6,5,6,7,8]
+  assertEquals([2, 4, 6], stream(data).takeWhile(def(x) = x % 2 == 0).toArray())
+  assertEquals(0, stream(data).takeWhile(def(x) = x % 2 != 0).count())
+}
+
+def testDropWhile() {
+  data = [2,4,6,5,6,7,8]
+  assertEquals([5, 6, 7, 8], stream(data).dropWhile(def(x) = x % 2 == 0).toArray())
+  assertEquals(data, stream(data).dropWhile(def(x) = x % 2 != 0).toArray())
 }

@@ -1,6 +1,5 @@
 package com.annimon.ownlang;
 
-import com.annimon.ownlang.exceptions.LexerException;
 import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.parser.Beautifier;
 import com.annimon.ownlang.parser.Lexer;
@@ -11,10 +10,10 @@ import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
+import com.annimon.ownlang.utils.Repl;
 import com.annimon.ownlang.utils.TimeMeasurement;
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 public final class Main {
     
-    private static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.2.0";
 
     private static String[] ownlangArgs = new String[0];
 
@@ -97,7 +96,7 @@ public final class Main {
 
                 case "-r":
                 case "--repl":
-                    repl();
+                    Repl.main(new String[0]);
                     return;
 
                 case "-l":
@@ -191,46 +190,6 @@ public final class Main {
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }
         }
-    }
-    
-    private static void repl() {
-        final StringBuilder buffer = new StringBuilder();
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to OwnLang " + VERSION + " REPL\n"
-                + "Type in expressions to have them evaluated.\n"
-                + "Type :reset to clear buffer.\n"
-                + "Type :exit to exit REPL.");
-        while (true) {
-            System.out.print((buffer.length() == 0) ? "\n> " : "  ");
-            
-            if (!scanner.hasNextLine()) break;
-            
-            final String line = scanner.nextLine();
-            if (":exit".equalsIgnoreCase(line)) break;
-            if (":reset".equalsIgnoreCase(line)) {
-                buffer.setLength(0);
-                continue;
-            }
-            
-            buffer.append(line).append(System.lineSeparator());
-            try {
-                final List<Token> tokens = Lexer.tokenize(buffer.toString());
-                final Parser parser = new Parser(tokens);
-                final Statement program = parser.parse();
-                if (parser.getParseErrors().hasErrors()) {
-                    continue;
-                }
-                program.execute();
-            } catch (LexerException lex) {
-                continue;
-            } catch (StoppedException ex) {
-                // skip
-            } catch (Exception ex) {
-                Console.handleException(Thread.currentThread(), ex);
-            }
-            buffer.setLength(0);
-        }
-        scanner.close();
     }
 
     private static class Options {

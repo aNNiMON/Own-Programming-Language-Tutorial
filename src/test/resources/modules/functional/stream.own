@@ -1,3 +1,4 @@
+use "std"
 use "functional"
 
 def testStream() {
@@ -36,4 +37,18 @@ def testDropWhile() {
   data = [2,4,6,5,6,7,8]
   assertEquals([5, 6, 7, 8], stream(data).dropWhile(def(x) = x % 2 == 0).toArray())
   assertEquals(data, stream(data).dropWhile(def(x) = x % 2 != 0).toArray())
+}
+
+def testCustom() {
+  data = [2,4,6,5]
+  assertEquals([5,6,4,2], stream(data).custom(::reverse).toArray())
+}
+
+def reverse(container) {
+  size = length(container)
+  result = newarray(size)
+  for i : range(size) {
+    result[size - i - 1] = container[i]
+  }
+  return result
 }

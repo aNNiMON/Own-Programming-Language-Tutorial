@@ -29,7 +29,7 @@ public final class functional_stream implements Function {
         private final ArrayValue container;
 
         public StreamValue(ArrayValue container) {
-            super(12);
+            super(13);
             this.container = container;
             init();
         }
@@ -43,6 +43,7 @@ public final class functional_stream implements Function {
             set("dropWhile", wrapIntermediate(new functional_dropwhile()));
             set("skip", this::skip);
             set("limit", this::limit);
+            set("custom", this::custom);
 
             set("reduce", wrapTerminal(new functional_reduce()));
             set("forEach", wrapTerminal(new functional_foreach()));
@@ -80,6 +81,19 @@ public final class functional_stream implements Function {
             final Value[] result = new Value[limitCount];
             System.arraycopy(container.getCopyElements(), 0, result, 0, limitCount);
             return new StreamValue(new ArrayValue(result));
+        }
+
+        private Value custom(Value... args) {
+            Arguments.check(1, args.length);
+            if (args[0].type() != Types.FUNCTION) {
+                throw new TypeException("Function expected in first argument");
+            }
+            final Function f = ((FunctionValue) args[0]).getValue();
+            final Value result = f.execute(container);
+            if (result.type() == Types.ARRAY) {
+                return new StreamValue((ArrayValue) result);
+            }
+            return result;
         }
 
         private FunctionValue wrapIntermediate(Function f) {

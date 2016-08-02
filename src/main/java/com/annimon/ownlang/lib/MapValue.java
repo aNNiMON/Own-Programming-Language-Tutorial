@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  *
@@ -29,6 +30,18 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
 
     public MapValue(Map<Value, Value> map) {
         this.map = map;
+    }
+
+    public boolean ifPresent(String key, Consumer<Value> consumer) {
+        return ifPresent(new StringValue(key), consumer);
+    }
+
+    public boolean ifPresent(Value key, Consumer<Value> consumer) {
+        if (map.containsKey(key)) {
+            consumer.accept(map.get(key));
+            return true;
+        }
+        return false;
     }
 
     public ArrayValue toPairs() {

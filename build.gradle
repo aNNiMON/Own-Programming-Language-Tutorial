@@ -53,7 +53,9 @@ task proguard(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
 }
 
 dependencies {
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile ('io.socket:socket.io-client:0.7.0') {
+      exclude group: 'org.json', module: 'json'
+    }
     compile 'org.json:json:20160212'
 
     testCompile 'junit:junit:4.12'

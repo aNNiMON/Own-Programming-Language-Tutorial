@@ -62,7 +62,7 @@ public final class socket implements Module {
         private final Socket socket;
 
         public SocketValue(Socket socket) {
-            super(11);
+            super(12);
             this.socket = socket;
             init();
         }

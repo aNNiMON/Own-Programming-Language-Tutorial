@@ -1,0 +1,17 @@
+{
+  "name": "TestSocketIOServer",
+  "version": "1.0.0",
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "aNNiMON",
+  "contributors": [],
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
+  }
+}

@@ -1,9 +1,7 @@
 use "std"
 use "canvas"
 
-///-------------------------------------
-/// PIPES CELL
-///-------------------------------------
+/// --- PIPES CELL ---
 CELL_START = 0
 HORIZONTAL = 0
 VERTICAL = 1
@@ -14,22 +12,15 @@ RIGHT_TO_DOWN = 5
 CROSS = 6
 CELL_LAST = 6
 
-// лево, право, верх, низ
-HorizontalCell = [1,1,0,0]
-VerticalCell = [0,0,1,1]
-LeftToDownCell = [1,0,0,1]
-LeftToUpCell = [1,0,1,0]
-RightToUpCell = [0,1,1,0]
-RightToDownCell = [0,1,0,1]
-CrossCell = [1,1,1,1]
-
-support = [
-  HorizontalCell, VerticalCell,
-  LeftToDownCell, LeftToUpCell,
-  RightToUpCell, RightToDownCell,
-  CrossCell
+Cells = [
+  {"support": [1, 1, 0, 0], "index": HORIZONTAL, "next": VERTICAL},
+  {"support": [0, 0, 1, 1], "index": VERTICAL, "next": HORIZONTAL},
+  {"support": [1, 0, 0, 1], "index": LEFT_TO_DOWN, "next": LEFT_TO_UP},
+  {"support": [1, 0, 1, 0], "index": LEFT_TO_UP, "next": RIGHT_TO_UP},
+  {"support": [0, 1, 1, 0], "index": RIGHT_TO_UP, "next": RIGHT_TO_DOWN},
+  {"support": [0, 1, 0, 1], "index": RIGHT_TO_DOWN, "next": LEFT_TO_DOWN},
+  {"support": [1, 1, 1, 1], "index": CROSS, "next": CROSS}
 ]
-
 
 def draw(v, cellSize) {
   c2 = cellSize / 2
@@ -42,7 +33,7 @@ def draw(v, cellSize) {
     }
     case LEFT_TO_UP : {
       fillRect(0, c2 - 2, c2, 4)
-      fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
+      fillRect(c2 - 2, 0, 4, c2 + 2)
     }
     case RIGHT_TO_UP : {
       fillRect(c2 - 2, c2 - 2, c2 + 2, 4)
@@ -59,19 +50,16 @@ def draw(v, cellSize) {
   }
 }
 
-def supportLeft(v)  = support[v][0]
-def supportRight(v) = support[v][1]
-def supportUp(v)    = support[v][2]
-def supportDown(v)  = support[v][3]
-///-------------------------------------
+def supportLeft(v)  = Cells[v].support[0]
+def supportRight(v) = Cells[v].support[1]
+def supportUp(v)    = Cells[v].support[2]
+def supportDown(v)  = Cells[v].support[3]
 
 
-///-------------------------------------
-/// PIPES BOARD
-///-------------------------------------
+/// --- PIPES BOARD ---
 SIZE = 10
 
-// Создаём игровое поле
+// Creating game board
 board = newarray(SIZE, SIZE)
 
 def createBoard() {
@@ -81,51 +69,49 @@ def createBoard() {
 }
 
 def switchCell(x, y) {
-  nextType = board[x][y] + 1
-  board[x][y] = nextType > CELL_LAST ? CELL_START : nextType
+  board[x][y] = Cells[board[x][y]].next
 }
 
 def isFinished() {
-  // Стартовая труба должна иметь левую точку соприкосновения
-  if (!supportLeft(board[0][0])) return 0
-  // А конечная труба - правую
-  if (!supportRight(board[SIZE - 1][SIZE - 1])) return 0
+  // Start pipe must have left touchpoint
+  if (!supportLeft(board[0][0])) return false
+  // Finish pipe - right touchpoint
+  if (!supportRight(board[SIZE - 1][SIZE - 1])) return false
   
   visited = newarray(SIZE, SIZE)
+  // Recursive traversal from left upper pipe
   return isConnected(0, 0, visited)
 }
 
 def isConnected(curX, curY, visited) {
-  // Если достигли конечной ячейки - выходим.
-  if ( (curX == SIZE - 1) && (curY == SIZE - 1) ) return 1
+  // If it is a last cell - game is finished
+  if ( (curX == SIZE - 1) && (curY == SIZE - 1) ) return true
   
-  // Если уже посещали - выходим.
-  if (visited[curX][curY]) return 0
-  // Отмечаем посещение.
+  // Already visited - exit
+  if (visited[curX][curY]) return false
+  // Mark visited
   visited[curX][curY] = 1
+  // Check pipes matching
   current = board[curX][curY]
   if ( supportLeft(current) && (curX > 0) && (supportRight(board[curX - 1][curY])) ) {
-      if (isConnected(curX - 1, curY, visited)) return 1
+      if (isConnected(curX - 1, curY, visited)) return true
   }
   if ( supportRight(current) && (curX < SIZE - 1) && (supportLeft(board[curX + 1][curY])) ) {
-      if (isConnected(curX + 1, curY, visited)) return 1
+      if (isConnected(curX + 1, curY, visited)) return true
   }
   if ( supportUp(current) && (curY > 0) && (supportDown(board[curX][curY - 1])) ) {
-      if (isConnected(curX, curY - 1, visited)) return 1
+      if (isConnected(curX, curY - 1, visited)) return true
   }
   if ( supportDown(current) && (curY < SIZE - 1) && (supportUp(board[curX][curY + 1])) ) {
-      if (isConnected(curX, curY + 1, visited)) return 1
+      if (isConnected(curX, curY + 1, visited)) return true
   }
-  return 0
+  return false
 }
-///-------------------------------------
 
 
-///-------------------------------------
-/// PIPES MAIN
-///-------------------------------------
+/// --- PIPES MAIN ---
 translateX = 0  translateY = 0
-/* frect с поддержкой translate*/
+/* frect with translate ability */
 def fillRect(x,y,w,h) {
   frect(translateX+x, translateY+y, w, h)
 }
@@ -138,7 +124,7 @@ window("Pipes", WIDTH, HEIGHT)
 cellSize = WIDTH / SIZE
 createBoard()
 
-// курсор
+// cursor
 curX = 0
 curY = 0
 
@@ -153,10 +139,10 @@ while run {
   else if key == VK_FIRE switchCell(curX,curY)
   else if key == 48 run = 0
 
-  // фон
+  // background
   color(isFinished() ? #00FF00 : #FFFFFF)
   frect(0,0,WIDTH,HEIGHT)
-  // курсор
+  // cursor
   color(#4444FF)
   frect(curX*cellSize, curY*cellSize, cellSize, cellSize)
   for (i=0, i<SIZE, i++) {

@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +19,6 @@ import javax.swing.JPanel;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class canvas implements Module {
     
     private static JFrame frame;

@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import java.io.BufferedReader;
@@ -21,7 +20,6 @@ import java.util.Map;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class files implements Module {
 
     private static Map<Integer, FileInfo> files;
@@ -34,7 +32,7 @@ public final class files implements Module {
     public void init() {
         files = new HashMap<>();
         initConstants();
-        
+
         Functions.set("fopen", new fopen());
         Functions.set("flush", new flush());
         Functions.set("fclose", new fclose());
@@ -169,7 +167,7 @@ public final class files implements Module {
         
         protected abstract Value execute(FileInfo fileInfo, Value[] args) throws IOException;
     }
-    
+
     private static class listFiles extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
@@ -559,7 +557,7 @@ public final class files implements Module {
             return NumberValue.ONE;
         }
     }
-    
+
     private static class writeText extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {

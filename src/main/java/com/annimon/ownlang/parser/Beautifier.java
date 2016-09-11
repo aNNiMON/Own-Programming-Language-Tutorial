@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.Console;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -233,7 +234,7 @@ public final class Beautifier {
     }
 
     private void newLineStrict() {
-        beautifiedCode.append(System.lineSeparator());
+        beautifiedCode.append(Console.newline());
         indent();
         do {
             next();

@@ -8,6 +8,10 @@ import java.io.UnsupportedEncodingException;
 
 public class Console {
 
+    public static String newline() {
+        return System.lineSeparator();
+    }
+
     public static void print(String value) {
         System.out.print(value);
     }

@@ -1,7 +1,12 @@
 package com.annimon.ownlang.lib.modules.functions;
 
 import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.lib.Arguments;
+import com.annimon.ownlang.lib.ArrayValue;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.FunctionValue;
+import com.annimon.ownlang.lib.Types;
+import com.annimon.ownlang.lib.Value;
 import java.util.Arrays;
 
 public final class functional_sortby implements Function {

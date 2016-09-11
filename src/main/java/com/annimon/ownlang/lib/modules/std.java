@@ -1,7 +1,6 @@
 package com.annimon.ownlang.lib.modules;
 
 import com.annimon.ownlang.Main;
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.lib.modules.functions.*;
 
@@ -9,7 +8,6 @@ import com.annimon.ownlang.lib.modules.functions.*;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class std implements Module {
 
     public static void initConstants() {
@@ -28,7 +26,7 @@ public final class std implements Module {
         Functions.set("thread", new std_thread());
         Functions.set("sync", new std_sync());
         Functions.set("try", new std_try());
-        
+
         // String
         Functions.set("sprintf", new std_sprintf());
         Functions.set("split", new std_split());

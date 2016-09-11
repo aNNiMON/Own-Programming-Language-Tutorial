@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.Console;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +34,7 @@ public final class ParseErrors implements Iterable<ParseError> {
     public String toString() {
         final StringBuilder result = new StringBuilder();
         for (ParseError error : errors) {
-            result.append(error).append(System.lineSeparator());
+            result.append(error).append(Console.newline());
         }
         return result.toString();
     }

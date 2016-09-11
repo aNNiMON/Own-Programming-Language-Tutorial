@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.optimization;
 
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.Node;
@@ -98,9 +99,9 @@ public class InstructionCombining extends OptimizationVisitor<Void> implements O
                     : ((PrintlnStatement) n2).expression;
             if (isConstantValue(e1) && isConstantValue(e2)) {
                 String s1 = e1.eval().asString();
-                if (n1Type == 2) s1 += System.lineSeparator();
+                if (n1Type == 2) s1 += Console.newline();
                 String s2 = e2.eval().asString();
-                if (n2Type == 2) s2 += System.lineSeparator();
+                if (n2Type == 2) s2 += Console.newline();
                 printCombinedCount++;
                 return new PrintStatement(new ValueExpression(s1 + s2));
             }

@@ -7,7 +7,6 @@ import com.annimon.ownlang.lib.ValueUtils;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
-
 public final class json_decode implements Function {
 
     @Override

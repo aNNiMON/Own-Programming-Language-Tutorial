@@ -9,11 +9,12 @@ public final class std_echo implements Function {
 
     @Override
     public Value execute(Value... args) {
+        final StringBuilder sb = new StringBuilder();
         for (Value arg : args) {
-            Console.print(arg.asString());
-            Console.print(" ");
+            sb.append(arg.asString());
+            sb.append(" ");
         }
-        Console.println();
+        Console.println(sb.toString());
         return NumberValue.ZERO;
     }
 }

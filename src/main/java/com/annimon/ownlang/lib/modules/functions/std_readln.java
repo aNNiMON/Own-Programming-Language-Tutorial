@@ -1,6 +1,8 @@
 package com.annimon.ownlang.lib.modules.functions;
 
-import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.StringValue;
+import com.annimon.ownlang.lib.Value;
 import java.util.Scanner;
 
 public final class std_readln implements Function {

@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import io.socket.client.IO;
@@ -12,7 +11,6 @@ import java.net.URISyntaxException;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class socket implements Module {
 
     public static void initConstants() {

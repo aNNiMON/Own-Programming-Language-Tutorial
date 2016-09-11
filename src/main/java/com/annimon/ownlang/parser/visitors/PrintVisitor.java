@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.visitors;
 
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Types;
@@ -422,7 +423,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
     }
 
     private void newLine(StringBuilder t) {
-        t.append(System.lineSeparator());
+        t.append(Console.newline());
     }
 
     private void printIndent(StringBuilder sb) {

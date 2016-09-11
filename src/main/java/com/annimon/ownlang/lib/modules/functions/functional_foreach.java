@@ -2,7 +2,6 @@ package com.annimon.ownlang.lib.modules.functions;
 
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
-
 import java.util.Map;
 
 public final class functional_foreach implements Function {

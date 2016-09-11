@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -11,10 +10,9 @@ import java.util.List;
 
 /**
  * Java interoperability module.
- * 
+ *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class java implements Module {
 
     private static final Value NULL = new NullValue();

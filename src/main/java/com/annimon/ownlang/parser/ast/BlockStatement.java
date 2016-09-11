@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public final class BlockStatement extends InterruptableNode implements Statement
     public String toString() {
         final StringBuilder result = new StringBuilder();
         for (Statement statement : statements) {
-            result.append(statement.toString()).append(System.lineSeparator());
+            result.append(statement.toString()).append(Console.newline());
         }
         return result.toString();
     }

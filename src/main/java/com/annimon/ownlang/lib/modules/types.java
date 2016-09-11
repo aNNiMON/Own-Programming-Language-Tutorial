@@ -1,13 +1,11 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 
 /**
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class types implements Module {
 
     public static void initConstants() {

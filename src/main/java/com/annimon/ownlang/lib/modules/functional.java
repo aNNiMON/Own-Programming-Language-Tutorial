@@ -1,14 +1,14 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
-import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.lib.FunctionValue;
+import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.lib.modules.functions.*;
 
 /**
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class functional implements Module {
 
     public static void initConstants() {

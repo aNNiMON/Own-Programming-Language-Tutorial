@@ -1,7 +1,8 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.lib.*;
-import com.annimon.ownlang.lib.modules.functions.*;
+import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.modules.functions.json_decode;
+import com.annimon.ownlang.lib.modules.functions.json_encode;
 
 /**
  *

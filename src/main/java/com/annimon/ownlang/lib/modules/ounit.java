@@ -1,6 +1,13 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.Console;
+import com.annimon.ownlang.lib.Arguments;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.StringValue;
+import com.annimon.ownlang.lib.Types;
+import com.annimon.ownlang.lib.Value;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,10 +99,10 @@ public final class ounit implements Module {
             for (TestInfo test : tests) {
                 if (!test.isPassed) failures++;
                 summaryTime += test.elapsedTimeInMicros;
-                result.append(System.lineSeparator());
+                result.append(Console.newline());
                 result.append(test.info());
             }
-            result.append(System.lineSeparator());
+            result.append(Console.newline());
             result.append(String.format("Tests run: %d, Failures: %d, Time elapsed: %s",
                     tests.size(), failures,
                     microsToSeconds(summaryTime)));

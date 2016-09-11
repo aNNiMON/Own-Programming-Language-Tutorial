@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.text.DateFormat;
@@ -14,7 +13,6 @@ import java.util.Locale;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class date implements Module {
 
     private static final int DATE_DATE_FORMAT = 9829;
@@ -197,7 +195,7 @@ public final class date implements Module {
             }
             try {
                 calendar.setTime(DateFormat.getDateTimeInstance().parse(arg1.asString()));
-            } catch (ParseException ex) { }
+            } catch (ParseException ignore) { }
         }
 
         private static void date(Calendar calendar, Value arg1, Value arg2) {
@@ -207,7 +205,7 @@ public final class date implements Module {
             }
             try {
                 calendar.setTime(new SimpleDateFormat(arg1.asString()).parse(arg2.asString()));
-            } catch (ParseException ex) { }
+            } catch (ParseException ignore) { }
         }
     }
 

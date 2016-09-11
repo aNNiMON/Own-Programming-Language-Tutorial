@@ -1,5 +1,6 @@
 package com.annimon.ownlang.utils;
 
+import com.annimon.ownlang.Console;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -62,12 +63,12 @@ public final class TimeMeasurement {
             
             result.append(entry.getKey()).append(": ")
                     .append(convertedTime).append(' ').append(unitName)
-                    .append(System.lineSeparator());
+                    .append(Console.newline());
         }
         if (showSummary) {
             result.append("Summary: ")
                         .append(summaryTime).append(' ').append(unitName)
-                        .append(System.lineSeparator());
+                        .append(Console.newline());
         }
         return result.toString();
     }

@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
@@ -11,7 +10,6 @@ import java.util.function.UnaryOperator;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class math implements Module {
 
     private static final DoubleFunction<NumberValue> doubleToNumber = NumberValue::of;
@@ -151,7 +149,7 @@ public final class math implements Module {
         };
     }
 
-     private static Function functionConvert(DoubleUnaryOperator opDouble, UnaryOperator<Float> opFloat) {
+    private static Function functionConvert(DoubleUnaryOperator opDouble, UnaryOperator<Float> opFloat) {
         return args -> {
             Arguments.check(1, args.length);
             final Object raw = args[0].raw();

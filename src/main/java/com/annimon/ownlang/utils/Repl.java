@@ -62,7 +62,7 @@ public final class Repl {
                     continue;
             }
 
-            buffer.append(line).append(System.lineSeparator());
+            buffer.append(line).append(Console.newline());
             Statement program = null;
             try {
                 final List<Token> tokens = Lexer.tokenize(buffer.toString());

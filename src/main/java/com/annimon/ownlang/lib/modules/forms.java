@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.lib.modules.functions.forms.Components;
 import com.annimon.ownlang.lib.modules.functions.forms.LayoutManagers;
@@ -13,7 +12,6 @@ import javax.swing.SwingConstants;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class forms implements Module {
 
     public static void initConstants() {

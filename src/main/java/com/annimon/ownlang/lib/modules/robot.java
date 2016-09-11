@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.lib.modules.functions.robot_exec;
 import com.annimon.ownlang.lib.modules.functions.robot_fromclipboard;
@@ -16,7 +15,6 @@ import java.util.Map;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class robot implements Module {
     
     private static final int CLICK_DELAY = 200;

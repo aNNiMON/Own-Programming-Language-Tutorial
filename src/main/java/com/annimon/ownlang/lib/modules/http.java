@@ -1,14 +1,14 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
-import com.annimon.ownlang.lib.*;
-import com.annimon.ownlang.lib.modules.functions.*;
+import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.modules.functions.http_download;
+import com.annimon.ownlang.lib.modules.functions.http_http;
+import com.annimon.ownlang.lib.modules.functions.http_urlencode;
 
 /**
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class http implements Module {
 
     public static void initConstants() {

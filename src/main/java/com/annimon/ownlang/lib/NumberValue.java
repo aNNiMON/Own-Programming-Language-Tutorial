@@ -5,9 +5,9 @@ package com.annimon.ownlang.lib;
  * @author aNNiMON
  */
 public final class NumberValue implements Value {
-    
+
     public static final NumberValue MINUS_ONE, ZERO, ONE;
-    
+
     private static final int CACHE_MIN = -128, CACHE_MAX = 127;
     private static final NumberValue[] NUMBER_CACHE;
     static {

@@ -1,6 +1,5 @@
 package com.annimon.ownlang.lib.modules;
 
-import com.annimon.ownlang.annotations.ConstantInitializer;
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
@@ -32,7 +31,6 @@ import java.util.function.Function;
  *
  * @author aNNiMON
  */
-@ConstantInitializer
 public final class jdbc implements Module {
 
     public static void initConstants() {

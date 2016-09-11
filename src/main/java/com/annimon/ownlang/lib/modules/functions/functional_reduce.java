@@ -1,8 +1,13 @@
 package com.annimon.ownlang.lib.modules.functions;
 
 import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.*;
-
+import com.annimon.ownlang.lib.Arguments;
+import com.annimon.ownlang.lib.ArrayValue;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.FunctionValue;
+import com.annimon.ownlang.lib.MapValue;
+import com.annimon.ownlang.lib.Types;
+import com.annimon.ownlang.lib.Value;
 import java.util.Map;
 
 public final class functional_reduce implements Function {

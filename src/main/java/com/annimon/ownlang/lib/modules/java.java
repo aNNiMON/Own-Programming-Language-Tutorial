@@ -174,6 +174,19 @@ public final class java implements Module {
         }
 
         @Override
+        public boolean containsKey(Value key) {
+            return getValue(clazz, null, key.asString()) != null;
+        }
+
+        @Override
+        public Value get(Value key) {
+            if (super.containsKey(key)) {
+                return super.get(key);
+            }
+            return getValue(clazz, null, key.asString());
+        }
+
+        @Override
         public String toString() {
             return "ClassValue " + clazz.toString();
         }
@@ -195,76 +208,12 @@ public final class java implements Module {
 
         @Override
         public boolean containsKey(Value key) {
-            return getValue(key.asString()) != null;
+            return getValue(object.getClass(), object, key.asString()) != null;
         }
 
         @Override
         public Value get(Value key) {
-            return getValue(key.asString());
-        }
-
-        private Value getValue(String key) {
-            // Trying to get field
-            try {
-                final Field field = object.getClass().getField(key);
-                return objectToValue(field.getType(), field.get(object));
-            } catch (NoSuchFieldException | SecurityException |
-                    IllegalArgumentException | IllegalAccessException ex) {
-                // ignore and go to the next step
-            }
-
-            // Trying to invoke method
-            try {
-                final Method[] allMethods = object.getClass().getMethods();
-                final List<Method> methods = new ArrayList<>();
-                for (Method method : allMethods) {
-                    if (method.getName().equals(key)) {
-                        methods.add(method);
-                    }
-                }
-                if (methods.size() == 0) {
-                    return FunctionValue.EMPTY;
-                }
-                return new FunctionValue(methodsToFunction(methods));
-            } catch (SecurityException ex) {
-                // ignore and go to the next step
-            }
-
-            return NULL;
-
-        }
-
-        private Function methodsToFunction(List<Method> methods) {
-            return (args) -> {
-                for (Method method : methods) {
-                    if (method.getParameterCount() != args.length) continue;
-                    if (!isMatch(args, method.getParameterTypes())) continue;
-                    try {
-                        final Object result = method.invoke(object, valuesToObjects(args));
-                        if (method.getReturnType() != void.class) {
-                            return objectToValue(result);
-                        }
-                        return NumberValue.ONE;
-                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                        // skip
-                    }
-                }
-                return null;
-            };
-        }
-
-        private boolean isMatch(Value[] args, Class<?>[] types) {
-            for (int i = 0; i < args.length; i++) {
-                final Value arg = args[i];
-                final Class<?> clazz = types[i];
-
-                if (arg == NULL) continue;
-                if (unboxed(clazz).isAssignableFrom(unboxed(valueToObject(arg).getClass()))) {
-                    continue;
-                }
-                return false;
-            }
-            return true;
+            return getValue(object.getClass(), object, key.asString());
         }
 
         @Override
@@ -275,22 +224,6 @@ public final class java implements Module {
         @Override
         public String toString() {
             return "ObjectValue " + asString();
-        }
-
-        private Class<?> unboxed(Class<?> clazz) {
-            if (clazz == null) return null;
-            if (clazz.isPrimitive()) {
-                if (int.class == clazz) return Integer.class;
-                if (boolean.class == clazz) return Boolean.class;
-                if (double.class == clazz) return Double.class;
-                if (float.class == clazz) return Float.class;
-                if (long.class == clazz) return Long.class;
-                if (byte.class == clazz) return Byte.class;
-                if (char.class == clazz) return Character.class;
-                if (short.class == clazz) return Short.class;
-                if (void.class == clazz) return Void.class;
-            }
-            return clazz;
         }
     }
 //</editor-fold>
@@ -330,6 +263,85 @@ public final class java implements Module {
 
 
     //<editor-fold defaultstate="collapsed" desc="Helpers">
+    private static Value getValue(Class<?> clazz, Object object, String key) {
+        // Trying to get field
+        try {
+            final Field field = clazz.getField(key);
+            return objectToValue(field.getType(), field.get(object));
+        } catch (NoSuchFieldException | SecurityException |
+                IllegalArgumentException | IllegalAccessException ex) {
+            // ignore and go to the next step
+        }
+
+        // Trying to invoke method
+        try {
+            final Method[] allMethods = clazz.getMethods();
+            final List<Method> methods = new ArrayList<>();
+            for (Method method : allMethods) {
+                if (method.getName().equals(key)) {
+                    methods.add(method);
+                }
+            }
+            if (methods.size() == 0) {
+                return FunctionValue.EMPTY;
+            }
+            return new FunctionValue(methodsToFunction(object, methods));
+        } catch (SecurityException ex) {
+            // ignore and go to the next step
+        }
+
+        return NULL;
+    }
+
+    private static Function methodsToFunction(Object object, List<Method> methods) {
+        return (args) -> {
+            for (Method method : methods) {
+                if (method.getParameterCount() != args.length) continue;
+                if (!isMatch(args, method.getParameterTypes())) continue;
+                try {
+                    final Object result = method.invoke(object, valuesToObjects(args));
+                    if (method.getReturnType() != void.class) {
+                        return objectToValue(result);
+                    }
+                    return NumberValue.ONE;
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    // skip
+                }
+            }
+            return null;
+        };
+    }
+
+    private static boolean isMatch(Value[] args, Class<?>[] types) {
+        for (int i = 0; i < args.length; i++) {
+            final Value arg = args[i];
+            final Class<?> clazz = types[i];
+
+            if (arg == NULL) continue;
+            if (unboxed(clazz).isAssignableFrom(unboxed(valueToObject(arg).getClass()))) {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private static Class<?> unboxed(Class<?> clazz) {
+        if (clazz == null) return null;
+        if (clazz.isPrimitive()) {
+            if (int.class == clazz) return Integer.class;
+            if (boolean.class == clazz) return Boolean.class;
+            if (double.class == clazz) return Double.class;
+            if (float.class == clazz) return Float.class;
+            if (long.class == clazz) return Long.class;
+            if (byte.class == clazz) return Byte.class;
+            if (char.class == clazz) return Character.class;
+            if (short.class == clazz) return Short.class;
+            if (void.class == clazz) return Void.class;
+        }
+        return clazz;
+    }
+
     private static ArrayValue array(Class<?>[] classes) {
         final ArrayValue result = new ArrayValue(classes.length);
         for (int i = 0; i < classes.length; i++) {

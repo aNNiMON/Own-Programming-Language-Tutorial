@@ -1,0 +1,9 @@
+def calc() = {
+  "add": ::add,
+  "sub": ::minus
+}
+def add(x, y) = x + y
+def minus(x, y) = x - y
+
+println calc().add(77, 42)
+println calc().sub(77, 42)

@@ -1,0 +1,26 @@
+use "std"
+use "functional"
+
+println "x, square(x), cube(x) for even numbers"
+data = [1,2,3,4,5,6,7,8,9]
+stream(data)
+  .filter(def(x) = x % 2 == 0)
+  .map(def(x) = [x, x * x, x * x * x])
+  .sortBy(def(x) = -x[2])
+  .forEach(::echo)
+
+
+println "\nReverse custom operator"
+data = [2, 4, 6, 5, 12, 34, 0, 18]
+rev = stream(data).custom(::reverse).toArray()
+println data
+println rev
+
+def reverse(container) {
+  size = length(container)
+  result = newarray(size)
+  for i : range(size) {
+    result[size - i - 1] = container[i]
+  }
+  return result
+}

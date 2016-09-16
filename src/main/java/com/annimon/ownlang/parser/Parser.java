@@ -185,7 +185,7 @@ public final class Parser {
             } else {
                 variables.add(null);
             }
-            consume(TokenType.COMMA);
+            match(TokenType.COMMA);
         }
         consume(TokenType.EQ);
         return new DestructuringAssignmentStatement(variables, expression());

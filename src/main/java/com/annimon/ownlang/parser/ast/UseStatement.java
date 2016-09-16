@@ -1,6 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.modules.Module;
+import com.annimon.ownlang.modules.Module;
 import java.lang.reflect.Method;
 
 /**
@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  */
 public final class UseStatement extends InterruptableNode implements Statement {
 
-    private static final String PACKAGE = "com.annimon.ownlang.lib.modules.";
+    private static final String PACKAGE = "com.annimon.ownlang.modules.%s.%s";
     private static final String INIT_CONSTANTS_METHOD = "initConstants";
     
     public final Expression expression;
@@ -23,7 +23,7 @@ public final class UseStatement extends InterruptableNode implements Statement {
         super.interruptionCheck();
         try {
             final String moduleName = expression.eval().asString();
-            final Module module = (Module) Class.forName(PACKAGE + moduleName).newInstance();
+            final Module module = (Module) Class.forName(String.format(PACKAGE, moduleName, moduleName)).newInstance();
             module.init();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -33,7 +33,7 @@ public final class UseStatement extends InterruptableNode implements Statement {
     public void loadConstants() {
         try {
             final String moduleName = expression.eval().asString();
-            final Class<?> moduleClass = Class.forName(PACKAGE + moduleName);
+            final Class<?> moduleClass = Class.forName(String.format(PACKAGE, moduleName, moduleName));
             final Method method = moduleClass.getMethod(INIT_CONSTANTS_METHOD);
             if (method != null) {
                 method.invoke(this);

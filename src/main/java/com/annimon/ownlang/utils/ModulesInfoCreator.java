@@ -1,12 +1,12 @@
 package com.annimon.ownlang.utils;
 
-import com.annimon.ownlang.annotations.Modules;
 import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.lib.MapValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
-import com.annimon.ownlang.lib.modules.Module;
+import com.annimon.ownlang.modules.Module;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,20 +22,26 @@ import org.json.JSONObject;
 
 public final class ModulesInfoCreator {
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    private static final String MODULES_PATH = "src/main/java/com/annimon/ownlang/modules";
+
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         final Class<Module> clazz = Module.class; // get classloader for package
 
         final List<ModuleInfo> moduleInfos = new ArrayList<>();
 
-        final Package modulesPackage = Package.getPackage("com.annimon.ownlang.lib.modules");
-        final Modules annotation = modulesPackage.getAnnotation(Modules.class);
-        for (Class moduleClass : annotation.modules()) {
+        String[] moduleNames = Arrays.stream(new File(MODULES_PATH).listFiles())
+                .filter(p -> p.isDirectory())
+                .map(p -> p.getName())
+                .toArray(String[]::new);
+        for (String moduleName : moduleNames) {
+            final String moduleClassPath = String.format("com.annimon.ownlang.modules.%s.%s", moduleName, moduleName);
+            Class<?> moduleClass = Class.forName(moduleClassPath);
             Functions.getFunctions().clear();
             Variables.variables().clear();
             final Module module = (Module) moduleClass.newInstance();
             module.init();
 
-            final ModuleInfo moduleInfo = new ModuleInfo(moduleClass.getSimpleName());
+            final ModuleInfo moduleInfo = new ModuleInfo(moduleName);
             moduleInfo.functions.addAll(Functions.getFunctions().keySet());
             moduleInfo.constants.putAll(Variables.variables());
             moduleInfo.types.addAll(listValues(moduleClass));

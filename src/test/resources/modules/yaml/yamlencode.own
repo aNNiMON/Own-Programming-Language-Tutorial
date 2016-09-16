@@ -1,0 +1,22 @@
+use "std"
+use "yaml"
+use "ounit"
+
+yml = yamlencode({
+  "name": "Yaml Example",
+  "version": 1,
+  "arrayData": [
+     1, 2, 3, 4
+  ],
+  "objectData": {
+    "key": "value",
+    10: "1000"
+  }
+})
+obj = yamldecode(yml)
+
+assertEquals("Yaml Example", obj.name)
+assertEquals(1, obj.version)
+assertEquals(4, length(obj.arrayData))
+assertEquals("value", obj.objectData.key)
+assertEquals("1000", obj.objectData["10"])

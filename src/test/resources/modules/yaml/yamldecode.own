@@ -1,0 +1,33 @@
+use "std"
+use "yaml"
+use "ounit"
+
+x = yamldecode("
+  name: \"std\"
+  scope: \"both\"
+  desc: \"Contains common functions\"
+  desc_ru: \"Содержит вспомогательные функции общего назначения\"
+  constants: []
+  functions:
+    -
+      name: \"arrayCombine\"
+      args: \"keys, values\"
+      desc: \"creates map by combining two arrays\"
+      desc_ru: \"создаёт объект на основе двух массивов\"
+    -
+      name: \"typeof\"
+      args: \"value\"
+      desc: \"returns the type of value\"
+      desc_ru: \"возвращает тип переданного значения\"
+      example: |-
+        print typeof(1) // 1 (NUMBER)
+        print typeof(\"text\") // 2 (STRING)
+        print typeof([]) // 3 (ARRAY)
+")
+
+assertEquals("std", x.name)
+assertEquals("both", x.scope)
+assertEquals(0, length(x.constants))
+assertEquals(2, length(x.functions))
+assertEquals("arrayCombine", x.functions[0].name)
+assertEquals("возвращает тип переданного значения", x.functions[1].desc_ru)

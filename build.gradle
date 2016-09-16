@@ -57,6 +57,7 @@ dependencies {
       exclude group: 'org.json', module: 'json'
     }
     compile 'org.json:json:20160212'
+    compile 'org.yaml:snakeyaml:1.17'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.openjdk.jmh:jmh-core:1.13'

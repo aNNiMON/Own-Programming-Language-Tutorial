@@ -1,0 +1,44 @@
+use "yaml"
+
+println "Yaml encode"
+println yamlencode({
+  "name": "Yaml Example",
+  "version": 1,
+  "arrayData": [
+     1, 2, 3, 4
+  ],
+  "objectData": {
+    "key": "value",
+    10: "1000"
+  }
+})
+
+println "\nYaml decode"
+x = yamldecode("
+  name: \"std\"
+  scope: \"both\"
+  desc: \"Contains common functions\"
+  desc_ru: \"Содержит вспомогательные функции общего назначения\"
+  constants: []
+  functions:
+    -
+      name: \"arrayCombine\"
+      args: \"keys, values\"
+      desc: \"creates map by combining two arrays\"
+      desc_ru: \"создаёт объект на основе двух массивов\"
+    -
+      name: \"typeof\"
+      args: \"value\"
+      desc: \"returns the type of value\"
+      desc_ru: \"возвращает тип переданного значения\"
+      example: |-
+        print typeof(1) // 1 (NUMBER)
+        print typeof(\"text\") // 2 (STRING)
+        print typeof([]) // 3 (ARRAY)
+")
+println x.name + ", scope: " + x.scope
+println x.desc
+for func : x.functions {
+  println " - " + func.name + "(" + func.args + ")"
+  println "     " + func.desc
+}

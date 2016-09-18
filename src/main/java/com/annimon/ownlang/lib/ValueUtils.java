@@ -90,4 +90,13 @@ public final class ValueUtils {
         if (value.type() == Types.NUMBER) return ((NumberValue) value).raw().floatValue();
         return (float) value.asNumber();
     }
+
+    public static byte[] toByteArray(ArrayValue array) {
+        final int size = array.size();
+        final byte[] result = new byte[size];
+        for (int i = 0; i < size; i++) {
+            result[i] = (byte) array.get(i).asInt();
+        }
+        return result;
+    }
 }

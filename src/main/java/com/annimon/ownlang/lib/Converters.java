@@ -1,5 +1,7 @@
 package com.annimon.ownlang.lib;
 
+import static com.annimon.ownlang.lib.ValueUtils.getFloatNumber;
+
 /**
  * Wrapper functions and interfaces.
  */
@@ -39,6 +41,10 @@ public final class Converters {
 
     public interface IntToVoidFunction {
         void apply(int i);
+    }
+
+    public interface Int4ToVoidFunction {
+        void apply(int i1, int i2, int i3, int i4);
     }
 
     public interface FloatToVoidFunction {
@@ -124,10 +130,21 @@ public final class Converters {
         });
     }
 
+    public static FunctionValue int4ToVoid(Int4ToVoidFunction f) {
+        return new FunctionValue(args -> {
+            Arguments.check(4, args.length);
+            f.apply(args[0].asInt(),
+                    args[1].asInt(),
+                    args[2].asInt(),
+                    args[3].asInt());
+            return NumberValue.ZERO;
+        });
+    }
+
     public static FunctionValue floatToVoid(FloatToVoidFunction f) {
         return new FunctionValue(args -> {
             Arguments.check(1, args.length);
-            f.apply(getNumber(args[0]).floatValue());
+            f.apply(getFloatNumber(args[0]));
             return NumberValue.ZERO;
         });
     }
@@ -135,10 +152,10 @@ public final class Converters {
     public static FunctionValue float4ToVoid(Float4ToVoidFunction f) {
         return new FunctionValue(args -> {
             Arguments.check(4, args.length);
-            f.apply(getNumber(args[0]).floatValue(),
-                    getNumber(args[1]).floatValue(),
-                    getNumber(args[2]).floatValue(),
-                    getNumber(args[3]).floatValue());
+            f.apply(getFloatNumber(args[0]),
+                    getFloatNumber(args[1]),
+                    getFloatNumber(args[2]),
+                    getFloatNumber(args[3]));
             return NumberValue.ZERO;
         });
     }
@@ -174,10 +191,5 @@ public final class Converters {
             f.apply(args[0].asString());
             return NumberValue.ZERO;
         });
-    }
-
-    public static Number getNumber(Value value) {
-        if (value.type() == Types.NUMBER) return ((NumberValue) value).raw();
-        return value.asInt();
     }
 }

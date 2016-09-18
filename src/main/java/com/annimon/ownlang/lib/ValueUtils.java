@@ -80,4 +80,14 @@ public final class ValueUtils {
         }
         return result;
     }
+
+    public static Number getNumber(Value value) {
+        if (value.type() == Types.NUMBER) return ((NumberValue) value).raw();
+        return value.asInt();
+    }
+
+    public static float getFloatNumber(Value value) {
+        if (value.type() == Types.NUMBER) return ((NumberValue) value).raw().floatValue();
+        return (float) value.asNumber();
+    }
 }

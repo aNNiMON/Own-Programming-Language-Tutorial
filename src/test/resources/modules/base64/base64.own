@@ -1,0 +1,31 @@
+use "base64"
+use "functional"
+use "types"
+
+base64Example = [0x42, 0x61, 0x73, 0x65, 0x36, 0x34, 0x20, 0x45, 0x78, 0x61, 0x6D, 0x70, 0x6C, 0x65]
+base64Example_enc = [0x51, 0x6D, 0x46, 0x7A, 0x5A, 0x54, 0x59, 0x30,
+                     0x49, 0x45, 0x56, 0x34, 0x59, 0x57, 0x31, 0x77,
+                     0x62, 0x47, 0x55, 0x3D]
+unicode = map([0xD0, 0xAE, 0xD0, 0xBD, 0xD0, 0xB8, 0xD0, 0xBA, 0xD0, 0xBE, 0xD0, 0xB4], ::byte)
+unicode_enc = [0x30, 0x4B, 0x37, 0x51, 0x76, 0x64, 0x43, 0x34, 0x30, 0x4C, 0x72, 0x51, 0x76, 0x74, 0x43, 0x30]
+
+def testBase64Encode() {
+  assertEquals(base64Example_enc, base64encode(base64Example))
+  assertEquals(base64Example_enc, base64encode("Base64 Example"))
+  assertEquals(unicode_enc, base64encode(unicode))
+  assertEquals(unicode_enc, base64encode("Юникод"))
+}
+
+def testBase64EncodeToString() {
+  assertEquals("QmFzZTY0IEV4YW1wbGU=", base64encodeToString(base64Example))
+  assertEquals("QmFzZTY0IEV4YW1wbGU=", base64encodeToString("Base64 Example"))
+  assertEquals("0K7QvdC40LrQvtC0", base64encodeToString(unicode))
+  assertEquals("0K7QvdC40LrQvtC0", base64encodeToString("Юникод"))
+}
+
+def testBase64Decode() {
+  assertEquals(base64Example, base64decode("QmFzZTY0IEV4YW1wbGU="))
+  assertEquals(base64Example, base64decode(base64Example_enc))
+  assertEquals(unicode, base64decode("0K7QvdC40LrQvtC0"))
+  assertEquals(unicode, base64decode(unicode_enc))
+}

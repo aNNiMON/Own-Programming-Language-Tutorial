@@ -30,7 +30,6 @@ public final class std implements Module {
         // String
         Functions.set("sprintf", new std_sprintf());
         Functions.set("split", new std_split());
-        Functions.set("join", new std_join());
         Functions.set("indexOf", new std_indexof());
         Functions.set("lastIndexOf", new std_lastindexof());
         Functions.set("charAt", new std_charat());
@@ -42,9 +41,12 @@ public final class std implements Module {
         Functions.set("replace", new std_replace());
         Functions.set("replaceAll", new std_replaceall());
         Functions.set("replaceFirst", new std_replacefirst());
-        
+        Functions.set("parseInt", StringFunctions::parseInt);
+        Functions.set("parseLong", StringFunctions::parseLong);
+
         // Arrays and maps
         Functions.set("newarray", new std_newarray());
+        Functions.set("join", new std_join());
         Functions.set("sort", new std_sort());
         Functions.set("arrayCombine", new std_arrayCombine());
         Functions.set("arrayKeyExists", new std_arrayKeyExists());

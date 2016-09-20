@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,25 +40,26 @@ public final class files implements Module {
         Functions.set("fclose", new fclose());
         
         // Operations
-        Functions.set("delete", new delete());
+        Functions.set("copy", new copy());
+        Functions.set("delete", fileToBoolean(File::delete));
         Functions.set("listFiles", new listFiles());
-        Functions.set("mkdir", new mkdir());
-        Functions.set("mkdirs", new mkdirs());
+        Functions.set("mkdir", fileToBoolean(File::mkdir));
+        Functions.set("mkdirs", fileToBoolean(File::mkdirs));
         Functions.set("rename", new rename());
 
         // Permissions and statuses
-        Functions.set("canExecute", new canExecute());
-        Functions.set("canRead", new canRead());
-        Functions.set("canWrite", new canWrite());
-        Functions.set("isDirectory", new isDirectory());
-        Functions.set("isFile", new isFile());
-        Functions.set("isHidden", new isHidden());
+        Functions.set("canExecute", fileToBoolean(File::canExecute));
+        Functions.set("canRead", fileToBoolean(File::canRead));
+        Functions.set("canWrite", fileToBoolean(File::canWrite));
+        Functions.set("isDirectory", fileToBoolean(File::isDirectory));
+        Functions.set("isFile", fileToBoolean(File::isFile));
+        Functions.set("isHidden", fileToBoolean(File::isHidden));
         Functions.set("setExecutable", new setExecutable());
         Functions.set("setReadable", new setReadable());
         Functions.set("setReadOnly", new setReadOnly());
         Functions.set("setWritable", new setWritable());
 
-        Functions.set("exists", new exists());
+        Functions.set("exists", fileToBoolean(File::exists));
         Functions.set("fileSize", new fileSize());
         Functions.set("getParent", new getParent());
         Functions.set("lastModified", new lastModified());
@@ -176,81 +178,31 @@ public final class files implements Module {
         }
     }
 
-    private static class canExecute extends FileFunction {
+    private static class copy implements Function {
+
         @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.canExecute());
+        public Value execute(Value... args) {
+            Arguments.check(2, args.length);
+            try {
+                final FileInputStream is = new FileInputStream(fileFrom(args[0]));
+                final FileOutputStream os = new FileOutputStream(fileFrom(args[1]));
+                final FileChannel ic = is.getChannel();
+                ic.transferTo(0, ic.size(), os.getChannel());
+                is.close();
+                os.close();
+                return NumberValue.ONE;
+            } catch (IOException ioe) {
+                return NumberValue.MINUS_ONE;
+            }
         }
     }
 
-    private static class canRead extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.canRead());
-        }
-    }
+    private static class rename implements Function {
 
-    private static class canWrite extends FileFunction {
         @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.canWrite());
-        }
-    }
-    
-    private static class delete extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.delete());
-        }
-    }
-    
-    private static class exists extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.exists());
-        }
-    }
-
-    private static class isDirectory extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.isDirectory());
-        }
-    }
-    
-    private static class isFile extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.isFile());
-        }
-    }
-
-    private static class isHidden extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.isHidden());
-        }
-    }
-
-    private static class mkdir extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.mkdir());
-        }
-    }
-
-    private static class mkdirs extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            return NumberValue.fromBoolean(fileInfo.file.mkdirs());
-        }
-    }
-
-    private static class rename extends FileFunction {
-        @Override
-        protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            final File dest = files.get(args[1].asInt()).file;
-            return NumberValue.fromBoolean(fileInfo.file.renameTo(dest));
+        public Value execute(Value... args) {
+            Arguments.check(2, args.length);
+            return NumberValue.fromBoolean( fileFrom(args[0]).renameTo(fileFrom(args[1])) );
         }
     }
     
@@ -597,6 +549,25 @@ public final class files implements Module {
             }
             return NumberValue.ONE;
         }
+    }
+
+    private static File fileFrom(Value value) {
+        if (value.type() == Types.NUMBER) {
+            return files.get(value.asInt()).file;
+        }
+        return new File(value.asString());
+    }
+
+    private interface FileToBooleanFunction {
+
+        boolean apply(File file);
+    }
+
+    private static Function fileToBoolean(FileToBooleanFunction f) {
+        return args -> {
+            Arguments.check(1, args.length);
+            return NumberValue.fromBoolean(f.apply(fileFrom(args[0])));
+        };
     }
     
     private static class FileInfo {

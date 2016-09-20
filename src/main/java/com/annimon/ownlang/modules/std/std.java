@@ -27,6 +27,9 @@ public final class std implements Module {
         Functions.set("sync", new std_sync());
         Functions.set("try", new std_try());
 
+        // Numbers
+        Functions.set("toHexString", NumberFunctions::toHexString);
+
         // String
         Functions.set("sprintf", new std_sprintf());
         Functions.set("split", new std_split());

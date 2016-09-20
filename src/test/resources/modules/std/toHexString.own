@@ -1,0 +1,7 @@
+use "std"
+
+def testToHexString() {
+  assertEquals("8d", toHexString(141))
+  assertEquals("cafebabe", toHexString(#CAFEBABE))
+  assertEquals("2dfdbbc31", toHexString(12345654321))
+}

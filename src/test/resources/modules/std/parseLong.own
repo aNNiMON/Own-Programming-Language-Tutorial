@@ -1,0 +1,18 @@
+use "std"
+
+def testParseInt() {
+  assertEquals(12345654321, parseLong("12345654321"))
+}
+
+def testParseIntBin() {
+  assertEquals(12345654321, parseLong("1011011111110110111011110000110001", 2))
+}
+
+def testParseIntOct() {
+  assertEquals(12345654321, parseLong("133766736061", 8))
+}
+
+def testParseIntHex() {
+  assertEquals(#2DFDBBC31, parseLong("2DFDBBC31", 16))
+  assertEquals(12345654321, parseLong("2DFDBBC31", 16))
+}

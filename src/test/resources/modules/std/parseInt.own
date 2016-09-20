@@ -1,0 +1,17 @@
+use "std"
+
+def testParseInt() {
+  assertEquals(141, parseInt("141"))
+}
+
+def testParseIntBin() {
+  assertEquals(141, parseInt("10001101", 2))
+}
+
+def testParseIntOct() {
+  assertEquals(141, parseInt("215", 8))
+}
+
+def testParseIntHex() {
+  assertEquals(141, parseInt("8D", 16))
+}

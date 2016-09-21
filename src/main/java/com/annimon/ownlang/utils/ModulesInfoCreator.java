@@ -12,13 +12,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
 
 public final class ModulesInfoCreator {
 
@@ -48,11 +52,8 @@ public final class ModulesInfoCreator {
             moduleInfos.add(moduleInfo);
         }
 
-        final JSONArray modulesJson = new JSONArray();
-        for (ModuleInfo moduleInfo : moduleInfos) {
-            modulesJson.put(moduleInfo.toJSON());
-        }
-        System.out.println(modulesJson.toString(2));
+        // printAsJson(moduleInfos);
+        printAsYaml(moduleInfos);
 
         System.out.println("Total modules: " + moduleInfos.size());
         System.out.println("Total functions: " + moduleInfos.stream()
@@ -63,6 +64,26 @@ public final class ModulesInfoCreator {
                 .flatMap(m -> m.constants.keySet().stream())
                 .count()
         );
+    }
+
+    private static void printAsJson(List<ModuleInfo> moduleInfos) throws JSONException {
+        final JSONArray modulesJson = new JSONArray();
+        for (ModuleInfo moduleInfo : moduleInfos) {
+            modulesJson.put(new JSONObject(moduleInfo.info()));
+        }
+        System.out.println(modulesJson.toString(2));
+    }
+
+    private static void printAsYaml(List<ModuleInfo> moduleInfos) {
+        DumperOptions options = new DumperOptions();
+        options.setIndent(2);
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        final List<Map<String, Object>> infos = new ArrayList<>();
+        for (ModuleInfo moduleInfo : moduleInfos) {
+            infos.add(moduleInfo.info());
+        }
+        System.out.println(new Yaml(options).dump(infos));
     }
 
     private static List<String> listValues(Class moduleClass) {
@@ -91,14 +112,27 @@ public final class ModulesInfoCreator {
             types = new ArrayList<>();
         }
 
-        public JSONArray constantsJSON() {
-            final JSONArray result = new JSONArray();
+        public List<Map<String, Object>> functions() {
+            return functions.stream().sorted()
+                    .map(f -> {
+                        final Map<String, Object> function = new LinkedHashMap<>();
+                        function.put("name", f);
+                        function.put("args", "");
+                        function.put("desc", "");
+                        function.put("desc_ru", "");
+                        return function;
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        public List<Map<String, Object>> constants() {
+            final List<Map<String, Object>> result = new ArrayList<>();
             constants.entrySet().stream()
                     .sorted(Comparator.comparing(e -> e.getKey()))
                     .forEach(entry -> {
                 final Value value = entry.getValue();
 
-                final JSONObject constant = new JSONObject();
+                final Map<String, Object> constant = new LinkedHashMap<>();
                 constant.put("name", entry.getKey());
                 constant.put("type", value.type());
                 constant.put("typeName", Types.typeToString(value.type()));
@@ -112,26 +146,27 @@ public final class ModulesInfoCreator {
                 } else {
                     constant.put("value", value.asString());
                 }
-                result.put(constant);
+                result.add(constant);
             });
             return result;
         }
 
-        public JSONObject toJSON() {
-            final JSONObject json = new JSONObject();
-            json.put("name", name);
-            json.put("functions", functions.stream().sorted().toArray());
-            json.put("constants", constantsJSON());
+        public Map<String, Object> info() {
+            final Map<String, Object> result = new LinkedHashMap<>();
+            result.put("name", name);
+            result.put("scope", "both");
+            result.put("constants", constants());
+            result.put("functions", functions());
             if (!types.isEmpty()) {
-                json.put("types", types.stream().sorted()
+                result.put("types", types.stream().sorted()
                         .map(s -> {
-                            final JSONObject type = new JSONObject();
+                            final Map<String, String> type = new HashMap<>();
                             type.put("name", s);
                             return type;
                         })
                         .toArray());
             }
-            return json;
+            return result;
         }
     }
 }

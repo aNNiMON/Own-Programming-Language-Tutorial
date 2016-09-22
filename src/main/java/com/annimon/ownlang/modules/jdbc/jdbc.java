@@ -132,7 +132,6 @@ public final class jdbc implements Module {
             set("close", new FunctionValue(this::close));
 
             set("clearWarnings", voidFunction(connection::clearWarnings));
-            set("close", voidFunction(connection::close));
             set("commit", voidFunction(connection::commit));
             set("rollback", voidFunction(connection::rollback));
 

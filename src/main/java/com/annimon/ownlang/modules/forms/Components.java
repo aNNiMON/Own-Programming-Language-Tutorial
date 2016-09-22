@@ -40,7 +40,7 @@ public final class Components {
     public static Value newLabel(Value... args) {
         Arguments.checkRange(0, 2, args.length);
         String text = (args.length >= 1) ? args[0].asString() : "";
-        int align = (args.length == 2) ? args[0].asInt() : SwingConstants.LEADING;
+        int align = (args.length == 2) ? args[1].asInt() : SwingConstants.LEADING;
         return new JLabelValue(new JLabel(text, align));
     }
 

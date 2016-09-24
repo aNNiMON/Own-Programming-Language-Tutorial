@@ -4,13 +4,13 @@
 
 | Free | Pro | Desktop |
 | :--: | :-: | :-----: |
-| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v1.2.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v1.2.0)
+| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v1.3.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v1.3.0)
 
 OwnLang - dynamic functional programming language inspired by Scala and Python. Available for PC, Android and Java ME devices.
 
 ## Key features
 
-#### Function values
+#### Higher-order functions
 
 Functions are values, so we can store them to variables for operating.
 

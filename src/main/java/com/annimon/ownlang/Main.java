@@ -11,6 +11,7 @@ import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
 import com.annimon.ownlang.utils.Repl;
+import com.annimon.ownlang.utils.Sandbox;
 import com.annimon.ownlang.utils.TimeMeasurement;
 import java.io.IOException;
 import java.util.List;
@@ -112,6 +113,13 @@ public final class Main {
                         i++;
                     }
                     break;
+
+                case "--sandbox":
+                    createOwnLangArgs(args, i + 1);
+                    String[] newArgs = new String[ownlangArgs.length];
+                    System.arraycopy(ownlangArgs, 0, newArgs, 0, ownlangArgs.length);
+                    Sandbox.main(newArgs);
+                    return;
                 
                 default:
                     if (input == null) {

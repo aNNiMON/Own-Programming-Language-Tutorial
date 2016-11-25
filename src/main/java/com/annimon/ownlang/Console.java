@@ -1,12 +1,15 @@
 package com.annimon.ownlang;
 
 import com.annimon.ownlang.lib.CallStack;
-
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
 public class Console {
+
+    private static final String FILE_PREFIX = "tmp/";
+    public static boolean filePrefixEnabled = false;
 
     public static String newline() {
         return System.lineSeparator();
@@ -39,7 +42,7 @@ public class Console {
     public static void error(CharSequence value) {
         System.err.println(value);
     }
-    
+
     public static void handleException(Thread thread, Throwable throwable) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try(final PrintStream ps = new PrintStream(baos)) {
@@ -56,5 +59,15 @@ public class Console {
         } catch (UnsupportedEncodingException ex) {
             error(baos.toString());
         }
+    }
+
+    public static File fileInstance(String path) {
+        final String filepath;
+        if (filePrefixEnabled) {
+            filepath = FILE_PREFIX.concat(path);
+        } else {
+            filepath = path;
+        }
+        return new File(filepath);
     }
 }

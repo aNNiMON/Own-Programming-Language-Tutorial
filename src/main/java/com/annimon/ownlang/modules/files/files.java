@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.files;
 
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
@@ -120,7 +121,7 @@ public final class files implements Module {
         public Value execute(Value... args) {
             Arguments.checkAtLeast(1, args.length);
             
-            final File file = new File(args[0].asString());
+            final File file = Console.fileInstance(args[0].asString());
             try {
                 if (args.length > 1) {
                     return process(file, args[1].asString().toLowerCase());
@@ -555,7 +556,7 @@ public final class files implements Module {
         if (value.type() == Types.NUMBER) {
             return files.get(value.asInt()).file;
         }
-        return new File(value.asString());
+        return Console.fileInstance(value.asString());
     }
 
     private interface FileToBooleanFunction {

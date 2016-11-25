@@ -15,7 +15,7 @@ public final class SourceLoader {
         return readAndCloseStream(is);
     }
     
-    private static String readAndCloseStream(InputStream is) throws IOException {
+    public static String readAndCloseStream(InputStream is) throws IOException {
         final ByteArrayOutputStream result = new ByteArrayOutputStream();
         final int bufferSize = 1024;
         final byte[] buffer = new byte[bufferSize];

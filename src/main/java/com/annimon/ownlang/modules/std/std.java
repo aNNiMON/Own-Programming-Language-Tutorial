@@ -55,6 +55,7 @@ public final class std implements Module {
         Functions.set("arrayKeyExists", new std_arrayKeyExists());
         Functions.set("arrayKeys", new std_arrayKeys());
         Functions.set("arrayValues", new std_arrayValues());
+        Functions.set("arraySplice", new std_arraySplice());
         Functions.set("range", new std_range());
     }
 }

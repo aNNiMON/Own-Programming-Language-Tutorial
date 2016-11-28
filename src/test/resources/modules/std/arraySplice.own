@@ -1,0 +1,107 @@
+use "std"
+
+def testArraySpliceFromStart() {
+  arr = [1,2,3,4,5]
+  assertEquals([1, 2], arraySplice(arr, 2))
+}
+
+def testArraySpliceFromStartAndInsert() {
+  arr = [1,2,3,4,5]
+  assertEquals([1, 2,  6,7,8], arraySplice(arr, 2, 3, [6,7,8]))
+}
+
+def testArraySpliceRemoveOneElementByIndex() {
+  arr = [1,2,3,4,5]
+  assertEquals([1, 2, 4, 5], arraySplice(arr, 2, 1))
+}
+
+def testArraySpliceRemoveOneElementByIndexAndInsert() {
+  arr = [1,2,3,4,5]
+  assertEquals([1, 2,  6,7,8,  4, 5], arraySplice(arr, 2, 1, [6,7,8]))
+}
+
+def testArraySpliceReplaceFirstElement() {
+  arr = [1,2,3,4,5]
+  assertEquals([6,7,8,  2, 3, 4, 5], arraySplice(arr, 0, 1, [6,7,8]))
+}
+
+def testArraySpliceInsertAtStart() {
+  arr = [1,2,3,4,5]
+  assertEquals([6,7,8,  1, 2, 3, 4, 5], arraySplice(arr, 0, 0, [6,7,8]))
+}
+
+def testArraySpliceReplaceAll() {
+  arr = [1,2,3,4,5]
+  assertEquals([6,7,8], arraySplice(arr, 0, 5, [6,7,8]))
+}
+
+def testArraySpliceRemoveMoreThanSizeAtTheEnd() {
+  arr = [1,2,3,4,5]
+  assertEquals([1, 2, 3], arraySplice(arr, 3, 4))
+}
+
+def testArraySpliceRemoveMoreThanSizeAtTheEndAndInsert() {
+  arr = [1,2,3,4,5]
+  assertEquals([1, 2, 3,  6,7,8], arraySplice(arr, 3, 4, [6,7,8]))
+}
+
+def testArraySpliceRemoveMoreThanSize() {
+  arr = [1,2,3,4,5]
+  assertEquals([], arraySplice(arr, 0, 15))
+}
+
+def testArraySpliceRemoveMoreThanSizeAndInsert() {
+  arr = [1,2,3,4,5]
+  assertEquals([1,2], arraySplice(arr, 0, 15, [1,2]))
+}
+
+def testArraySpliceStartMoreThanSize() {
+  arr = [1,2,3,4,5]
+  assertEquals([1,2,3,4,5], arraySplice(arr, 15))
+}
+
+def testArraySpliceStartAndRemoveMoreThanSize() {
+  arr = [1,2,3,4,5]
+  assertEquals([1,2,3,4,5], arraySplice(arr, 15, 15))
+}
+
+def testArraySpliceStartAndRemoveMoreThanSizeAndInsert() {
+  arr = [1,2,3,4,5]
+  assertEquals([1,2,3,4,5,1], arraySplice(arr, 15, 15, [1]))
+}
+
+def testArraySpliceFromJSExamples1() {
+  arr = ["angel", "clown", "mandarin", "surgeon"]
+  res = ["angel", "clown", "drum", "mandarin", "surgeon"]
+  assertEquals(res, arraySplice(arr, 2, 0, ["drum"]))
+}
+
+def testArraySpliceFromJSExamples2() {
+  arr = ["angel", "clown", "drum", "mandarin", "surgeon"]
+  res = ["angel", "clown", "drum", "surgeon"]
+  assertEquals(res, arraySplice(arr, 3, 1))
+}
+
+def testArraySpliceFromJSExamples3() {
+  arr = ["angel", "clown", "drum", "surgeon"]
+  res = ["angel", "clown", "trumpet", "surgeon"]
+  assertEquals(res, arraySplice(arr, 2, 1, ["trumpet"]))
+}
+
+def testArraySpliceFromJSExamples4() {
+  arr = ["angel", "clown", "trumpet", "surgeon"]
+  res = ["parrot", "anemone", "blue", "trumpet", "surgeon"]
+  assertEquals(res, arraySplice(arr, 0, 2, ["parrot", "anemone", "blue"]))
+}
+
+def testArraySpliceFromJSExamples5() {
+  arr = ["parrot", "anemone", "blue", "trumpet", "surgeon"]
+  res = ["parrot", "anemone", "surgeon"]
+  assertEquals(res, arraySplice(arr, length(arr) - 3, 2))
+}
+
+def testArraySpliceFromJSExamples6() {
+  arr = ["angel", "clown", "mandarin", "surgeon"]
+  res = ["angel", "clown", "surgeon"]
+  assertEquals(res, arraySplice(arr, -2, 1))
+}

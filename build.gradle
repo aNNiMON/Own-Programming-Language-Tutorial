@@ -52,6 +52,21 @@ task proguard(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
     outjars "$rootProject.projectDir/store/OwnLang.jar"
 }
 
+task sandbox(dependsOn: proguard, type: Jar) {
+    from zipTree("$rootProject.projectDir/store/OwnLang.jar")
+    libsDirName = "$rootProject.projectDir/store"
+    appendix = "Sandbox"
+
+    exclude "**/modules/canvas/**", "**/modules/canvasfx/**", "**/modules/forms/**",
+            "**/modules/java/**", "**/modules/jdbc/**", "**/modules/robot/**",
+            "**/modules/socket/**", "io/**",
+            "**/modules/aimp/**", "aimpremote/**"
+
+    manifest {
+        attributes 'Main-Class': project.mainClass
+    }
+}
+
 dependencies {
     compile ('io.socket:socket.io-client:0.7.0') {
       exclude group: 'org.json', module: 'json'

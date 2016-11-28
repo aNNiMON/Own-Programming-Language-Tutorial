@@ -29,7 +29,7 @@ public final class functional_stream implements Function {
         private final ArrayValue container;
 
         public StreamValue(ArrayValue container) {
-            super(13);
+            super(15);
             this.container = container;
             init();
         }
@@ -41,6 +41,7 @@ public final class functional_stream implements Function {
             set("sortBy", wrapIntermediate(new functional_sortby()));
             set("takeWhile", wrapIntermediate(new functional_filter(true)));
             set("dropWhile", wrapIntermediate(new functional_dropwhile()));
+            set("peek", wrapIntermediate(new functional_foreach()));
             set("skip", this::skip);
             set("limit", this::limit);
             set("custom", this::custom);

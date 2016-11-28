@@ -44,6 +44,19 @@ def testCustom() {
   assertEquals([5,6,4,2], stream(data).custom(::reverse).toArray())
 }
 
+def testPeek() {
+  data = [2,3,4,5,6,7]
+  expected = [2,4,6]
+  index = 0
+
+  actual = stream(data)
+    .filter(def(x) = x % 2 == 0)
+    .peek(def(x) = assertEquals(expected[index++], x))
+    .toArray()
+  assertEquals(expected, actual)
+  assertEquals(length(expected), index)
+}
+
 def reverse(container) {
   size = length(container)
   result = newarray(size)

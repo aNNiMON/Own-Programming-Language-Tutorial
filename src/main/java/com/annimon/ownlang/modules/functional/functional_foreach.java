@@ -20,14 +20,14 @@ public final class functional_foreach implements Function {
             for (Value element : array) {
                 consumer.execute(element);
             }
-            return NumberValue.ZERO;
+            return array;
         }
         if (container.type() == Types.MAP) {
             final MapValue map = (MapValue) container;
             for (Map.Entry<Value, Value> element : map) {
                 consumer.execute(element.getKey(), element.getValue());
             }
-            return NumberValue.ZERO;
+            return map;
         }
         throw new TypeException("Invalid first argument. Array or map expected");
     }

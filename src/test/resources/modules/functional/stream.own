@@ -1,5 +1,6 @@
 use "std"
 use "functional"
+use "math"
 
 def testStream() {
   data = [1,2,3,4,5,6,7]
@@ -55,6 +56,12 @@ def testPeek() {
     .toArray()
   assertEquals(expected, actual)
   assertEquals(length(expected), index)
+}
+
+def testSorted() {
+  data = [-2,4,6,-5,6,3,-8]
+  assertEquals([-8,-5,-2,3,4,6,6], stream(data).sorted().toArray())
+  assertEquals([-2,3,4,-5,6,6,-8], stream(data).sorted(def(a,b) = abs(a) - abs(b)).toArray())
 }
 
 def reverse(container) {

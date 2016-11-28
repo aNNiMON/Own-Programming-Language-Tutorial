@@ -1,7 +1,9 @@
 package com.annimon.ownlang.modules.functional;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
+import java.util.Arrays;
 
 public final class functional_stream implements Function {
 
@@ -12,7 +14,7 @@ public final class functional_stream implements Function {
         if (args.length > 1) {
             return new StreamValue(new ArrayValue(args));
         }
-        
+
         final Value value = args[0];
         switch (value.type()) {
             case Types.MAP:
@@ -29,7 +31,7 @@ public final class functional_stream implements Function {
         private final ArrayValue container;
 
         public StreamValue(ArrayValue container) {
-            super(15);
+            super(16);
             this.container = container;
             init();
         }
@@ -38,6 +40,7 @@ public final class functional_stream implements Function {
             set("filter", wrapIntermediate(new functional_filter(false)));
             set("map", wrapIntermediate(new functional_map()));
             set("flatMap", wrapIntermediate(new functional_flatmap()));
+            set("sorted", this::sorted);
             set("sortBy", wrapIntermediate(new functional_sortby()));
             set("takeWhile", wrapIntermediate(new functional_filter(true)));
             set("dropWhile", wrapIntermediate(new functional_dropwhile()));
@@ -82,6 +85,28 @@ public final class functional_stream implements Function {
             final Value[] result = new Value[limitCount];
             System.arraycopy(container.getCopyElements(), 0, result, 0, limitCount);
             return new StreamValue(new ArrayValue(result));
+        }
+
+        private Value sorted(Value... args) {
+            Arguments.checkOrOr(0, 1, args.length);
+            final Value[] elements = container.getCopyElements();
+
+            switch (args.length) {
+                case 0:
+                    Arrays.sort(elements);
+                    break;
+                case 1:
+                    if (args[0].type() != Types.FUNCTION) {
+                        throw new TypeException("Function expected in second argument");
+                    }
+                    final Function comparator = ((FunctionValue) args[0]).getValue();
+                    Arrays.sort(elements, (o1, o2) -> comparator.execute(o1, o2).asInt());
+                    break;
+                default:
+                    throw new ArgumentsMismatchException("Wrong number of arguments");
+            }
+
+            return new StreamValue(new ArrayValue(elements));
         }
 
         private Value custom(Value... args) {

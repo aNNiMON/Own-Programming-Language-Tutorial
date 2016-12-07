@@ -79,7 +79,8 @@ task sandbox(dependsOn: proguard, type: Jar) {
     exclude "**/modules/canvas/**", "**/modules/canvasfx/**", "**/modules/forms/**",
             "**/modules/java/**", "**/modules/jdbc/**", "**/modules/robot/**",
             "**/modules/socket/**", "io/**",
-            "**/modules/aimp/**", "aimpremote/**"
+            "**/modules/aimp/**", "aimpremote/**",
+            "**/modules/downloader/**"
 
     manifest {
         attributes 'Main-Class': project.mainClass

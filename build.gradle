@@ -7,6 +7,9 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = 'com.annimon.ownlang.Main'
 }
 
+ext.generatedJavaDir = "${rootProject.projectDir}/src/main/generatedJava"
+sourceSets.main.java.srcDirs += project.generatedJavaDir
+
 repositories {
     jcenter()
 }
@@ -19,6 +22,21 @@ buildscript {
         classpath 'net.sf.proguard:proguard-gradle:5.2.1'
     }
 }
+
+task generateJavaSources() {
+    doLast {
+        def source = """
+            package com.annimon.ownlang;
+            class Gen {
+                public static final String BUILD_DATE = "${new Date().format('YYMMdd')}";
+            }
+            """
+        def genFile = new File("${project.generatedJavaDir}/com/annimon/ownlang/Gen.java")
+        genFile.getParentFile().mkdirs()
+        genFile.write(source)
+    }
+}
+compileJava.dependsOn(generateJavaSources)
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClass
@@ -37,13 +55,14 @@ task runOptimizing(dependsOn: classes, type: JavaExec) {
 
 task dist(dependsOn: classes, type: Jar) {
     from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
-    from files(sourceSets.main.resources)
-    libsDirName = "$rootProject.projectDir/dist"
+    destinationDir file("$rootProject.projectDir/dist")
 
-    manifest {
-        attributes 'Main-Class': project.mainClass
-    }
+    manifest.attributes(
+            'Main-Class': project.mainClass,
+            'Build-Date': new Date().format('YYMMdd')
+    )
 }
 
 task proguard(dependsOn: dist, type: proguard.gradle.ProGuardTask) {

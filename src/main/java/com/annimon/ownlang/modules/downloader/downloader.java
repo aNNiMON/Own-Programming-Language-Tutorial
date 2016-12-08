@@ -63,7 +63,7 @@ public final class downloader implements Module {
                 os.write(buffer, 0, readed);
                 downloaded += readed;
                 if (calculateProgressEnabled) {
-                    final int percent = downloaded * 100 / contentLength;
+                    final int percent = (int) (downloaded / ((double) contentLength) * 100.0);
                     progressCallback.execute(
                             NumberValue.of(percent),
                             NumberValue.of(downloaded),

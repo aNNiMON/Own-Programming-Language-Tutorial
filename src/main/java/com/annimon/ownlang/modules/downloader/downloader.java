@@ -58,10 +58,10 @@ public final class downloader implements Module {
              OutputStream os = new FileOutputStream(Console.fileInstance(filePath))) {
             int downloaded = 0;
             final byte[] buffer = new byte[bufferSize];
-            int readed;
-            while ((readed = is.read(buffer, 0, bufferSize)) != -1) {
-                os.write(buffer, 0, readed);
-                downloaded += readed;
+            int read;
+            while ((read = is.read(buffer, 0, bufferSize)) != -1) {
+                os.write(buffer, 0, read);
+                downloaded += read;
                 if (calculateProgressEnabled) {
                     final int percent = (int) (downloaded / ((double) contentLength) * 100.0);
                     progressCallback.execute(

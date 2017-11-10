@@ -1,16 +1,14 @@
 package com.annimon.ownlang.modules.forms;
 
-import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
-import static com.annimon.ownlang.lib.Converters.*;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.MapValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
-import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.ValueUtils;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -18,6 +16,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import static com.annimon.ownlang.lib.Converters.booleanOptToVoid;
+import static com.annimon.ownlang.lib.Converters.stringToVoid;
+import static com.annimon.ownlang.lib.Converters.voidToBoolean;
+import static com.annimon.ownlang.lib.Converters.voidToInt;
+import static com.annimon.ownlang.lib.Converters.voidToString;
+import static com.annimon.ownlang.lib.Converters.voidToVoid;
 
 public abstract class ComponentValue extends MapValue {
 
@@ -75,11 +79,7 @@ public abstract class ComponentValue extends MapValue {
 
     private Value addKeyListener(Value... args) {
         Arguments.check(1, args.length);
-        final int type = args[0].type();
-        if (type != Types.FUNCTION) {
-            throw new TypeException("Function expected, but found " + Types.typeToString(type));
-        }
-        final Function action = ((FunctionValue) args[0]).getValue();
+        final Function action = ValueUtils.consumeFunction(args[0], 0);
         component.addKeyListener(new KeyListener() {
 
             @Override

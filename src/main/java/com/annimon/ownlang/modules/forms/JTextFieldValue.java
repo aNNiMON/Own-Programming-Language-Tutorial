@@ -1,14 +1,13 @@
 package com.annimon.ownlang.modules.forms;
 
-import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.Arguments;
 import static com.annimon.ownlang.lib.Converters.*;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import javax.swing.JTextField;
+import static com.annimon.ownlang.lib.ValueUtils.consumeFunction;
 
 public class JTextFieldValue extends JComponentValue {
 
@@ -41,11 +40,7 @@ public class JTextFieldValue extends JComponentValue {
 
     private Value addActionListener(Value... args) {
         Arguments.check(1, args.length);
-        final int type = args[0].type();
-        if (type != Types.FUNCTION) {
-            throw new TypeException("Function expected, but found " + Types.typeToString(type));
-        }
-        final Function action = ((FunctionValue) args[0]).getValue();
+        Function action = consumeFunction(args[0], 1);
         textField.addActionListener(e -> action.execute());
         return NumberValue.ZERO;
     }

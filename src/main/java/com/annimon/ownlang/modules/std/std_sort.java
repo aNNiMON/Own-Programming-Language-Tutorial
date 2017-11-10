@@ -5,9 +5,9 @@ import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.ValueUtils;
 import java.util.Arrays;
 
 public final class std_sort implements Function {
@@ -25,10 +25,7 @@ public final class std_sort implements Function {
                 Arrays.sort(elements);
                 break;
             case 2:
-                if (args[1].type() != Types.FUNCTION) {
-                    throw new TypeException("Function expected in second argument");
-                }
-                final Function comparator = ((FunctionValue) args[1]).getValue();
+                final Function comparator = ValueUtils.consumeFunction(args[1], 1);
                 Arrays.sort(elements, (o1, o2) -> comparator.execute(o1, o2).asInt());
                 break;
             default:

@@ -42,41 +42,44 @@ public final class robot implements Module {
     @Override
     public void init() {
         initConstants();
-        initialize();
-        
-        Functions.set("click", convertFunction(robot::click));
-        Functions.set("delay", convertFunction(awtRobot::delay));
-        Functions.set("setAutoDelay", convertFunction(awtRobot::setAutoDelay));
-        Functions.set("keyPress", convertFunction(awtRobot::keyPress));
-        Functions.set("keyRelease", convertFunction(awtRobot::keyRelease));
-        Functions.set("mousePress", convertFunction(awtRobot::mousePress));
-        Functions.set("mouseRelease", convertFunction(awtRobot::mouseRelease));
-        Functions.set("mouseWheel", convertFunction(awtRobot::mouseWheel));
-        Functions.set("mouseMove", (args) -> {
-            Arguments.check(2, args.length);
-            try {
-                awtRobot.mouseMove(args[0].asInt(), args[1].asInt());
-            } catch (IllegalArgumentException iae) { }
-            return NumberValue.ZERO;
-        });
-        Functions.set("typeText", (args) -> {
-            Arguments.check(1, args.length);
-            try {
-                typeText(args[0].asString());
-            } catch (IllegalArgumentException iae) { }
-            return NumberValue.ZERO;
-        });
-        Functions.set("toClipboard", new robot_toclipboard());
-        Functions.set("fromClipboard", new robot_fromclipboard());
+        boolean isRobotInitialized = initialize();
+        if (isRobotInitialized) {
+            Functions.set("click", convertFunction(robot::click));
+            Functions.set("delay", convertFunction(awtRobot::delay));
+            Functions.set("setAutoDelay", convertFunction(awtRobot::setAutoDelay));
+            Functions.set("keyPress", convertFunction(awtRobot::keyPress));
+            Functions.set("keyRelease", convertFunction(awtRobot::keyRelease));
+            Functions.set("mousePress", convertFunction(awtRobot::mousePress));
+            Functions.set("mouseRelease", convertFunction(awtRobot::mouseRelease));
+            Functions.set("mouseWheel", convertFunction(awtRobot::mouseWheel));
+            Functions.set("mouseMove", (args) -> {
+                Arguments.check(2, args.length);
+                try {
+                    awtRobot.mouseMove(args[0].asInt(), args[1].asInt());
+                } catch (IllegalArgumentException iae) { }
+                return NumberValue.ZERO;
+            });
+            Functions.set("typeText", (args) -> {
+                Arguments.check(1, args.length);
+                try {
+                    typeText(args[0].asString());
+                } catch (IllegalArgumentException iae) { }
+                return NumberValue.ZERO;
+            });
+            Functions.set("toClipboard", new robot_toclipboard());
+            Functions.set("fromClipboard", new robot_fromclipboard());
+        }
         Functions.set("execProcess", new robot_exec(robot_exec.Mode.EXEC));
         Functions.set("execProcessAndWait", new robot_exec(robot_exec.Mode.EXEC_AND_WAIT));
     }
     
-    private static void initialize() {
+    private static boolean initialize() {
         try {
             awtRobot = new Robot();
+            return true;
         } catch (AWTException awte) {
-            throw new RuntimeException("Unable to create robot instance", awte);
+            //throw new RuntimeException("Unable to create robot instance", awte);
+            return false;
         }
     }
     

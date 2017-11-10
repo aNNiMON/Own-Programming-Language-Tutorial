@@ -4,9 +4,9 @@ import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.ValueUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +18,7 @@ public final class functional_flatmap implements Function {
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected in first argument");
         }
-        if (args[1].type() != Types.FUNCTION) {
-            throw new TypeException("Function expected in second argument");
-        }
-        
-        final Function mapper = ((FunctionValue) args[1]).getValue();
+        final Function mapper = ValueUtils.consumeFunction(args[1], 1);
         return flatMapArray((ArrayValue) args[0], mapper);
     }
     

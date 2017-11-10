@@ -3,7 +3,6 @@ package com.annimon.ownlang.parser;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -15,7 +14,6 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Benchmark)
-@Ignore
 public class ParserBenchmarkTest {
 
     @Param({"1000"})
@@ -35,7 +33,7 @@ public class ParserBenchmarkTest {
         }
     }
 
-    @Test
+    //@Test
     public void executeBenchmark() throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(ParserBenchmarkTest.class.getSimpleName())

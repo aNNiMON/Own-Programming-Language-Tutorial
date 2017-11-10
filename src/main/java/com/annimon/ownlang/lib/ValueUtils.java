@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.TypeException;
 import java.util.Iterator;
 import java.util.Map;
 import org.json.JSONArray;
@@ -98,5 +99,14 @@ public final class ValueUtils {
             result[i] = (byte) array.get(i).asInt();
         }
         return result;
+    }
+
+    public static Function consumeFunction(Value value, int argumentNumber) throws TypeException {
+        final int type = value.type();
+        if (type != Types.FUNCTION) {
+            throw new TypeException("Function expected at argument " + (argumentNumber + 1)
+                    + ", but found " + Types.typeToString(type));
+        }
+        return ((FunctionValue) value).getValue();
     }
 }

@@ -1,0 +1,26 @@
+use "std"
+for b : range(8)
+  print sprintf("  4%dm ", b)
+println ""
+for f : range(30, 38) {
+  for s : ["", "1;"] {
+    print sprintf("%4sm", s+f)
+    print sprintf(" \u001B[%sm%s\u001B[0m", s+f, "gYw ")
+    for b : range(8)
+      print sprintf(" \u001B[4%s;%sm%s\u001B[0m", b, s+f, " gYw ")
+    println ""
+  }
+}
+
+/*use "functional"
+stream(range(30, 38))
+  .flatMap(def(f) = [[f, ""], [f, "1;"]])
+  .forEach(def(a) {
+    extract(f, s) = a
+    print sprintf("%4sm", s+f)
+    print sprintf(" \u001B[%sm%s\u001B[0m", s+f, "gYw ")
+    for b : range(8)
+      print sprintf(" \u001B[4%s;%sm%s\u001B[0m", b, s+f, " gYw ")
+    println ""
+  })
+*/

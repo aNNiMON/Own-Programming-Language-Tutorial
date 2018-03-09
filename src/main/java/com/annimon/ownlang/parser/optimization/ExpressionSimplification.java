@@ -117,6 +117,14 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
             return new ValueExpression(0);
         }
 
+        // x >> 0 to x, x << 0 to x
+        if (isIntegerValue(s.expr2, 0) &&
+                (s.operation == BinaryExpression.Operator.LSHIFT ||
+                 s.operation == BinaryExpression.Operator.RSHIFT)) {
+            simplificationsCount++;
+            return s.expr1;
+        }
+
         return super.visit(s, t);
     }
 

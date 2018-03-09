@@ -13,11 +13,14 @@ import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.PrintVisitor;
+import com.annimon.ownlang.utils.repl.JLineConsole;
+import com.annimon.ownlang.utils.repl.ReplConsole;
+import com.annimon.ownlang.utils.repl.SystemConsole;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public final class Repl {
@@ -36,14 +39,13 @@ public final class Repl {
 
         final BlockStatement history = new BlockStatement();
         final StringBuilder buffer = new StringBuilder();
-        final Scanner scanner = new Scanner(System.in);
+        final ReplConsole console = initReplConsole();
         while (true) {
-            System.out.print((buffer.length() == 0) ? "\n> " : "  ");
+            console.setPrompt((buffer.length() == 0) ? "\n> " : "  ");
 
-            if (!scanner.hasNextLine()) break;
+            final String line = console.readLine();
+            if (line == null || EXIT.equalsIgnoreCase(line)) break;
 
-            final String line = scanner.nextLine();
-            if (EXIT.equalsIgnoreCase(line)) break;
             switch (line.toLowerCase(Locale.ENGLISH)) {
                 case RESET:
                     buffer.setLength(0);
@@ -84,7 +86,15 @@ public final class Repl {
             }
             buffer.setLength(0);
         }
-        scanner.close();
+        console.close();
+    }
+
+    private static ReplConsole initReplConsole() {
+        try {
+            return new JLineConsole();
+        } catch (IOException ioe) {
+            return new SystemConsole();
+        }
     }
 
     private static void printHelp(boolean full) {

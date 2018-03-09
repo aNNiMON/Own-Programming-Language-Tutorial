@@ -10,6 +10,7 @@ import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.Token;
+import com.annimon.ownlang.parser.TokenType;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.PrintVisitor;
@@ -34,6 +35,8 @@ public final class Repl {
             SOURCE = ":source",
             RESET = ":reset",
             EXIT = ":exit";
+
+    private static final Token PRINTLN_TOKEN = new Token(TokenType.PRINTLN, "", 0, 0);
 
     public static void main(String[] args) {
         System.out.println("Welcome to OwnLang " + Main.VERSION + " REPL");
@@ -73,7 +76,15 @@ public final class Repl {
                 final Parser parser = new Parser(tokens);
                 program = parser.parse();
                 if (parser.getParseErrors().hasErrors()) {
-                    continue;
+                    // Try to print value
+                    List<Token> tokens2 = new ArrayList<>();
+                    tokens2.add(PRINTLN_TOKEN);
+                    tokens2.addAll(tokens);
+                    Parser parser2 = new Parser(tokens2);
+                    program = parser2.parse();
+                    if (parser2.getParseErrors().hasErrors()) {
+                        continue;
+                    }
                 }
                 program.execute();
             } catch (LexerException lex) {

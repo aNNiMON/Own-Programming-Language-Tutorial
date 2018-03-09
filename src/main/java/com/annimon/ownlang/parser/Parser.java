@@ -629,6 +629,10 @@ public final class Parser {
                 result = new BinaryExpression(BinaryExpression.Operator.AT, result, multiplicative());
                 continue;
             }
+            if (match(TokenType.CARETCARET)) {
+                result = new BinaryExpression(BinaryExpression.Operator.CARETCARET, result, multiplicative());
+                continue;
+            }
             break;
         }
         

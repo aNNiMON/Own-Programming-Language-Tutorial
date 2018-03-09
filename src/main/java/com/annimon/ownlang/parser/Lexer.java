@@ -80,6 +80,7 @@ public final class Lexer {
         OPERATORS.put("@=", TokenType.ATEQ);
         OPERATORS.put("..", TokenType.DOTDOT);
         OPERATORS.put("**", TokenType.STARSTAR);
+        OPERATORS.put("^^", TokenType.CARETCARET);
         OPERATORS.put("?:", TokenType.QUESTIONCOLON);
     }
     

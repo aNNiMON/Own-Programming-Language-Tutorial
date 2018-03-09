@@ -72,6 +72,7 @@ public enum TokenType {
     
     TILDE, // ~
     CARET, // ^
+    CARETCARET, // ^^
     BAR, // |
     BARBAR, // ||
     AMP, // &

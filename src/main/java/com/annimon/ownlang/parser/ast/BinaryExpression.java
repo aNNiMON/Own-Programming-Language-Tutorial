@@ -33,6 +33,7 @@ public final class BinaryExpression implements Expression {
 
         // Addition operators for future usage or overloading
         AT("@"),
+        CARETCARET("^^"),
         RANGE(".."),
         POWER("**"),
         ELVIS("?:");

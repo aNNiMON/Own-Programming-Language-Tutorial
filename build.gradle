@@ -1,4 +1,20 @@
-apply plugin: 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.sf.proguard:proguard-gradle:6.0.1'
+    }
+}
+
+plugins {
+    id "java"
+    id "com.github.johnrengelman.shadow" version "2.0.2"
+}
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import proguard.gradle.ProGuardTask
+
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -12,15 +28,6 @@ sourceSets.main.java.srcDirs += project.generatedJavaDir
 
 repositories {
     jcenter()
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.sf.proguard:proguard-gradle:5.2.1'
-    }
 }
 
 task generateJavaSources() {
@@ -53,11 +60,15 @@ task runOptimizing(dependsOn: classes, type: JavaExec) {
     args '-o 9 -m -a -f program.own'.split(' ')
 }
 
-task dist(dependsOn: classes, type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
+task dist(type: ShadowJar) {
+    from sourceSets.main.output
+    configurations = [project.configurations.runtime]
     destinationDir file("$rootProject.projectDir/dist")
+
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/maven/**'
+    exclude 'LICENSE*'
 
     manifest.attributes(
             'Main-Class': project.mainClass,
@@ -65,10 +76,22 @@ task dist(dependsOn: classes, type: Jar) {
     )
 }
 
-task proguard(dependsOn: dist, type: proguard.gradle.ProGuardTask) {
+task proguard(dependsOn: dist, type: ProGuardTask) {
     configuration "$rootProject.projectDir/proguard.properties"
     injars "$rootProject.projectDir/dist/OwnLang.jar"
     outjars "$rootProject.projectDir/store/OwnLang.jar"
+
+    // Automatically handle the Java version of this build.
+    if (System.getProperty('java.version').startsWith('1.')) {
+        // Before Java 9, the runtime classes were packaged in a single jar file.
+        libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+    } else {
+        // As of Java 9, the runtime classes are packaged in modular jmod files.
+        def jmods = files { file("${System.getProperty('java.home')}/jmods").listFiles() }
+        jmods.each {
+            libraryjars it, jarfilter: '!**.jar', filter: '!module-info.class'
+        }
+    }
 }
 
 task sandbox(dependsOn: proguard, type: Jar) {
@@ -80,7 +103,8 @@ task sandbox(dependsOn: proguard, type: Jar) {
             "**/modules/java/**", "**/modules/jdbc/**", "**/modules/robot/**",
             "**/modules/socket/**", "io/**",
             "**/modules/aimp/**", "aimpremote/**",
-            "**/modules/downloader/**"
+            "**/modules/downloader/**",
+            "jline/**", "org/fusesource/**", "META-INF/native/**"
 
     manifest {
         attributes 'Main-Class': project.mainClass
@@ -88,14 +112,14 @@ task sandbox(dependsOn: proguard, type: Jar) {
 }
 
 dependencies {
-    compile ('io.socket:socket.io-client:0.7.0') {
+    compile ('io.socket:socket.io-client:1.0.0') {
       exclude group: 'org.json', module: 'json'
     }
-    compile 'org.json:json:20160212'
-    compile 'org.yaml:snakeyaml:1.17'
+    compile 'org.json:json:20180130'
+    compile 'org.yaml:snakeyaml:1.20'
     compile 'jline:jline:2.14.5'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.openjdk.jmh:jmh-core:1.13'
-    testCompile 'org.openjdk.jmh:jmh-generator-annprocess:1.13'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.openjdk.jmh:jmh-core:1.13'
+    testImplementation 'org.openjdk.jmh:jmh-generator-annprocess:1.13'
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -103,6 +104,10 @@ public final class Lexer {
         KEYWORDS.put("case", TokenType.CASE);
         KEYWORDS.put("extract", TokenType.EXTRACT);
         KEYWORDS.put("include", TokenType.INCLUDE);
+    }
+
+    public static Set<String> getKeywords() {
+        return KEYWORDS.keySet();
     }
 
     private final String input;

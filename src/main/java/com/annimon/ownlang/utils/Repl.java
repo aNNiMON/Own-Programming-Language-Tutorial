@@ -14,6 +14,7 @@ import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.PrintVisitor;
 import com.annimon.ownlang.utils.repl.JLineConsole;
+import com.annimon.ownlang.utils.repl.OwnLangCompleter;
 import com.annimon.ownlang.utils.repl.ReplConsole;
 import com.annimon.ownlang.utils.repl.SystemConsole;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import jline.console.completer.CandidateListCompletionHandler;
 
 public final class Repl {
 
@@ -91,7 +93,12 @@ public final class Repl {
 
     private static ReplConsole initReplConsole() {
         try {
-            return new JLineConsole();
+            JLineConsole jline = new JLineConsole();
+            CandidateListCompletionHandler handler = new CandidateListCompletionHandler();
+            handler.setPrintSpaceAfterFullCompletion(false);
+            jline.getConsole().setCompletionHandler(handler);
+            jline.getConsole().addCompleter(new OwnLangCompleter(HELP, VARS, FUNCS, SOURCE, RESET, EXIT));
+            return jline;
         } catch (IOException ioe) {
             return new SystemConsole();
         }

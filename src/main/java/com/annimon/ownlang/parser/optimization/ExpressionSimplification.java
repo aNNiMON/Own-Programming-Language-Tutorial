@@ -58,26 +58,26 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
         if (expr1IsZero || isIntegerValue(s.expr2, 0)) {
             switch (s.operation) {
                 case ADD:
-                    //  0 + x2 to x2, x1 + 0 to x1
+                    //  0 + x = x + 0 = x
                     simplificationsCount++;
                     return expr1IsZero ? s.expr2 : s.expr1;
 
                 case SUBTRACT:
                     simplificationsCount++;
                     if (expr1IsZero) {
-                        // 0 - x2 to -x2
+                        // 0 - x = -x
                         return new UnaryExpression(UnaryExpression.Operator.NEGATE, s.expr2);
                     }
-                    // x1 - 0 to x1
+                    // x - 0 = x
                     return s.expr1;
 
                 case MULTIPLY:
-                    // 0 * x2 to 0, x1 * 0 to 0
+                    // 0 * x = x * 0 = 0
                     simplificationsCount++;
                     return new ValueExpression(0);
 
                 case DIVIDE:
-                    // 0 / x2 to 0
+                    // 0 / x = 0
                     if (expr1IsZero) {
                         simplificationsCount++;
                         return new ValueExpression(0);
@@ -91,12 +91,12 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
         if (expr1IsOne || isIntegerValue(s.expr2, 1)) {
             switch (s.operation) {
                 case MULTIPLY:
-                    // 1 * x2 to x2, x1 * 1 to x1
+                    // 1 * x = x * 1 = x
                     simplificationsCount++;
                     return expr1IsOne ? s.expr2 : s.expr1;
 
                 case DIVIDE:
-                    // x1 / 1 to x1
+                    // x / 1 = x
                     if (!expr1IsOne) {
                         simplificationsCount++;
                         return s.expr1;
@@ -105,19 +105,26 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
             }
         }
 
-        // x1 / -1 to -x1
-        if (isIntegerValue(s.expr2, -1)) {
+        // x / -1 = -x
+        if (isIntegerValue(s.expr2, -1) && s.operation == BinaryExpression.Operator.DIVIDE) {
             simplificationsCount++;
             return new UnaryExpression(UnaryExpression.Operator.NEGATE, s.expr1);
         }
 
-        // x - x to 0
+        // -1 * x = x * -1 = -x
+        final boolean expr1IsMinusOne = isIntegerValue(s.expr1, -1);
+        if ((expr1IsMinusOne || isIntegerValue(s.expr2, -1)) && s.operation == BinaryExpression.Operator.MULTIPLY) {
+            simplificationsCount++;
+            return new UnaryExpression(UnaryExpression.Operator.NEGATE, expr1IsMinusOne ? s.expr2 : s.expr1);
+        }
+
+        // x - x = 0
         if (isSameVariables(s.expr1, s.expr2) && s.operation == BinaryExpression.Operator.SUBTRACT) {
             simplificationsCount++;
             return new ValueExpression(0);
         }
 
-        // x >> 0 to x, x << 0 to x
+        // x >> 0 = x, x << 0 = x
         if (isIntegerValue(s.expr2, 0) &&
                 (s.operation == BinaryExpression.Operator.LSHIFT ||
                  s.operation == BinaryExpression.Operator.RSHIFT)) {
@@ -134,12 +141,12 @@ public class ExpressionSimplification extends OptimizationVisitor<Void> implemen
             return super.visit(s, t);
         }
         if (isIntegerValue(s.expr1, 0) && s.operation == ConditionalExpression.Operator.AND) {
-            // 0 && x2 to 0
+            // 0 && x = 0
             simplificationsCount++;
             return new ValueExpression(0);
         }
         if (isIntegerValue(s.expr1, 1) && s.operation == ConditionalExpression.Operator.OR) {
-            // 1 || x2 to 1
+            // 1 || x = 1
             simplificationsCount++;
             return new ValueExpression(1);
         }

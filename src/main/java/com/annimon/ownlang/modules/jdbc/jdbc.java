@@ -430,7 +430,7 @@ public final class jdbc implements Module {
             set("getBigDecimal", getObjectResult(rs::getBigDecimal, rs::getBigDecimal, (bd) -> new StringValue(bd.toString())));
             set("getBoolean", getBooleanResult(rs::getBoolean, rs::getBoolean));
             set("getByte", getNumberResult(rs::getByte, rs::getByte));
-            set("getBytes", getObjectResult(rs::getBytes, rs::getBytes, ArrayValue::of));
+            set("getBytes", getObjectResult(rs::getBytes, rs::getBytes, (bytes) -> ArrayValue.of(bytes)));
             set("getDate", getObjectResult(rs::getDate, rs::getDate, (date) -> NumberValue.of(date.getTime())));
             set("getDouble", getNumberResult(rs::getDouble, rs::getDouble));
             set("getFloat", getNumberResult(rs::getFloat, rs::getFloat));

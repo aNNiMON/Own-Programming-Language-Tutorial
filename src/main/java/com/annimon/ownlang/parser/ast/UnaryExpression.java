@@ -12,7 +12,7 @@ import com.annimon.ownlang.lib.Value;
  */
 public final class UnaryExpression implements Expression, Statement {
 
-    public static enum Operator {
+    public enum Operator {
         INCREMENT_PREFIX("++"),
         DECREMENT_PREFIX("--"),
         INCREMENT_POSTFIX("++"),

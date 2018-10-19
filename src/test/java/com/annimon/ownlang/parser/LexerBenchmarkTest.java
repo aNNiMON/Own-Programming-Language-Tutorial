@@ -2,6 +2,7 @@ package com.annimon.ownlang.parser;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
@@ -31,7 +32,8 @@ public class LexerBenchmarkTest {
         }
     }
 
-    //@Test
+    @Ignore
+    @Test
     public void executeBenchmark() throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(LexerBenchmarkTest.class.getSimpleName())

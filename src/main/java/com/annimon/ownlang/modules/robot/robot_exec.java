@@ -1,6 +1,5 @@
 package com.annimon.ownlang.modules.robot;
 
-import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Function;
@@ -10,7 +9,7 @@ import com.annimon.ownlang.lib.Value;
 
 public final class robot_exec implements Function {
     
-    public static enum Mode { EXEC, EXEC_AND_WAIT };
+    public enum Mode { EXEC, EXEC_AND_WAIT }
     
     private final Mode mode;
 

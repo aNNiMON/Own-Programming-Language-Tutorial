@@ -17,6 +17,8 @@ import java.util.Set;
 
 public final class VisitorUtils {
 
+    private VisitorUtils() { }
+
     public static boolean isValue(Node node) {
         return (node instanceof ValueExpression);
     }

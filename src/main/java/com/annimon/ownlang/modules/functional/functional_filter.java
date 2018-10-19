@@ -36,7 +36,7 @@ public final class functional_filter implements Function {
     
     private Value filterArray(ArrayValue array, Function predicate, boolean takeWhile) {
         final int size = array.size();
-        final List<Value> values = new ArrayList<Value>(size);
+        final List<Value> values = new ArrayList<>(size);
         for (Value value : array) {
             if (predicate.execute(value) != NumberValue.ZERO) {
                 values.add(value);

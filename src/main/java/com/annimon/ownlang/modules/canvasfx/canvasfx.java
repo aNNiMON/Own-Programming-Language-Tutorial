@@ -53,7 +53,7 @@ public final class canvasfx implements Module {
     private static GraphicsContext graphics;
     private static Canvas canvas;
     
-    private static enum Events {
+    private enum Events {
         DRAG_DETECTED(MouseEvent.DRAG_DETECTED),
         MOUSE_CLICKED(MouseEvent.MOUSE_CLICKED),
         MOUSE_DRAGGED(MouseEvent.MOUSE_DRAGGED),

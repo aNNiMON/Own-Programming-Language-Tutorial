@@ -34,7 +34,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(AssignmentExpression s, StringBuilder t) {
-        ((Node) s.target).accept(this, t);
+        s.target.accept(this, t);
         t.append(' ').append((s.operation == null) ? "" : s.operation);
         t.append("= ");
         s.expression.accept(this, t);
@@ -203,7 +203,8 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
 
     @Override
     public StringBuilder visit(FunctionalExpression s, StringBuilder t) {
-        if (s.functionExpr instanceof ValueExpression && ((ValueExpression)s.functionExpr).value.type() == Types.STRING) {
+        if (s.functionExpr instanceof ValueExpression
+                && ((ValueExpression)s.functionExpr).value.type() == Types.STRING) {
             t.append(((ValueExpression)s.functionExpr).value.asString());
         } else {
             s.functionExpr.accept(this, t);

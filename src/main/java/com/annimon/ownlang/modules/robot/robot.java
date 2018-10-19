@@ -8,6 +8,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.IntConsumer;
 
 /**
  *
@@ -83,12 +84,7 @@ public final class robot implements Module {
         }
     }
     
-    @FunctionalInterface
-    private interface RobotIntConsumer {
-        void accept(int value) throws IllegalArgumentException;
-    }
-    
-    private static Function convertFunction(RobotIntConsumer consumer) {
+    private static Function convertFunction(IntConsumer consumer) {
         return args -> {
             Arguments.check(1, args.length);
             try {

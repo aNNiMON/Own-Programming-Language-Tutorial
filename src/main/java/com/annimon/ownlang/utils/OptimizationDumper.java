@@ -68,7 +68,6 @@ public final class OptimizationDumper {
     }
 
     private static String nodeToString(Node n) {
-//        return n.toString();
         return n.accept(new PrintVisitor(), new StringBuilder()).toString();
     }
 

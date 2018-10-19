@@ -50,9 +50,9 @@ public class Console {
     public static void handleException(Thread thread, Throwable throwable) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try(final PrintStream ps = new PrintStream(baos)) {
-            ps.printf("%s in %s\n", throwable.getMessage(), thread.getName());
+            ps.printf("%s in %s%n", throwable.getMessage(), thread.getName());
             for (CallStack.CallInfo call : CallStack.getCalls()) {
-                ps.printf("\tat %s\n", call);
+                ps.printf("\tat %s%n", call);
             }
             ps.println();
             throwable.printStackTrace(ps);
@@ -74,4 +74,6 @@ public class Console {
         }
         return new File(filepath);
     }
+
+
 }

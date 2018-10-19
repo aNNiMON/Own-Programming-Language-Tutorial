@@ -3,7 +3,6 @@ package com.annimon.ownlang.modules.std;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Value;
 
 public final class std_split implements Function {

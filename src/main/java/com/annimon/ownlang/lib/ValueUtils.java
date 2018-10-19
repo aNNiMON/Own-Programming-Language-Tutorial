@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 public final class ValueUtils {
 
+    private ValueUtils() { }
+
     public static Object toObject(Value val) {
         switch (val.type()) {
             case Types.ARRAY:
@@ -101,7 +103,7 @@ public final class ValueUtils {
         return result;
     }
 
-    public static Function consumeFunction(Value value, int argumentNumber) throws TypeException {
+    public static Function consumeFunction(Value value, int argumentNumber) {
         final int type = value.type();
         if (type != Types.FUNCTION) {
             throw new TypeException("Function expected at argument " + (argumentNumber + 1)

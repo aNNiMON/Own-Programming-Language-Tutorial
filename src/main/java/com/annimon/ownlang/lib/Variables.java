@@ -35,6 +35,8 @@ public final class Variables {
         Variables.clear();
     }
 
+    private Variables() { }
+
     public static Map<String, Value> variables() {
         return scope.variables;
     }

@@ -6,10 +6,15 @@ package com.annimon.ownlang.lib;
  */
 public final class NumberValue implements Value {
 
-    public static final NumberValue MINUS_ONE, ZERO, ONE;
+    private static final int CACHE_MIN = -128;
+    private static final int CACHE_MAX = 127;
 
-    private static final int CACHE_MIN = -128, CACHE_MAX = 127;
+    public static final NumberValue MINUS_ONE;
+    public static final NumberValue ZERO;
+    public static final NumberValue ONE;
+
     private static final NumberValue[] NUMBER_CACHE;
+
     static {
         final int length = CACHE_MAX - CACHE_MIN + 1;
         NUMBER_CACHE = new NumberValue[length];

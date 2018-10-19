@@ -4,6 +4,8 @@ import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 
 public final class Arguments {
 
+    private Arguments() { }
+
     public static void check(int expected, int got) {
         if (got != expected) throw new ArgumentsMismatchException(String.format(
                 "%d %s expected, got %d", expected, pluralize(expected), got));

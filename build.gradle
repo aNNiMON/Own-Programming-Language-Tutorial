@@ -36,6 +36,7 @@ task generateJavaSources() {
         def source = """
             package com.annimon.ownlang;
             class Gen {
+                private Gen() {}
                 public static final String BUILD_DATE = "${new Date().format('YYMMdd')}";
             }
             """

@@ -8,7 +8,9 @@ import com.annimon.ownlang.lib.Value;
 
 public final class NumberFunctions {
 
-    public static Value toHexString(Value... args) {
+    private NumberFunctions() { }
+
+    static Value toHexString(Value... args) {
         Arguments.check(1, args.length);
         long value;
         if (args[0].type() == Types.NUMBER) {

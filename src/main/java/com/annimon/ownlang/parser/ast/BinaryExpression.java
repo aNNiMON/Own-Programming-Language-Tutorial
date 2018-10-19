@@ -16,7 +16,7 @@ import com.annimon.ownlang.lib.Value;
  */
 public final class BinaryExpression implements Expression {
     
-    public static enum Operator {
+    public enum Operator {
         ADD("+"),
         SUBTRACT("-"),
         MULTIPLY("*"),
@@ -40,7 +40,7 @@ public final class BinaryExpression implements Expression {
         
         private final String name;
 
-        private Operator(String name) {
+        Operator(String name) {
             this.name = name;
         }
 
@@ -73,7 +73,7 @@ public final class BinaryExpression implements Expression {
         }
     }
     
-    private Value eval(Value value1, Value value2) throws OperationIsNotSupportedException {
+    private Value eval(Value value1, Value value2) {
         switch (operation) {
             case ADD: return add(value1, value2);
             case SUBTRACT: return subtract(value1, value2);
@@ -141,7 +141,8 @@ public final class BinaryExpression implements Expression {
         switch (value1.type()) {
             case Types.NUMBER: return subtract((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -177,17 +178,10 @@ public final class BinaryExpression implements Expression {
     private Value multiply(Value value1, Value value2) {
         switch (value1.type()) {
             case Types.NUMBER: return multiply((NumberValue) value1, value2);
-            case Types.STRING: {
-                final String string1 = value1.asString();
-                final int iterations = value2.asInt();
-                final StringBuilder buffer = new StringBuilder();
-                for (int i = 0; i < iterations; i++) {
-                    buffer.append(string1);
-                }
-                return new StringValue(buffer.toString());
-            }
+            case Types.STRING: return multiply((StringValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -219,12 +213,23 @@ public final class BinaryExpression implements Expression {
         }
         return NumberValue.of(number1.intValue() * value2.asInt());
     }
+
+    private Value multiply(StringValue value1, Value value2) {
+        final String string1 = value1.asString();
+        final int iterations = value2.asInt();
+        final StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < iterations; i++) {
+            buffer.append(string1);
+        }
+        return new StringValue(buffer.toString());
+    }
     
     private Value divide(Value value1, Value value2) {
         switch (value1.type()) {
             case Types.NUMBER: return divide((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -261,7 +266,8 @@ public final class BinaryExpression implements Expression {
         switch (value1.type()) {
             case Types.NUMBER: return remainder((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -298,7 +304,8 @@ public final class BinaryExpression implements Expression {
         switch (value1.type()) {
             case Types.ARRAY: return ArrayValue.add((ArrayValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -306,7 +313,8 @@ public final class BinaryExpression implements Expression {
         switch (value1.type()) {
             case Types.NUMBER: return and((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -331,7 +339,8 @@ public final class BinaryExpression implements Expression {
         switch (value1.type()) {
             case Types.NUMBER: return or((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -356,7 +365,8 @@ public final class BinaryExpression implements Expression {
         switch (value1.type()) {
             case Types.NUMBER: return xor((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -380,16 +390,13 @@ public final class BinaryExpression implements Expression {
     private Value lshift(Value value1, Value value2) {
         switch (value1.type()) {
             case Types.NUMBER: return lshift((NumberValue) value1, value2);
-            case Types.ARRAY: {
-                if (value2.type() != Types.ARRAY)
-                    throw new TypeException("Cannot merge non array value to array");
-                return ArrayValue.merge((ArrayValue) value1, (ArrayValue) value2);
-            }
+            case Types.ARRAY: return lshift((ArrayValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
-    
+
     private Value lshift(NumberValue value1, Value value2) {
         final Number number1 = value1.raw();
         if (value2.type() == Types.NUMBER) {
@@ -406,12 +413,19 @@ public final class BinaryExpression implements Expression {
         }
         return NumberValue.of(number1.intValue() << value2.asInt());
     }
+
+    private Value lshift(ArrayValue value1, Value value2) {
+        if (value2.type() != Types.ARRAY)
+            throw new TypeException("Cannot merge non array value to array");
+        return ArrayValue.merge(value1, (ArrayValue) value2);
+    }
     
     private Value rshift(Value value1, Value value2) {
         switch (value1.type()) {
             case Types.NUMBER: return rshift((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     
@@ -436,7 +450,8 @@ public final class BinaryExpression implements Expression {
         switch (value1.type()) {
             case Types.NUMBER: return urshift((NumberValue) value1, value2);
             default:
-                throw new OperationIsNotSupportedException(operation, "for " + Types.typeToString(value1.type()));
+                throw new OperationIsNotSupportedException(operation,
+                        "for " + Types.typeToString(value1.type()));
         }
     }
     

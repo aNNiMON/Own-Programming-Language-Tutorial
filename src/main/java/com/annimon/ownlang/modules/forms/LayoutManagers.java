@@ -13,7 +13,9 @@ import javax.swing.BoxLayout;
  */
 public final class LayoutManagers {
 
-    public static Value borderLayout(Value... args) {
+    private LayoutManagers() { }
+
+    static Value borderLayout(Value... args) {
         Arguments.checkOrOr(0, 2, args.length);
         int hgap = (args.length == 2) ? args[0].asInt() : 0;
         int vgap = (args.length == 2) ? args[1].asInt() : 0;
@@ -22,7 +24,7 @@ public final class LayoutManagers {
         );
     }
 
-    public static Value boxLayout(Value... args) {
+    static Value boxLayout(Value... args) {
         Arguments.checkOrOr(1, 2, args.length);
         int axis = (args.length == 2) ? args[1].asInt() : BoxLayout.PAGE_AXIS;
         return new LayoutManagerValue(
@@ -30,7 +32,7 @@ public final class LayoutManagers {
         );
     }
 
-    public static Value cardLayout(Value... args) {
+    static Value cardLayout(Value... args) {
         Arguments.checkOrOr(0, 2, args.length);
         int hgap = (args.length == 2) ? args[0].asInt() : 0;
         int vgap = (args.length == 2) ? args[1].asInt() : 0;
@@ -39,7 +41,7 @@ public final class LayoutManagers {
         );
     }
 
-    public static Value gridLayout(Value... args) {
+    static Value gridLayout(Value... args) {
         Arguments.checkRange(0, 4, args.length);
         int rows = 1, cols = 0, hgap = 0, vgap = 0;
         switch (args.length) {
@@ -67,7 +69,7 @@ public final class LayoutManagers {
         );
     }
 
-    public static Value flowLayout(Value... args) {
+    static Value flowLayout(Value... args) {
         Arguments.checkRange(0, 3, args.length);
         final int align, hgap, vgap;
         switch (args.length) {

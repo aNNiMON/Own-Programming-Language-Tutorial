@@ -14,7 +14,9 @@ import javax.swing.SwingConstants;
  */
 public final class Components {
 
-    public static Value newWindow(Value... args) {
+    private Components() { }
+
+    static Value newWindow(Value... args) {
         Arguments.checkOrOr(0, 1, args.length);
         String title = (args.length == 1) ? args[0].asString() : "";
         final JFrame frame = new JFrame(title);
@@ -22,7 +24,7 @@ public final class Components {
         return new JFrameValue(frame);
     }
 
-    public static Value newPanel(Value... args) {
+    static Value newPanel(Value... args) {
         Arguments.checkOrOr(0, 1, args.length);
         final JPanel panel = new JPanel();
         if (args.length == 1) {
@@ -31,20 +33,20 @@ public final class Components {
         return new JPanelValue(panel);
     }
 
-    public static Value newButton(Value... args) {
+    static Value newButton(Value... args) {
         Arguments.checkOrOr(0, 1, args.length);
         String text = (args.length == 1) ? args[0].asString() : "";
         return new JButtonValue(new JButton(text));
     }
 
-    public static Value newLabel(Value... args) {
+    static Value newLabel(Value... args) {
         Arguments.checkRange(0, 2, args.length);
         String text = (args.length >= 1) ? args[0].asString() : "";
         int align = (args.length == 2) ? args[1].asInt() : SwingConstants.LEADING;
         return new JLabelValue(new JLabel(text, align));
     }
 
-    public static Value newTextField(Value... args) {
+    static Value newTextField(Value... args) {
         Arguments.checkOrOr(0, 1, args.length);
         String text = (args.length == 1) ? args[0].asString() : "";
         return new JTextFieldValue(new JTextField(text));

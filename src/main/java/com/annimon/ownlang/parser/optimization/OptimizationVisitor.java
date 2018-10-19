@@ -260,16 +260,14 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
                 final String variable = ((MatchExpression.VariablePattern) pattern).variable;
                 final VariableExpression expr = new VariableExpression(variable);
                 final Node node = expr.accept(this, t);
-                if (node != expr) {
-                    if (isValue(node)) {
-                        changed = true;
-                        final Value value = ((ValueExpression) node).value;
-                        final Expression optCondition = pattern.optCondition;
-                        final Statement result = pattern.result;
-                        pattern = new MatchExpression.ConstantPattern(value);
-                        pattern.optCondition = optCondition;
-                        pattern.result = result;
-                    }
+                if ((node != expr) && isValue(node)) {
+                    changed = true;
+                    final Value value = ((ValueExpression) node).value;
+                    final Expression optCondition = pattern.optCondition;
+                    final Statement result = pattern.result;
+                    pattern = new MatchExpression.ConstantPattern(value);
+                    pattern.optCondition = optCondition;
+                    pattern.result = result;
                 }
             }
             

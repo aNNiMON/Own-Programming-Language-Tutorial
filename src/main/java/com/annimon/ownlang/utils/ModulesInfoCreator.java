@@ -7,19 +7,10 @@ import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.modules.Module;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -28,14 +19,17 @@ public final class ModulesInfoCreator {
 
     private static final String MODULES_PATH = "src/main/java/com/annimon/ownlang/modules";
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public static void main(String[] args)
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         final Class<Module> clazz = Module.class; // get classloader for package
 
         final List<ModuleInfo> moduleInfos = new ArrayList<>();
 
-        String[] moduleNames = Arrays.stream(new File(MODULES_PATH).listFiles())
-                .filter(p -> p.isDirectory())
-                .map(p -> p.getName())
+        String[] moduleNames = Optional.ofNullable(new File(MODULES_PATH).listFiles())
+                .map(Arrays::stream)
+                .orElse(Stream.empty())
+                .filter(File::isDirectory)
+                .map(File::getName)
                 .toArray(String[]::new);
         for (String moduleName : moduleNames) {
             final String moduleClassPath = String.format("com.annimon.ownlang.modules.%s.%s", moduleName, moduleName);
@@ -57,16 +51,16 @@ public final class ModulesInfoCreator {
 
         System.out.println("Total modules: " + moduleInfos.size());
         System.out.println("Total functions: " + moduleInfos.stream()
-                .flatMap(m -> m.functions.stream())
-                .count()
+                .mapToLong(m -> m.functions.size())
+                .sum()
         );
         System.out.println("Total constants: " + moduleInfos.stream()
-                .flatMap(m -> m.constants.keySet().stream())
-                .count()
+                .mapToLong(m -> m.constants.keySet().size())
+                .sum()
         );
     }
 
-    private static void printAsJson(List<ModuleInfo> moduleInfos) throws JSONException {
+    private static void printAsJson(List<ModuleInfo> moduleInfos) {
         final JSONArray modulesJson = new JSONArray();
         for (ModuleInfo moduleInfo : moduleInfos) {
             modulesJson.put(new JSONObject(moduleInfo.info()));
@@ -128,7 +122,7 @@ public final class ModulesInfoCreator {
         public List<Map<String, Object>> constants() {
             final List<Map<String, Object>> result = new ArrayList<>();
             constants.entrySet().stream()
-                    .sorted(Comparator.comparing(e -> e.getKey()))
+                    .sorted(Comparator.comparing(Map.Entry::getKey))
                     .forEach(entry -> {
                 final Value value = entry.getValue();
 
@@ -140,7 +134,7 @@ public final class ModulesInfoCreator {
                     String text = ((Map<Value, Value>) value.raw()).entrySet().stream()
                             .sorted(Comparator.comparing(
                                     e -> ((MapValue)value).size() > 16 ? e.getKey() : e.getValue()))
-                            .map(s -> s.toString())
+                            .map(Object::toString)
                             .collect(Collectors.joining(", ", "{", "}"));
                     constant.put("value", text);
                 } else {

@@ -15,6 +15,8 @@ public final class Functions {
         functions = new HashMap<>();
     }
 
+    private Functions() { }
+
     public static void clear() {
         functions.clear();
     }

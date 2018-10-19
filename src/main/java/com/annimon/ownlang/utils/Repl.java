@@ -129,7 +129,8 @@ public final class Repl {
 
         int maxLength = commands.stream()
                 .mapToInt(String::length)
-                .max().getAsInt();
+                .max()
+                .orElse(20);
 
         final int maxCols = 2;
         final int size = commands.size();

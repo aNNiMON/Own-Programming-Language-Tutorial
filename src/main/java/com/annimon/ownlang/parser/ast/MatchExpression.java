@@ -205,7 +205,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         return sb.toString();
     }
 
-    public static abstract class Pattern {
+    public abstract static class Pattern {
         public Statement result;
         public Expression optCondition;
 

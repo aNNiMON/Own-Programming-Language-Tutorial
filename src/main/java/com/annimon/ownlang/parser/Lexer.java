@@ -87,7 +87,7 @@ public final class Lexer {
     
     private static final Map<String, TokenType> KEYWORDS;
     static {
-        KEYWORDS = new HashMap<String, TokenType>();
+        KEYWORDS = new HashMap<>();
         KEYWORDS.put("print", TokenType.PRINT);
         KEYWORDS.put("println", TokenType.PRINTLN);
         KEYWORDS.put("if", TokenType.IF);

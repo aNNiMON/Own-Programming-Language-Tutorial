@@ -283,7 +283,7 @@ public final class java implements Module {
                     methods.add(method);
                 }
             }
-            if (methods.size() == 0) {
+            if (methods.isEmpty()) {
                 return FunctionValue.EMPTY;
             }
             return new FunctionValue(methodsToFunction(object, methods));
@@ -362,7 +362,7 @@ public final class java implements Module {
     }
 
     private static Value objectToValue(Class<?> clazz, Object o) {
-        if (o == null | o == NULL) return NULL;
+        if (o == null || o == NULL) return NULL;
         if (clazz.isPrimitive()) {
             if (int.class.isAssignableFrom(clazz))
                 return NumberValue.of((int) o);
@@ -394,54 +394,58 @@ public final class java implements Module {
             return (Value) o;
         }
         if (clazz.isArray()) {
-            final int length = Array.getLength(o);
-            final ArrayValue result = new ArrayValue(length);
-            final Class<?> componentType = clazz.getComponentType();
-            int i = 0;
-            if (boolean.class.isAssignableFrom(componentType)) {
-                for (boolean element : (boolean[]) o) {
-                    result.set(i++, NumberValue.fromBoolean(element));
-                }
-            } else if (byte.class.isAssignableFrom(componentType)) {
-                for (byte element : (byte[]) o) {
-                    result.set(i++, NumberValue.of(element));
-                }
-            } else if (char.class.isAssignableFrom(componentType)) {
-                for (char element : (char[]) o) {
-                    result.set(i++, NumberValue.of(element));
-                }
-            } else if (double.class.isAssignableFrom(componentType)) {
-                for (double element : (double[]) o) {
-                    result.set(i++, NumberValue.of(element));
-                }
-            } else if (float.class.isAssignableFrom(componentType)) {
-                for (float element : (float[]) o) {
-                    result.set(i++, NumberValue.of(element));
-                }
-            } else if (int.class.isAssignableFrom(componentType)) {
-                for (int element : (int[]) o) {
-                    result.set(i++, NumberValue.of(element));
-                }
-            } else if (long.class.isAssignableFrom(componentType)) {
-                for (long element : (long[]) o) {
-                    result.set(i++, NumberValue.of(element));
-                }
-            } else if (short.class.isAssignableFrom(componentType)) {
-                for (short element : (short[]) o) {
-                    result.set(i++, NumberValue.of(element));
-                }
-            } else {
-                for (Object element : (Object[]) o) {
-                    result.set(i++, objectToValue(element));
-                }
-            }
-            return result;
+            return arrayToValue(clazz, o);
         }
         final Class<?> componentType = clazz.getComponentType();
         if (componentType != null) {
             return objectToValue(componentType, o);
         }
         return new ObjectValue(o);
+    }
+
+    private static Value arrayToValue(Class<?> clazz, Object o) {
+        final int length = Array.getLength(o);
+        final ArrayValue result = new ArrayValue(length);
+        final Class<?> componentType = clazz.getComponentType();
+        int i = 0;
+        if (boolean.class.isAssignableFrom(componentType)) {
+            for (boolean element : (boolean[]) o) {
+                result.set(i++, NumberValue.fromBoolean(element));
+            }
+        } else if (byte.class.isAssignableFrom(componentType)) {
+            for (byte element : (byte[]) o) {
+                result.set(i++, NumberValue.of(element));
+            }
+        } else if (char.class.isAssignableFrom(componentType)) {
+            for (char element : (char[]) o) {
+                result.set(i++, NumberValue.of(element));
+            }
+        } else if (double.class.isAssignableFrom(componentType)) {
+            for (double element : (double[]) o) {
+                result.set(i++, NumberValue.of(element));
+            }
+        } else if (float.class.isAssignableFrom(componentType)) {
+            for (float element : (float[]) o) {
+                result.set(i++, NumberValue.of(element));
+            }
+        } else if (int.class.isAssignableFrom(componentType)) {
+            for (int element : (int[]) o) {
+                result.set(i++, NumberValue.of(element));
+            }
+        } else if (long.class.isAssignableFrom(componentType)) {
+            for (long element : (long[]) o) {
+                result.set(i++, NumberValue.of(element));
+            }
+        } else if (short.class.isAssignableFrom(componentType)) {
+            for (short element : (short[]) o) {
+                result.set(i++, NumberValue.of(element));
+            }
+        } else {
+            for (Object element : (Object[]) o) {
+                result.set(i++, objectToValue(element));
+            }
+        }
+        return result;
     }
 
     private static Object[] valuesToObjects(Value[] args) {
@@ -459,15 +463,8 @@ public final class java implements Module {
                 return value.raw();
             case Types.STRING:
                 return value.asString();
-            case Types.ARRAY: {
-                final ArrayValue array = (ArrayValue) value;
-                final int size = array.size();
-                final Object[] result = new Object[size];
-                for (int i = 0; i < size; i++) {
-                    result[i] = valueToObject(array.get(i));
-                }
-                return result;
-            }
+            case Types.ARRAY:
+                return arrayToObject((ArrayValue) value);
         }
         if (value instanceof ObjectValue) {
             return ((ObjectValue) value).object;
@@ -476,6 +473,15 @@ public final class java implements Module {
             return ((ClassValue) value).clazz;
         }
         return value.raw();
+    }
+
+    private static Object arrayToObject(ArrayValue value) {
+        final int size = value.size();
+        final Object[] result = new Object[size];
+        for (int i = 0; i < size; i++) {
+            result[i] = valueToObject(value.get(i));
+        }
+        return result;
     }
 //</editor-fold>
 }

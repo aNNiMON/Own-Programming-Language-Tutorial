@@ -13,6 +13,8 @@ import com.annimon.ownlang.parser.optimization.SummaryOptimization;
 
 public final class Optimizer {
 
+    private Optimizer() { }
+
     public static Statement optimize(Statement statement, int level, boolean showSummary) {
         if (level == 0) return statement;
 

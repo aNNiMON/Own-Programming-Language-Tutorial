@@ -7,6 +7,8 @@ import java.io.InputStream;
 
 public final class SourceLoader {
 
+    private SourceLoader() { }
+
     public static String readSource(String name) throws IOException {
         InputStream is = SourceLoader.class.getResourceAsStream(name);
         if (is != null) return readAndCloseStream(is);
@@ -19,9 +21,9 @@ public final class SourceLoader {
         final ByteArrayOutputStream result = new ByteArrayOutputStream();
         final int bufferSize = 1024;
         final byte[] buffer = new byte[bufferSize];
-        int readed;
-        while ((readed = is.read(buffer)) != -1) {
-            result.write(buffer, 0, readed);
+        int read;
+        while ((read = is.read(buffer)) != -1) {
+            result.write(buffer, 0, read);
         }
         is.close();
         return result.toString("UTF-8");

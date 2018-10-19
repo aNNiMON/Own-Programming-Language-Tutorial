@@ -33,25 +33,9 @@ public final class Main {
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
             try {
-                final Options options = new Options();
-                options.showAst = false;
-                options.showTokens = false;
-                options.showMeasurements = false;
-                options.lintMode = false;
-                options.optimizationLevel = 0;
-                run(SourceLoader.readSource("program.own"), options);
+                runDefault();
             } catch (IOException ioe) {
-                System.out.println("OwnLang version " + VERSION + "\n\n" +
-                        "Usage: ownlang [options]\n" +
-                        "  options:\n" +
-                        "      -f, --file [input]  Run program file. Required.\n" +
-                        "      -r, --repl          Enter to a REPL mode\n" +
-                        "      -l, --lint          Find bugs in code\n" +
-                        "      -o N, --optimize N  Perform optimization with N passes\n" +
-                        "      -b, --beautify      Beautify source code\n" +
-                        "      -a, --showast       Show AST of program\n" +
-                        "      -t, --showtokens    Show lexical tokens\n" +
-                        "      -m, --showtime      Show elapsed time of parsing and execution");
+                printUsage();
             }
             return;
         }
@@ -139,6 +123,30 @@ public final class Main {
         run(input, options);
     }
 
+    private static void runDefault() throws IOException {
+        final Options options = new Options();
+        options.showAst = false;
+        options.showTokens = false;
+        options.showMeasurements = false;
+        options.lintMode = false;
+        options.optimizationLevel = 0;
+        run(SourceLoader.readSource("program.own"), options);
+    }
+
+    private static void printUsage() {
+        System.out.println("OwnLang version " + VERSION + "\n\n" +
+                "Usage: ownlang [options]\n" +
+                "  options:\n" +
+                "      -f, --file [input]  Run program file. Required.\n" +
+                "      -r, --repl          Enter to a REPL mode\n" +
+                "      -l, --lint          Find bugs in code\n" +
+                "      -o N, --optimize N  Perform optimization with N passes\n" +
+                "      -b, --beautify      Beautify source code\n" +
+                "      -a, --showast       Show AST of program\n" +
+                "      -t, --showtokens    Show lexical tokens\n" +
+                "      -m, --showtime      Show elapsed time of parsing and execution");
+    }
+
     private static void createOwnLangArgs(String[] javaArgs, int index) {
         if (index >= javaArgs.length) return;
         ownlangArgs = new String[javaArgs.length - index];
@@ -152,7 +160,8 @@ public final class Main {
         final List<Token> tokens = Lexer.tokenize(input);
         measurement.stop("Tokenize time");
         if (options.showTokens) {
-            for (int i = 0; i < tokens.size(); i++) {
+            final int tokensCount = tokens.size();
+            for (int i = 0; i < tokensCount; i++) {
                 System.out.println(i + " " + tokens.get(i));
             }
         }
@@ -205,7 +214,7 @@ public final class Main {
         boolean lintMode;
         int optimizationLevel;
 
-        public Options() {
+        Options() {
             showTokens = false;
             showAst = false;
             showMeasurements = false;
@@ -213,8 +222,8 @@ public final class Main {
             optimizationLevel = 0;
         }
 
-        public void validate() {
-            if (lintMode == true) {
+        void validate() {
+            if (lintMode) {
                 showTokens = false;
                 showAst = false;
                 showMeasurements = false;

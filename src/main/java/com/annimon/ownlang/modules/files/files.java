@@ -156,7 +156,7 @@ public final class files implements Module {
         }
     }
     
-    private static abstract class FileFunction implements Function {
+    private abstract static class FileFunction implements Function {
         
         @Override
         public Value execute(Value... args) {
@@ -252,7 +252,7 @@ public final class files implements Module {
     private static class setExecutable extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            final boolean ownerOnly = (args.length >= 3) ? (args[2].asInt() != 0) : true;
+            final boolean ownerOnly = (args.length < 3) || (args[2].asInt() != 0);
             return NumberValue.fromBoolean(
                     fileInfo.file.setExecutable(args[1].asInt() != 0, ownerOnly));
         }
@@ -261,7 +261,7 @@ public final class files implements Module {
     private static class setReadable extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            final boolean ownerOnly = (args.length >= 3) ? (args[2].asInt() != 0) : true;
+            final boolean ownerOnly = (args.length < 3) || (args[2].asInt() != 0);
             return NumberValue.fromBoolean(
                     fileInfo.file.setReadable(args[1].asInt() != 0, ownerOnly));
         }
@@ -270,7 +270,7 @@ public final class files implements Module {
     private static class setWritable extends FileFunction {
         @Override
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
-            final boolean ownerOnly = (args.length >= 3) ? (args[2].asInt() != 0) : true;
+            final boolean ownerOnly = (args.length < 3) || (args[2].asInt() != 0);
             return NumberValue.fromBoolean(
                     fileInfo.file.setWritable(args[1].asInt() != 0, ownerOnly));
         }

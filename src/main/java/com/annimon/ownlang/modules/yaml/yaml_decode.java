@@ -13,8 +13,7 @@ public final class yaml_decode implements Function {
         try {
             final String yamlRaw = args[0].asString();
             final Object root = new Yaml().load(yamlRaw);
-            final Value process = process(root);
-            return process;
+            return process(root);
         } catch (Exception ex) {
             throw new RuntimeException("Error while parsing yaml", ex);
         }

@@ -1,7 +1,11 @@
 /.gradle/
+/.idea/
+/.nb-gradle/
 /build/
 /dist/
 /store/
 /optimizations/
 /nbproject/private/
 /src/main/generatedJava/
+OwnLang.iml
+.nb-gradle-properties

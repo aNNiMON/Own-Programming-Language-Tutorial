@@ -10,6 +10,7 @@ buildscript {
 plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "2.0.2"
+    id "org.sonarqube" version "2.6.2"
 }
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
@@ -122,4 +123,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.openjdk.jmh:jmh-core:1.13'
     testImplementation 'org.openjdk.jmh:jmh-generator-annprocess:1.13'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Own-Programming-Language-Tutorial"
+        property "sonar.projectKey", "aNNiMON_Own-Programming-Language-Tutorial"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }

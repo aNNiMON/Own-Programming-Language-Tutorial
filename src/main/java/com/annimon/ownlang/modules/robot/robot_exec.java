@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.robot;
 
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Function;
@@ -43,7 +44,6 @@ public final class robot_exec implements Function {
                     return NumberValue.ZERO;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             return NumberValue.ZERO;
         }
     }

@@ -18,7 +18,7 @@ import java.util.List;
 public final class Sandbox {
 
     public static void main(String[] args) throws IOException {
-        Console.filePrefixEnabled = true;
+        Console.enableFilePrefix();
         final String input = SourceLoader.readAndCloseStream(System.in);
         dumpInputArguments(input, args);
         

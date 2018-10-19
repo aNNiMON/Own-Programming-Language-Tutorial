@@ -4,7 +4,7 @@ import com.annimon.ownlang.lib.Value;
 
 public final class VariableInfo {
     public Value value;
-    public int modifications;
+    int modifications;
 
     @Override
     public String toString() {

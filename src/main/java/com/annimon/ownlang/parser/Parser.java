@@ -30,7 +30,7 @@ public final class Parser {
 
     private static final EnumMap<TokenType, BinaryExpression.Operator> ASSIGN_OPERATORS;
     static {
-        ASSIGN_OPERATORS = new EnumMap(TokenType.class);
+        ASSIGN_OPERATORS = new EnumMap<>(TokenType.class);
         ASSIGN_OPERATORS.put(TokenType.EQ, null);
         ASSIGN_OPERATORS.put(TokenType.PLUSEQ, BinaryExpression.Operator.ADD);
         ASSIGN_OPERATORS.put(TokenType.MINUSEQ, BinaryExpression.Operator.SUBTRACT);
@@ -305,7 +305,7 @@ public final class Parser {
         }
         if (lookMatch(0, TokenType.DOT)) {
             final List<Expression> indices = variableSuffix();
-            if (indices == null | indices.isEmpty()) return expr;
+            if (indices == null || indices.isEmpty()) return expr;
 
             if (lookMatch(0, TokenType.LPAREN)) {
                 // next function call

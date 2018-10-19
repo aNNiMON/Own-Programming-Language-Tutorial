@@ -221,7 +221,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
     }
 
     public static class ConstantPattern extends Pattern {
-        public Value constant;
+        Value constant;
 
         public ConstantPattern(Value pattern) {
             this.constant = pattern;
@@ -247,13 +247,13 @@ public final class MatchExpression extends InterruptableNode implements Expressi
     }
 
     public static class ListPattern extends Pattern {
-        public List<String> parts;
+        List<String> parts;
 
         public ListPattern() {
             this(new ArrayList<>());
         }
 
-        public ListPattern(List<String> parts) {
+        ListPattern(List<String> parts) {
             this.parts = parts;
         }
 

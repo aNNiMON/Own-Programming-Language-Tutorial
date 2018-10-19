@@ -12,22 +12,22 @@ public final class Variables {
     private static final Object lock = new Object();
 
     private static class Scope {
-        public final Scope parent;
-        public final Map<String, Value> variables;
+        final Scope parent;
+        final Map<String, Value> variables;
 
-        public Scope() {
+        Scope() {
             this(null);
         }
 
-        public Scope(Scope parent) {
+        Scope(Scope parent) {
             this.parent = parent;
             variables = new ConcurrentHashMap<>();
         }
     }
 
     private static class ScopeFindData {
-        public boolean isFound;
-        public Scope scope;
+        boolean isFound;
+        Scope scope;
     }
 
     private static volatile Scope scope;
@@ -46,14 +46,13 @@ public final class Variables {
         scope.variables.put("false", NumberValue.ZERO);
     }
     
-    public static void push() {
+    static void push() {
         synchronized (lock) {
-            final Scope newScope = new Scope(scope);
-            scope = newScope;
+            scope = new Scope(scope);
         }
     }
     
-    public static void pop() {
+    static void pop() {
         synchronized (lock) {
             if (scope.parent != null) {
                 scope = scope.parent;

@@ -29,6 +29,7 @@ public final class std_sync implements Function {
         try {
             return queue.take();
         } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
             throw new RuntimeException(ex);
         }
     }

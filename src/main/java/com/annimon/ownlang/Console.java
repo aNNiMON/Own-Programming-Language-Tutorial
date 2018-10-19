@@ -9,7 +9,11 @@ import java.io.UnsupportedEncodingException;
 public class Console {
 
     private static final String FILE_PREFIX = "tmp/";
-    public static boolean filePrefixEnabled = false;
+    private static boolean filePrefixEnabled;
+
+    public static void enableFilePrefix() {
+        Console.filePrefixEnabled = true;
+    }
 
     public static String newline() {
         return System.lineSeparator();

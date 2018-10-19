@@ -319,9 +319,14 @@ public final class java implements Module {
             final Class<?> clazz = types[i];
 
             if (arg == NULL) continue;
-            if (unboxed(clazz).isAssignableFrom(unboxed(valueToObject(arg).getClass()))) {
-                continue;
-            }
+
+            final Class<?> unboxed = unboxed(clazz);
+            boolean assignable = unboxed != null;
+            final Object object = valueToObject(arg);
+            assignable = assignable && (object != null);
+            assignable = assignable && (unboxed.isAssignableFrom(object.getClass()));
+            if (assignable) continue;
+
             return false;
         }
         return true;

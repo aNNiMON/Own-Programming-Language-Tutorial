@@ -1,6 +1,8 @@
 # OwnLang
 
 [![Build Status](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial.svg?branch=latest)](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial)
+[![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=aNNiMON_Own-Programming-Language-Tutorial&metric=alert_status)](https://sonarcloud.io/dashboard?id=aNNiMON_Own-Programming-Language-Tutorial)
+[![SonarCloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=aNNiMON_Own-Programming-Language-Tutorial&metric=sqale_rating)](https://sonarcloud.io/dashboard/?id=aNNiMON_Own-Programming-Language-Tutorial)
 
 | Free | Pro | Desktop |
 | :--: | :-: | :-----: |

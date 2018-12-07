@@ -50,7 +50,8 @@ public class ParserTest {
     }
     
     private static void assertStatements(BlockStatement expected, BlockStatement actual) {
-        for (int i = 0; i < expected.statements.size(); i++) {
+        final int size = expected.statements.size();
+        for (int i = 0; i < size; i++) {
             assertEquals(expected.statements.get(i).getClass(), actual.statements.get(i).getClass());
         }
     }

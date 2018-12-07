@@ -40,8 +40,7 @@ public final class Main {
             return;
         }
 
-        final Options options = new Options();
-        boolean beautifyMode = false;
+        final RunOptions options = new RunOptions();
         String input = null;
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -52,19 +51,19 @@ public final class Main {
 
                 case "-b":
                 case "--beautify":
-                    beautifyMode = true;
+                    options.beautifyMode = true;
                     break;
-                    
+
                 case "-t":
                 case "--showtokens":
                     options.showTokens = true;
                     break;
-                    
+
                 case "-m":
                 case "--showtime":
                     options.showMeasurements = true;
                     break;
-                    
+
                 case "-o":
                 case "--optimize":
                     if (i + 1 < args.length) {
@@ -88,7 +87,7 @@ public final class Main {
                 case "--lint":
                     options.lintMode = true;
                     return;
-                    
+
                 case "-f":
                 case "--file":
                     if (i + 1 < args.length)  {
@@ -104,7 +103,7 @@ public final class Main {
                     System.arraycopy(ownlangArgs, 0, newArgs, 0, ownlangArgs.length);
                     Sandbox.main(newArgs);
                     return;
-                
+
                 default:
                     if (input == null) {
                         input = args[i];
@@ -116,7 +115,7 @@ public final class Main {
         if (input == null) {
             throw new IllegalArgumentException("Empty input");
         }
-        if (beautifyMode) {
+        if (options.beautifyMode) {
             System.out.println(Beautifier.beautify(input));
             return;
         }
@@ -124,12 +123,7 @@ public final class Main {
     }
 
     private static void runDefault() throws IOException {
-        final Options options = new Options();
-        options.showAst = false;
-        options.showTokens = false;
-        options.showMeasurements = false;
-        options.lintMode = false;
-        options.optimizationLevel = 0;
+        final RunOptions options = new RunOptions();
         run(SourceLoader.readSource("program.own"), options);
     }
 
@@ -153,7 +147,7 @@ public final class Main {
         System.arraycopy(javaArgs, index, ownlangArgs, 0, ownlangArgs.length);
     }
         
-    private static void run(String input, Options options) {
+    private static void run(String input, RunOptions options) {
         options.validate();
         final TimeMeasurement measurement = new TimeMeasurement();
         measurement.start("Tokenize time");
@@ -209,16 +203,18 @@ public final class Main {
         }
     }
 
-    private static class Options {
+    private static class RunOptions {
         boolean showTokens, showAst, showMeasurements;
         boolean lintMode;
+        boolean beautifyMode;
         int optimizationLevel;
 
-        Options() {
+        RunOptions() {
             showTokens = false;
             showAst = false;
             showMeasurements = false;
             lintMode = false;
+            beautifyMode = false;
             optimizationLevel = 0;
         }
 

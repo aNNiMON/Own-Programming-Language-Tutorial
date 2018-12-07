@@ -36,12 +36,16 @@ public class ProgramsTest {
     public static Collection<String> data() {
         final File resDir = new File(RES_DIR);
         return scanDirectory(resDir)
-                .map(f -> f.getPath())
+                .map(File::getPath)
                 .collect(Collectors.toList());
     }
 
     private static Stream<File> scanDirectory(File dir) {
-        return Arrays.stream(dir.listFiles())
+        final File[] files = dir.listFiles();
+        if (files == null || files.length == 0) {
+            return Stream.empty();
+        }
+        return Arrays.stream(files)
                 .flatMap(file -> {
                     if (file.isDirectory()) {
                         return scanDirectory(file);

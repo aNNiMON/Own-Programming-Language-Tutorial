@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 
 public class Console {
 
+    private Console() { }
+
     private static final String FILE_PREFIX = "tmp/";
     private static boolean filePrefixEnabled;
 

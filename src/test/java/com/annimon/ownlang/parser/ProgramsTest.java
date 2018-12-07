@@ -1,8 +1,11 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.outputsettings.OutputSettings;
+import com.annimon.ownlang.outputsettings.StringOutputSettings;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.Visitor;
@@ -91,6 +94,22 @@ public class ProgramsTest {
             s.accept(testFunctionsExecutor);
         } catch (Exception oae) {
             Assert.fail(oae.toString());
+        }
+    }
+
+    @Test
+    public void testOutput() throws IOException {
+        OutputSettings oldSettings = Console.getSettings();
+        Console.useSettings(new StringOutputSettings());
+        String source = "for i = 0, i <= 5, i++\n  print i";
+        final Statement s = Parser.parse(Lexer.tokenize(source));
+        try {
+            s.execute();
+            assertEquals("012345", Console.text());
+        } catch (Exception oae) {
+            Assert.fail(oae.toString());
+        } finally {
+            Console.useSettings(oldSettings);
         }
     }
 

@@ -1,6 +1,8 @@
 package com.annimon.ownlang;
 
 import com.annimon.ownlang.lib.CallStack;
+import com.annimon.ownlang.outputsettings.ConsoleOutputSettings;
+import com.annimon.ownlang.outputsettings.OutputSettings;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
@@ -9,44 +11,51 @@ import java.io.UnsupportedEncodingException;
 public class Console {
 
     private Console() { }
+    
+    private static OutputSettings outputSettings = new ConsoleOutputSettings();
 
-    private static final String FILE_PREFIX = "tmp/";
-    private static boolean filePrefixEnabled;
+    public static void useSettings(OutputSettings outputSettings) {
+        Console.outputSettings = outputSettings;
+    }
 
-    public static void enableFilePrefix() {
-        Console.filePrefixEnabled = true;
+    public static OutputSettings getSettings() {
+        return outputSettings;
     }
 
     public static String newline() {
-        return System.lineSeparator();
+        return outputSettings.newline();
     }
 
     public static void print(String value) {
-        System.out.print(value);
+        outputSettings.print(value);
     }
 
     public static void print(Object value) {
-        print(value.toString());
+        outputSettings.print(value);
     }
 
     public static void println() {
-        System.out.println();
+        outputSettings.println();
     }
 
     public static void println(String value) {
-        System.out.println(value);
+        outputSettings.println(value);
     }
 
     public static void println(Object value) {
-        println(value.toString());
+        outputSettings.println(value);
+    }
+
+    public static String text() {
+        return outputSettings.getText();
     }
 
     public static void error(Throwable throwable) {
-        error(throwable.toString());
+        outputSettings.error(throwable);
     }
 
     public static void error(CharSequence value) {
-        System.err.println(value);
+        outputSettings.error(value);
     }
 
     public static void handleException(Thread thread, Throwable throwable) {
@@ -68,14 +77,6 @@ public class Console {
     }
 
     public static File fileInstance(String path) {
-        final String filepath;
-        if (filePrefixEnabled) {
-            filepath = FILE_PREFIX.concat(path);
-        } else {
-            filepath = path;
-        }
-        return new File(filepath);
+        return outputSettings.fileInstance(path);
     }
-
-
 }

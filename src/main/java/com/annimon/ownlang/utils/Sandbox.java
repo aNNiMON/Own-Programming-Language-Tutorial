@@ -3,12 +3,14 @@ package com.annimon.ownlang.utils;
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.lib.CallStack;
+import com.annimon.ownlang.outputsettings.ConsoleOutputSettings;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -18,7 +20,12 @@ import java.util.List;
 public final class Sandbox {
 
     public static void main(String[] args) throws IOException {
-        Console.enableFilePrefix();
+        Console.useSettings(new ConsoleOutputSettings() {
+            @Override
+            public File fileInstance(String path) {
+                return new File("tmp/" + path);
+            }
+        });
         final String input = SourceLoader.readAndCloseStream(System.in);
         dumpInputArguments(input, args);
         

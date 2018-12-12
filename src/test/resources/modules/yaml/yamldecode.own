@@ -1,24 +1,22 @@
-use "std"
-use "yaml"
-use "ounit"
+use ["std", "yaml", "ounit"]
 
 x = yamldecode("
   name: \"std\"
   scope: \"both\"
   desc: \"Contains common functions\"
-  desc_ru: \"Содержит вспомогательные функции общего назначения\"
+  desc_ru: \"РЎРѕРґРµСЂР¶РёС‚ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё РѕР±С‰РµРіРѕ РЅР°Р·РЅР°С‡РµРЅРёСЏ\"
   constants: []
   functions:
     -
       name: \"arrayCombine\"
       args: \"keys, values\"
       desc: \"creates map by combining two arrays\"
-      desc_ru: \"создаёт объект на основе двух массивов\"
+      desc_ru: \"СЃРѕР·РґР°С‘С‚ РѕР±СЉРµРєС‚ РЅР° РѕСЃРЅРѕРІРµ РґРІСѓС… РјР°СЃСЃРёРІРѕРІ\"
     -
       name: \"typeof\"
       args: \"value\"
       desc: \"returns the type of value\"
-      desc_ru: \"возвращает тип переданного значения\"
+      desc_ru: \"РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РёРї РїРµСЂРµРґР°РЅРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ\"
       example: |-
         print typeof(1) // 1 (NUMBER)
         print typeof(\"text\") // 2 (STRING)
@@ -30,4 +28,4 @@ assertEquals("both", x.scope)
 assertEquals(0, length(x.constants))
 assertEquals(2, length(x.functions))
 assertEquals("arrayCombine", x.functions[0].name)
-assertEquals("возвращает тип переданного значения", x.functions[1].desc_ru)
+assertEquals("РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РёРї РїРµСЂРµРґР°РЅРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ", x.functions[1].desc_ru)

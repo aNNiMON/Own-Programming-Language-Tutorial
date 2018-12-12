@@ -1,5 +1,4 @@
-use "std"
-use "java"
+use ["std", "java"]
 
 def testCheckNull() {
   assertTrue(isNull(null))

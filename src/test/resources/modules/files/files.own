@@ -1,5 +1,4 @@
-use "files"
-use "types"
+use ["files", "types"]
 
 def testFiles() {
   // writeLong

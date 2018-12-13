@@ -1,0 +1,15 @@
+use ["regex", "types"]
+
+def testMatchGitUrl() {
+  pattern = Pattern.compile("https?://((git(hu|la)b\.com)|bitbucket\.org)/?")
+  assertTrue(pattern.matches("http://github.com"))
+  assertTrue(pattern.matches("http://github.com/"))
+  assertTrue(pattern.matches("https://gitlab.com/"))
+  assertTrue(pattern.matches("https://bitbucket.org/"))
+
+  assertFalse(pattern.matches("http://github.org"))
+  assertFalse(pattern.matches("https://bithub.com/"))
+  assertFalse(pattern.matches("http://gitlab.org"))
+  assertFalse(pattern.matches("ftp://github.com/"))
+  assertFalse(pattern.matches("http://gitbucket.org/"))
+}

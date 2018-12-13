@@ -1,0 +1,8 @@
+use ["regex", "types"]
+
+def testReplaceCallback() {
+  in = "[1-2-3-4]"
+  pattern = regex("(\d)")
+  out = pattern.replaceCallback(in, def(m) = m.group() * int(m.group()))
+  assertEquals("[1-22-333-4444]", out)
+}

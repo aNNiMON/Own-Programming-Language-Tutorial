@@ -1,0 +1,19 @@
+use "std"
+
+def testDefaultNumber() {
+  assertEquals(123, default(0, 123))
+}
+
+def testDefaultString() {
+  assertEquals("123", default("", "123"))
+}
+
+def testDefaultNull() {
+  use "java"
+  assertEquals("not null", default(null, "not null"))
+}
+
+def testOperatorOverloading() {
+  def `?:`(a, b) = default(a, b)
+  assertEquals("not null", "" ?: "not null")
+}

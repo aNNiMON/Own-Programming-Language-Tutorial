@@ -26,6 +26,7 @@ public final class std implements Module {
         Functions.set("thread", new std_thread());
         Functions.set("sync", new std_sync());
         Functions.set("try", new std_try());
+        Functions.set("default", new std_default());
 
         // Numbers
         Functions.set("toHexString", NumberFunctions::toHexString);

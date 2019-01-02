@@ -11,6 +11,13 @@ import com.annimon.ownlang.modules.Module;
 public final class std implements Module {
 
     public static void initConstants() {
+        MapValue ownlang = new MapValue(5);
+        ownlang.set("PLATFORM", new StringValue("desktop"));
+        ownlang.set("VERSION", new StringValue(Main.VERSION));
+        ownlang.set("VERSION_MAJOR", NumberValue.of(Main.VERSION_MAJOR));
+        ownlang.set("VERSION_MINOR", NumberValue.of(Main.VERSION_MINOR));
+        ownlang.set("VERSION_PATCH", NumberValue.of(Main.VERSION_PATCH));
+        Variables.define("OwnLang", ownlang);
     }
 
     @Override

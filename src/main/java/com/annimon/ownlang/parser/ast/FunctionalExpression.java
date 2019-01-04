@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.exceptions.VariableDoesNotExistsException;
 import com.annimon.ownlang.exceptions.UnknownFunctionException;
 import com.annimon.ownlang.lib.*;
@@ -40,9 +42,13 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
         }
         final Function f = consumeFunction(functionExpr);
         CallStack.enter(functionExpr.toString(), f);
-        final Value result = f.execute(values);
-        CallStack.exit();
-        return result;
+        try {
+            return f.execute(values);
+        } catch (ArgumentsMismatchException | TypeException | VariableDoesNotExistsException ex) {
+            throw new RuntimeException(ex.getMessage() + " in function " + functionExpr, ex);
+        } finally {
+            CallStack.exit();
+        }
     }
     
     private Function consumeFunction(Expression expr) {
@@ -58,7 +64,9 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
     }
     
     private Function getFunction(String key) {
-        if (Functions.isExists(key)) return Functions.get(key);
+        if (Functions.isExists(key)) {
+            return Functions.get(key);
+        }
         if (Variables.isExists(key)) {
             final Value variable = Variables.get(key);
             if (variable.type() == Types.FUNCTION) {

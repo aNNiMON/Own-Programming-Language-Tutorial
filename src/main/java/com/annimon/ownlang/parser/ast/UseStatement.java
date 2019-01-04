@@ -36,7 +36,7 @@ public final class UseStatement extends InterruptableNode implements Statement {
                 loadModule(value.asString());
                 break;
             default:
-                throw new TypeException("Array or string required");
+                throw typeException(value);
         }
     }
 
@@ -45,7 +45,7 @@ public final class UseStatement extends InterruptableNode implements Statement {
             final Module module = (Module) Class.forName(String.format(PACKAGE, name, name)).newInstance();
             module.init();
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Unable to load module " + name, ex);
         }
     }
 
@@ -61,8 +61,13 @@ public final class UseStatement extends InterruptableNode implements Statement {
                 loadConstants(value.asString());
                 break;
             default:
-                throw new TypeException("Array or string required");
+                throw typeException(value);
         }
+    }
+
+    private TypeException typeException(Value value) {
+        return new TypeException("Array or string required in 'use' statement, " +
+                "got " + Types.typeToString(value.type()) + " " + value);
     }
 
     private void loadConstants(String moduleName) {

@@ -34,11 +34,13 @@ public final class UserDefinedFunction implements Function {
         final int size = values.length;
         final int requiredArgsCount = arguments.getRequiredArgumentsCount();
         if (size < requiredArgsCount) {
-            throw new ArgumentsMismatchException(String.format("Arguments count mismatch. %d < %d", size, requiredArgsCount));
+            throw new ArgumentsMismatchException(String.format(
+                    "Arguments count mismatch. Required %d, got %d", requiredArgsCount, size));
         }
         final int totalArgsCount = getArgsCount();
         if (size > totalArgsCount) {
-            throw new ArgumentsMismatchException(String.format("Arguments count mismatch. %d > %d", size, totalArgsCount));
+            throw new ArgumentsMismatchException(String.format(
+                    "Arguments count mismatch. Total %d, got %d", totalArgsCount, size));
         }
 
         try {

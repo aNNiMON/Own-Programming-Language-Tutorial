@@ -1,0 +1,16 @@
+use "std"
+
+def testTryOnly() {
+  assertEquals(1, try(def() = 1))
+  assertEquals(-1, try(def() = parseInt("oops")))
+}
+
+def testCatchFunction() {
+  actual = try(def() = parseInt("oops"), def(class, cause) = class)
+  assertEquals("java.lang.NumberFormatException", actual)
+}
+
+def testCatchValue() {
+  actual = try(def() = parseInt("oops"), 42)
+  assertEquals(42, actual)
+}

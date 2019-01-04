@@ -14,12 +14,17 @@ public final class std_try implements Function {
         try {
             return ((FunctionValue) args[0]).getValue().execute();
         } catch (Exception ex) {
-            if (args.length == 2 && args[1].type() == Types.FUNCTION) {
-                final String message = ex.getMessage();
-                final Function catchFunction = ((FunctionValue) args[1]).getValue();
-                return catchFunction.execute(
-                        new StringValue(ex.getClass().getName()),
-                        new StringValue(message == null ? "" : message));
+            if (args.length == 2) {
+                switch (args[1].type()) {
+                    case Types.FUNCTION:
+                        final String message = ex.getMessage();
+                        final Function catchFunction = ((FunctionValue) args[1]).getValue();
+                        return catchFunction.execute(
+                                new StringValue(ex.getClass().getName()),
+                                new StringValue(message == null ? "" : message));
+                    default:
+                        return args[1];
+                }
             }
             return NumberValue.MINUS_ONE;
         }

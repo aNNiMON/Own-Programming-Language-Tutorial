@@ -1,0 +1,10 @@
+def testLength() {
+  assertEquals(3, "123".length)
+  s = "test"
+  assertEquals(4, s.length)
+}
+
+def testTrim() {
+  s = "  test   "
+  assertEquals("test", s.trim())
+}

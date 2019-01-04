@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.UnknownPropertyException;
 import java.util.Objects;
 
 /**
@@ -14,6 +15,19 @@ public final class StringValue implements Value {
 
     public StringValue(String value) {
         this.value = value;
+    }
+
+    public Value access(Value property) {
+        switch (property.asString()) {
+            // Properties
+            case "length":
+                return NumberValue.of(length());
+
+            // Functions
+            case "trim":
+                return new FunctionValue(args -> new StringValue(value.trim()));
+        }
+        throw new UnknownPropertyException(property.asString());
     }
     
     public int length() {
@@ -82,5 +96,4 @@ public final class StringValue implements Value {
     public String toString() {
         return asString();
     }
-
 }

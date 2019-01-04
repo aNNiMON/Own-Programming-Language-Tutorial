@@ -782,7 +782,23 @@ public final class Parser {
             return new ValueExpression(createNumber(current.getText(), 16));
         }
         if (match(TokenType.TEXT)) {
-            return new ValueExpression(current.getText());
+            final ValueExpression strExpr = new ValueExpression(current.getText());
+            // "text".property || "text".func()
+            if (lookMatch(0, TokenType.DOT)) {
+                if (lookMatch(1, TokenType.WORD) && lookMatch(2, TokenType.LPAREN)) {
+                    match(TokenType.DOT);
+                    return functionChain(new ContainerAccessExpression(
+                            strExpr, Collections.singletonList(
+                                    new ValueExpression(consume(TokenType.WORD).getText())
+                    )));
+                }
+                final List<Expression> indices = variableSuffix();
+                if (indices.isEmpty()) {
+                    return strExpr;
+                }
+                return new ContainerAccessExpression(strExpr, indices);
+            }
+            return strExpr;
         }
         throw new ParseException("Unknown expression: " + current);
     }

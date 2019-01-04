@@ -17,8 +17,9 @@ public final class StringValue implements Value {
         this.value = value;
     }
 
-    public Value access(Value property) {
-        switch (property.asString()) {
+    public Value access(Value propertyValue) {
+        final String prop = propertyValue.asString();
+        switch (prop) {
             // Properties
             case "length":
                 return NumberValue.of(length());
@@ -26,8 +27,20 @@ public final class StringValue implements Value {
             // Functions
             case "trim":
                 return new FunctionValue(args -> new StringValue(value.trim()));
+
+            default:
+                if (Functions.isExists(prop)) {
+                    final Function f = Functions.get(prop);
+                    return new FunctionValue(args -> {
+                        final Value[] newArgs = new Value[args.length + 1];
+                        newArgs[0] = this;
+                        System.arraycopy(args, 0, newArgs, 1, args.length);
+                        return f.execute(newArgs);
+                    });
+                }
+                break;
         }
-        throw new UnknownPropertyException(property.asString());
+        throw new UnknownPropertyException(prop);
     }
     
     public int length() {

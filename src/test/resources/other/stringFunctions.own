@@ -8,3 +8,14 @@ def testTrim() {
   s = "  test   "
   assertEquals("test", s.trim())
 }
+
+def testExtensionFunction() {
+  use "std"
+  s = "1es1"
+  assertEquals("test", s.replace("1", "t"))
+}
+
+def testExtensionCustomFunction() {
+  def repeat(str, num) = str * num
+  assertEquals("****", "*".repeat(4))
+}

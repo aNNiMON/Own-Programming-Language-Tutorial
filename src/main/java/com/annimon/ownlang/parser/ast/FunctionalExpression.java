@@ -43,11 +43,11 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
         final Function f = consumeFunction(functionExpr);
         CallStack.enter(functionExpr.toString(), f);
         try {
-            return f.execute(values);
+            final Value result = f.execute(values);
+            CallStack.exit();
+            return result;
         } catch (ArgumentsMismatchException | TypeException | VariableDoesNotExistsException ex) {
             throw new RuntimeException(ex.getMessage() + " in function " + functionExpr, ex);
-        } finally {
-            CallStack.exit();
         }
     }
     

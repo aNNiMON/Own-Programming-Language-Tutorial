@@ -219,12 +219,15 @@ public final class Parser {
     
     private Statement forStatement() {
         int foreachIndex = lookMatch(0, TokenType.LPAREN) ? 1 : 0;
-        if (lookMatch(foreachIndex, TokenType.WORD) && lookMatch(foreachIndex + 1, TokenType.COLON)) {
+        if (lookMatch(foreachIndex, TokenType.WORD)
+                && lookMatch(foreachIndex + 1, TokenType.COLON)) {
             // for v : arr || for (v : arr)
             return foreachArrayStatement();
         }
-        if (lookMatch(foreachIndex, TokenType.WORD) && lookMatch(foreachIndex + 1, TokenType.COMMA)
-                && lookMatch(foreachIndex + 2, TokenType.WORD) && lookMatch(foreachIndex + 3, TokenType.COLON)) {
+        if (lookMatch(foreachIndex, TokenType.WORD)
+                && lookMatch(foreachIndex + 1, TokenType.COMMA)
+                && lookMatch(foreachIndex + 2, TokenType.WORD)
+                && lookMatch(foreachIndex + 3, TokenType.COLON)) {
             // for key, value : arr || for (key, value : arr)
             return foreachMapStatement();
         }
@@ -242,23 +245,29 @@ public final class Parser {
     }
     
     private ForeachArrayStatement foreachArrayStatement() {
+        // for x : arr
         boolean optParentheses = match(TokenType.LPAREN);
         final String variable = consume(TokenType.WORD).getText();
         consume(TokenType.COLON);
         final Expression container = expression();
-        if (optParentheses) consume(TokenType.RPAREN); // close opt parentheses
+        if (optParentheses) {
+            consume(TokenType.RPAREN); // close opt parentheses
+        }
         final Statement statement = statementOrBlock();
         return new ForeachArrayStatement(variable, container, statement);
     }
     
     private ForeachMapStatement foreachMapStatement() {
+        // for k, v : map
         boolean optParentheses = match(TokenType.LPAREN);
         final String key = consume(TokenType.WORD).getText();
         consume(TokenType.COMMA);
         final String value = consume(TokenType.WORD).getText();
         consume(TokenType.COLON);
         final Expression container = expression();
-        if (optParentheses) consume(TokenType.RPAREN); // close opt parentheses
+        if (optParentheses) {
+            consume(TokenType.RPAREN); // close opt parentheses
+        }
         final Statement statement = statementOrBlock();
         return new ForeachMapStatement(key, value, container, statement);
     }
@@ -440,13 +449,14 @@ public final class Parser {
     }
     
     private Expression assignmentStrict() {
+        // x[0].prop += ...
         final int position = pos;
         final Expression targetExpr = qualifiedName();
         if (!(targetExpr instanceof Accessible)) {
             pos = position;
             return null;
         }
-        
+
         final TokenType currentType = get(0).getType();
         if (!ASSIGN_OPERATORS.containsKey(currentType)) {
             pos = position;
@@ -696,6 +706,7 @@ public final class Parser {
         }
         
         if (match(TokenType.COLONCOLON)) {
+            // ::method reference
             final String functionName = consume(TokenType.WORD).getText();
             return new FunctionReferenceExpression(functionName);
         }
@@ -703,6 +714,7 @@ public final class Parser {
             return match();
         }
         if (match(TokenType.DEF)) {
+            // anonymous function def(args) ...
             final Arguments arguments = arguments();
             final Statement statement = statementBody();
             return new ValueExpression(new UserDefinedFunction(arguments, statement));
@@ -818,14 +830,18 @@ public final class Parser {
     
     private Token consume(TokenType type) {
         final Token current = get(0);
-        if (type != current.getType()) throw new ParseException("Token " + current + " doesn't match " + type);
+        if (type != current.getType()) {
+            throw new ParseException("Token " + current + " doesn't match " + type);
+        }
         pos++;
         return current;
     }
     
     private boolean match(TokenType type) {
         final Token current = get(0);
-        if (type != current.getType()) return false;
+        if (type != current.getType()) {
+            return false;
+        }
         pos++;
         return true;
     }

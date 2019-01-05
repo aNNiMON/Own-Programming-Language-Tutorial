@@ -9,6 +9,41 @@ def testTrim() {
   assertEquals("test", s.trim())
 }
 
+def testLower() {
+  s = "TeST"
+  assertEquals("test", s.lower)
+}
+
+def testUpper() {
+  s = "Test"
+  assertEquals("TEST", s.upper)
+}
+
+def testChars() {
+  assertEquals([49, 50, 51, 52], "1234".chars)
+}
+
+def testStartsWith() {
+  s = "test"
+  assertTrue(s.startsWith("tes"))
+  assertTrue(s.startsWith("t"))
+  assertFalse(s.startsWith("s"))
+}
+
+def testEndsWith() {
+  s = "test"
+  assertTrue(s.endsWith("st"))
+  assertTrue(s.endsWith("t"))
+  assertFalse(s.endsWith("s"))
+}
+
+def testIsEmpty() {
+  assertFalse("    ".isEmpty())
+  assertTrue("    ".trim().isEmpty())
+  assertFalse("1234".isEmpty())
+  assertTrue("".isEmpty())
+}
+
 def testExtensionFunction() {
   use "std"
   s = "1es1"

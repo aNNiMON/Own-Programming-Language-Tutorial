@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import java.util.function.Predicate;
 import static com.annimon.ownlang.lib.ValueUtils.getFloatNumber;
 
 /**
@@ -190,6 +191,13 @@ public final class Converters {
             Arguments.check(1, args.length);
             f.apply(args[0].asString());
             return NumberValue.ZERO;
+        });
+    }
+
+    public static FunctionValue stringToBoolean(Predicate<String> f) {
+        return new FunctionValue(args -> {
+            Arguments.check(1, args.length);
+            return NumberValue.fromBoolean(f.test(args[0].asString()));
         });
     }
 }

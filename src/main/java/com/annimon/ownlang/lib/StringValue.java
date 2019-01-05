@@ -23,10 +23,38 @@ public final class StringValue implements Value {
             // Properties
             case "length":
                 return NumberValue.of(length());
+            case "lower":
+                return new StringValue(value.toLowerCase());
+            case "upper":
+                return new StringValue(value.toUpperCase());
+            case "chars": {
+                final Value[] chars = new Value[length()];
+                int i = 0;
+                for (char ch : value.toCharArray()) {
+                    chars[i++] = NumberValue.of((int) ch);
+                }
+                return new ArrayValue(chars);
+            }
 
             // Functions
             case "trim":
-                return new FunctionValue(args -> new StringValue(value.trim()));
+                return Converters.voidToString(value::trim);
+            case "startsWith":
+                return new FunctionValue(args -> {
+                    Arguments.checkOrOr(1, 2, args.length);
+                    int offset = (args.length == 2) ? args[1].asInt() : 0;
+                    return NumberValue.fromBoolean(value.startsWith(args[0].asString(), offset));
+                });
+            case "endsWith":
+                return Converters.stringToBoolean(value::endsWith);
+            case "matches":
+                return Converters.stringToBoolean(value::matches);
+            case "contains":
+                return Converters.stringToBoolean(value::contains);
+            case "equalsIgnoreCase":
+                return Converters.stringToBoolean(value::equalsIgnoreCase);
+            case "isEmpty":
+                return Converters.voidToBoolean(value::isEmpty);
 
             default:
                 if (Functions.isExists(prop)) {
@@ -42,7 +70,7 @@ public final class StringValue implements Value {
         }
         throw new UnknownPropertyException(prop);
     }
-    
+
     public int length() {
         return value.length();
     }

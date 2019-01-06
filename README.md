@@ -1,14 +1,20 @@
 # OwnLang
 
 [![Build Status](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial.svg?branch=latest)](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial)
-[![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=aNNiMON_Own-Programming-Language-Tutorial&metric=alert_status)](https://sonarcloud.io/dashboard?id=aNNiMON_Own-Programming-Language-Tutorial)
-[![SonarCloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=aNNiMON_Own-Programming-Language-Tutorial&metric=sqale_rating)](https://sonarcloud.io/dashboard/?id=aNNiMON_Own-Programming-Language-Tutorial)
+
+OwnLang - dynamic functional programming language inspired by Scala and Python. Available for PC, Android and Java ME devices.
+
+## Installing
 
 | Free | Pro | Desktop |
 | :--: | :-: | :-----: |
-| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v1.3.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v1.3.0)
+| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v1.4.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v1.4.0)
 
-OwnLang - dynamic functional programming language inspired by Scala and Python. Available for PC, Android and Java ME devices.
+Also available as AUR package:
+
+```
+yay -S ownlang
+```
 
 ## Key features
 
@@ -61,8 +67,7 @@ def fizzbuzz(limit = 100) {
 Operate data in functional style.
 
 ```scala
-use "std"
-use "functional"
+use ["std", "functional"]
 
 nums = [1,2,3,4,5,6,7,8,9,10]
 nums = filter(nums, def(x) = x % 2 == 0)
@@ -72,6 +77,11 @@ foreach(squares, ::echo)
 // Sum of squares
 sum = reduce(squares, 0, def(x, y) = x + y)
 println "Sum: " + sum
+// Same using stream
+println "Sum: " + stream(range(1, 11))
+  .filter(def(x) = x % 2 == 0)
+  .map(def(x) = x * x)
+  .reduce(0, def(x, y) = x + y)
 ```
 
 #### Operator overloading
@@ -79,11 +89,9 @@ println "Sum: " + sum
 Why not?
 
 ```scala
-use "std"
-use "types"
-use "math"
+use ["std", "types", "math"]
 
-def `..`(a, b) = range(a, b - 1)
+def `..`(a, b) = range(a, b)
 def `**`(a, b) = int(pow(a, b))
 for y : 1 .. 10 {
   println sprintf("2 ^ %d = %d", y, 2 ** y)
@@ -129,8 +137,6 @@ def patch_callback(v) {
 ## Build
 
 Build using Gradle `./gradlew dist`
-
-or Ant `ant clean pack`
 
 or take a look to [latest release](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/latest) for binaries.
 

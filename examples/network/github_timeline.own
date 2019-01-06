@@ -1,12 +1,9 @@
-use "std"
-use "http"
-use "json"
-use "functional"
+use ["std", "http", "json", "functional", "date"]
 
 header = "* Prints current GitHub timeline *"
-println "*" * length(header)
+println "*" * header.length
 println header
-println "*" * length(header)
+println "*" * header.length
 
 // Executes in main thread
 //http("https://api.github.com/events", def(r) {
@@ -19,7 +16,7 @@ thread(::http, "https://api.github.com/events", def(r) {
 })
 
 def show_github_events(event) {
-    println event.created_at
+    println event.created_at.formatTzDate()
     println "User: https://github.com/" + event.actor.login
     println github_event_type(event)
     println "-" * 50
@@ -41,3 +38,6 @@ def github_event_type(event) {
       case type : type + " on " + repo
     }
 }
+
+def formatTzDate(str) = formatDate(parseTzDate(str), newFormat("yyyy-MM-dd HH:mm:ss"))
+def parseTzDate(str) = parseDate(str, newFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"))

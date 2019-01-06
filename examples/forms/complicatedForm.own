@@ -13,7 +13,7 @@ enterTextLabel = newLabel("Enter a text", SwingConstants.CENTER)
 
 textField = newTextField()
 textField.addKeyListener(def(type, event) {
-   lengthLabel.setText(length(textField.getText()))
+   lengthLabel.setText(textField.getText().length)
 })
 
 statusPanel = newPanel()

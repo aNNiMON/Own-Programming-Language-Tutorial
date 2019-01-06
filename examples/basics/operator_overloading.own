@@ -1,6 +1,4 @@
-use "std"
-use "types"
-use "math"
+use ["std", "types", "math"]
 
 println "Operator overloading"
 def `::`(v1, v2) = string(v1) + string(v2)
@@ -11,7 +9,7 @@ def `^`(v1, v2) = pow(v1[0], v2[0])
 print "[2] ^ [7] = "
 println [2] ^ [7]
 
-def `..`(a, b) = range(a, b - 1)
+def `..`(a, b) = range(a, b)
 def `**`(a, b) = int(pow(a, b))
 for y : 1 .. 10 {
   println sprintf("2 ^ %d = %d", y, 2 ** y)

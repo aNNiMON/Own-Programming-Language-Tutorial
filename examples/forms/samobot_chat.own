@@ -1,6 +1,4 @@
-use "std"
-use "http"
-use "forms"
+use ["std", "http", "forms"]
 
 chatHistory = newLabel("<html>Чат с самоботом<br>")
 messageField = newTextField()
@@ -13,7 +11,7 @@ def onSend() {
   if (length(text) == 0) return 0
   messageField.setText("")
   chatHistory.setText(chatHistory.getText() + "<br><b>вы</b> > " + text)
-  thread(::http, "http://annimon.com/json/bot.php", "POST", {"text": text}, def(answer) {
+  thread(::http, "https://annimon.com/json/bot.php", "POST", {"text": text}, def(answer) {
     chatHistory.setText(chatHistory.getText() + "<br><b>бот</b> > " + answer)
   })
 }

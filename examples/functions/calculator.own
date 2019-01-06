@@ -20,18 +20,18 @@ def calculate(expression) {
 
   def parseNumber() {
     buffer = ""
-    while (pos < len && isDigit(charAt(expression, pos))) {
-      buffer += toChar(charAt(expression, pos))
+    while (pos < len && isDigit(expression.charAt(pos))) {
+      buffer += toChar(expression.charAt(pos))
       pos++
     }
     return number(buffer)
   }
 
   def parseOperation() {
-    while (pos < len && !arrayKeyExists(toChar(charAt(expression, pos)), operations)) {
+    while (pos < len && !arrayKeyExists(toChar(expression.charAt(pos)), operations)) {
       pos++
     }
-    return operations[toChar(charAt(expression, pos++))]
+    return operations[toChar(expression.charAt(pos++))]
   }
 
   num1 = parseNumber()

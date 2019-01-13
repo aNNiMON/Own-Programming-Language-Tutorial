@@ -1,7 +1,11 @@
 package com.annimon.ownlang.modules.std;
 
-import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.lib.Arguments;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.FunctionValue;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.ValueUtils;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -10,9 +14,6 @@ public final class std_sync implements Function {
     @Override
     public Value execute(Value... args) {
         Arguments.check(1, args.length);
-        if (args[0].type() != Types.FUNCTION) {
-            throw new TypeException(args[0].toString() + " is not a function");
-        }
 
         final BlockingQueue<Value> queue = new LinkedBlockingQueue<>(2);
         final Function synchronizer = (sArgs) -> {
@@ -23,7 +24,7 @@ public final class std_sync implements Function {
             }
             return NumberValue.ZERO;
         };
-        final Function callback = ((FunctionValue) args[0]).getValue();
+        final Function callback = ValueUtils.consumeFunction(args[0], 0);
         callback.execute(new FunctionValue(synchronizer));
 
         try {

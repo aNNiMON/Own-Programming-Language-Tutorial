@@ -1,7 +1,13 @@
 package com.annimon.ownlang.modules.functional;
 
 import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.lib.Arguments;
+import com.annimon.ownlang.lib.ArrayValue;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Types;
+import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.ValueUtils;
 
 public final class functional_dropwhile implements Function {
 
@@ -11,12 +17,8 @@ public final class functional_dropwhile implements Function {
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected in first argument");
         }
-        if (args[1].type() != Types.FUNCTION) {
-            throw new TypeException("Function expected in second argument");
-        }
-
         final Value container = args[0];
-        final Function predicate = ((FunctionValue) args[1]).getValue();
+        final Function predicate = ValueUtils.consumeFunction(args[1], 1);
         return dropWhileArray((ArrayValue) container, predicate);
     }
     

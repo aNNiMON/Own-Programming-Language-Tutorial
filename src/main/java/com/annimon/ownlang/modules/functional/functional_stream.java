@@ -96,10 +96,7 @@ public final class functional_stream implements Function {
                     Arrays.sort(elements);
                     break;
                 case 1:
-                    if (args[0].type() != Types.FUNCTION) {
-                        throw new TypeException("Function expected in second argument");
-                    }
-                    final Function comparator = ((FunctionValue) args[0]).getValue();
+                    final Function comparator = ValueUtils.consumeFunction(args[0], 0);
                     Arrays.sort(elements, (o1, o2) -> comparator.execute(o1, o2).asInt());
                     break;
                 default:
@@ -111,10 +108,7 @@ public final class functional_stream implements Function {
 
         private Value custom(Value... args) {
             Arguments.check(1, args.length);
-            if (args[0].type() != Types.FUNCTION) {
-                throw new TypeException("Function expected in first argument");
-            }
-            final Function f = ((FunctionValue) args[0]).getValue();
+            final Function f = ValueUtils.consumeFunction(args[0], 0);
             final Value result = f.execute(container);
             if (result.type() == Types.ARRAY) {
                 return new StreamValue((ArrayValue) result);

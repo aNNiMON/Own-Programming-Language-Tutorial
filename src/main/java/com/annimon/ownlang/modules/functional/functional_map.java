@@ -4,10 +4,10 @@ import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.MapValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.ValueUtils;
 import java.util.Map;
 
 public final class functional_map implements Function {
@@ -18,22 +18,13 @@ public final class functional_map implements Function {
         
         final Value container = args[0];
         if (container.type() == Types.ARRAY) {
-            if (args[1].type() != Types.FUNCTION) {
-                throw new TypeException("Function expected in second arg");
-            }
-            final Function mapper = ((FunctionValue) args[1]).getValue();
+            final Function mapper = ValueUtils.consumeFunction(args[1], 1);
             return mapArray((ArrayValue) container, mapper);
         }
         
         if (container.type() == Types.MAP) {
-            if (args[1].type() != Types.FUNCTION) {
-                throw new TypeException("Function expected in second arg");
-            }
-            if (args[2].type() != Types.FUNCTION) {
-                throw new TypeException("Function expected in third arg");
-            }
-            final Function keyMapper = ((FunctionValue) args[1]).getValue();
-            final Function valueMapper = ((FunctionValue) args[2]).getValue();
+            final Function keyMapper = ValueUtils.consumeFunction(args[1], 1);
+            final Function valueMapper = ValueUtils.consumeFunction(args[2], 2);
             return mapMap((MapValue) container, keyMapper, valueMapper);
         }
 

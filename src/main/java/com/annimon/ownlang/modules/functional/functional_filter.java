@@ -17,12 +17,8 @@ public final class functional_filter implements Function {
     @Override
     public Value execute(Value... args) {
         Arguments.check(2, args.length);
-        if (args[1].type() != Types.FUNCTION) {
-            throw new TypeException("Function expected in second argument");
-        }
-
         final Value container = args[0];
-        final Function predicate = ((FunctionValue) args[1]).getValue();
+        final Function predicate = ValueUtils.consumeFunction(args[1], 1);
         if (container.type() == Types.ARRAY) {
             return filterArray((ArrayValue) container, predicate, takeWhile);
         }

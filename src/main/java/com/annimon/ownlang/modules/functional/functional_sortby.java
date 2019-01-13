@@ -15,8 +15,9 @@ public final class functional_sortby implements Function {
     public Value execute(Value... args) {
         Arguments.check(2, args.length);
         if (args[0].type() != Types.ARRAY) {
-            throw new TypeException("Array expected in first argument");
+            throw new TypeException("Array expected at first argument");
         }
+
         final Value[] elements = ((ArrayValue) args[0]).getCopyElements();
         final Function function = ValueUtils.consumeFunction(args[1], 1);
         Arrays.sort(elements, (o1, o2) -> function.execute(o1).compareTo(function.execute(o2)));

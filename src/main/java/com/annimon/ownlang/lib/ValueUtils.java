@@ -1,6 +1,8 @@
 package com.annimon.ownlang.lib;
 
 import com.annimon.ownlang.exceptions.TypeException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.Map;
 import org.json.JSONArray;
@@ -110,5 +112,18 @@ public final class ValueUtils {
                     + ", but found " + Types.typeToString(type));
         }
         return ((FunctionValue) value).getValue();
+    }
+
+    public static <T extends Number> MapValue collectNumberConstants(Class<?> clazz, Class<T> type) {
+        MapValue result = new MapValue(20);
+        for (Field field : clazz.getDeclaredFields()) {
+            if (!Modifier.isStatic(field.getModifiers())) continue;
+            if (!field.getType().equals(type)) continue;
+            try {
+                result.set(field.getName(), NumberValue.of((T) field.get(type)));
+            } catch (IllegalAccessException ignore) {
+            }
+        }
+        return result;
     }
 }

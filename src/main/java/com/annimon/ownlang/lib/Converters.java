@@ -20,12 +20,20 @@ public final class Converters {
         int apply();
     }
 
+    public interface VoidToLongFunction {
+        long apply();
+    }
+
     public interface VoidToFloatFunction {
         float apply();
     }
 
     public interface VoidToDoubleFunction {
         double apply();
+    }
+
+    public interface VoidToCharSequenceFunction {
+        CharSequence apply();
     }
 
     public interface VoidToStringFunction {
@@ -42,6 +50,14 @@ public final class Converters {
 
     public interface IntToVoidFunction {
         void apply(int i);
+    }
+
+    public interface IntToLongFunction {
+        long apply(int i);
+    }
+
+    public interface Int2ToVoidFunction {
+        void apply(int i1, int i2);
     }
 
     public interface Int4ToVoidFunction {
@@ -68,6 +84,10 @@ public final class Converters {
         void apply(double d1, double d2, double d3, double d4);
     }
 
+    public interface CharSequenceToVoidFunction {
+        void apply(CharSequence s);
+    }
+
     public interface StringToVoidFunction {
         void apply(String s);
     }
@@ -88,12 +108,20 @@ public final class Converters {
         return new FunctionValue(args -> NumberValue.of(f.apply()));
     }
 
+    public static FunctionValue voidToLong(VoidToLongFunction f) {
+        return new FunctionValue(args -> NumberValue.of(f.apply()));
+    }
+
     public static FunctionValue voidToFloat(VoidToFloatFunction f) {
         return new FunctionValue(args -> NumberValue.of(f.apply()));
     }
 
     public static FunctionValue voidToDouble(VoidToDoubleFunction f) {
         return new FunctionValue(args -> NumberValue.of(f.apply()));
+    }
+
+    public static FunctionValue voidToCharSequence(VoidToCharSequenceFunction f) {
+        return new FunctionValue(args -> new StringValue(f.apply().toString()));
     }
     
     public static FunctionValue voidToString(VoidToStringFunction f) {
@@ -127,6 +155,22 @@ public final class Converters {
         return new FunctionValue(args -> {
             Arguments.check(1, args.length);
             f.apply(args[0].asInt());
+            return NumberValue.ZERO;
+        });
+    }
+
+    public static FunctionValue intToLong(IntToLongFunction f) {
+        return new FunctionValue(args -> {
+            Arguments.check(1, args.length);
+            return NumberValue.of(f.apply(args[0].asInt()));
+        });
+    }
+
+    public static FunctionValue int2ToVoid(Int2ToVoidFunction f) {
+        return new FunctionValue(args -> {
+            Arguments.check(4, args.length);
+            f.apply(args[0].asInt(),
+                    args[1].asInt());
             return NumberValue.ZERO;
         });
     }
@@ -182,6 +226,23 @@ public final class Converters {
             Arguments.check(4, args.length);
             f.apply(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber());
+            return NumberValue.ZERO;
+        });
+    }
+
+    public static FunctionValue charSequenceToVoid(CharSequenceToVoidFunction f) {
+        return charSequenceToVoid(f, false);
+    }
+
+    public static FunctionValue charSequenceToVoid(CharSequenceToVoidFunction f, boolean emptyAsNull) {
+        return new FunctionValue(args -> {
+            Arguments.check(1, args.length);
+            final String text = args[0].asString();
+            if (emptyAsNull && (text != null) && (text.isEmpty())) {
+                f.apply(null);
+            } else {
+                f.apply(text);
+            }
             return NumberValue.ZERO;
         });
     }

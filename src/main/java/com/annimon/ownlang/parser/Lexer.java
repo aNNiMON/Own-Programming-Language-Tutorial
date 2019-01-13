@@ -137,7 +137,7 @@ public final class Lexer {
             else if (current == '"') tokenizeText();
             else if (current == '#') {
                 next();
-                tokenizeHexNumber();
+                tokenizeHexNumber(1);
             }
             else if (OPERATOR_CHARS.indexOf(current) != -1) {
                 tokenizeOperator();
@@ -155,7 +155,7 @@ public final class Lexer {
         if (current == '0' && (peek(1) == 'x' || (peek(1) == 'X'))) {
             next();
             next();
-            tokenizeHexNumber();
+            tokenizeHexNumber(2);
             return;
         }
         while (true) {
@@ -170,7 +170,7 @@ public final class Lexer {
         addToken(TokenType.NUMBER, buffer.toString());
     }
     
-    private void tokenizeHexNumber() {
+    private void tokenizeHexNumber(int skipped) {
         clearBuffer();
         char current = peek(0);
         while (isHexNumber(current) || (current == '_')) {
@@ -180,7 +180,8 @@ public final class Lexer {
             }
             current = next();
         }
-        if (buffer.length() > 0) {
+        final int length = buffer.length();
+        if (length > 0) {
             addToken(TokenType.HEX_NUMBER, buffer.toString());
         }
     }

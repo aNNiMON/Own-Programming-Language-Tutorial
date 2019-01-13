@@ -1,0 +1,17 @@
+use ["std", "jdbc"]
+
+connection = getConnection("jdbc:hsqldb:file:hsql.db", "", "", "org.hsqldb.jdbcDriver")
+statement = connection.createStatement()
+statement.executeUpdate("drop table if exists cities")
+statement.executeUpdate("CREATE TABLE cities (id IDENTITY, name VARCHAR(32))")
+statement.executeUpdate("INSERT INTO cities (name) VALUES('Киев')")
+statement.executeUpdate("INSERT INTO cities (name) VALUES('Минск')")
+statement.executeUpdate("INSERT INTO cities (name) VALUES('Москва')")
+
+rs = statement.executeQuery("SELECT id, name FROM cities")
+while(rs.next()) {
+  // read the result set
+  println "name = " + rs.getString("name")
+  println "id = " + rs.getInt("id")
+}
+statement.execute("SHUTDOWN")

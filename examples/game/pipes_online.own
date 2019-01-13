@@ -1,0 +1,176 @@
+use "std"
+use "canvas"
+use "socket"
+
+/// --- PIPES CELL ---
+CELL_START = 0
+HORIZONTAL = 0
+VERTICAL = 1
+LEFT_TO_DOWN = 2
+LEFT_TO_UP = 3
+RIGHT_TO_UP = 4
+RIGHT_TO_DOWN = 5
+CROSS = 6
+CELL_LAST = 6
+
+Cells = [
+  {"index": HORIZONTAL, "next": VERTICAL},
+  {"index": VERTICAL, "next": HORIZONTAL},
+  {"index": LEFT_TO_DOWN, "next": LEFT_TO_UP},
+  {"index": LEFT_TO_UP, "next": RIGHT_TO_UP},
+  {"index": RIGHT_TO_UP, "next": RIGHT_TO_DOWN},
+  {"index": RIGHT_TO_DOWN, "next": LEFT_TO_DOWN},
+  {"index": CROSS, "next": CROSS}
+];
+
+
+def draw(v, cellSize) {
+  c2 = cellSize / 2
+  match v {
+    case HORIZONTAL : fillRect(0, c2 - 2, cellSize, 4)
+    case VERTICAL : fillRect(c2 - 2, 0, 4, cellSize)
+    case LEFT_TO_DOWN : {
+      fillRect(0, c2 - 2, c2, 4)
+      fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
+    }
+    case LEFT_TO_UP : {
+      fillRect(0, c2 - 2, c2, 4)
+      fillRect(c2 - 2, 0, 4, c2 + 2)
+    }
+    case RIGHT_TO_UP : {
+      fillRect(c2 - 2, c2 - 2, c2 + 2, 4)
+      fillRect(c2 - 2, 0, 4, c2 + 2)
+    }
+    case RIGHT_TO_DOWN : {
+      fillRect(c2 - 2, c2 - 2, c2 + 2, 4)
+      fillRect(c2 - 2, c2 - 2, 4, c2 + 2)
+    }
+    case CROSS : {
+      fillRect(c2 - 2, 0, 4, cellSize)
+      fillRect(0, c2 - 2, cellSize, 4)
+    }
+  }
+}
+
+
+/// --- PIPES BOARD ---
+SIZE = 10
+
+// Creating game board
+board = newarray(SIZE, SIZE)
+boardGhost = newarray(SIZE, SIZE)
+
+def switchCell(x, y) {
+  board[x][y] = Cells[board[x][y]].next
+}
+def setGhostCell(x, y) {
+  boardGhost[x][y] = Cells[boardGhost[x][y]].next
+}
+
+
+/// --- PIPES MAIN ---
+translateX = 0  translateY = 0
+isGameFinished = false
+isWin = false
+
+/* frect with translate ability */
+def fillRect(x,y,w,h) {
+  frect(translateX+x, translateY+y, w, h)
+}
+
+WIDTH = 320 HEIGHT = 320
+WINDOW_WIDTH = WIDTH * 2
+window("Pipes Online", WINDOW_WIDTH, HEIGHT)
+cellSize = WIDTH / SIZE
+
+// cursor
+curX = 0  curY = 0
+curGhostX = 0  curGhostY = 0
+
+// Initialize client
+socket = newSocket("http://localhost:6469")
+socket.on("gameStart", def(data) {
+  data = data[0]
+  for i=0, i<SIZE, i++
+    for j=0, j<SIZE, j++
+      boardGhost[i][j] = board[i][j] = data[i][j]
+  thread(::gameLoop)
+})
+.on("updateGhostCell", def(data) {
+  data = data[0]
+  setGhostCell(data.x, data.y);
+})
+.on("updateGhostCursor", def(data) {
+  data = data[0]
+  curGhostX = data.x
+  curGhostY = data.y
+})
+.on("gameFinished", def(data) {
+  isGameFinished = true
+  isWin = data[0]
+})
+socket.connect()
+
+def gameLoop() {
+  run = 1
+  while run {
+    key = keypressed()
+    if (!isGameFinished) {
+      if (key == VK_LEFT  && curX > 0) {
+        curX--
+        socket.emit("updateCursor", {"x": curX, "y": curY})
+      } else if (key == VK_RIGHT && curX < SIZE - 1) {
+        curX++
+        socket.emit("updateCursor", {"x": curX, "y": curY})
+      } else if (key == VK_UP    && curY > 0) {
+        curY--
+        socket.emit("updateCursor", {"x": curX, "y": curY})
+      } else if (key == VK_DOWN  && curY < SIZE - 1) {
+        curY++
+        socket.emit("updateCursor", {"x": curX, "y": curY})
+      } else if (key == VK_FIRE) {
+        switchCell(curX, curY)
+        socket.emit("switchCell", {"x": curX, "y": curY})
+      }
+      else if (key == 48) run = 0
+    }
+
+    // background
+    color(isGameFinished ? (isWin ? #66FF66 : #FF6666) : #FFFFFF)
+    frect(0, 0, WIDTH, HEIGHT)
+    color(isGameFinished ? (!isWin ? #66FF66 : #FF6666) : #DDDDDD)
+    frect(WIDTH, 0, WIDTH, HEIGHT)
+    // cursor
+    color(#4444FF)
+    frect(curX*cellSize, curY*cellSize, cellSize, cellSize)
+    color(#4040DD)
+    frect(WIDTH + curGhostX*cellSize, curGhostY*cellSize, cellSize, cellSize)
+    for (i=0, i<SIZE, i++) {
+      color(0)
+      ic = i*cellSize
+      // ourrebt board
+      line(0, ic, cellSize*SIZE, ic)
+      line(ic, 0, ic, cellSize*SIZE)
+      // ghost board
+      line(WIDTH, ic, WIDTH + cellSize*SIZE, ic)
+      line(WIDTH + ic, 0, WIDTH + ic, cellSize*SIZE)
+      color(#FF0000)
+      for j=0, j<SIZE, j++ {
+        translateX = ic
+        translateY = j*cellSize
+        draw(board[i][j], cellSize)
+        translateX = -ic
+        translateY = -j*cellSize
+        // ghost cells
+        translateX = WIDTH + ic
+        translateY = j*cellSize
+        draw(boardGhost[i][j], cellSize)
+        translateX = - WIDTH - ic
+        translateY = -j*cellSize
+      }
+    }
+    repaint()
+    sleep(50)
+  }
+  socket.disconnect()
+}

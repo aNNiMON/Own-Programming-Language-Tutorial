@@ -1,0 +1,19 @@
+use ["std", "jdbc"]
+
+// Example from https://github.com/xerial/sqlite-jdbc
+
+connection = getConnection("jdbc:sqlite:sample.db")
+statement = connection.createStatement()
+statement.setQueryTimeout(30)  // set timeout to 30 sec.
+
+statement.executeUpdate("drop table if exists person")
+statement.executeUpdate("create table person (id integer, name string)")
+statement.executeUpdate("insert into person values(1, 'leo')")
+statement.executeUpdate("insert into person values(2, 'yui')")
+
+rs = statement.executeQuery("select * from person")
+while(rs.next()) {
+  // read the result set
+  println "name = " + rs.getString("name")
+  println "id = " + rs.getInt("id")
+}

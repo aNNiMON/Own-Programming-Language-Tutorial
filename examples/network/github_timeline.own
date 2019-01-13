@@ -16,10 +16,10 @@ thread(::http, "https://api.github.com/events", def(r) {
 })
 
 def show_github_events(event) {
-    println event.created_at.formatTzDate()
-    println "User: https://github.com/" + event.actor.login
-    println github_event_type(event)
-    println "-" * 50
+  println event.created_at.formatTzDate()
+  println "User: https://github.com/" + event.actor.login
+  println github_event_type(event)
+  println "-" * 50
 }
 
 def github_event_type(event) {

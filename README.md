@@ -129,7 +129,7 @@ def patch_callback(v) {
 
 ## Language specification
 
-[Available on GitBook (English and Russian)](https://www.gitbook.com/book/annimon/ownlang/details)
+[English](https://annimon.com/docs/ownlang/en/) and [Russian](https://annimon.com/docs/ownlang/ru/)
 
 [Examples](examples/)
 

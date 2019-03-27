@@ -66,7 +66,7 @@ public final class jdbc implements Module {
         initConstants();
         Functions.set("getConnection", getConnectionFunction());
         Functions.set("sqlite", getConnectionFunction("jdbc:sqlite:"));
-        Functions.set("mysql", getConnectionFunction("jdbc:", () -> Class.forName("com.mysql.jdbc.Driver")));
+        Functions.set("mysql", getConnectionFunction("jdbc:"));
     }
 
     private static com.annimon.ownlang.lib.Function getConnectionFunction() {

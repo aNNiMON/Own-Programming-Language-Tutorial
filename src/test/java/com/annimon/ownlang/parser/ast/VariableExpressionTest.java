@@ -1,6 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
 import static com.annimon.ownlang.parser.ast.ASTHelper.*;
+import com.annimon.ownlang.exceptions.VariableDoesNotExistsException;
 import org.junit.Test;
 
 /**
@@ -26,7 +27,7 @@ public class VariableExpressionTest {
         assertValue(number(8), var("a").eval());
     }
     
-    @Test(expected = RuntimeException.class)
+    @Test(expected = VariableDoesNotExistsException.class)
     public void testUnknownVariable() {
         var("a").eval();
     }

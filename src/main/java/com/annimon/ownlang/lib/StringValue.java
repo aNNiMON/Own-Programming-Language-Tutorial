@@ -87,20 +87,12 @@ public final class StringValue implements Value {
     
     @Override
     public int asInt() {
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
+        return Integer.parseInt(value);
     }
     
     @Override
     public double asNumber() {
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
+        return Double.parseDouble(value);
     }
 
     @Override

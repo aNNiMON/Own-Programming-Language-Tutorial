@@ -35,8 +35,11 @@ public class ParserTest {
         BlockStatement program = assertExpression(input, expected);
         program.execute();
         final Value actual = Variables.get("a");
-        assertEquals(expectedValue.asNumber(), actual.asNumber(), 0.001);
-        assertEquals(expectedValue.asString(), actual.asString());
+        try {
+            assertEquals(expectedValue.asNumber(), actual.asNumber(), 0.001);
+        } catch (NumberFormatException nfe) {
+            assertEquals(expectedValue.asString(), actual.asString());
+        }
     }
     
     private static BlockStatement assertExpression(String input, Expression expected) {

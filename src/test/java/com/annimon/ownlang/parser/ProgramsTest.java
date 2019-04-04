@@ -1,6 +1,7 @@
 package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.Console;
+import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Variables;
@@ -81,6 +82,15 @@ public class ProgramsTest {
         });
         Functions.set("assertFalse", (args) -> {
             assertFalse(args[0].asInt() != 0);
+            return NumberValue.ONE;
+        });
+        Functions.set("assertFail", (args) -> {
+            try {
+                ((FunctionValue) args[0]).getValue().execute();
+                fail("Function should fail");
+            } catch (Throwable thr) {
+
+            }
             return NumberValue.ONE;
         });
     }

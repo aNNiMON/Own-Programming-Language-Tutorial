@@ -1,6 +1,7 @@
 package com.annimon.ownlang.lib;
 
 import com.annimon.ownlang.exceptions.TypeException;
+import com.annimon.ownlang.exceptions.UnknownPropertyException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -78,29 +79,45 @@ public class ArrayValue implements Value, Iterable<Value> {
     public int type() {
         return Types.ARRAY;
     }
-    
+
     public int size() {
         return elements.length;
     }
-    
+
     public Value get(int index) {
         return elements[index];
     }
-    
+
+    public Value get(Value index) {
+        final String prop = index.asString();
+        switch (prop) {
+            // Properties
+            case "length":
+                return NumberValue.of(size());
+
+            // Functions
+            case "isEmpty":
+                return NumberValue.fromBoolean(size() == 0);
+
+            default:
+                return get(index.asInt());
+        }
+    }
+
     public void set(int index, Value value) {
         elements[index] = value;
     }
-    
+
     @Override
     public Object raw() {
         return elements;
     }
-    
+
     @Override
     public int asInt() {
         throw new TypeException("Cannot cast array to integer");
     }
-    
+
     @Override
     public double asNumber() {
         throw new TypeException("Cannot cast array to number");
@@ -132,7 +149,7 @@ public class ArrayValue implements Value, Iterable<Value> {
         final ArrayValue other = (ArrayValue) obj;
         return Arrays.deepEquals(this.elements, other.elements);
     }
-    
+
     @Override
     public int compareTo(Value o) {
         if (o.type() == Types.ARRAY) {

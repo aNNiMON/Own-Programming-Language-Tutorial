@@ -1,0 +1,26 @@
+def testSetUnknownKey() = assertFail(def() {
+    arr = [1, 2, 3]
+    arr.one = 1
+  })
+
+def testSetLengthProperty() = assertFail(def() {
+    arr = [1, 2, 3]
+    arr.length = 10
+  })
+
+def testGetLength() {
+  arr = [1, 2, 3]
+  assertEquals(3, arr.length)
+}
+
+def testGetLengthInnerArray() {
+  arr = [[1, 2, 3], [1, 2, [3, 4, 5, 6]]]
+  assertEquals(2, arr.length)
+  assertEquals(3, arr[0].length)
+  assertEquals(4, arr[1][2].length)
+}
+
+def testIsEmpty() {
+  arr = [1, 2, 3]
+  assertFalse(arr.isEmpty)
+}

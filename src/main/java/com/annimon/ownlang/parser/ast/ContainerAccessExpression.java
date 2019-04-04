@@ -43,8 +43,7 @@ public final class ContainerAccessExpression implements Expression, Accessible {
         final Value lastIndex = lastIndex();
         switch (container.type()) {
             case Types.ARRAY:
-                final int arrayIndex = lastIndex.asInt();
-                return ((ArrayValue) container).get(arrayIndex);
+                return ((ArrayValue) container).get(lastIndex);
 
             case Types.MAP:
                 return ((MapValue) container).get(lastIndex);

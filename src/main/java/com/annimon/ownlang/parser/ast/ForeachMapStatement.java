@@ -1,7 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.exceptions.TypeException;
+import com.annimon.ownlang.lib.*;
 import java.util.Map;
 
 /**
@@ -26,8 +26,66 @@ public final class ForeachMapStatement extends InterruptableNode implements Stat
         super.interruptionCheck();
         final Value previousVariableValue1 = Variables.isExists(key) ? Variables.get(key) : null;
         final Value previousVariableValue2 = Variables.isExists(value) ? Variables.get(value) : null;
-        final Iterable<Map.Entry<Value, Value>> iterator = (Iterable<Map.Entry<Value, Value>>) container.eval();
-        for (Map.Entry<Value, Value> entry : iterator) {
+
+        final Value containerValue = container.eval();
+        switch (containerValue.type()) {
+            case Types.STRING:
+                iterateString(containerValue.asString());
+                break;
+            case Types.ARRAY:
+                iterateArray((ArrayValue) containerValue);
+                break;
+            case Types.MAP:
+                iterateMap((MapValue) containerValue);
+                break;
+            default:
+                throw new TypeException("Cannot iterate " + Types.typeToString(containerValue.type()) + " as key, value pair");
+        }
+
+        // Restore variables
+        if (previousVariableValue1 != null) {
+            Variables.set(key, previousVariableValue1);
+        } else {
+            Variables.remove(key);
+        }
+        if (previousVariableValue2 != null) {
+            Variables.set(value, previousVariableValue2);
+        } else {
+            Variables.remove(value);
+        }
+    }
+
+    private void iterateString(String str) {
+        for (char ch : str.toCharArray()) {
+            Variables.set(key, new StringValue(String.valueOf(ch)));
+            Variables.set(value, NumberValue.of(ch));
+            try {
+                body.execute();
+            } catch (BreakStatement bs) {
+                break;
+            } catch (ContinueStatement cs) {
+                // continue;
+            }
+        }
+    }
+
+    private void iterateArray(ArrayValue containerValue) {
+        int index = 0;
+        for (Value v : containerValue) {
+            Variables.set(key, v);
+            Variables.set(value, NumberValue.of(index++));
+            try {
+                body.execute();
+            } catch (BreakStatement bs) {
+                break;
+            } catch (ContinueStatement cs) {
+                // continue;
+            }
+        }
+    }
+
+    private void iterateMap(MapValue containerValue) {
+        for (Map.Entry<Value, Value> entry : containerValue) {
             Variables.set(key, entry.getKey());
             Variables.set(value, entry.getValue());
             try {
@@ -38,15 +96,8 @@ public final class ForeachMapStatement extends InterruptableNode implements Stat
                 // continue;
             }
         }
-        // Восстанавливаем переменные
-        if (previousVariableValue1 != null) {
-            Variables.set(key, previousVariableValue1);
-        }
-        if (previousVariableValue2 != null) {
-            Variables.set(value, previousVariableValue2);
-        }
     }
-    
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);

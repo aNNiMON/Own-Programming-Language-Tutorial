@@ -1,0 +1,36 @@
+use ["std", "functional"]
+
+def testArrayForeach1Arg() {
+  sum = 0
+  foreach([1, 2, 3], def(v) {
+    sum += v
+  })
+  assertEquals(6, sum)
+}
+
+def testArrayForeach2Args() {
+  sum = 0
+  foreach([1, 2, 3], def(v, index) {
+    sum += v * index
+  })
+  assertEquals(1 * 0 + 2 * 1 + 3 * 2, sum)
+}
+
+def testStringForeach1Arg() {
+  sum = 0
+  foreach("abcd", def(s) {
+    sum += s.charAt(0)
+  })
+  assertEquals(394/*97 + 98 + 99 + 100*/, sum)
+}
+
+def testStringForeach2Args() {
+  str = ""
+  sum = 0
+  foreach("abcd", def(s, code) {
+    str += s.upper
+    sum += code
+  })
+  assertEquals("ABCD", str)
+  assertEquals(97 + 98 + 99 + 100, sum)
+}

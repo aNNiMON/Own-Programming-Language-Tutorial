@@ -1,0 +1,41 @@
+use "std"
+
+def testArrayIterate() {
+  sum = 0
+  for v : [1, 2, 3] {
+    sum += v
+  }
+  assertEquals(6, sum)
+}
+
+def testMapIterate() {
+  map = {12: 1, 13: 2, 14: 3}
+  sumKey = 0
+  sumValue = 0
+  for pair : map {
+    extract(key, value) = pair
+    sumKey += key
+    sumValue += value
+  }
+  assertEquals(39, sumKey)
+  assertEquals(6, sumValue)
+}
+
+def testStringIterate() {
+  sum = 0
+  for s : "abcd" {
+    sum += s.charAt(0)
+  }
+  assertEquals(394/*97 + 98 + 99 + 100*/, sum)
+}
+
+def testScope() {
+  v = 45
+  sum = 0
+  for v : [1, 2, 3] {
+    sum += v
+  }
+  assertEquals(6, sum)
+  assertEquals(45, v)
+}
+

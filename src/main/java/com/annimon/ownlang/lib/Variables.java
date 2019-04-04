@@ -48,13 +48,13 @@ public final class Variables {
         scope.variables.put("false", NumberValue.ZERO);
     }
     
-    static void push() {
+    public static void push() {
         synchronized (lock) {
             scope = new Scope(scope);
         }
     }
     
-    static void pop() {
+    public static void pop() {
         synchronized (lock) {
             if (scope.parent != null) {
                 scope = scope.parent;

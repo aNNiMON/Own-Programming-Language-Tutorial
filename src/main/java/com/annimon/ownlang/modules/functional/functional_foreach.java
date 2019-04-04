@@ -1,36 +1,62 @@
 package com.annimon.ownlang.modules.functional;
 
 import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.ValueUtils;
+import com.annimon.ownlang.lib.*;
 import java.util.Map;
 
 public final class functional_foreach implements Function {
+
+    private static final int UNKNOWN = -1;
 
     @Override
     public Value execute(Value... args) {
         Arguments.check(2, args.length);
         final Value container = args[0];
         final Function consumer = ValueUtils.consumeFunction(args[1], 1);
-        if (container.type() == Types.ARRAY) {
-            final ArrayValue array = (ArrayValue) container;
-            for (Value element : array) {
-                consumer.execute(element);
-            }
-            return array;
+        final int argsCount;
+        if (consumer instanceof UserDefinedFunction) {
+            argsCount = ((UserDefinedFunction) consumer).getArgsCount();
+        } else {
+            argsCount = UNKNOWN;
         }
-        if (container.type() == Types.MAP) {
-            final MapValue map = (MapValue) container;
-            for (Map.Entry<Value, Value> element : map) {
-                consumer.execute(element.getKey(), element.getValue());
-            }
-            return map;
+
+        switch (container.type()) {
+            case Types.STRING:
+                final StringValue string = (StringValue) container;
+                if (argsCount == 2) {
+                    for (char ch : string.asString().toCharArray()) {
+                        consumer.execute(new StringValue(String.valueOf(ch)), NumberValue.of(ch));
+                    }
+                } else {
+                    for (char ch : string.asString().toCharArray()) {
+                        consumer.execute(new StringValue(String.valueOf(ch)));
+                    }
+                }
+                return string;
+
+            case Types.ARRAY:
+                final ArrayValue array = (ArrayValue) container;
+                if (argsCount == 2) {
+                    int index = 0;
+                    for (Value element : array) {
+                        consumer.execute(element, NumberValue.of(index++));
+                    }
+                } else {
+                    for (Value element : array) {
+                        consumer.execute(element);
+                    }
+                }
+                return array;
+
+            case Types.MAP:
+                final MapValue map = (MapValue) container;
+                for (Map.Entry<Value, Value> element : map) {
+                    consumer.execute(element.getKey(), element.getValue());
+                }
+                return map;
+
+            default:
+                throw new TypeException("Cannot iterate " + Types.typeToString(container.type()));
         }
-        throw new TypeException("Invalid first argument. Array or map expected");
     }
 }

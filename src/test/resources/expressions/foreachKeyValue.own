@@ -1,0 +1,30 @@
+def testArrayIterate() {
+  sum = 0
+  for v, i : [1, 2, 3] {
+    sum += v * i
+  }
+  assertEquals(1 * 0 + 2 * 1 + 3 * 2, sum)
+}
+
+def testMapIterate() {
+  map = {12: 1, 13: 2, 14: 3}
+  sumKey = 0
+  sumValue = 0
+  for key, value : map {
+    sumKey += key
+    sumValue += value
+  }
+  assertEquals(39, sumKey)
+  assertEquals(6, sumValue)
+}
+
+def testStringIterate() {
+  str = ""
+  sum = 0
+  for s, code : "abcd" {
+    str += s.upper
+    sum += code
+  }
+  assertEquals("ABCD", str)
+  assertEquals(394/*97 + 98 + 99 + 100*/, sum)
+}

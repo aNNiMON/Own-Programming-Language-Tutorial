@@ -2,20 +2,7 @@ package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
-import com.annimon.ownlang.parser.ast.Accessible;
-import com.annimon.ownlang.parser.ast.Argument;
-import com.annimon.ownlang.parser.ast.Arguments;
-import com.annimon.ownlang.parser.ast.AssignmentExpression;
-import com.annimon.ownlang.parser.ast.ContainerAccessExpression;
-import com.annimon.ownlang.parser.ast.DestructuringAssignmentStatement;
-import com.annimon.ownlang.parser.ast.ForeachArrayStatement;
-import com.annimon.ownlang.parser.ast.ForeachMapStatement;
-import com.annimon.ownlang.parser.ast.MatchExpression;
-import com.annimon.ownlang.parser.ast.Node;
-import com.annimon.ownlang.parser.ast.UnaryExpression;
-import com.annimon.ownlang.parser.ast.UseStatement;
-import com.annimon.ownlang.parser.ast.ValueExpression;
-import com.annimon.ownlang.parser.ast.VariableExpression;
+import com.annimon.ownlang.parser.ast.*;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isVariable;
 import java.util.HashMap;
@@ -116,7 +103,7 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
             // To get module variables we need  to store current variables, clear all, then load module.
             final Map<String, Value> currentVariables = new HashMap<>(Variables.variables());
             Variables.variables().clear();
-            if (isValue(s.expression)) {
+            if (canLoadConstants(s.expression)) {
                 s.loadConstants();
             }
             // Grab module variables
@@ -129,6 +116,19 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
             Variables.variables().putAll(currentVariables);
         }
         return super.visit(s, t);
+    }
+
+    private boolean canLoadConstants(Expression expression) {
+        if (expression instanceof ArrayExpression) {
+            ArrayExpression ae = (ArrayExpression) expression;
+            for (Expression expr : ae.elements) {
+                if (!isValue(expr)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return isValue(expression);
     }
 
     @Override

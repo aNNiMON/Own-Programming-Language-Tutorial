@@ -50,18 +50,15 @@ public final class UseStatement extends InterruptableNode implements Statement {
     }
 
     public void loadConstants() {
-        final Value value = expression.eval();
-        switch (value.type()) {
-            case Types.ARRAY:
-                for (Value module : ((ArrayValue) value)) {
-                    loadConstants(module.asString());
-                }
-                break;
-            case Types.STRING:
-                loadConstants(value.asString());
-                break;
-            default:
-                throw typeException(value);
+        if (expression instanceof ArrayExpression) {
+            ArrayExpression ae = (ArrayExpression) expression;
+            for (Expression expr : ae.elements) {
+                loadConstants(expr.eval().asString());
+            }
+        }
+        if (expression instanceof ValueExpression) {
+            ValueExpression ve = (ValueExpression) expression;
+            loadConstants(ve.value.asString());
         }
     }
 

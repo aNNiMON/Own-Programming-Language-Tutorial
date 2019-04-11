@@ -3,6 +3,7 @@
 /.nb-gradle/
 /build/
 /dist/
+/out/
 /store/
 /optimizations/
 /nbproject/private/

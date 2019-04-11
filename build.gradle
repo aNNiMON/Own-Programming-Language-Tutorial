@@ -106,7 +106,7 @@ task sandbox(dependsOn: proguard, type: Jar) {
             "**/modules/socket/**", "io/**",
             "**/modules/aimp/**", "aimpremote/**",
             "**/modules/downloader/**",
-            "**/modules/zip/**",
+            "**/modules/zip/**", "**/modules/gzip/**",
             "jline/**", "org/fusesource/**", "META-INF/native/**"
 
     manifest {

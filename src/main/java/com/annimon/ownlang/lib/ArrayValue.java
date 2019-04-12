@@ -1,7 +1,6 @@
 package com.annimon.ownlang.lib;
 
 import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.exceptions.UnknownPropertyException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;

@@ -1,0 +1,15 @@
+use ["std", "gzip"]
+
+def testGzipText() {
+  text = trim("
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. In leo dui, venenatis eu eleifend ut, volutpat vitae risus. Vivamus sed massa consectetur, fermentum est ac, semper ligula. Donec vel facilisis urna. Cras scelerisque libero a pulvinar mollis. Maecenas elementum, lectus vitae ullamcorper viverra, odio justo interdum lacus, a dictum mauris lacus id neque. Donec ante nibh, ornare ac lacus at, rutrum vulputate lacus. Quisque aliquet sem sit amet nisl semper faucibus. Aenean finibus sodales est, eget efficitur nibh. Donec ut tortor ut ex auctor fringilla id sed neque. Aenean id placerat ipsum.
+Etiam enim ligula, vulputate ac velit nec, accumsan blandit velit. Aenean tortor neque, ornare eu quam vel, viverra condimentum erat. In vitae mattis augue. Sed nec auctor est. Aenean in auctor lorem. Etiam non accumsan arcu. Vivamus purus massa, finibus at ultrices feugiat, congue vitae quam.
+Vestibulum porttitor finibus nulla, vel mollis elit luctus vel. Phasellus ut erat ante. Praesent consectetur vulputate sem eget bibendum. Etiam porttitor magna et egestas viverra. Praesent urna eros, porttitor vitae lorem sodales, luctus sagittis velit. Donec sed aliquet nulla, ac gravida urna. Mauris at quam eros. Nam dolor lacus, laoreet vel consequat non, semper sed quam. Nunc semper interdum arcu eget iaculis. Vivamus at turpis et urna pellentesque suscipit in nec tellus. Nam sed sem ut ipsum semper imperdiet in et est. Praesent vestibulum augue a dolor consequat feugiat. Nam massa tortor, feugiat quis orci ut, blandit varius tellus. Quisque et blandit erat.
+Fusce ultricies, odio scelerisque venenatis pellentesque, nisl mi vehicula mi, eu ultrices dui nisi ac elit. Nullam laoreet et lacus ac fringilla. Morbi pretium, eros non facilisis bibendum, nisl ex ultricies ipsum, sed sodales est felis vel eros. Suspendisse lobortis lectus scelerisque turpis dapibus, et tristique neque faucibus. Donec sed tellus id augue molestie tempus ac in urna. Morbi accumsan velit in erat ultricies, vitae ultricies nulla viverra. Pellentesque non euismod purus. Pellentesque vitae consequat orci. Pellentesque in nulla pulvinar, blandit leo sed, vehicula quam. Cras finibus libero ut diam aliquam efficitur. Vestibulum rutrum tincidunt posuere. Integer ultricies rutrum libero vitae pellentesque. Nulla blandit ipsum sit amet aliquet venenatis. Maecenas cursus massa quis massa posuere eleifend. Morbi vel lorem luctus, efficitur nibh id, sagittis tortor. Maecenas tristique suscipit dui vel congue.
+  ")
+  bytes1 = getBytes(text)
+  bytesGzip = gzipBytes(bytes1)
+  bytes2 = ungzipBytes(bytesGzip)
+  assertEquals(bytes1.length, bytes2.length)
+  assertEquals(text, stringFromBytes(bytes2))
+}

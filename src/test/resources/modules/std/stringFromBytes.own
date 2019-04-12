@@ -1,0 +1,9 @@
+use "std"
+
+def testStringFromBytes() {
+  assertEquals("ownlang", stringFromBytes([111, 119, 110, 108, 97, 110, 103]))
+}
+
+def testStringFromEmptyString() {
+  assertEquals("", stringFromBytes([]))
+}

@@ -39,6 +39,7 @@ public final class std implements Module {
         Functions.set("toHexString", NumberFunctions::toHexString);
 
         // String
+        Functions.set("getBytes", StringFunctions::getBytes);
         Functions.set("sprintf", new std_sprintf());
         Functions.set("split", new std_split());
         Functions.set("indexOf", new std_indexof());
@@ -65,5 +66,6 @@ public final class std implements Module {
         Functions.set("arrayValues", new std_arrayValues());
         Functions.set("arraySplice", new std_arraySplice());
         Functions.set("range", new std_range());
+        Functions.set("stringFromBytes", ArrayFunctions::stringFromBytes);
     }
 }

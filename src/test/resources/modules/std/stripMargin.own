@@ -1,0 +1,54 @@
+use "std"
+
+def testStripMargin() {
+  testCases = [
+    "|abc".stripMargin(),
+    "    |abc".stripMargin(),
+    "
+     |abc".stripMargin(),
+    "|abc
+         ".stripMargin(),
+    "
+     |abc
+         ".stripMargin(),
+    "abc".stripMargin(""),
+    "abc".stripMargin(),
+    "#abc".stripMargin("#"),
+    "| abc".stripMargin("| "),
+    "
+     | abc
+    ".stripMargin("| "),
+    "xxxabc".stripMargin("xxx"),
+    "
+     xxxabc".stripMargin("xxx"),
+    "
+     xxxabc
+    ".stripMargin("xxx")
+  ]
+  for actual : testCases {
+    assertEquals("abc", actual)
+  }
+}
+
+def testStripMargin2() {
+  assertEquals("123\n456\n789", "123
+                                |456
+                                |789".stripMargin())
+  assertEquals("123\n456\n789", "|123
+                                 |456
+                                 |789".stripMargin())
+  assertEquals("123\n456\n789", "
+                                 |123
+                                 |456
+                                 |789".stripMargin())
+  assertEquals("123\n456\n789", "
+                                 |123
+                                 |456
+                                 |789
+                                ".stripMargin())
+  assertEquals("123\n456\n789", "
+                                //123
+                                //456
+                                //789
+                                ".stripMargin("//"))
+}

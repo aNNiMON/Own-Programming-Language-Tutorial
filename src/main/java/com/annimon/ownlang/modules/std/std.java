@@ -55,6 +55,7 @@ public final class std implements Module {
         Functions.set("replaceFirst", new std_replacefirst());
         Functions.set("parseInt", StringFunctions::parseInt);
         Functions.set("parseLong", StringFunctions::parseLong);
+        Functions.set("stripMargin", StringFunctions::stripMargin);
 
         // Arrays and maps
         Functions.set("newarray", new std_newarray());

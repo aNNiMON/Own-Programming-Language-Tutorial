@@ -703,7 +703,7 @@ public final class Parser {
     private Expression primary() {
         if (match(TokenType.LPAREN)) {
             Expression result = expression();
-            match(TokenType.RPAREN);
+            consume(TokenType.RPAREN);
             return result;
         }
         

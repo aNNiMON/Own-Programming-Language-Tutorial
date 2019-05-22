@@ -1,0 +1,20 @@
+use ["std", "okhttp"]
+
+TOKEN = "your bot token"
+
+println okhttp.request()
+    .url("https://api.telegram.org/bot" + TOKEN + "/sendVoice")
+    .post(MultipartBody.builder()
+        .setType(MultipartBody.FORM)
+        .addFormData({
+          "chat_id": "-1001100000123",
+          "caption": "sample text"
+        })
+        .addFormDataPart("voice", "file.ogg",
+            RequestBody.file("audio/ogg", "voice.ogg"))
+        .build()
+    )
+    .newCall(okhttp.client)
+    .execute()
+    .body()
+    .string()

@@ -1,0 +1,17 @@
+use ["std", "okhttp"]
+
+// https://github.com/square/okhttp/blob/master/samples/guide/src/main/java/okhttp3/recipes/PostMultipart.java
+
+println okhttp.request()
+    .header("Authorization", "Client-ID 9199fdef135c122")
+    .url("https://api.imgur.com/3/image")
+    .post(MultipartBody.builder()
+        .setType(MultipartBody.FORM)
+        .addFormDataPart("title", "Sample image")
+        .addFormDataPart("image", "image.png", RequestBody.file("image/png", "image.png"))
+        .build()
+    )
+    .newCall(okhttp.client)
+    .execute()
+    .body()
+    .string()

@@ -106,9 +106,13 @@ public final class ValueUtils {
     }
 
     public static Function consumeFunction(Value value, int argumentNumber) {
+        return consumeFunction(value, " at argument " + (argumentNumber + 1));
+    }
+
+    public static Function consumeFunction(Value value, String errorMessage) {
         final int type = value.type();
         if (type != Types.FUNCTION) {
-            throw new TypeException("Function expected at argument " + (argumentNumber + 1)
+            throw new TypeException("Function expected" + errorMessage
                     + ", but found " + Types.typeToString(type));
         }
         return ((FunctionValue) value).getValue();

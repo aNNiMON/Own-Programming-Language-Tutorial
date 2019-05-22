@@ -1,0 +1,20 @@
+use ["std", "okhttp"]
+
+// https://github.com/square/okhttp/blob/b21ed68c08c2a5c1eb0bbe93a6f720d1aa2820da/samples/guide/src/main/java/okhttp3/recipes/WebSocketEcho.java
+
+okhttp.client.newWebSocket(
+    okhttp.request().url("ws://echo.websocket.org"),
+    {
+      "onOpen": def(ws, resp) {
+        ws.send("Hello...")
+        ws.send("...World!")
+        ws.close(1000, "Goodbye, World!")
+      },
+      "onTextMessage": def(ws, text) = echo(text),
+      "onBytesMessage": def(ws, bytes) = echo(bytes),
+      "onClosing": def(ws, code, reason) {
+        ws.close(1000)
+        echo("CLOSE:", code, reason)
+      }
+    }
+)

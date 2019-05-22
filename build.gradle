@@ -103,6 +103,7 @@ task sandbox(dependsOn: proguard, type: Jar) {
 
     exclude "**/modules/canvas/**", "**/modules/canvasfx/**", "**/modules/forms/**",
             "**/modules/java/**", "**/modules/jdbc/**", "**/modules/robot/**",
+            "**/modules/okhttp/**",
             "**/modules/socket/**", "io/**",
             "**/modules/aimp/**", "aimpremote/**",
             "**/modules/downloader/**",

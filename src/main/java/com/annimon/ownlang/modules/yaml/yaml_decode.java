@@ -1,22 +1,33 @@
 package com.annimon.ownlang.modules.yaml;
 
 import com.annimon.ownlang.lib.*;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
 public final class yaml_decode implements Function {
 
     @Override
     public Value execute(Value... args) {
-        Arguments.check(1, args.length);
+        Arguments.checkOrOr(1, 2, args.length);
         try {
             final String yamlRaw = args[0].asString();
-            final Object root = new Yaml().load(yamlRaw);
+            final LoaderOptions options = new LoaderOptions();
+            if (args.length == 2 && args[1].type() == Types.MAP) {
+                configure(options, ((MapValue) args[1]));
+            }
+            final Object root = new Yaml(options).load(yamlRaw);
             return process(root);
         } catch (Exception ex) {
             throw new RuntimeException("Error while parsing yaml", ex);
         }
+    }
+
+    private void configure(LoaderOptions options, MapValue map) {
+        map.ifPresent("allowDuplicateKeys", value ->
+                options.setAllowDuplicateKeys(value.asInt() != 0));
     }
     
     private Value process(Object obj) {
@@ -40,7 +51,7 @@ public final class yaml_decode implements Function {
     }
     
     private MapValue process(Map<Object, Object> map) {
-        final MapValue result = new MapValue(map.size());
+        final MapValue result = new MapValue(new LinkedHashMap<>(map.size()));
         for (Map.Entry<Object, Object> entry : map.entrySet()) {
             final String key = entry.getKey().toString();
             final Value value = process(entry.getValue());

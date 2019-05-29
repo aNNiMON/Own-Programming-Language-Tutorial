@@ -2,7 +2,7 @@ package com.annimon.ownlang.modules.yaml;
 
 import com.annimon.ownlang.lib.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
@@ -37,7 +37,7 @@ public final class yaml_encode implements Function {
     }
     
     private Object process(MapValue map) {
-        final Map<String, Object> result = new HashMap<>();
+        final Map<String, Object> result = new LinkedHashMap<>();
         for (Map.Entry<Value, Value> entry : map) {
             final String key = entry.getKey().asString();
             final Object value = process(entry.getValue());

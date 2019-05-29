@@ -131,7 +131,7 @@ public final class ModulesInfoCreator {
                 constant.put("type", value.type());
                 constant.put("typeName", Types.typeToString(value.type()));
                 if (value.type() == Types.MAP) {
-                    String text = ((Map<Value, Value>) value.raw()).entrySet().stream()
+                    String text = ((MapValue) value).getMap().entrySet().stream()
                             .sorted(Comparator.comparing(
                                     e -> ((MapValue)value).size() > 16 ? e.getKey() : e.getValue()))
                             .map(Object::toString)

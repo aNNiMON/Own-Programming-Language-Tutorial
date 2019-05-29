@@ -4,6 +4,7 @@ import com.annimon.ownlang.exceptions.TypeException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ public final class ValueUtils {
     }
 
     public static JSONObject toObject(MapValue map) {
-        final JSONObject result = new JSONObject();
+        final JSONObject result = new JSONObject(new LinkedHashMap<String, Object>());
         for (Map.Entry<Value, Value> entry : map) {
             final String key = entry.getKey().asString();
             final Object value = toObject(entry.getValue());
@@ -66,7 +67,7 @@ public final class ValueUtils {
     }
 
     public static MapValue toValue(JSONObject json) {
-        final MapValue result = new MapValue(json.length());
+        final MapValue result = new MapValue(new LinkedHashMap<>(json.length()));
         final Iterator<String> it = json.keys();
         while(it.hasNext()) {
             final String key = it.next();

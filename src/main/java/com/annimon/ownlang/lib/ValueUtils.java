@@ -27,7 +27,7 @@ public final class ValueUtils {
         }
     }
 
-    public static Object toObject(MapValue map) {
+    public static JSONObject toObject(MapValue map) {
         final JSONObject result = new JSONObject();
         for (Map.Entry<Value, Value> entry : map) {
             final String key = entry.getKey().asString();
@@ -37,7 +37,7 @@ public final class ValueUtils {
         return result;
     }
 
-    public static Object toObject(ArrayValue array) {
+    public static JSONArray toObject(ArrayValue array) {
         final JSONArray result = new JSONArray();
         for (Value value : array) {
             result.put(toObject(value));

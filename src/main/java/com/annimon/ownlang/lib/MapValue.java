@@ -1,8 +1,8 @@
 package com.annimon.ownlang.lib;
 
 import com.annimon.ownlang.exceptions.TypeException;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -25,7 +25,7 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     private final Map<Value, Value> map;
 
     public MapValue(int size) {
-        this.map = new HashMap<>(size);
+        this.map = new LinkedHashMap<>(size);
     }
 
     public MapValue(Map<Value, Value> map) {
@@ -83,6 +83,10 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     
     public void set(Value key, Value value) {
         map.put(key, value);
+    }
+
+    public Map<Value, Value> getMap() {
+        return map;
     }
     
     @Override

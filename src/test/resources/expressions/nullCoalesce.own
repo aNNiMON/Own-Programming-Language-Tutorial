@@ -1,0 +1,27 @@
+def testZero() {
+  assertEquals(0, 0 ?? 1)
+  x = 0
+  assertEquals(0, x ?? 2)
+}
+
+def testObject() {
+  obj = {"a": 12}
+  assertEquals(12, obj.a ?? 10)
+}
+
+def testObjectMissingKey() {
+  obj = {"a": 12}
+  assertEquals(10, obj.test ?? 10)
+}
+
+def testNestedObjects() {
+  obj = {"a": {"b": 12}}
+  assertEquals(12, obj.a.b ?? 10)
+}
+
+def testNestedObjectsMissingKey() {
+  obj = {"a": {"b": 12}}
+  assertEquals(1, obj.test ?? 1)
+  assertEquals(2, obj.a.test ?? 2)
+  assertEquals(3, obj.test1.test2 ?? 3)
+}

@@ -69,6 +69,7 @@ public enum TokenType {
     DOTDOT, // ..
     STARSTAR, // **
     QUESTIONCOLON, // ?:
+    QUESTIONQUESTION, // ??
     
     TILDE, // ~
     CARET, // ^

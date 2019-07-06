@@ -10,19 +10,21 @@ import com.annimon.ownlang.lib.Value;
  * @author aNNiMON
  */
 public final class ConditionalExpression implements Expression {
-    
+
     public enum Operator {
         EQUALS("=="),
         NOT_EQUALS("!="),
-        
+
         LT("<"),
         LTEQ("<="),
         GT(">"),
         GTEQ(">="),
-        
+
         AND("&&"),
-        OR("||");
-        
+        OR("||"),
+
+        NULL_COALESCE("??");
+
         private final String name;
 
         private Operator(String name) {
@@ -33,7 +35,7 @@ public final class ConditionalExpression implements Expression {
             return name;
         }
     }
-    
+
     public final Expression expr1, expr2;
     public final Operator operation;
 
@@ -45,17 +47,24 @@ public final class ConditionalExpression implements Expression {
 
     @Override
     public Value eval() {
-        final Value value1 = expr1.eval();
         switch (operation) {
-            case AND: return NumberValue.fromBoolean(
-                    (value1.asInt() != 0) && (expr2.eval().asInt() != 0) );
-            case OR: return NumberValue.fromBoolean(
-                    (value1.asInt() != 0) || (expr2.eval().asInt() != 0) );
+            case AND:
+                return NumberValue.fromBoolean((expr1AsInt() != 0) && (expr2AsInt() != 0));
+            case OR:
+                return NumberValue.fromBoolean((expr1AsInt() != 0) || (expr2AsInt() != 0));
+
+            case NULL_COALESCE:
+                return nullCoalesce();
+
+            default:
+                return NumberValue.fromBoolean(evalAndCompare());
         }
-        
-        
+    }
+
+    private boolean evalAndCompare() {
+        final Value value1 = expr1.eval();
         final Value value2 = expr2.eval();
-        
+
         double number1, number2;
         if (value1.type() == Types.NUMBER) {
             number1 = value1.asNumber();
@@ -64,23 +73,42 @@ public final class ConditionalExpression implements Expression {
             number1 = value1.compareTo(value2);
             number2 = 0;
         }
-        
-        boolean result;
+
         switch (operation) {
-            case EQUALS: result = number1 == number2; break;
-            case NOT_EQUALS: result = number1 != number2; break;
-            
-            case LT: result = number1 < number2; break;
-            case LTEQ: result = number1 <= number2; break;
-            case GT: result = number1 > number2; break;
-            case GTEQ: result = number1 >= number2; break;
-            
+            case EQUALS: return number1 == number2;
+            case NOT_EQUALS: return number1 != number2;
+
+            case LT: return number1 < number2;
+            case LTEQ: return number1 <= number2;
+            case GT: return number1 > number2;
+            case GTEQ: return number1 >= number2;
+
             default:
                 throw new OperationIsNotSupportedException(operation);
         }
-        return NumberValue.fromBoolean(result);
     }
-    
+
+    private Value nullCoalesce() {
+        Value value1;
+        try {
+            value1 = expr1.eval();
+        } catch (NullPointerException npe) {
+            value1 = null;
+        }
+        if (value1 == null) {
+            return expr2.eval();
+        }
+        return value1;
+    }
+
+    private int expr1AsInt() {
+        return expr1.eval().asInt();
+    }
+
+    private int expr2AsInt() {
+        return expr2.eval().asInt();
+    }
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);

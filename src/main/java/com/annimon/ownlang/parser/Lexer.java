@@ -83,6 +83,7 @@ public final class Lexer {
         OPERATORS.put("**", TokenType.STARSTAR);
         OPERATORS.put("^^", TokenType.CARETCARET);
         OPERATORS.put("?:", TokenType.QUESTIONCOLON);
+        OPERATORS.put("??", TokenType.QUESTIONQUESTION);
     }
     
     private static final Map<String, TokenType> KEYWORDS;

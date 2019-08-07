@@ -105,6 +105,8 @@ public final class Lexer {
         KEYWORDS.put("case", TokenType.CASE);
         KEYWORDS.put("extract", TokenType.EXTRACT);
         KEYWORDS.put("include", TokenType.INCLUDE);
+        KEYWORDS.put("class", TokenType.CLASS);
+        KEYWORDS.put("new", TokenType.NEW);
     }
 
     public static Set<String> getKeywords() {

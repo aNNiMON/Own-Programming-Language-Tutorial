@@ -8,11 +8,14 @@ public final class Types {
             STRING = 2,
             ARRAY = 3,
             MAP = 4,
-            FUNCTION = 5;
+            FUNCTION = 5,
+            CLASS = 6;
     
     private static final int FIRST = OBJECT;
-    private static final int LAST = FUNCTION;
-    private static final String[] NAMES = {"object", "number", "string", "array", "map", "function"};
+    private static final int LAST = CLASS;
+    private static final String[] NAMES = {
+        "object", "number", "string", "array", "map", "function", "class"
+    };
     
     public static String typeToString(int type) {
         if (FIRST <= type && type <= LAST) {

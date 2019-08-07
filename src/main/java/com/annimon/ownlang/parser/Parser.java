@@ -159,6 +159,9 @@ public final class Parser {
         if (match(TokenType.MATCH)) {
             return match();
         }
+        if (match(TokenType.CLASS)) {
+            return classDeclaration();
+        }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
             return new ExprStatement(functionChain(qualifiedName()));
         }
@@ -437,6 +440,30 @@ public final class Parser {
 
         return new MatchExpression(expression, patterns);
     }
+    
+    private Statement classDeclaration() {
+        // class Name {
+        //   x = 123
+        //   str = ""
+        //   def method() = str
+        // }
+        final String name = consume(TokenType.WORD).getText();
+        final ClassDeclarationStatement classDeclaration = new ClassDeclarationStatement(name);
+        consume(TokenType.LBRACE);
+        do {
+            if (match(TokenType.DEF)) {
+                classDeclaration.addMethod(functionDefine());
+            } else {
+                final AssignmentExpression fieldDeclaration = assignmentStrict();
+                if (fieldDeclaration != null) {
+                    classDeclaration.addField(fieldDeclaration);
+                } else {
+                    throw new ParseException("Class can contain only assignments and function declarations");
+                }
+            }
+        } while (!match(TokenType.RBRACE));
+        return classDeclaration;
+    }
 
     private Expression expression() {
         return assignment();
@@ -450,7 +477,7 @@ public final class Parser {
         return ternary();
     }
 
-    private Expression assignmentStrict() {
+    private AssignmentExpression assignmentStrict() {
         // x[0].prop += ...
         final int position = pos;
         final Expression targetExpr = qualifiedName();
@@ -667,29 +694,44 @@ public final class Parser {
     }
 
     private Expression multiplicative() {
-        Expression result = unary();
+        Expression result = objectCreation();
 
         while (true) {
             if (match(TokenType.STAR)) {
-                result = new BinaryExpression(BinaryExpression.Operator.MULTIPLY, result, unary());
+                result = new BinaryExpression(BinaryExpression.Operator.MULTIPLY, result, expression());
                 continue;
             }
             if (match(TokenType.SLASH)) {
-                result = new BinaryExpression(BinaryExpression.Operator.DIVIDE, result, unary());
+                result = new BinaryExpression(BinaryExpression.Operator.DIVIDE, result, expression());
                 continue;
             }
             if (match(TokenType.PERCENT)) {
-                result = new BinaryExpression(BinaryExpression.Operator.REMAINDER, result, unary());
+                result = new BinaryExpression(BinaryExpression.Operator.REMAINDER, result, expression());
                 continue;
             }
             if (match(TokenType.STARSTAR)) {
-                result = new BinaryExpression(BinaryExpression.Operator.POWER, result, unary());
+                result = new BinaryExpression(BinaryExpression.Operator.POWER, result, expression());
                 continue;
             }
             break;
         }
 
         return result;
+    }
+    
+    private Expression objectCreation() {
+       if (match(TokenType.NEW)) {
+            final String className = consume(TokenType.WORD).getText();
+            final List<Expression> args = new ArrayList<>();
+            consume(TokenType.LPAREN);
+            while (!match(TokenType.RPAREN)) {
+                args.add(expression());
+                match(TokenType.COMMA);
+            }
+            return new ObjectCreationExpression(className, args);
+        }
+        
+        return unary();
     }
 
     private Expression unary() {

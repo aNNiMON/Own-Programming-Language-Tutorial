@@ -28,6 +28,8 @@ public enum TokenType {
     CASE,
     EXTRACT,
     INCLUDE,
+    CLASS,
+    NEW,
     
     PLUS, // +
     MINUS, // -

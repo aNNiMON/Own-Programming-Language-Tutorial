@@ -308,7 +308,7 @@ public final class BinaryExpression implements Expression {
                         "for " + Types.typeToString(value1.type()));
         }
     }
-    
+
     private Value and(Value value1, Value value2) {
         switch (value1.type()) {
             case Types.NUMBER: return and((NumberValue) value1, value2);

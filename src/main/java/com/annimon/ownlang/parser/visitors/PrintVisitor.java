@@ -7,6 +7,7 @@ import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder> {
@@ -76,6 +77,23 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
     @Override
     public StringBuilder visit(BreakStatement s, StringBuilder t) {
         t.append("break");
+        return t;
+    }
+
+    @Override
+    public StringBuilder visit(ClassDeclarationStatement s, StringBuilder t) {
+        t.append("class ").append(s.name).append(" {");
+        newLine(t);
+
+        increaseIndent();
+        for (AssignmentExpression field : s.fields) {
+            field.accept(this, t);
+        }
+        for (FunctionDefineStatement method : s.methods) {
+            method.accept(this, t);
+        }
+        decreaseIndent();
+        t.append("}");
         return t;
     }
 
@@ -209,14 +227,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
         } else {
             s.functionExpr.accept(this, t);
         }
-        t.append("(");
-        boolean firstElement = true;
-        for (Expression expr : s.arguments) {
-            if (firstElement) firstElement = false;
-            else t.append(", ");
-            expr.accept(this, t);
-        }
-        t.append(")");
+        printArgs(t, s.arguments);
         return t;
     }
 
@@ -288,6 +299,13 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
         newLine(t);
         printIndent(t);
         t.append("}");
+        return t;
+    }
+    
+    @Override
+    public StringBuilder visit(ObjectCreationExpression s, StringBuilder t) {
+        t.append("new ").append(s.className);
+        printArgs(t, s.constructorArguments);
         return t;
     }
 
@@ -421,6 +439,17 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
             decreaseIndent();
         }
         return t;
+    }
+    
+    private void printArgs(StringBuilder t, List<Expression> args) {
+        t.append("(");
+        boolean firstElement = true;
+        for (Expression expr : args) {
+            if (firstElement) firstElement = false;
+            else t.append(", ");
+            expr.accept(this, t);
+        }
+        t.append(")");
     }
 
     private void newLine(StringBuilder t) {

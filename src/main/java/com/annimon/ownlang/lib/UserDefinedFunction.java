@@ -10,7 +10,7 @@ import com.annimon.ownlang.parser.ast.Statement;
  *
  * @author aNNiMON
  */
-public final class UserDefinedFunction implements Function {
+public class UserDefinedFunction implements Function {
     
     public final Arguments arguments;
     public final Statement body;

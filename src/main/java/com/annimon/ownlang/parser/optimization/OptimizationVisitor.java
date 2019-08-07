@@ -76,6 +76,11 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     }
 
     @Override
+    public Node visit(ClassDeclarationStatement s, T t) {
+        return s;
+    }
+    
+    @Override
     public Node visit(ConditionalExpression s, T t) {
         final Node expr1 = s.expr1.accept(this, t);
         final Node expr2 = s.expr2.accept(this, t);
@@ -311,6 +316,24 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         }
         if (changed) {
             return new MatchExpression((Expression) expression, patterns);
+        }
+        return s;
+    }
+    
+    @Override
+    public Node visit(ObjectCreationExpression s, T t) {
+        final List<Expression> args = new ArrayList<>();
+        boolean changed = false;
+        for (Expression argument : s.constructorArguments) {
+            final Node expr = argument.accept(this, t);
+            if (expr != argument) {
+                changed = true;
+            }
+            args.add((Expression) expr);
+        }
+        
+        if (changed) {
+            return new ObjectCreationExpression(s.className, args);
         }
         return s;
     }

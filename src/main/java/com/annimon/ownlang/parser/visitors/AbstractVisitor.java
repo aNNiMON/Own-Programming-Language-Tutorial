@@ -40,6 +40,11 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
+    public void visit(ClassDeclarationStatement s) {
+        
+    }
+
+    @Override
     public void visit(ConditionalExpression s) {
         s.expr1.accept(this);
         s.expr2.accept(this);
@@ -135,6 +140,13 @@ public abstract class AbstractVisitor implements Visitor {
     @Override
     public void visit(MatchExpression s) {
         s.expression.accept(this);
+    }
+    
+    @Override
+    public void visit(ObjectCreationExpression s) {
+        for (Expression argument : s.constructorArguments) {
+            argument.accept(this);
+        }
     }
 
     @Override

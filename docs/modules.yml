@@ -124,9 +124,9 @@
           r = range(-5, 0) // [-5, -4, -3, -2, -1]
           print r[0] // -5
           print r[2] // -3
-          for x : range(20, 9, -5) {
+          for x : range(4, 10, 2) {
             println x
-          } // 20 15 10
+          } // 4 6 8
       - name: readln
         scope: "desktop"
         args: "x"

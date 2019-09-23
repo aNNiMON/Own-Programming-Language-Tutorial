@@ -29,13 +29,14 @@ operations = {
   "*" : def(a,b) = a*b,
   "/" : ::division
 }
+
 def division(v1, v2) {
-  if (v2 == 0) return "error"
+  if (v2 == 0) return "error: division by zero"
   return v1 / v2
 }
 
-for operation : operations {
-  println operation(2, 3)
+for name, operation : operations {
+  println "2 " + name + " 3 = " + operation(2, 3)
 }
 ```
 
@@ -60,6 +61,9 @@ def fizzbuzz(limit = 100) {
     }
   }
 }
+
+// run
+fizzbuzz()
 ```
 
 #### Functional data operations
@@ -111,6 +115,7 @@ use "functional"
 http("https://api.github.com/events", def(r) {
   use "json"
   events = jsondecode(r)
+  println events[0]
 })
 
 // POST request

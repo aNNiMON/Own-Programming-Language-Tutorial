@@ -244,15 +244,15 @@
         desc: suppress any error in `unsafeFunction` and returns the result of the `catchFunction` if any error occurs
         desc_ru: подавляет любые ошибки в `unsafeFunction` и возрвщает результат функции `catchFunction`, если была ошибка
         example: |-
-          try(def() = "success") // success
-          try(def() = try + 2) // -1
-          try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))
-          try(def() = try(), 42) // 42
+          println try(def() = "success") // success
+          println try(def() = try + 2) // -1
+          println try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))
+          println try(def() = try(), 42) // 42
         example_ru: |-
-          try(def() = "успех") // успех
-          try(def() = try + 2) // -1
-          try(def() = try(), def(type, message) = sprintf("Обработана ошибка:\nтип: %s\nсообщение: %s", type, message))
-          try(def() = try(), 42) // 42
+          println try(def() = "успех") // успех
+          println try(def() = try + 2) // -1
+          println try(def() = try(), def(type, message) = sprintf("Обработана ошибка:\nтип: %s\nсообщение: %s", type, message))
+          println try(def() = try(), 42) // 42
   - name: types
     scope: "both"
     desc: "Contains functions for type checking and conversion"

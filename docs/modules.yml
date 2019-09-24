@@ -2085,7 +2085,7 @@
         example: |-
           use "canvasfx"
           g = showcanvas()
-          bitmap = createImage("http://lorempixel.com/image_output/nature-q-c-640-480-10.jpg")
+          bitmap = createImage("https://annimon.com/albums/files/2012-08-28_12-40-23-807_3105.jpg")
           g.drawBitmap(bitmap, 0, 0)
           bitmap = createImage("file:image.png")
           g.drawBitmap(bitmap, 200, 0)
@@ -3752,7 +3752,7 @@
         example: |-
           use ["http", "canvas"]
           g = showcanvas()
-          imageBytes = download("http://lorempixel.com/image_output/nature-q-c-640-480-10.jpg")
+          imageBytes = download("https://annimon.com/albums/files/2012-08-28_12-40-23-807_3105.jpg")
           bitmap = createBitmap(imageBytes)
           g.drawBitmap(bitmap, 0, 0)
       - 

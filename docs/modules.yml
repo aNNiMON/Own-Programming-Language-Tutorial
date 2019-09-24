@@ -4435,6 +4435,11 @@
         desc: ''
         desc_ru: ''
         example: |-
+          use ["std", "android", "forms"]
+
+          img1 = assetBitmap("ownlang.png")
+          img2 = img1
+
           items = [
             {"img" : img1, "text" : "Item 1"},
             {"img" : img2, "text" : "Item 2"}
@@ -4455,12 +4460,24 @@
                } else {
                   extract(imageView, textView) = view.getTag()
                }
-          
+
                imageView.setImageBitmap(items[pos].img);
-               textView.setText(toHexString(items[pos].text));
+               textView.setText(items[pos].text);
                return view
             }
           });
+
+          listView = newListView()
+          listView.setAdapter(adapter)
+          listView.onItemClick(def(v, pos, id) {
+            toast(adapter.getItem(pos).text + " selected")
+          })
+
+          panel = newLinearLayout()
+          panel.addView(newTextView("ListView with BaseAdapter demo"))
+          panel.addView(listView)
+
+          showForm(panel)
       - name: newButton
         args: 'text = ""'
         desc: 'creates Button'
@@ -4504,6 +4521,11 @@
           pb1.setProgress(10)
           pb2 = newProgressBar()
           pb2.setIndeterminate(true)
+
+          panel = newLinearLayout()
+          panel.addView(pb1)
+          panel.addView(pb2)
+          showForm(panel)
       - name: newRadioButton
         args: ''
         desc: 'creates RadioButton'

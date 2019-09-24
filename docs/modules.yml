@@ -631,7 +631,7 @@
         desc: formats date by given format and returns string
         desc_ru: форматирует дату в указанном формате и возвращает строку
         example: |-
-          d = date(2016, 4, 8)
+          d = newDate(2016, 4, 8)
           println formatDate(d, newFormat("yyyy/MM/dd")) // "2016/05/08"
       - 
         name: "parseDate"

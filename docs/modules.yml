@@ -495,8 +495,8 @@
       - 
         name: "signum"
         args: "x"
-        desc: ""
-        desc_ru: ""
+        desc: "returns an integer that indicates the sign of a number"
+        desc_ru: "возвращает целое число, указывающее знак числа"
       - 
         name: "sin"
         args: "x"

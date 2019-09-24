@@ -947,7 +947,7 @@
         desc_ru: "переименование (или перемещение) файла"
         example: |-
           use "files"
-          
+
           f1 = fopen("C:/file1", "i")
           f2 = fopen("E:/file2", "i")
           rename(f1, f2)
@@ -1566,6 +1566,8 @@
         desc: "filters array or object.\n\n`predicate` is a function which takes one argument for arrays or two arguments for objects"
         desc_ru: "фильтрует массив или объект и возвращает массив только с теми элементами, которые удовлетворяют предикату `predicate`.\n\n`predicate` - функция которая принимает один (для массивов) и два (для объектов) аргумента"
         example: |-
+          use "functional"
+
           nums = [1,2,3,4,5]
           print filter(nums, def(x) = x % 2 == 0) // [2, 4]
       - name: "flatmap"
@@ -1573,6 +1575,8 @@
         desc: "converts each element of an array to other array"
         desc_ru: "преобразует каждый элемент массива в массив элементов"
         example: |-
+          use "functional"
+
           nums = [1,2,3,4]
           print flatmap(nums, def(x) {
             arr = newarray(x)
@@ -1585,6 +1589,8 @@
         desc: "invokes function `consumer` for each element of array or map `data`\n\nIf `data` - массив, то в функции consumer необходим один параметр, если объект - два (ключ и значение)."
         desc_ru: "для каждого элемента в массиве или объекте `data` вызывает функцию `consumer`\n\nЕсли `data` - массив, то в функции `consumer` необходим один параметр, если объект - два (ключ и значение)."
         example: |-
+          use "functional"
+
           foreach([1, 2, 3], def(v) { print v })
           foreach({"key": 1, "key2": "text"}, def(key, value) {
             print key + ": " + value
@@ -1594,6 +1600,8 @@
         desc: "converts elements of array or map. If `data` is array - `mapper` converts his elements, if `data` is object - you need to pass `keyMapper` - converts keys and `valueMapper` - converts values"
         desc_ru: "преобразует элементы массива или объекта.\n\nЕсли `data` - массив, то функция `mapper` преобразует значения, если объект - необходимо передать две функции: `keyMapper` - преобразует ключи и `valueMapper` - преобразует значения"
         example: |-
+          use "functional"
+
           nums = [3,4,5]
           print map(nums, def(x) = x * x) // [9, 16, 25]
       - name: "reduce"
@@ -1601,6 +1609,8 @@
         desc: "converts elements of an array or a map to one value, e.g. sum of elements or concatenation string. `accumulator` takes one argument for array and two arguments for object (key and value)."
         desc_ru: "преобразует элементы массива или объекта в одно значение, например сумма элементов или объединение в строку.\n\nЕсли `data` - массив, то в функции `accumulator` необходим один параметр, если объект - два (ключ и значение)"
         example: |-
+          use "functional"
+
           nums = [1,2,3,4,5]
           print reduce(nums, 0, def(x, y) = x + y) // 15
       - name: "sortby"
@@ -1608,6 +1618,8 @@
         desc: "sorts elements of an array or an object by `function` result"
         desc_ru: "сортирует элементы массива по данным в функции `function`"
         example: |-
+          use "functional"
+          
           data = [
             {"k1": 2, "k2": "x"},
             {"k1": 7, "k2": "d"},

@@ -470,7 +470,7 @@
         desc_ru: "округляет вещественное число в меньшую сторону"
         example: |-
           use "math"
-          
+
           floor(3.8) // 3
       - 
         name: "getExponent"
@@ -676,6 +676,8 @@
         desc: formats date by given format and returns string
         desc_ru: форматирует дату в указанном формате и возвращает строку
         example: |-
+          use "date"
+
           d = newDate(2016, 4, 8)
           println formatDate(d, newFormat("yyyy/MM/dd")) // "2016/05/08"
       - 
@@ -684,6 +686,8 @@
         desc: parses date from string by given pattern. Returns DateValue
         desc_ru: парсит дату из строки в указанном шаблоне. Возвращает DateValue
         example: |-
+          use "date"
+          
           println parseDate("2016/05/08", newFormat("yyyy/MM/dd"))
       - 
         name: "toTimestamp"

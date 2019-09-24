@@ -50,17 +50,31 @@
         desc_ru: возвращает значение `a`, если оно не пустое, иначе возвращается значение `b`
         since: 1.4.0
         example: |-
+          use "std"
+
+          user = {"name": "", "lastname": "Doe"}
           name = default(user.name, "Unknown")
+          lastname = default(user.lastname, "Unknown")
+          println name + " " + lastname  // Unknown Doe
         example_ru: |-
-          name = default(user.name, "Неизвестно")
+          use "std"
+
+          user = {"name": "", "lastname": "Иванов"}
+          name = default(user.name, "Имя неизвестно")
+          lastname = default(user.lastname, "фамилия неизвестна")
+          println name + " " + lastname // Имя неизвестно Иванов
       - name: echo
         args: "arg..."
         desc: "prints values to console, separate them by space and puts newline at the end. Takes variable number of arguments"
         desc_ru: "выводит значения в консоль, разделяя их пробелом, а потом ставит перенос строки. Может принимать переменное значение аргументов"
         example: |-
+          use "std"
+
           echo(1, "abc") // prints "1 abc" to console
           echo(1, 2, 3, 4, 5, "a", "b") // prints "1 2 3 4 5 a b"
         example_ru: |-
+          use "std"
+
           echo(1, "abc") // выведет строку "1 abc" в консоль
           echo(1, 2, 3, 4, 5, "a", "b") // выведет строку "1 2 3 4 5 a b" в консоль"
       - name: getBytes
@@ -89,8 +103,10 @@
         desc: "creates array with `size`.\n`newarray(x)` - creates 1D array, `newarray(x,y)` - creates 2D array"
         desc_ru: "оздаёт массив с размером size. Если указать 1 аргумент - создаётся одномерный массив, если 2 аргумента - двухмерный и т.д"
         example: |-
-          newarray(4) // [0, 0, 0, 0]
-          newarray(2, 3) // [[0, 0, 0], [0, 0, 0]]
+          use "std"
+
+          println newarray(4) // [0, 0, 0, 0]
+          println newarray(2, 3) // [[0, 0, 0], [0, 0, 0]]
       - name: parseInt
         args: "str, radix"
         desc: parses string into integer in the `radix`
@@ -120,13 +136,15 @@
           `range(from, to)` - создаёт промежуток от `from` до `to` (не включительно) с шагом 1
           `range(from, to, step)` - создаёт промежуток от `from` до `to` (не включительно) с шагом `step`
         example: |-
-          print range(3) // [0, 1, 2]
+          use "std"
+
+          println range(3) // [0, 1, 2]
           r = range(-5, 0) // [-5, -4, -3, -2, -1]
-          print r[0] // -5
-          print r[2] // -3
-          for x : range(4, 10, 2) {
+          println r[0] // -5
+          println r[2] // -3
+          for x : range(20, 9, -5) {
             println x
-          } // 4 6 8
+          } // 20 15 10
       - name: readln
         scope: "desktop"
         args: "x"
@@ -157,8 +175,10 @@
         desc: "splits string `str` with regular expression `regex` into array. `limit` parameter affects the length of resulting array"
         desc_ru: "разделяет строку `str` по шаблону `regex` и помещает элементы в массив. Если указан параметр `limit`, то будет произведено не более limit разбиений, соответственно размер результирующего массива будет ограничен этим значением limit"
         example: |-
-          split("a5b5c5d5e", "5") // ["a", "b", "c", "d", "e"]
-          split("a5b5c5d5e", "5", 3) // ["a", "b", "c5d5e"]
+          use "std"
+
+          println split("a5b5c5d5e", "5") // ["a", "b", "c", "d", "e"]
+          println split("a5b5c5d5e", "5", 3) // ["a", "b", "c5d5e"]
       - name: sprintf
         args: "format, args..."
         desc: "formats string by arguments"
@@ -174,6 +194,7 @@
         since: 1.5.0
         example: |-
           use "std"
+
           println "
                   |123
                   |456
@@ -183,16 +204,22 @@
         desc: "returns string from `startIndex` to `endIndex` or to end of string if `endIndex` is not set"
         desc_ru: "обрезает строку `str`, начиная от символа после позиции `startIndex` и по `endIndex`. Если `endIndex` не указан, обрезается до конца строки"
         example: |-
-          substring("abcde", 1) // bcde
-          substring("abcde", 2, 4) // cd
+          use "std"
+
+          println substring("abcde", 1) // bcde
+          println substring("abcde", 2, 4) // cd
       - name: sync
         args: "callback"
         desc: calls an asynchronous function synchronously
         desc_ru: делает асинхронный вызов синхронным
         example: |-
+          use ["std", "http"]
+
+          url = "https://annimon.com/json/bot.php"
           result = sync(def(ret) {
              http(url, def(t) = ret(t))
           })
+          println result
       - name: thread
         args: "func, args..."
         desc: "creates new thread with parameters if passed"
@@ -203,15 +230,17 @@
 
             `args` - 0 или более аргументов, которые необходимо передать в функцию func
         example: |-
+          use "std"
+
           thread(def() {
-            print "New Thread"
+            println "New Thread"
           })
 
           thread(::newthread, 10)
           thread("newthread", 20)
 
           def newthread(x) {
-            print "New Thread. x = " + x
+            println "New Thread. x = " + x
           }
       - name: time
         args: ""
@@ -222,7 +251,9 @@
         desc: "converts char code to string"
         desc_ru: "переводит код символа в строку"
         example: |-
-          toChar(48) // "0"
+          use "std"
+
+          println toChar(48) // "0"
       - name: toHexString
         args: 'number'
         desc: 'converts number into hex string'
@@ -244,11 +275,15 @@
         desc: suppress any error in `unsafeFunction` and returns the result of the `catchFunction` if any error occurs
         desc_ru: подавляет любые ошибки в `unsafeFunction` и возрвщает результат функции `catchFunction`, если была ошибка
         example: |-
+          use "std"
+
           println try(def() = "success") // success
           println try(def() = try + 2) // -1
           println try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))
           println try(def() = try(), 42) // 42
         example_ru: |-
+          use "std"
+          
           println try(def() = "успех") // успех
           println try(def() = try + 2) // -1
           println try(def() = try(), def(type, message) = sprintf("Обработана ошибка:\nтип: %s\nсообщение: %s", type, message))

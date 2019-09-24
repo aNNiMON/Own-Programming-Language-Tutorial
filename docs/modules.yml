@@ -877,8 +877,8 @@
       - 
         name: "readBytes"
         args: "f, array, offset = 0, length = length(array)"
-        desc: "reads `length` bytes of file `f` to `array` starting from `offset`. Returns number of read bytes"
-        desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то пропускается offset байт и читается length байт в массив array"
+        desc: "reads `length` bytes of file `f` and stores to `array` starting from `offset+1` byte. Returns number of read bytes"
+        desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то читается length байт в массив array, начиная с `offset+1` байта"
         example: |-
           use "files"
 

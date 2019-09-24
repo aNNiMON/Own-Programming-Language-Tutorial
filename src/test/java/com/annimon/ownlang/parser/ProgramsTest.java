@@ -127,7 +127,11 @@ public class ProgramsTest {
         @Override
         public void visit(FunctionDefineStatement s) {
             if (s.name.startsWith("test")) {
-                Functions.get(s.name).execute();
+                try {
+                    Functions.get(s.name).execute();
+                } catch (AssertionError err) {
+                    throw new AssertionError(s.name + ": " + err.getMessage(), err);
+                }
             }
         }
     };

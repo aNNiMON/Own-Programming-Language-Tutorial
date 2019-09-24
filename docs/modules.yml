@@ -480,7 +480,7 @@
       - 
         name: "pow"
         args: "x, y"
-        desc: ""
+        desc: "returns a specified number raised to the specified power"
         desc_ru: "возведение x в степень y"
       - 
         name: "rint"

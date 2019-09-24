@@ -430,8 +430,8 @@
       - 
         name: "getExponent"
         args: "x"
-        desc: ""
-        desc_ru: ""
+        desc: "returns the unbiased exponent used in the representation of a double or float"
+        desc_ru: "возвращают несмещенное значение экспоненты числа"
       - 
         name: "hypot"
         args: "x, y"

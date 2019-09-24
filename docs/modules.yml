@@ -455,7 +455,7 @@
       - 
         name: "log10"
         args: "x"
-        desc: ""
+        desc: "returns the base 10 logarithm of a specified number"
         desc_ru: "десятичный логарифм"
       - 
         name: "max"

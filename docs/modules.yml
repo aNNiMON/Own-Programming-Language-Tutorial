@@ -283,7 +283,7 @@
           println try(def() = try(), 42) // 42
         example_ru: |-
           use "std"
-          
+
           println try(def() = "успех") // успех
           println try(def() = try + 2) // -1
           println try(def() = try(), def(type, message) = sprintf("Обработана ошибка:\nтип: %s\nсообщение: %s", type, message))
@@ -355,7 +355,9 @@
         desc: "converts value to number if possible"
         desc_ru: "преобразует значение к числу, если это возможно"
         example: |-
-          print typeof(number("2.3")) // 1 (NUMBER)
+          use "types"
+
+          println typeof(number("2.3")) // 1 (NUMBER)
       - 
         name: "short"
         args: "value"
@@ -367,16 +369,20 @@
         desc: "converts value to string"
         desc_ru: "преобразует значение в строку"
         example: |-
-          print typeof(string(1)) // 2 (STRING)
+          use "types"
+
+          println typeof(string(1)) // 2 (STRING)
       - 
         name: "typeof"
         args: "value"
         desc: "returns the type of value"
         desc_ru: "возвращает тип переданного значения"
         example: |-
-          print typeof(1) // 1 (NUMBER)
-          print typeof("text") // 2 (STRING)
-          print typeof([]) // 3 (ARRAY)
+          use "types"
+
+          println typeof(1) // 1 (NUMBER)
+          println typeof("text") // 2 (STRING)
+          println typeof([]) // 3 (ARRAY)
   - name: math
     scope: "both"
     desc: "Contains math functions and constants"

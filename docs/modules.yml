@@ -398,8 +398,8 @@
       - 
         name: "copySign"
         args: "magnitude, sign"
-        desc: ""
-        desc_ru: ""
+        desc: "returns a value with the magnitude of x and the sign of y"
+        desc_ru: "возвращает значение с величиной x и знаком y"
       - 
         name: "cos"
         args: "x"

@@ -435,6 +435,8 @@
         desc: "returns the ceiling of `x`"
         desc_ru: "округляет вещественное число в большую сторону"
         example: |-
+          use "math"
+
           ceil(6.4) // 7
       - 
         name: "copySign"
@@ -467,6 +469,8 @@
         desc: "returns floor of `x`"
         desc_ru: "округляет вещественное число в меньшую сторону"
         example: |-
+          use "math"
+          
           floor(3.8) // 3
       - 
         name: "getExponent"

@@ -877,24 +877,24 @@
       - 
         name: "readBytes"
         args: "f, array, offset = 0, length = length(array)"
-        desc: "reads `length` bytes of file `f` to `array` starting from `offset`. Returns number of readed bytes"
+        desc: "reads `length` bytes of file `f` to `array` starting from `offset`. Returns number of read bytes"
         desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то пропускается offset байт и читается length байт в массив array"
         example: |-
           use "files"
 
           f1 = fopen("file.bin", "rb") // file.bin must contain more than 5000 bytes
           array = newarray(2048)
-          readedCount = readBytes(f1, array) // reads 2048 bytes
-          readedCount = readBytes(f1, array, 10) // reads 2048 bytes starting from 11 byte
-          readedCount = readBytes(f1, array, 20, 10) // reads 10 bytes, starting from 21 byte
+          readCount = readBytes(f1, array) // reads 2048 bytes
+          readCount = readBytes(f1, array, 10) // reads 2048 bytes starting from 11 byte
+          readCount = readBytes(f1, array, 20, 10) // reads 10 bytes, starting from 21 byte
         example_ru: |-
           use "files"
 
           f1 = fopen("file.bin", "rb") // file.bin должен иметь больше 5000 байтов
           array = newarray(2048)
-          readedCount = readBytes(f1, array) // читает 2048 байт из файла
-          readedCount = readBytes(f1, array, 10) // читает 2048 байт, начиная с 11 байта
-          readedCount = readBytes(f1, array, 20, 10) // читает 10 байт, начиная с 21 байта
+          readCount = readBytes(f1, array) // читает 2048 байт из файла
+          readCount = readBytes(f1, array, 10) // читает 2048 байт, начиная с 11 байта
+          readCount = readBytes(f1, array, 20, 10) // читает 10 байт, начиная с 21 байта
       - 
         name: "readChar"
         args: "f"
@@ -1761,7 +1761,7 @@
         desc_ru: "запускает процесс с параметрами\n\n  Если функции переданы несколько аргументов, то они все передаются как параметры.\n  Если функции передан только один параметр - массив, то его элементы передаются как параметры.\n  Если функции передан только один параметр, то он служит единственным параметром."
         example: |-
           use "robot"
-          
+
           execProcess("mkdir", "Test")
           execProcess("mkdir Test")
           execProcess(["mkdir", "Test"])

@@ -1468,13 +1468,29 @@
         desc: "combines functions"
         desc_ru: "комбинирует функции (композиция)"
         example: |-
+          use "functional"
+
+          def f1() = 2
+          def f2(a) = a*2
+          def f3(a) = a/4
+
           f = combine(::f1, ::f2, ::f3)
+          println f() // 1
           // same as
-          f = def(f1, f2, f3) = f3(f2(f1))
+          f = def() = f3(f2(f1()))
+          println f() // 1
         example_ru: |-
+          use "functional"
+
+          def f1() = 2
+          def f2(a) = a*2
+          def f3(a) = a/4
+          
           f = combine(::f1, ::f2, ::f3)
+          println f() // 1
           // равносильно
-          f = def(f1, f2, f3) = f3(f2(f1))
+          f = def() = f3(f2(f1()))
+          println f() // 1
       - name: dropwhile
         args: 'data, predicate'
         desc: 'skips elements while predicate function returns true'
@@ -1520,7 +1536,7 @@
         desc_ru: "преобразует элементы массива или объекта в одно значение, например сумма элементов или объединение в строку.\n\nЕсли `data` - массив, то в функции `accumulator` необходим один параметр, если объект - два (ключ и значение)"
         example: |-
           nums = [1,2,3,4,5]
-          print reduce(nums, 0, def(x, y) = x + x) // 15
+          print reduce(nums, 0, def(x, y) = x + y) // 15
       - name: "sortby"
         args: "array, function"
         desc: "sorts elements of an array or an object by `function` result"

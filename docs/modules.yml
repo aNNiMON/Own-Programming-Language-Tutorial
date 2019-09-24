@@ -435,7 +435,7 @@
       - 
         name: "hypot"
         args: "x, y"
-        desc: ""
+        desc: "returns the square root of the sum of squares of its arguments"
         desc_ru: "расчёт гипотенузы sqrt(x<sup>2</sup> + y<sup>2</sup>) без переполнения"
       - 
         name: "IEEEremainder"

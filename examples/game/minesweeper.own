@@ -59,7 +59,7 @@ def drawGameTable(showBombs = false) {
         case CELL_MINE if !showBombs: g.setFill(DEFAULT_CELL_COLOR)
         case _ : g.setFill(OPENED_CELL_COLOR)
       }
-      if (FLAGS[j][i] && (TABLE[j][i] == CELL_NONE || TABLE[j][i] == CELL_MINE) {
+      if FLAGS[j][i] && (TABLE[j][i] == CELL_NONE || TABLE[j][i] == CELL_MINE) {
         g.setFill(FLAG_COLOR)
       }
       g.fillRect(i * gridStepX + 1, j * gridStepY + 1, gridStepX - 2, gridStepY - 2)

@@ -134,7 +134,7 @@ public final class std_range implements Function {
 
                     @Override
                     public boolean hasNext() {
-                        return value < toInt;
+                        return (stepInt > 0) ? (value < toInt) : (value > toInt);
                     }
 
                     @Override
@@ -154,7 +154,7 @@ public final class std_range implements Function {
 
                 @Override
                 public boolean hasNext() {
-                    return value < to;
+                    return (step > 0) ? (value < to) : (value > to);
                 }
 
                 @Override

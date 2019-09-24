@@ -28,6 +28,18 @@ def testRangeParamsReversed() {
   assertEquals(5, x[5])
 }
 
+def testRangeIterator() {
+  x = range(0, 9, 2)
+  arr = reduce(x, [], def(acc, e) = acc += e)
+  assertEquals([0, 2, 4, 6, 8], arr)
+}
+
+def testRangeReversedIterator() {
+  x = range(20, 9, -2)
+  arr = reduce(x, [], def(acc, e) = acc += e)
+  assertEquals([20, 18, 16, 14, 12, 10], arr)
+}
+
 def testRangeLength() {
   assertEquals(10, length(range(0, 10, 1)))
   assertEquals(5, length(range(0, 10, 2)))

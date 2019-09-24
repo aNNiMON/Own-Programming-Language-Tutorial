@@ -445,7 +445,7 @@
       - 
         name: "log"
         args: "x"
-        desc: ""
+        desc: "returns the logarithm of a specified number"
         desc_ru: "логарифм"
       - 
         name: "log1p"

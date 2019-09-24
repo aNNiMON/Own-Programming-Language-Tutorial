@@ -6,7 +6,7 @@ def testTryOnly() {
 }
 
 def testCatchFunction() {
-  actual = try(def() = parseInt("oops"), def(class, cause) = class)
+  actual = try(def() = parseInt("oops"), def(clazz, cause) = clazz)
   assertEquals("java.lang.NumberFormatException", actual)
 }
 

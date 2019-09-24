@@ -39,7 +39,7 @@ def testInvokeMethodSameName() {
 
 def createObject() {
   dataClass = newClass("interop.Data")
-  return dataClass.new()
+  return dataClass.`new`()
 }
 
 def assertObjectArray(obj) {

@@ -301,11 +301,11 @@ public final class files implements Module {
             }
             
             final byte[] buffer = new byte[length];
-            final int readed = fileInfo.dis.read(buffer, offset, length);
-            for (int i = 0; i < readed; i++) {
-                array.set(i, NumberValue.of(buffer[i]));
+            final int read = fileInfo.dis.read(buffer, 0, length);
+            for (int i = 0; i < read; i++) {
+                array.set(offset + i, NumberValue.of(buffer[i]));
             }
-            return NumberValue.of(readed);
+            return NumberValue.of(read);
         }
     }
     
@@ -315,9 +315,9 @@ public final class files implements Module {
             final int bufferSize = 4096;
             final byte[] buffer = new byte[bufferSize];
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int readed;
-            while ((readed = fileInfo.dis.read(buffer, 0, bufferSize)) != -1) {
-                baos.write(buffer, 0, readed);
+            int read;
+            while ((read = fileInfo.dis.read(buffer, 0, bufferSize)) != -1) {
+                baos.write(buffer, 0, read);
             }
             baos.flush();
             baos.close();
@@ -389,9 +389,9 @@ public final class files implements Module {
         protected Value execute(FileInfo fileInfo, Value[] args) throws IOException {
             final StringBuilder result = new StringBuilder();
             final char[] buffer = new char[BUFFER_SIZE];
-            int readed;
-            while ((readed = fileInfo.reader.read(buffer, 0, BUFFER_SIZE)) != -1) {
-                result.append(buffer, 0, readed);
+            int read;
+            while ((read = fileInfo.reader.read(buffer, 0, BUFFER_SIZE)) != -1) {
+                result.append(buffer, 0, read);
             }
             return new StringValue(result.toString());
         }

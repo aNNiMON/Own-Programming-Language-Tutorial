@@ -698,19 +698,19 @@ public final class Parser {
 
         while (true) {
             if (match(TokenType.STAR)) {
-                result = new BinaryExpression(BinaryExpression.Operator.MULTIPLY, result, expression());
+                result = new BinaryExpression(BinaryExpression.Operator.MULTIPLY, result, objectCreation());
                 continue;
             }
             if (match(TokenType.SLASH)) {
-                result = new BinaryExpression(BinaryExpression.Operator.DIVIDE, result, expression());
+                result = new BinaryExpression(BinaryExpression.Operator.DIVIDE, result, objectCreation());
                 continue;
             }
             if (match(TokenType.PERCENT)) {
-                result = new BinaryExpression(BinaryExpression.Operator.REMAINDER, result, expression());
+                result = new BinaryExpression(BinaryExpression.Operator.REMAINDER, result, objectCreation());
                 continue;
             }
             if (match(TokenType.STARSTAR)) {
-                result = new BinaryExpression(BinaryExpression.Operator.POWER, result, expression());
+                result = new BinaryExpression(BinaryExpression.Operator.POWER, result, objectCreation());
                 continue;
             }
             break;

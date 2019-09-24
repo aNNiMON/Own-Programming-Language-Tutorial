@@ -1231,9 +1231,10 @@
         desc_ru: 'скачивает файл по адресу `downloadUrl` и сохраняет в `filePath`'
         example: |-
           use "downloader"
+
           downloader(url, file, def(progress, bytesDownloaded, bytesMax) {
             bar = "#" * (progress / 2)
-            print sprintf("%-50s %d%% %.2f / %.2f\r", bar, progress, cur / 1048576.0, max / 1048576.0)
+            print sprintf("%-50s %d%% %.2f / %.2f\r", bar, progress, float(bytesDownloaded / bytesMax), float(bytesMax))
           })
   - name: base64
     scope: both

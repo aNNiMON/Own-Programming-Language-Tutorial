@@ -490,7 +490,7 @@
       - 
         name: "round"
         args: "x"
-        desc: ""
+        desc: "rounds a value to the nearest integer or to the specified number of fractional digits"
         desc_ru: "округляет вещественное число до ближайшего целого"
       - 
         name: "signum"

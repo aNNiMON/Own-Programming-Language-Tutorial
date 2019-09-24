@@ -3755,6 +3755,7 @@
           imageBytes = download("https://annimon.com/albums/files/2012-08-28_12-40-23-807_3105.jpg")
           bitmap = createBitmap(imageBytes)
           g.drawBitmap(bitmap, 0, 0)
+          repaint()
       - 
         name: "createScaledBitmap"
         args: "srcBitmap, width, height, filter"

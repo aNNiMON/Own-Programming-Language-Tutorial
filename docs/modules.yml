@@ -687,7 +687,7 @@
         desc_ru: парсит дату из строки в указанном шаблоне. Возвращает DateValue
         example: |-
           use "date"
-          
+
           println parseDate("2016/05/08", newFormat("yyyy/MM/dd"))
       - 
         name: "toTimestamp"
@@ -794,9 +794,13 @@
 
             Возвращает дескриптор файла, который необходим для остальных функций.
         example: |-
+          use "files"
+
           f1 = fopen("text.txt") // opens file text.txt for read in text mode
           f2 = fopen("E:/1.dat", "rbwb") // opens file 1.dat on drive E for binary read and write"
         example_ru: |-
+          use "files"
+
           f1 = fopen("text.txt") // открывает файл text.txt для текстового чтения
           f2 = fopen("E:/1.dat", "rbwb") // открывает файл 1.dat на диске E для бинарного чтения и записи"
       - 
@@ -830,9 +834,13 @@
         desc: "returns array with filenames in given directory.\n\n f - directory descriptor"
         desc_ru: "возвращает массив с именами файлов в указанной директории.\n\n f - дескриптор папки"
         example: |-
+          use "files"
+
           f1 = fopen("E:/examples", "") // opens directory examples for getting information
           list = listFiles(f1) // gets array with filenames in directory
         example_ru: |-
+          use "files"
+
           f1 = fopen("E:/examples", "") // открыть папку examples для получения информации
           list = listFiles(f1) // получить массив с именами файлов в этой папке
       - 
@@ -851,8 +859,11 @@
         desc: "reads all bytes from file. Returns array with bytes"
         desc_ru: "чтение всех байт файла. Возвращает массив байт файла"
         example: |-
+          use ["std", "files"]
+
           f1 = fopen("file.bin", "rb")
           array = readAllBytes(f1)
+          println length(array)
       - 
         name: "readBoolean"
         args: "f"
@@ -869,13 +880,17 @@
         desc: "reads `length` bytes of file `f` to `array` starting from `offset`. Returns number of readed bytes"
         desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то пропускается offset байт и читается length байт в массив array"
         example: |-
-          f1 = fopen("file.bin", "rb")
+          use "files"
+
+          f1 = fopen("file.bin", "rb") // file.bin must contain more than 5000 bytes
           array = newarray(2048)
           readedCount = readBytes(f1, array) // reads 2048 bytes
           readedCount = readBytes(f1, array, 10) // reads 2048 bytes starting from 11 byte
           readedCount = readBytes(f1, array, 20, 10) // reads 10 bytes, starting from 21 byte
         example_ru: |-
-          f1 = fopen("file.bin", "rb")
+          use "files"
+
+          f1 = fopen("file.bin", "rb") // file.bin должен иметь больше 5000 байтов
           array = newarray(2048)
           readedCount = readBytes(f1, array) // читает 2048 байт из файла
           readedCount = readBytes(f1, array, 10) // читает 2048 байт, начиная с 11 байта
@@ -931,6 +946,8 @@
         desc: "renames (or moves) file"
         desc_ru: "переименование (или перемещение) файла"
         example: |-
+          use "files"
+          
           f1 = fopen("C:/file1", "i")
           f2 = fopen("E:/file2", "i")
           rename(f1, f2)

@@ -1619,7 +1619,7 @@
         desc_ru: "сортирует элементы массива по данным в функции `function`"
         example: |-
           use "functional"
-          
+
           data = [
             {"k1": 2, "k2": "x"},
             {"k1": 7, "k2": "d"},
@@ -1741,8 +1741,12 @@
         desc: "performs click with given mouse buttons"
         desc_ru: "осуществляет клик мышью с заданными клавишами"
         example: |-
+          use "robot"
+
           click(BUTTON3) // right mouse button click
         example_ru: |-
+          use "robot"
+
           click(BUTTON3) // клик правой кнопкой мыши
       - 
         name: "delay"
@@ -1756,6 +1760,8 @@
         desc: "executes the process with parameters"
         desc_ru: "запускает процесс с параметрами\n\n  Если функции переданы несколько аргументов, то они все передаются как параметры.\n  Если функции передан только один параметр - массив, то его элементы передаются как параметры.\n  Если функции передан только один параметр, то он служит единственным параметром."
         example: |-
+          use "robot"
+          
           execProcess("mkdir", "Test")
           execProcess("mkdir Test")
           execProcess(["mkdir", "Test"])

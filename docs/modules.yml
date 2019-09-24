@@ -465,7 +465,7 @@
       - 
         name: "min"
         args: "x, y"
-        desc: ""
+        desc: "returns the smaller of two numbers"
         desc_ru: "минимальное из двух чисел"
       - 
         name: "nextAfter"

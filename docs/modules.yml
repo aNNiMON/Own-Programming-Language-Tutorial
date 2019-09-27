@@ -1914,97 +1914,114 @@
         typeName: number
         type: 1
         value: "40"
+        desc: "arrow down key code"
+        desc_ru: "код клавиши стрелка вниз"
       - 
         name: "VK_ESCAPE"
         typeName: number
         type: 1
         value: "27"
+        desc: "Esc key code"
+        desc_ru: "код клавиши Esc"
       - 
         name: "VK_FIRE"
         typeName: number
         type: 1
         value: "10"
+        desc: "Enter key code"
+        desc_ru: "код клавиши Enter"
       - 
         name: "VK_LEFT"
         typeName: number
         type: 1
         value: "37"
+        desc: "arrow left key code"
+        desc_ru: "код клавиши стрелка влево"
       - 
         name: "VK_RIGHT"
         typeName: number
         type: 1
         value: "39"
+        desc: "arrow left key code"
+        desc_ru: "код клавиши стрелка вправо"
       - 
         name: "VK_UP"
         typeName: number
         type: 1
         value: "38"
+        desc: "arrow up key code"
+        desc_ru: "код клавиши стрелка вверх"
     functions: 
       - 
         name: "clip"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "sets the current clip to the rectangle specified by the given coordinates"
+        desc_ru: "устанавливает текущий клип в прямоугольник, заданный данными координатами"
       - 
         name: "color"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "rgb"
+        desc: "sets color drawing. `rgb` - color with the specified combined RGB value"
+        desc_ru: "устанвливает цвет рисования. `rgb` - целое, комбинация цветов RGB, например `#FFGGFF`"
+      - 
+        name: "color"
+        args: "red, green, blue"
+        desc: "sets color with the specified red, green, and blue values in the range (0 - 255)"
+        desc_ru: "устанвливает цвет рисования c отдельными уровнями красного, зеленого и синего в диапазоне (0 - 255)"
       - 
         name: "drawstring"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "text, x, y"
+        desc: "draws string `text` at position `x`, `y`"
+        desc_ru: "рисует строку `text` с координатами `x`, `y`"
       - 
         name: "foval"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a filled oval at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует закрашенный овал на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "frect"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a filled rectangle at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует закрашенный прямоугольник на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "keypressed"
         args: ""
-        desc: ""
-        desc_ru: ""
+        desc: "returns the code of the pressed key (see the constant section)"
+        desc_ru: "возрвращает код нажатой клавиши (см. раздел константы)"
       - 
         name: "line"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x1, y1, x2, y2"
+        desc: "draws line from point (`x1`;y1`) to (`x2`;y2`)"
+        desc_ru: "рисует линию от позиции (`x1`;y1`) до (`x2`;y2`)"
       - 
         name: "mousehover"
         args: ""
-        desc: ""
-        desc_ru: ""
+        desc: "returns array with current mouse pointer coordinates"
+        desc_ru: "возвращает массив с текущими координатами указателя мыши"
       - 
         name: "oval"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a oval at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует овал на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "prompt"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "message"
+        desc: "displays a dialog box that prompts the visitor for input"
+        desc_ru: "показывает диалог для ввода значения от пользователя"
       - 
         name: "rect"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a rectangle at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует прямоугольник на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "repaint"
         args: ""
-        desc: ""
-        desc_ru: ""
+        desc: "draws elements from graphics buffer on canvas"
+        desc_ru: "прорисовывает элементы из буфера на холсте"
       - 
         name: "window"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "name, width, hight"
+        desc: "creates a new window with the specified `name` and size `width`x`height`"
+        desc_ru: "создает новое окно с именем `name` и размером `width`x`height`"
   - name: canvasfx
     scope: "desktop"
     desc: "Contains functions for working with Java FX graphics"

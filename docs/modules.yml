@@ -215,7 +215,7 @@
         example: |-
           use ["std", "http"]
 
-          url = "https://annimon.com/json/bot.php"
+          url = "https://whatthecommit.com/index.txt"
           result = sync(def(ret) {
              http(url, def(t) = ret(t))
           })
@@ -2172,8 +2172,10 @@
           Возвращает ImageFXValue.
         example: |-
           use "canvasfx"
+
           g = showcanvas()
-          bitmap = createImage("https://annimon.com/albums/files/2012-08-28_12-40-23-807_3105.jpg")
+          url = "http://lorempixel.com/640/480/nature"
+          bitmap = createImage(url)
           g.drawBitmap(bitmap, 0, 0)
           bitmap = createImage("file:image.png")
           g.drawBitmap(bitmap, 200, 0)
@@ -3839,8 +3841,10 @@
           Возвращает BitmapValue.
         example: |-
           use ["http", "canvas"]
+
           g = showcanvas()
-          imageBytes = download("https://annimon.com/albums/files/2012-08-28_12-40-23-807_3105.jpg")
+          url = "http://lorempixel.com/640/480/nature"
+          imageBytes = download(url)
           bitmap = createBitmap(imageBytes)
           g.drawBitmap(bitmap, 0, 0)
           repaint()

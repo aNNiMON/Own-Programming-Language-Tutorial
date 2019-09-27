@@ -80,7 +80,7 @@ def listPastBroadcasts(channel) {
   for vod : pastVods {
     println "=" * 30
     println vod._id
-    if (arrayKeyExists("title", vod) {
+    if arrayKeyExists("title", vod) {
       println vod.title
     }
     println "Date: " + formatTzDate(vod.recorded_at)
@@ -89,7 +89,7 @@ def listPastBroadcasts(channel) {
     println "Views: " + vod.views
     println "Previews:"
     println vod.preview
-    if (arrayKeyExists("animated_preview", vod) {
+    if arrayKeyExists("animated_preview", vod) {
       println vod.animated_preview
     }
     for quality : ["chunked", "high", "medium", "low", "mobile"] {

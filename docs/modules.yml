@@ -50,17 +50,31 @@
         desc_ru: возвращает значение `a`, если оно не пустое, иначе возвращается значение `b`
         since: 1.4.0
         example: |-
+          use "std"
+
+          user = {"name": "", "lastname": "Doe"}
           name = default(user.name, "Unknown")
+          lastname = default(user.lastname, "Unknown")
+          println name + " " + lastname  // Unknown Doe
         example_ru: |-
-          name = default(user.name, "Неизвестно")
+          use "std"
+
+          user = {"name": "", "lastname": "Иванов"}
+          name = default(user.name, "Имя неизвестно")
+          lastname = default(user.lastname, "фамилия неизвестна")
+          println name + " " + lastname // Имя неизвестно Иванов
       - name: echo
         args: "arg..."
         desc: "prints values to console, separate them by space and puts newline at the end. Takes variable number of arguments"
         desc_ru: "выводит значения в консоль, разделяя их пробелом, а потом ставит перенос строки. Может принимать переменное значение аргументов"
         example: |-
+          use "std"
+
           echo(1, "abc") // prints "1 abc" to console
           echo(1, 2, 3, 4, 5, "a", "b") // prints "1 2 3 4 5 a b"
         example_ru: |-
+          use "std"
+
           echo(1, "abc") // выведет строку "1 abc" в консоль
           echo(1, 2, 3, 4, 5, "a", "b") // выведет строку "1 2 3 4 5 a b" в консоль"
       - name: getBytes
@@ -89,8 +103,10 @@
         desc: "creates array with `size`.\n`newarray(x)` - creates 1D array, `newarray(x,y)` - creates 2D array"
         desc_ru: "оздаёт массив с размером size. Если указать 1 аргумент - создаётся одномерный массив, если 2 аргумента - двухмерный и т.д"
         example: |-
-          newarray(4) // [0, 0, 0, 0]
-          newarray(2, 3) // [[0, 0, 0], [0, 0, 0]]
+          use "std"
+
+          println newarray(4) // [0, 0, 0, 0]
+          println newarray(2, 3) // [[0, 0, 0], [0, 0, 0]]
       - name: parseInt
         args: "str, radix"
         desc: parses string into integer in the `radix`
@@ -120,10 +136,12 @@
           `range(from, to)` - создаёт промежуток от `from` до `to` (не включительно) с шагом 1
           `range(from, to, step)` - создаёт промежуток от `from` до `to` (не включительно) с шагом `step`
         example: |-
-          print range(3) // [0, 1, 2]
+          use "std"
+
+          println range(3) // [0, 1, 2]
           r = range(-5, 0) // [-5, -4, -3, -2, -1]
-          print r[0] // -5
-          print r[2] // -3
+          println r[0] // -5
+          println r[2] // -3
           for x : range(20, 9, -5) {
             println x
           } // 20 15 10
@@ -157,8 +175,10 @@
         desc: "splits string `str` with regular expression `regex` into array. `limit` parameter affects the length of resulting array"
         desc_ru: "разделяет строку `str` по шаблону `regex` и помещает элементы в массив. Если указан параметр `limit`, то будет произведено не более limit разбиений, соответственно размер результирующего массива будет ограничен этим значением limit"
         example: |-
-          split("a5b5c5d5e", "5") // ["a", "b", "c", "d", "e"]
-          split("a5b5c5d5e", "5", 3) // ["a", "b", "c5d5e"]
+          use "std"
+
+          println split("a5b5c5d5e", "5") // ["a", "b", "c", "d", "e"]
+          println split("a5b5c5d5e", "5", 3) // ["a", "b", "c5d5e"]
       - name: sprintf
         args: "format, args..."
         desc: "formats string by arguments"
@@ -174,6 +194,7 @@
         since: 1.5.0
         example: |-
           use "std"
+
           println "
                   |123
                   |456
@@ -183,16 +204,22 @@
         desc: "returns string from `startIndex` to `endIndex` or to end of string if `endIndex` is not set"
         desc_ru: "обрезает строку `str`, начиная от символа после позиции `startIndex` и по `endIndex`. Если `endIndex` не указан, обрезается до конца строки"
         example: |-
-          substring("abcde", 1) // bcde
-          substring("abcde", 2, 4) // cd
+          use "std"
+
+          println substring("abcde", 1) // bcde
+          println substring("abcde", 2, 4) // cd
       - name: sync
         args: "callback"
         desc: calls an asynchronous function synchronously
         desc_ru: делает асинхронный вызов синхронным
         example: |-
+          use ["std", "http"]
+
+          url = "https://whatthecommit.com/index.txt"
           result = sync(def(ret) {
              http(url, def(t) = ret(t))
           })
+          println result
       - name: thread
         args: "func, args..."
         desc: "creates new thread with parameters if passed"
@@ -203,15 +230,17 @@
 
             `args` - 0 или более аргументов, которые необходимо передать в функцию func
         example: |-
+          use "std"
+
           thread(def() {
-            print "New Thread"
+            println "New Thread"
           })
 
           thread(::newthread, 10)
           thread("newthread", 20)
 
           def newthread(x) {
-            print "New Thread. x = " + x
+            println "New Thread. x = " + x
           }
       - name: time
         args: ""
@@ -222,7 +251,9 @@
         desc: "converts char code to string"
         desc_ru: "переводит код символа в строку"
         example: |-
-          toChar(48) // "0"
+          use "std"
+
+          println toChar(48) // "0"
       - name: toHexString
         args: 'number'
         desc: 'converts number into hex string'
@@ -244,15 +275,19 @@
         desc: suppress any error in `unsafeFunction` and returns the result of the `catchFunction` if any error occurs
         desc_ru: подавляет любые ошибки в `unsafeFunction` и возрвщает результат функции `catchFunction`, если была ошибка
         example: |-
-          try(def() = "success") // success
-          try(def() = try + 2) // -1
-          try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))
-          try(def() = try(), 42) // 42
+          use "std"
+
+          println try(def() = "success") // success
+          println try(def() = try + 2) // -1
+          println try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))
+          println try(def() = try(), 42) // 42
         example_ru: |-
-          try(def() = "успех") // успех
-          try(def() = try + 2) // -1
-          try(def() = try(), def(type, message) = sprintf("Обработана ошибка:\nтип: %s\nсообщение: %s", type, message))
-          try(def() = try(), 42) // 42
+          use "std"
+
+          println try(def() = "успех") // успех
+          println try(def() = try + 2) // -1
+          println try(def() = try(), def(type, message) = sprintf("Обработана ошибка:\nтип: %s\nсообщение: %s", type, message))
+          println try(def() = try(), 42) // 42
   - name: types
     scope: "both"
     desc: "Contains functions for type checking and conversion"
@@ -320,7 +355,9 @@
         desc: "converts value to number if possible"
         desc_ru: "преобразует значение к числу, если это возможно"
         example: |-
-          print typeof(number("2.3")) // 1 (NUMBER)
+          use "types"
+
+          println typeof(number("2.3")) // 1 (NUMBER)
       - 
         name: "short"
         args: "value"
@@ -332,16 +369,20 @@
         desc: "converts value to string"
         desc_ru: "преобразует значение в строку"
         example: |-
-          print typeof(string(1)) // 2 (STRING)
+          use "types"
+
+          println typeof(string(1)) // 2 (STRING)
       - 
         name: "typeof"
         args: "value"
         desc: "returns the type of value"
         desc_ru: "возвращает тип переданного значения"
         example: |-
-          print typeof(1) // 1 (NUMBER)
-          print typeof("text") // 2 (STRING)
-          print typeof([]) // 3 (ARRAY)
+          use "types"
+
+          println typeof(1) // 1 (NUMBER)
+          println typeof("text") // 2 (STRING)
+          println typeof([]) // 3 (ARRAY)
   - name: math
     scope: "both"
     desc: "Contains math functions and constants"
@@ -394,12 +435,14 @@
         desc: "returns the ceiling of `x`"
         desc_ru: "округляет вещественное число в большую сторону"
         example: |-
+          use "math"
+
           ceil(6.4) // 7
       - 
         name: "copySign"
         args: "magnitude, sign"
-        desc: ""
-        desc_ru: ""
+        desc: "returns a value with the magnitude of x and the sign of y"
+        desc_ru: "возвращает значение с величиной x и знаком y"
       - 
         name: "cos"
         args: "x"
@@ -426,26 +469,28 @@
         desc: "returns floor of `x`"
         desc_ru: "округляет вещественное число в меньшую сторону"
         example: |-
+          use "math"
+
           floor(3.8) // 3
       - 
         name: "getExponent"
         args: "x"
-        desc: ""
-        desc_ru: ""
+        desc: "returns the unbiased exponent used in the representation of a double or float"
+        desc_ru: "возвращают несмещенное значение экспоненты числа"
       - 
         name: "hypot"
         args: "x, y"
-        desc: ""
+        desc: "returns the square root of the sum of squares of its arguments"
         desc_ru: "расчёт гипотенузы sqrt(x<sup>2</sup> + y<sup>2</sup>) без переполнения"
       - 
         name: "IEEEremainder"
         args: "x, y"
-        desc: ""
-        desc_ru: ""
+        desc: "returns the remainder resulting from the division of a specified number by another specified number. This operation complies with the remainder operation defined in Section 5.1 of ANSI/IEEE Std 754-1985; IEEE Standard for Binary Floating-Point Arithmetic; Institute of Electrical and Electronics Engineers, Inc; 1985."
+        desc_ru: "возвращает остаток от деления x на y по стандарту ANSI/IEEE Std 754-1985, раздел 5.1"
       - 
         name: "log"
         args: "x"
-        desc: ""
+        desc: "returns the logarithm of a specified number"
         desc_ru: "логарифм"
       - 
         name: "log1p"
@@ -455,17 +500,17 @@
       - 
         name: "log10"
         args: "x"
-        desc: ""
+        desc: "returns the base 10 logarithm of a specified number"
         desc_ru: "десятичный логарифм"
       - 
         name: "max"
         args: "x, y"
-        desc: ""
+        desc: "returns the larger of two specified numbers"
         desc_ru: "максимальное из двух чисел"
       - 
         name: "min"
         args: "x, y"
-        desc: ""
+        desc: "returns the smaller of two numbers"
         desc_ru: "минимальное из двух чисел"
       - 
         name: "nextAfter"
@@ -480,7 +525,7 @@
       - 
         name: "pow"
         args: "x, y"
-        desc: ""
+        desc: "returns a specified number raised to the specified power"
         desc_ru: "возведение x в степень y"
       - 
         name: "rint"
@@ -490,13 +535,13 @@
       - 
         name: "round"
         args: "x"
-        desc: ""
+        desc: "rounds a value to the nearest integer or to the specified number of fractional digits"
         desc_ru: "округляет вещественное число до ближайшего целого"
       - 
         name: "signum"
         args: "x"
-        desc: ""
-        desc_ru: ""
+        desc: "returns an integer that indicates the sign of a number"
+        desc_ru: "возвращает целое число, указывающее знак числа"
       - 
         name: "sin"
         args: "x"
@@ -631,7 +676,9 @@
         desc: formats date by given format and returns string
         desc_ru: форматирует дату в указанном формате и возвращает строку
         example: |-
-          d = date(2016, 4, 8)
+          use "date"
+
+          d = newDate(2016, 4, 8)
           println formatDate(d, newFormat("yyyy/MM/dd")) // "2016/05/08"
       - 
         name: "parseDate"
@@ -639,6 +686,8 @@
         desc: parses date from string by given pattern. Returns DateValue
         desc_ru: парсит дату из строки в указанном шаблоне. Возвращает DateValue
         example: |-
+          use "date"
+
           println parseDate("2016/05/08", newFormat("yyyy/MM/dd"))
       - 
         name: "toTimestamp"
@@ -745,9 +794,13 @@
 
             Возвращает дескриптор файла, который необходим для остальных функций.
         example: |-
+          use "files"
+
           f1 = fopen("text.txt") // opens file text.txt for read in text mode
           f2 = fopen("E:/1.dat", "rbwb") // opens file 1.dat on drive E for binary read and write"
         example_ru: |-
+          use "files"
+
           f1 = fopen("text.txt") // открывает файл text.txt для текстового чтения
           f2 = fopen("E:/1.dat", "rbwb") // открывает файл 1.dat на диске E для бинарного чтения и записи"
       - 
@@ -781,9 +834,13 @@
         desc: "returns array with filenames in given directory.\n\n f - directory descriptor"
         desc_ru: "возвращает массив с именами файлов в указанной директории.\n\n f - дескриптор папки"
         example: |-
+          use "files"
+
           f1 = fopen("E:/examples", "") // opens directory examples for getting information
           list = listFiles(f1) // gets array with filenames in directory
         example_ru: |-
+          use "files"
+
           f1 = fopen("E:/examples", "") // открыть папку examples для получения информации
           list = listFiles(f1) // получить массив с именами файлов в этой папке
       - 
@@ -802,8 +859,11 @@
         desc: "reads all bytes from file. Returns array with bytes"
         desc_ru: "чтение всех байт файла. Возвращает массив байт файла"
         example: |-
+          use ["std", "files"]
+
           f1 = fopen("file.bin", "rb")
           array = readAllBytes(f1)
+          println length(array)
       - 
         name: "readBoolean"
         args: "f"
@@ -817,20 +877,24 @@
       - 
         name: "readBytes"
         args: "f, array, offset = 0, length = length(array)"
-        desc: "reads `length` bytes of file `f` to `array` starting from `offset`. Returns number of readed bytes"
-        desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то пропускается offset байт и читается length байт в массив array"
+        desc: "reads `length` bytes of file `f` and stores to `array` starting from `offset+1` byte. Returns number of read bytes"
+        desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то читается length байт в массив array, начиная с `offset+1` байта"
         example: |-
-          f1 = fopen("file.bin", "rb")
+          use "files"
+
+          f1 = fopen("file.bin", "rb") // file.bin must contain more than 5000 bytes
           array = newarray(2048)
-          readedCount = readBytes(f1, array) // reads 2048 bytes
-          readedCount = readBytes(f1, array, 10) // reads 2048 bytes starting from 11 byte
-          readedCount = readBytes(f1, array, 20, 10) // reads 10 bytes, starting from 21 byte
+          readCount = readBytes(f1, array) // reads 2048 bytes
+          readCount = readBytes(f1, array, 10) // reads 2048 bytes starting from 11 byte
+          readCount = readBytes(f1, array, 20, 10) // reads 10 bytes, starting from 21 byte
         example_ru: |-
-          f1 = fopen("file.bin", "rb")
+          use "files"
+
+          f1 = fopen("file.bin", "rb") // file.bin должен иметь больше 5000 байтов
           array = newarray(2048)
-          readedCount = readBytes(f1, array) // читает 2048 байт из файла
-          readedCount = readBytes(f1, array, 10) // читает 2048 байт, начиная с 11 байта
-          readedCount = readBytes(f1, array, 20, 10) // читает 10 байт, начиная с 21 байта
+          readCount = readBytes(f1, array) // читает 2048 байт из файла
+          readCount = readBytes(f1, array, 10) // читает 2048 байт, начиная с 11 байта
+          readCount = readBytes(f1, array, 20, 10) // читает 10 байт, начиная с 21 байта
       - 
         name: "readChar"
         args: "f"
@@ -882,6 +946,8 @@
         desc: "renames (or moves) file"
         desc_ru: "переименование (или перемещение) файла"
         example: |-
+          use "files"
+
           f1 = fopen("C:/file1", "i")
           f2 = fopen("E:/file2", "i")
           rename(f1, f2)
@@ -1230,10 +1296,15 @@
         desc: 'downloads file from `downloadUrl` to `filePath`'
         desc_ru: 'скачивает файл по адресу `downloadUrl` и сохраняет в `filePath`'
         example: |-
-          use "downloader"
+          use ["downloader", "std"]
+
+          MBYTES = 1048576.0 // 1024*1024
+          url = "http://www.ovh.net/files/10Mb.dat"
+          file = "10Mb.dat"
+
           downloader(url, file, def(progress, bytesDownloaded, bytesMax) {
             bar = "#" * (progress / 2)
-            print sprintf("%-50s %d%% %.2f / %.2f\r", bar, progress, cur / 1048576.0, max / 1048576.0)
+            print sprintf("%-50s %d%% %.2f / %.2f MiB\r", bar, progress, bytesDownloaded / MBYTES, bytesMax / MBYTES)
           })
   - name: base64
     scope: both
@@ -1467,13 +1538,29 @@
         desc: "combines functions"
         desc_ru: "комбинирует функции (композиция)"
         example: |-
+          use "functional"
+
+          def f1() = 2
+          def f2(a) = a*2
+          def f3(a) = a/4
+
           f = combine(::f1, ::f2, ::f3)
+          println f() // 1
           // same as
-          f = def(f1, f2, f3) = f3(f2(f1))
+          f = def() = f3(f2(f1()))
+          println f() // 1
         example_ru: |-
+          use "functional"
+
+          def f1() = 2
+          def f2(a) = a*2
+          def f3(a) = a/4
+          
           f = combine(::f1, ::f2, ::f3)
+          println f() // 1
           // равносильно
-          f = def(f1, f2, f3) = f3(f2(f1))
+          f = def() = f3(f2(f1()))
+          println f() // 1
       - name: dropwhile
         args: 'data, predicate'
         desc: 'skips elements while predicate function returns true'
@@ -1483,6 +1570,8 @@
         desc: "filters array or object.\n\n`predicate` is a function which takes one argument for arrays or two arguments for objects"
         desc_ru: "фильтрует массив или объект и возвращает массив только с теми элементами, которые удовлетворяют предикату `predicate`.\n\n`predicate` - функция которая принимает один (для массивов) и два (для объектов) аргумента"
         example: |-
+          use "functional"
+
           nums = [1,2,3,4,5]
           print filter(nums, def(x) = x % 2 == 0) // [2, 4]
       - name: "flatmap"
@@ -1490,6 +1579,8 @@
         desc: "converts each element of an array to other array"
         desc_ru: "преобразует каждый элемент массива в массив элементов"
         example: |-
+          use "functional"
+
           nums = [1,2,3,4]
           print flatmap(nums, def(x) {
             arr = newarray(x)
@@ -1502,6 +1593,8 @@
         desc: "invokes function `consumer` for each element of array or map `data`\n\nIf `data` - массив, то в функции consumer необходим один параметр, если объект - два (ключ и значение)."
         desc_ru: "для каждого элемента в массиве или объекте `data` вызывает функцию `consumer`\n\nЕсли `data` - массив, то в функции `consumer` необходим один параметр, если объект - два (ключ и значение)."
         example: |-
+          use "functional"
+
           foreach([1, 2, 3], def(v) { print v })
           foreach({"key": 1, "key2": "text"}, def(key, value) {
             print key + ": " + value
@@ -1511,6 +1604,8 @@
         desc: "converts elements of array or map. If `data` is array - `mapper` converts his elements, if `data` is object - you need to pass `keyMapper` - converts keys and `valueMapper` - converts values"
         desc_ru: "преобразует элементы массива или объекта.\n\nЕсли `data` - массив, то функция `mapper` преобразует значения, если объект - необходимо передать две функции: `keyMapper` - преобразует ключи и `valueMapper` - преобразует значения"
         example: |-
+          use "functional"
+
           nums = [3,4,5]
           print map(nums, def(x) = x * x) // [9, 16, 25]
       - name: "reduce"
@@ -1518,13 +1613,17 @@
         desc: "converts elements of an array or a map to one value, e.g. sum of elements or concatenation string. `accumulator` takes one argument for array and two arguments for object (key and value)."
         desc_ru: "преобразует элементы массива или объекта в одно значение, например сумма элементов или объединение в строку.\n\nЕсли `data` - массив, то в функции `accumulator` необходим один параметр, если объект - два (ключ и значение)"
         example: |-
+          use "functional"
+
           nums = [1,2,3,4,5]
-          print reduce(nums, 0, def(x, y) = x + x) // 15
+          print reduce(nums, 0, def(x, y) = x + y) // 15
       - name: "sortby"
         args: "array, function"
         desc: "sorts elements of an array or an object by `function` result"
         desc_ru: "сортирует элементы массива по данным в функции `function`"
         example: |-
+          use "functional"
+
           data = [
             {"k1": 2, "k2": "x"},
             {"k1": 7, "k2": "d"},
@@ -1646,8 +1745,12 @@
         desc: "performs click with given mouse buttons"
         desc_ru: "осуществляет клик мышью с заданными клавишами"
         example: |-
+          use "robot"
+
           click(BUTTON3) // right mouse button click
         example_ru: |-
+          use "robot"
+
           click(BUTTON3) // клик правой кнопкой мыши
       - 
         name: "delay"
@@ -1661,6 +1764,8 @@
         desc: "executes the process with parameters"
         desc_ru: "запускает процесс с параметрами\n\n  Если функции переданы несколько аргументов, то они все передаются как параметры.\n  Если функции передан только один параметр - массив, то его элементы передаются как параметры.\n  Если функции передан только один параметр, то он служит единственным параметром."
         example: |-
+          use "robot"
+
           execProcess("mkdir", "Test")
           execProcess("mkdir Test")
           execProcess(["mkdir", "Test"])
@@ -1809,97 +1914,114 @@
         typeName: number
         type: 1
         value: "40"
+        desc: "arrow down key code"
+        desc_ru: "код клавиши стрелка вниз"
       - 
         name: "VK_ESCAPE"
         typeName: number
         type: 1
         value: "27"
+        desc: "Esc key code"
+        desc_ru: "код клавиши Esc"
       - 
         name: "VK_FIRE"
         typeName: number
         type: 1
         value: "10"
+        desc: "Enter key code"
+        desc_ru: "код клавиши Enter"
       - 
         name: "VK_LEFT"
         typeName: number
         type: 1
         value: "37"
+        desc: "arrow left key code"
+        desc_ru: "код клавиши стрелка влево"
       - 
         name: "VK_RIGHT"
         typeName: number
         type: 1
         value: "39"
+        desc: "arrow left key code"
+        desc_ru: "код клавиши стрелка вправо"
       - 
         name: "VK_UP"
         typeName: number
         type: 1
         value: "38"
+        desc: "arrow up key code"
+        desc_ru: "код клавиши стрелка вверх"
     functions: 
       - 
         name: "clip"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "sets the current clip to the rectangle specified by the given coordinates"
+        desc_ru: "устанавливает текущий клип в прямоугольник, заданный данными координатами"
       - 
         name: "color"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "rgb"
+        desc: "sets color drawing. `rgb` - color with the specified combined RGB value"
+        desc_ru: "устанвливает цвет рисования. `rgb` - целое, комбинация цветов RGB, например `#FFGGFF`"
+      - 
+        name: "color"
+        args: "red, green, blue"
+        desc: "sets color with the specified red, green, and blue values in the range (0 - 255)"
+        desc_ru: "устанвливает цвет рисования c отдельными уровнями красного, зеленого и синего в диапазоне (0 - 255)"
       - 
         name: "drawstring"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "text, x, y"
+        desc: "draws string `text` at position `x`, `y`"
+        desc_ru: "рисует строку `text` с координатами `x`, `y`"
       - 
         name: "foval"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a filled oval at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует закрашенный овал на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "frect"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a filled rectangle at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует закрашенный прямоугольник на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "keypressed"
         args: ""
-        desc: ""
-        desc_ru: ""
+        desc: "returns the code of the pressed key (see the constant section)"
+        desc_ru: "возрвращает код нажатой клавиши (см. раздел константы)"
       - 
         name: "line"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x1, y1, x2, y2"
+        desc: "draws line from point (`x1`;y1`) to (`x2`;y2`)"
+        desc_ru: "рисует линию от позиции (`x1`;y1`) до (`x2`;y2`)"
       - 
         name: "mousehover"
         args: ""
-        desc: ""
-        desc_ru: ""
+        desc: "returns array with current mouse pointer coordinates"
+        desc_ru: "возвращает массив с текущими координатами указателя мыши"
       - 
         name: "oval"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a oval at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует овал на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "prompt"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "message"
+        desc: "displays a dialog box that prompts the visitor for input"
+        desc_ru: "показывает диалог для ввода значения от пользователя"
       - 
         name: "rect"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "x, y, w, h"
+        desc: "draws a rectangle at position `x`,` y`, size `w`,` h`"
+        desc_ru: "рисует прямоугольник на позиции `x`, `y`, размером `w`, `h`"
       - 
         name: "repaint"
         args: ""
-        desc: ""
-        desc_ru: ""
+        desc: "draws elements from graphics buffer on canvas"
+        desc_ru: "прорисовывает элементы из буфера на холсте"
       - 
         name: "window"
-        args: ""
-        desc: ""
-        desc_ru: ""
+        args: "name, width, hight"
+        desc: "creates a new window with the specified `name` and size `width`x`height`"
+        desc_ru: "создает новое окно с именем `name` и размером `width`x`height`"
   - name: canvasfx
     scope: "desktop"
     desc: "Contains functions for working with Java FX graphics"
@@ -2067,8 +2189,10 @@
           Возвращает ImageFXValue.
         example: |-
           use "canvasfx"
+
           g = showcanvas()
-          bitmap = createImage("http://lorempixel.com/image_output/nature-q-c-640-480-10.jpg")
+          url = "http://lorempixel.com/640/480/nature"
+          bitmap = createImage(url)
           g.drawBitmap(bitmap, 0, 0)
           bitmap = createImage("file:image.png")
           g.drawBitmap(bitmap, 200, 0)
@@ -3734,10 +3858,13 @@
           Возвращает BitmapValue.
         example: |-
           use ["http", "canvas"]
+
           g = showcanvas()
-          imageBytes = download("http://lorempixel.com/image_output/nature-q-c-640-480-10.jpg")
+          url = "http://lorempixel.com/640/480/nature"
+          imageBytes = download(url)
           bitmap = createBitmap(imageBytes)
           g.drawBitmap(bitmap, 0, 0)
+          repaint()
       - 
         name: "createScaledBitmap"
         args: "srcBitmap, width, height, filter"
@@ -4418,6 +4545,11 @@
         desc: ''
         desc_ru: ''
         example: |-
+          use ["std", "android", "forms"]
+
+          img1 = assetBitmap("ownlang.png")
+          img2 = img1
+
           items = [
             {"img" : img1, "text" : "Item 1"},
             {"img" : img2, "text" : "Item 2"}
@@ -4438,12 +4570,24 @@
                } else {
                   extract(imageView, textView) = view.getTag()
                }
-          
+
                imageView.setImageBitmap(items[pos].img);
-               textView.setText(toHexString(items[pos].text));
+               textView.setText(items[pos].text);
                return view
             }
           });
+
+          listView = newListView()
+          listView.setAdapter(adapter)
+          listView.onItemClick(def(v, pos, id) {
+            toast(adapter.getItem(pos).text + " selected")
+          })
+
+          panel = newLinearLayout()
+          panel.addView(newTextView("ListView with BaseAdapter demo"))
+          panel.addView(listView)
+
+          showForm(panel)
       - name: newButton
         args: 'text = ""'
         desc: 'creates Button'
@@ -4487,6 +4631,11 @@
           pb1.setProgress(10)
           pb2 = newProgressBar()
           pb2.setIndeterminate(true)
+
+          panel = newLinearLayout()
+          panel.addView(pb1)
+          panel.addView(pb2)
+          showForm(panel)
       - name: newRadioButton
         args: ''
         desc: 'creates RadioButton'
@@ -6528,6 +6677,8 @@
           подписывается на обработчик получения местоположения
         example: |-
           use ["std", "gps"]
+
+          provider = "gps" // or passive, network if exists
           // requestUpdates(provider, 0, 25, def(loc) = echo("location changed: ", loc))
           requestUpdates(provider, 10 * 1000, 25, {
             "onLocationChanged" : def(loc) = echo("location changed: ", loc)

@@ -1296,11 +1296,15 @@
         desc: 'downloads file from `downloadUrl` to `filePath`'
         desc_ru: 'скачивает файл по адресу `downloadUrl` и сохраняет в `filePath`'
         example: |-
-          use "downloader"
+          use ["downloader", "std"]
+
+          MBYTES = 1048576.0 // 1024*1024
+          url = "http://www.ovh.net/files/10Mb.dat"
+          file = "10Mb.dat"
 
           downloader(url, file, def(progress, bytesDownloaded, bytesMax) {
             bar = "#" * (progress / 2)
-            print sprintf("%-50s %d%% %.2f / %.2f\r", bar, progress, float(bytesDownloaded / bytesMax), float(bytesMax))
+            print sprintf("%-50s %d%% %.2f / %.2f MiB\r", bar, progress, bytesDownloaded / MBYTES, bytesMax / MBYTES)
           })
   - name: base64
     scope: both

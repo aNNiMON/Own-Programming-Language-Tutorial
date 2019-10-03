@@ -1,15 +1,14 @@
 package com.annimon.ownlang.lib;
 
-import com.annimon.ownlang.exceptions.UnknownFunctionException;
 import com.annimon.ownlang.parser.ast.ClassDeclarationStatement;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class ClassDeclarations {
 
     private static final Map<String, ClassDeclarationStatement> declarations;
     static {
-        declarations = new HashMap<>();
+        declarations = new ConcurrentHashMap<>();
     }
 
     private ClassDeclarations() { }
@@ -22,12 +21,7 @@ public final class ClassDeclarations {
         return declarations;
     }
     
-    public static boolean isExists(String key) {
-        return declarations.containsKey(key);
-    }
-    
     public static ClassDeclarationStatement get(String key) {
-        if (!isExists(key)) throw new UnknownFunctionException(key);
         return declarations.get(key);
     }
     

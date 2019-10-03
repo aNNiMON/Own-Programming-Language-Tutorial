@@ -103,7 +103,7 @@ public final class java implements Module {
         }
     }
 
-    private static class ClassValue extends MapValue {
+    private static class ClassValue extends MapValue implements Instantiable {
 
         public static Value classOrNull(Class<?> clazz) {
             if (clazz == null) return NULL;
@@ -162,7 +162,8 @@ public final class java implements Module {
             return NumberValue.fromBoolean(clazz.isAssignableFrom( ((ClassValue)args[0]).clazz ));
         }
 
-        private Value newInstance(Value[] args) {
+        @Override
+        public Value newInstance(Value[] args) {
             return findConstructorAndInstantiate(args, clazz.getConstructors());
         }
 

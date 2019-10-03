@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -167,7 +168,7 @@ public final class java implements Module {
             return findConstructorAndInstantiate(args, clazz.getConstructors());
         }
 
-        private Value cast(Value... args) {
+        private Value cast(Value[] args) {
             Arguments.check(1, args.length);
             return objectToValue(clazz, clazz.cast(((ObjectValue)args[0]).object));
         }
@@ -337,7 +338,15 @@ public final class java implements Module {
             boolean assignable = unboxed != null;
             final Object object = valueToObject(arg);
             assignable = assignable && (object != null);
-            assignable = assignable && (unboxed.isAssignableFrom(object.getClass()));
+            if (assignable && unboxed.isArray() && object.getClass().isArray()) {
+                final Class<?> uComponentType = unboxed.getComponentType();
+                final Class<?> oComponentType = object.getClass().getComponentType();
+                assignable = assignable && (uComponentType != null);
+                assignable = assignable && (oComponentType != null);
+                assignable = assignable && (uComponentType.isAssignableFrom(oComponentType));
+            } else {
+                assignable = assignable && (unboxed.isAssignableFrom(object.getClass()));
+            }
             if (assignable) continue;
 
             return false;
@@ -460,7 +469,7 @@ public final class java implements Module {
         }
         return result;
     }
-
+    
     private static Object[] valuesToObjects(Value[] args) {
         Object[] result = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -490,11 +499,72 @@ public final class java implements Module {
 
     private static Object arrayToObject(ArrayValue value) {
         final int size = value.size();
-        final Object[] result = new Object[size];
-        for (int i = 0; i < size; i++) {
-            result[i] = valueToObject(value.get(i));
+        final Object[] array = new Object[size];
+        if (size == 0) {
+            return array;
         }
-        return result;
+        
+        Class<?> elementsType = null;
+        for (int i = 0; i < size; i++) {
+            array[i] = valueToObject(value.get(i));
+            if (i == 0) {
+                elementsType = array[0].getClass();
+            } else {
+                elementsType = mostCommonType(elementsType, array[i].getClass());
+            }
+        }
+        
+        if (elementsType.equals(Object[].class)) {
+            return array;
+        }
+        return typedArray(array, size, elementsType);
+    }
+    
+    private static <T, U> T[] typedArray(U[] elements, int newLength, Class<?> elementsType) {
+        @SuppressWarnings("unchecked")
+        T[] copy = (T[]) Array.newInstance(elementsType, newLength);
+        System.arraycopy(elements, 0, copy, 0, Math.min(elements.length, newLength));
+        return copy;
+    }
+    
+    private static Class<?> mostCommonType(Class<?> c1, Class<?> c2) {
+        if (c1.equals(c2)) {
+            return c1;
+        } else if (c1.isAssignableFrom(c2)) {
+            return c1;
+        } else if (c2.isAssignableFrom(c1)) {
+            return c2;
+        }
+        final Class<?> s1 = c1.getSuperclass();
+        final Class<?> s2 = c2.getSuperclass();
+        if (s1 == null && s2 == null) {
+            final List<Class<?>> upperTypes = Arrays.asList(
+                    Object.class, void.class, boolean.class, char.class,
+                    byte.class, short.class, int.class, long.class,
+                    float.class, double.class);
+            for (Class<?> type : upperTypes) {
+                if (c1.equals(type) && c2.equals(type)) {
+                    return s1;
+                }
+            }
+            return Object.class;
+        } else if (s1 == null || s2 == null) {
+            if (c1.equals(c2)) {
+                return c1;
+            }
+            if (c1.isInterface() && c1.isAssignableFrom(c2)) {
+                return c1;
+            }
+            if (c2.isInterface() && c2.isAssignableFrom(c1)) {
+                return c2;
+            }
+        }
+        
+        if (s1 != null) {
+            return mostCommonType(s1, c2);
+        } else {
+            return mostCommonType(c1, s2);
+        }
     }
 //</editor-fold>
 }

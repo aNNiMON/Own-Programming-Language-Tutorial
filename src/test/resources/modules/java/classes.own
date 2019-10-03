@@ -38,7 +38,7 @@ def testInvokeMethodSameName() {
 
 def testNonDefaultConstructor() {
   StringBuilder = newClass("java.lang.StringBuilder")
-  sb = StringBuilder.`new`("text")
+  sb = new StringBuilder("text")
   assertEquals("text", sb.toString())
 }
 

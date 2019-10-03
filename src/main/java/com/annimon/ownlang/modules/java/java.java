@@ -3,6 +3,7 @@ package com.annimon.ownlang.modules.java;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -156,17 +157,13 @@ public final class java implements Module {
             return new ClassValue(clazz.asSubclass( ((ClassValue)args[0]).clazz ));
         }
 
-        private Value isAssignableFrom(Value... args) {
+        private Value isAssignableFrom(Value[] args) {
             Arguments.check(1, args.length);
             return NumberValue.fromBoolean(clazz.isAssignableFrom( ((ClassValue)args[0]).clazz ));
         }
 
-        private Value newInstance(Value... args) {
-            try {
-                return new ObjectValue(clazz.newInstance());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                return NULL;
-            }
+        private Value newInstance(Value[] args) {
+            return findConstructorAndInstantiate(args, clazz.getConstructors());
         }
 
         private Value cast(Value... args) {
@@ -293,6 +290,21 @@ public final class java implements Module {
 
         return NULL;
     }
+    
+    private static Value findConstructorAndInstantiate(Value[] args, Constructor<?>[] ctors) {
+        for (Constructor<?> ctor : ctors) {
+            if (ctor.getParameterCount() != args.length) continue;
+            if (!isMatch(args, ctor.getParameterTypes())) continue;
+            try {
+                final Object result = ctor.newInstance(valuesToObjects(args));
+                return new ObjectValue(result);
+            } catch (InstantiationException | IllegalAccessException
+                    | IllegalArgumentException | InvocationTargetException ex) {
+                // skip
+            }
+        }
+        return null;
+    }
 
     private static Function methodsToFunction(Object object, List<Method> methods) {
         return (args) -> {
@@ -312,7 +324,7 @@ public final class java implements Module {
             return null;
         };
     }
-
+    
     private static boolean isMatch(Value[] args, Class<?>[] types) {
         for (int i = 0; i < args.length; i++) {
             final Value arg = args[i];

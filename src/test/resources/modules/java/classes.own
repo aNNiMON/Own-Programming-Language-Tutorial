@@ -36,6 +36,12 @@ def testInvokeMethodSameName() {
   assertEquals("text", data.getText())
 }
 
+def testNonDefaultConstructor() {
+  StringBuilder = newClass("java.lang.StringBuilder")
+  sb = new StringBuilder("text")
+  assertEquals("text", sb.toString())
+}
+
 
 def createObject() {
   dataClass = newClass("interop.Data")

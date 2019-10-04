@@ -3,10 +3,12 @@ package com.annimon.ownlang.modules.java;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -102,7 +104,7 @@ public final class java implements Module {
         }
     }
 
-    private static class ClassValue extends MapValue {
+    private static class ClassValue extends MapValue implements Instantiable {
 
         public static Value classOrNull(Class<?> clazz) {
             if (clazz == null) return NULL;
@@ -151,25 +153,22 @@ public final class java implements Module {
             set("cast", new FunctionValue(this::cast));
         }
 
-        private Value asSubclass(Value... args) {
+        private Value asSubclass(Value[] args) {
             Arguments.check(1, args.length);
             return new ClassValue(clazz.asSubclass( ((ClassValue)args[0]).clazz ));
         }
 
-        private Value isAssignableFrom(Value... args) {
+        private Value isAssignableFrom(Value[] args) {
             Arguments.check(1, args.length);
             return NumberValue.fromBoolean(clazz.isAssignableFrom( ((ClassValue)args[0]).clazz ));
         }
 
-        private Value newInstance(Value... args) {
-            try {
-                return new ObjectValue(clazz.newInstance());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                return NULL;
-            }
+        @Override
+        public Value newInstance(Value[] args) {
+            return findConstructorAndInstantiate(args, clazz.getConstructors());
         }
 
-        private Value cast(Value... args) {
+        private Value cast(Value[] args) {
             Arguments.check(1, args.length);
             return objectToValue(clazz, clazz.cast(((ObjectValue)args[0]).object));
         }
@@ -209,7 +208,7 @@ public final class java implements Module {
 
         @Override
         public boolean containsKey(Value key) {
-            return getValue(object.getClass(), object, key.asString()) != null;
+            return get(key) != null;
         }
 
         @Override
@@ -229,7 +228,7 @@ public final class java implements Module {
     }
 //</editor-fold>
 
-    private Value isNull(Value... args) {
+    private Value isNull(Value[] args) {
         Arguments.checkAtLeast(1, args.length);
         for (Value arg : args) {
             if (arg.raw() == null) return NumberValue.ONE;
@@ -237,24 +236,24 @@ public final class java implements Module {
         return NumberValue.ZERO;
     }
 
-    private Value newClass(Value... args) {
+    private Value newClass(Value[] args) {
         Arguments.check(1, args.length);
 
         final String className = args[0].asString();
         try {
             return new ClassValue(Class.forName(className));
         } catch (ClassNotFoundException ce) {
-            return NULL;
+            throw new RuntimeException("Class " + className + " not found.", ce);
         }
     }
 
-    private Value toObject(Value... args) {
+    private Value toObject(Value[] args) {
         Arguments.check(1, args.length);
         if (args[0] == NULL) return NULL;
         return new ObjectValue(valueToObject(args[0]));
     }
 
-    private Value toValue(Value... args) {
+    private Value toValue(Value[] args) {
         Arguments.check(1, args.length);
         if (args[0] instanceof ObjectValue) {
             return objectToValue( ((ObjectValue) args[0]).object );
@@ -293,6 +292,22 @@ public final class java implements Module {
 
         return NULL;
     }
+    
+    private static Value findConstructorAndInstantiate(Value[] args, Constructor<?>[] ctors) {
+        for (Constructor<?> ctor : ctors) {
+            if (ctor.getParameterCount() != args.length) continue;
+            if (!isMatch(args, ctor.getParameterTypes())) continue;
+            try {
+                final Object result = ctor.newInstance(valuesToObjects(args));
+                return new ObjectValue(result);
+            } catch (InstantiationException | IllegalAccessException
+                    | IllegalArgumentException | InvocationTargetException ex) {
+                // skip
+            }
+        }
+        throw new RuntimeException("Constructor for " + args.length + " arguments"
+                + " not found or non accessible");
+    }
 
     private static Function methodsToFunction(Object object, List<Method> methods) {
         return (args) -> {
@@ -309,10 +324,12 @@ public final class java implements Module {
                     // skip
                 }
             }
-            return null;
+            final String className = (object == null ? "null" : object.getClass().getName());
+            throw new RuntimeException("Method for " + args.length + " arguments"
+                + " not found or non accessible in " + className);
         };
     }
-
+    
     private static boolean isMatch(Value[] args, Class<?>[] types) {
         for (int i = 0; i < args.length; i++) {
             final Value arg = args[i];
@@ -324,7 +341,15 @@ public final class java implements Module {
             boolean assignable = unboxed != null;
             final Object object = valueToObject(arg);
             assignable = assignable && (object != null);
-            assignable = assignable && (unboxed.isAssignableFrom(object.getClass()));
+            if (assignable && unboxed.isArray() && object.getClass().isArray()) {
+                final Class<?> uComponentType = unboxed.getComponentType();
+                final Class<?> oComponentType = object.getClass().getComponentType();
+                assignable = assignable && (uComponentType != null);
+                assignable = assignable && (oComponentType != null);
+                assignable = assignable && (uComponentType.isAssignableFrom(oComponentType));
+            } else {
+                assignable = assignable && (unboxed.isAssignableFrom(object.getClass()));
+            }
             if (assignable) continue;
 
             return false;
@@ -447,7 +472,7 @@ public final class java implements Module {
         }
         return result;
     }
-
+    
     private static Object[] valuesToObjects(Value[] args) {
         Object[] result = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -477,11 +502,72 @@ public final class java implements Module {
 
     private static Object arrayToObject(ArrayValue value) {
         final int size = value.size();
-        final Object[] result = new Object[size];
-        for (int i = 0; i < size; i++) {
-            result[i] = valueToObject(value.get(i));
+        final Object[] array = new Object[size];
+        if (size == 0) {
+            return array;
         }
-        return result;
+        
+        Class<?> elementsType = null;
+        for (int i = 0; i < size; i++) {
+            array[i] = valueToObject(value.get(i));
+            if (i == 0) {
+                elementsType = array[0].getClass();
+            } else {
+                elementsType = mostCommonType(elementsType, array[i].getClass());
+            }
+        }
+        
+        if (elementsType.equals(Object[].class)) {
+            return array;
+        }
+        return typedArray(array, size, elementsType);
+    }
+    
+    private static <T, U> T[] typedArray(U[] elements, int newLength, Class<?> elementsType) {
+        @SuppressWarnings("unchecked")
+        T[] copy = (T[]) Array.newInstance(elementsType, newLength);
+        System.arraycopy(elements, 0, copy, 0, Math.min(elements.length, newLength));
+        return copy;
+    }
+    
+    private static Class<?> mostCommonType(Class<?> c1, Class<?> c2) {
+        if (c1.equals(c2)) {
+            return c1;
+        } else if (c1.isAssignableFrom(c2)) {
+            return c1;
+        } else if (c2.isAssignableFrom(c1)) {
+            return c2;
+        }
+        final Class<?> s1 = c1.getSuperclass();
+        final Class<?> s2 = c2.getSuperclass();
+        if (s1 == null && s2 == null) {
+            final List<Class<?>> upperTypes = Arrays.asList(
+                    Object.class, void.class, boolean.class, char.class,
+                    byte.class, short.class, int.class, long.class,
+                    float.class, double.class);
+            for (Class<?> type : upperTypes) {
+                if (c1.equals(type) && c2.equals(type)) {
+                    return s1;
+                }
+            }
+            return Object.class;
+        } else if (s1 == null || s2 == null) {
+            if (c1.equals(c2)) {
+                return c1;
+            }
+            if (c1.isInterface() && c1.isAssignableFrom(c2)) {
+                return c1;
+            }
+            if (c2.isInterface() && c2.isAssignableFrom(c1)) {
+                return c2;
+            }
+        }
+        
+        if (s1 != null) {
+            return mostCommonType(s1, c2);
+        } else {
+            return mostCommonType(c1, s2);
+        }
     }
 //</editor-fold>
 }

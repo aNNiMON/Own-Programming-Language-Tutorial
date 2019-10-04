@@ -153,7 +153,7 @@ public final class java implements Module {
             set("cast", new FunctionValue(this::cast));
         }
 
-        private Value asSubclass(Value... args) {
+        private Value asSubclass(Value[] args) {
             Arguments.check(1, args.length);
             return new ClassValue(clazz.asSubclass( ((ClassValue)args[0]).clazz ));
         }
@@ -208,7 +208,7 @@ public final class java implements Module {
 
         @Override
         public boolean containsKey(Value key) {
-            return getValue(object.getClass(), object, key.asString()) != null;
+            return get(key) != null;
         }
 
         @Override
@@ -228,7 +228,7 @@ public final class java implements Module {
     }
 //</editor-fold>
 
-    private Value isNull(Value... args) {
+    private Value isNull(Value[] args) {
         Arguments.checkAtLeast(1, args.length);
         for (Value arg : args) {
             if (arg.raw() == null) return NumberValue.ONE;
@@ -236,24 +236,24 @@ public final class java implements Module {
         return NumberValue.ZERO;
     }
 
-    private Value newClass(Value... args) {
+    private Value newClass(Value[] args) {
         Arguments.check(1, args.length);
 
         final String className = args[0].asString();
         try {
             return new ClassValue(Class.forName(className));
         } catch (ClassNotFoundException ce) {
-            return NULL;
+            throw new RuntimeException("Class " + className + " not found.", ce);
         }
     }
 
-    private Value toObject(Value... args) {
+    private Value toObject(Value[] args) {
         Arguments.check(1, args.length);
         if (args[0] == NULL) return NULL;
         return new ObjectValue(valueToObject(args[0]));
     }
 
-    private Value toValue(Value... args) {
+    private Value toValue(Value[] args) {
         Arguments.check(1, args.length);
         if (args[0] instanceof ObjectValue) {
             return objectToValue( ((ObjectValue) args[0]).object );
@@ -305,7 +305,8 @@ public final class java implements Module {
                 // skip
             }
         }
-        return null;
+        throw new RuntimeException("Constructor for " + args.length + " arguments"
+                + " not found or non accessible");
     }
 
     private static Function methodsToFunction(Object object, List<Method> methods) {
@@ -323,7 +324,9 @@ public final class java implements Module {
                     // skip
                 }
             }
-            return null;
+            final String className = (object == null ? "null" : object.getClass().getName());
+            throw new RuntimeException("Method for " + args.length + " arguments"
+                + " not found or non accessible in " + className);
         };
     }
     

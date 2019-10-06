@@ -1,0 +1,29 @@
+use "forms"
+
+label = newLabel("Current value: 50")
+progressBar = newProgressBar()
+progressBar.setValue(50)
+progressBar.onChange(def() {
+  label.setText("Current value: " + progressBar.getValue())
+})
+minusBtn = newButton("-1")
+minusBtn.onClick(def() = changeProgress(-1))
+plusBtn = newButton("+1")
+plusBtn.onClick(def() = changeProgress(1))
+
+def changeProgress(delta) {
+  value = progressBar.getValue() + delta
+  if (value > 100) value = 100
+  else if (value < 0) value = 0
+  progressBar.setValue(value)
+}
+
+window = newWindow("ProgressBar example")
+window.add(minusBtn, BorderLayout.WEST)
+window.add(progressBar, BorderLayout.CENTER)
+window.add(plusBtn, BorderLayout.EAST)
+window.add(label, BorderLayout.SOUTH)
+window.pack()
+window.setLocationByPlatform()
+window.setResizable(false)
+window.setVisible()

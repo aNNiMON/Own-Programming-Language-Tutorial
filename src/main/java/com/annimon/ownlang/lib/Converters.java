@@ -158,6 +158,18 @@ public final class Converters {
             return NumberValue.ZERO;
         });
     }
+    
+    public static FunctionValue intOptToVoid(VoidToVoidFunction f1, IntToVoidFunction f2) {
+        return new FunctionValue(args -> {
+            Arguments.checkOrOr(0, 1, args.length);
+            if (args.length == 0) {
+                f1.apply();
+            } else {
+                f2.apply(args[0].asInt());
+            }
+            return NumberValue.ZERO;
+        });
+    }
 
     public static FunctionValue intToLong(IntToLongFunction f) {
         return new FunctionValue(args -> {
@@ -168,7 +180,7 @@ public final class Converters {
 
     public static FunctionValue int2ToVoid(Int2ToVoidFunction f) {
         return new FunctionValue(args -> {
-            Arguments.check(4, args.length);
+            Arguments.check(2, args.length);
             f.apply(args[0].asInt(),
                     args[1].asInt());
             return NumberValue.ZERO;

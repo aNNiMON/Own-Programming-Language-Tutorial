@@ -75,6 +75,7 @@ public final class forms implements Module {
         Functions.set("newButton", Components::newButton);
         Functions.set("newLabel", Components::newLabel);
         Functions.set("newPanel", Components::newPanel);
+        Functions.set("newProgressBar", Components::newProgressBar);
         Functions.set("newTextField", Components::newTextField);
         Functions.set("newWindow", Components::newWindow);
 

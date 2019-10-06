@@ -77,7 +77,7 @@ public abstract class ComponentValue extends MapValue {
         set("validate", voidToVoid(component::validate));
     }
 
-    private Value addKeyListener(Value... args) {
+    private Value addKeyListener(Value[] args) {
         Arguments.check(1, args.length);
         final Function action = ValueUtils.consumeFunction(args[0], 0);
         component.addKeyListener(new KeyListener() {
@@ -118,7 +118,7 @@ public abstract class ComponentValue extends MapValue {
         return NumberValue.ZERO;
     }
 
-    private Value getLocation(Value... args) {
+    private Value getLocation(Value[] args) {
         final Point location = component.getLocation();
         final ArrayValue result = new ArrayValue(2);
         result.set(0, NumberValue.of(location.x));
@@ -126,7 +126,7 @@ public abstract class ComponentValue extends MapValue {
         return result;
     }
 
-    private Value getLocationOnScreen(Value... args) {
+    private Value getLocationOnScreen(Value[] args) {
         final Point location = component.getLocationOnScreen();
         final ArrayValue result = new ArrayValue(2);
         result.set(0, NumberValue.of(location.x));
@@ -134,7 +134,7 @@ public abstract class ComponentValue extends MapValue {
         return result;
     }
 
-    private Value setLocation(Value... args) {
+    private Value setLocation(Value[] args) {
         Arguments.check(2, args.length);
         component.setLocation(args[0].asInt(), args[1].asInt());
         return NumberValue.ZERO;

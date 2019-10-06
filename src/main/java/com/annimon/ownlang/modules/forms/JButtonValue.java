@@ -1,32 +1,17 @@
 package com.annimon.ownlang.modules.forms;
 
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.ValueUtils;
 import javax.swing.JButton;
 
-public class JButtonValue extends JComponentValue {
+public class JButtonValue extends AbstractButtonValue {
 
-    final JButton button;
+    final JButton jButton;
 
-    public JButtonValue(JButton button) {
-        super(2, button);
-        this.button = button;
+    public JButtonValue(JButton jButton) {
+        super(0, jButton);
+        this.jButton = jButton;
         init();
     }
 
     private void init() {
-        set("onClick", new FunctionValue(this::addActionListener));
-        set("addActionListener", new FunctionValue(this::addActionListener));
-    }
-
-    private Value addActionListener(Value... args) {
-        Arguments.check(1, args.length);
-        final Function action = ValueUtils.consumeFunction(args[0], 0);
-        button.addActionListener(e -> action.execute());
-        return NumberValue.ZERO;
     }
 }

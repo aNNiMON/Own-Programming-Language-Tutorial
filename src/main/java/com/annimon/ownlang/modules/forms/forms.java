@@ -3,6 +3,7 @@ package com.annimon.ownlang.modules.forms;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.awt.BorderLayout;
+import java.awt.event.WindowEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.ScrollPaneConstants;
@@ -92,6 +93,21 @@ public final class forms implements Module {
         box.set("X_AXIS", NumberValue.of(BoxLayout.X_AXIS));
         box.set("Y_AXIS", NumberValue.of(BoxLayout.Y_AXIS));
         Variables.define("BoxLayout", box);
+        
+        final MapValue windowEvent = new MapValue(4);
+        windowEvent.set("WINDOW_FIRST", NumberValue.of(WindowEvent.WINDOW_FIRST));
+        windowEvent.set("WINDOW_OPENED", NumberValue.of(WindowEvent.WINDOW_OPENED));
+        windowEvent.set("WINDOW_CLOSING", NumberValue.of(WindowEvent.WINDOW_CLOSING));
+        windowEvent.set("WINDOW_CLOSED", NumberValue.of(WindowEvent.WINDOW_CLOSED));
+        windowEvent.set("WINDOW_ICONIFIED", NumberValue.of(WindowEvent.WINDOW_ICONIFIED));
+        windowEvent.set("WINDOW_DEICONIFIED", NumberValue.of(WindowEvent.WINDOW_DEICONIFIED));
+        windowEvent.set("WINDOW_ACTIVATED", NumberValue.of(WindowEvent.WINDOW_ACTIVATED));
+        windowEvent.set("WINDOW_DEACTIVATED", NumberValue.of(WindowEvent.WINDOW_DEACTIVATED));
+        windowEvent.set("WINDOW_GAINED_FOCUS", NumberValue.of(WindowEvent.WINDOW_GAINED_FOCUS));
+        windowEvent.set("WINDOW_LOST_FOCUS", NumberValue.of(WindowEvent.WINDOW_LOST_FOCUS));
+        windowEvent.set("WINDOW_STATE_CHANGED", NumberValue.of(WindowEvent.WINDOW_STATE_CHANGED));
+        windowEvent.set("WINDOW_LAST", NumberValue.of(WindowEvent.WINDOW_LAST));
+        Variables.define("WindowEvent", windowEvent);
     }
 
     @Override

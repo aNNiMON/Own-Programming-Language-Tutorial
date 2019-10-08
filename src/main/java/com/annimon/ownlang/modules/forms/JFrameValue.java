@@ -3,7 +3,7 @@ package com.annimon.ownlang.modules.forms;
 import static com.annimon.ownlang.lib.Converters.*;
 import javax.swing.JFrame;
 
-public class JFrameValue extends ContainerValue {
+public class JFrameValue extends WindowValue {
 
     final JFrame frame;
 
@@ -14,13 +14,10 @@ public class JFrameValue extends ContainerValue {
     }
 
     private void init() {
-        set("dispose", voidToVoid(frame::dispose));
         set("getTitle", voidToString(frame::getTitle));
+        set("getResizable", voidToBoolean(frame::isResizable));
         set("getDefaultCloseOperation", voidToInt(frame::getDefaultCloseOperation));
-        set("pack", voidToVoid(frame::pack));
-        set("setAlwaysOnTop", booleanOptToVoid(frame::setAlwaysOnTop));
         set("setDefaultCloseOperation", intToVoid(frame::setDefaultCloseOperation));
-        set("setLocationByPlatform", booleanOptToVoid(frame::setLocationByPlatform));
         set("setResizable", booleanOptToVoid(frame::setResizable));
         set("setTitle", stringToVoid(frame::setTitle));
     }

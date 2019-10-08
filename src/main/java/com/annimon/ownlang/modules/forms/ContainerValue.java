@@ -29,6 +29,7 @@ public abstract class ContainerValue extends ComponentValue {
         set("getComponentCount", voidToInt(container::getComponentCount));
         set("isFocusCycleRoot", voidToBoolean(container::isFocusCycleRoot));
         set("isValidateRoot", voidToBoolean(container::isValidateRoot));
+        set("setFocusCycleRoot", booleanToVoid(container::setFocusCycleRoot));
         set("setLayout", new FunctionValue(this::setLayout));
     }
 

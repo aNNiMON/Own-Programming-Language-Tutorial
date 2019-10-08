@@ -1,6 +1,6 @@
 use ["std", "forms", "functional"]
 
-text = join(map(range(1, 16), def(x) = "line " + x), "\n")
+text = map(range(1, 16), def(x) = "line " + x).joinToString("\n")
 label = newLabel()
 textArea = newTextArea(text)
 textArea.addCaretListener(def(event) = updateInfo())

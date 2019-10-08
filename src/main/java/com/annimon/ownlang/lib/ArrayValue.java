@@ -1,5 +1,6 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.exceptions.TypeException;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -46,6 +47,17 @@ public class ArrayValue implements Value, Iterable<Value> {
         System.arraycopy(array1.elements, 0, result.elements, 0, length1);
         System.arraycopy(array2.elements, 0, result.elements, length1, length2);
         return result;
+    }
+    
+    public static StringValue joinToString(ArrayValue array, String delimiter, String prefix, String suffix) {
+        final StringBuilder sb = new StringBuilder();
+        for (Value value : array) {
+            if (sb.length() > 0) sb.append(delimiter);
+            else sb.append(prefix);
+            sb.append(value.asString());
+        }
+        sb.append(suffix);
+        return new StringValue(sb.toString());
     }
     
     private final Value[] elements;
@@ -96,10 +108,28 @@ public class ArrayValue implements Value, Iterable<Value> {
 
             // Functions
             case "isEmpty":
-                return NumberValue.fromBoolean(size() == 0);
+                return Converters.voidToBoolean(() -> size() == 0);
+            case "joinToString":
+                return new FunctionValue(this::joinToString);
 
             default:
                 return get(index.asInt());
+        }
+    }
+    
+    public Value joinToString(Value[] args) {
+        Arguments.checkRange(0, 3, args.length);
+        switch (args.length) {
+            case 0: 
+                return joinToString(this, "", "", "");
+            case 1:
+                return joinToString(this, args[0].asString(), "", "");
+            case 2:
+                return joinToString(this, args[0].asString(), args[1].asString(), args[1].asString());
+            case 3:
+                return joinToString(this, args[0].asString(), args[1].asString(), args[2].asString());
+            default:
+                throw new ArgumentsMismatchException("Wrong number of arguments");
         }
     }
 

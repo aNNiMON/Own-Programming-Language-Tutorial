@@ -22,5 +22,11 @@ def testGetLengthInnerArray() {
 
 def testIsEmpty() {
   arr = [1, 2, 3]
-  assertFalse(arr.isEmpty)
+  assertFalse(arr.isEmpty())
+}
+
+def testJoinToString() {
+  arr = [1, 2, 3]
+  assertEquals("123", arr.joinToString())
+  assertEquals("1 2 3", arr.joinToString(" "))
 }

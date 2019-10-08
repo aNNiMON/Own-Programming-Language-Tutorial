@@ -43,6 +43,13 @@ def testCustom() {
   assertEquals([5,6,4,2], stream(data).custom(::reverse).toArray())
 }
 
+def testJoining() {
+  data = [1,2,3,4]
+  assertEquals("1234", stream(data).joining())
+  assertEquals("1-2-3-4", stream(data).joining("-"))
+  assertEquals("<1-2-3-4>", stream(data).joining("-", "<", ">"))
+}
+
 def testPeek() {
   data = [2,3,4,5,6,7]
   expected = [2,4,6]

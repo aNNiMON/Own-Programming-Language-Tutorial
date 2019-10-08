@@ -8,7 +8,7 @@ import java.util.Arrays;
 public final class functional_stream implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkAtLeast(1, args.length);
 
         if (args.length > 1) {
@@ -52,10 +52,11 @@ public final class functional_stream implements Function {
             set("reduce", wrapTerminal(new functional_reduce()));
             set("forEach", wrapTerminal(new functional_foreach()));
             set("toArray", args -> container);
+            set("joining", container::joinToString);
             set("count", args -> NumberValue.of(container.size()));
         }
 
-        private Value skip(Value... args) {
+        private Value skip(Value[] args) {
             Arguments.check(1, args.length);
 
             final int skipCount = args[0].asInt();
@@ -71,7 +72,7 @@ public final class functional_stream implements Function {
             return new StreamValue(new ArrayValue(result));
         }
 
-        private Value limit(Value... args) {
+        private Value limit(Value[] args) {
             Arguments.check(1, args.length);
 
             final int limitCount = args[0].asInt();
@@ -87,7 +88,7 @@ public final class functional_stream implements Function {
             return new StreamValue(new ArrayValue(result));
         }
 
-        private Value sorted(Value... args) {
+        private Value sorted(Value[] args) {
             Arguments.checkOrOr(0, 1, args.length);
             final Value[] elements = container.getCopyElements();
 
@@ -106,7 +107,7 @@ public final class functional_stream implements Function {
             return new StreamValue(new ArrayValue(elements));
         }
 
-        private Value custom(Value... args) {
+        private Value custom(Value[] args) {
             Arguments.check(1, args.length);
             final Function f = ValueUtils.consumeFunction(args[0], 0);
             final Value result = f.execute(container);
@@ -115,7 +116,7 @@ public final class functional_stream implements Function {
             }
             return result;
         }
-
+        
         private FunctionValue wrapIntermediate(Function f) {
             return wrap(f, true);
         }

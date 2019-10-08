@@ -2,11 +2,13 @@ package com.annimon.ownlang.modules.forms;
 
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.Value;
+import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -64,6 +66,28 @@ public final class Components {
         return new JTextFieldValue(new JTextField(text, cols));
     }
     
+    static Value newTextArea(Value[] args) {
+        Arguments.checkRange(0, 3, args.length);
+        String text = "";
+        int rows = 0;
+        int cols = 0;
+        switch (args.length) {
+            case 1: {
+                text = args[0].asString();
+            } break;
+            case 2: {
+                rows = args[0].asInt();
+                cols = args[1].asInt();
+            } break;
+            case 3: {
+                text = args[0].asString();
+                rows = args[1].asInt();
+                cols = args[2].asInt();
+            } break;
+        }
+        return new JTextAreaValue(new JTextArea(text, rows, cols));
+    }
+    
     static Value newProgressBar(Value[] args) {
         Arguments.checkRange(0, 3, args.length);
         boolean isVertical = false;
@@ -86,6 +110,30 @@ public final class Components {
         return new JProgressBarValue(new JProgressBar(
                 isVertical ? SwingConstants.VERTICAL : SwingConstants.HORIZONTAL,
                 min, max
+        ));
+    }
+    
+    static Value newScrollPane(Value[] args) {
+        Arguments.checkRange(0, 3, args.length);
+        Component view = null;
+        int vsbPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED;
+        int hsbPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED;
+        switch (args.length) {
+            case 1: {
+                view = ((ComponentValue) args[0]).component;
+            } break;
+            case 2: {
+                vsbPolicy = args[0].asInt();
+                hsbPolicy = args[1].asInt();
+            } break;
+            case 3: {
+                view = ((ComponentValue) args[0]).component;
+                vsbPolicy = args[1].asInt();
+                hsbPolicy = args[2].asInt();
+            } break;
+        }
+        return new JScrollPaneValue(new JScrollPane(
+                view, vsbPolicy, hsbPolicy
         ));
     }
 }

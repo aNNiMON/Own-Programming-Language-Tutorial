@@ -1,0 +1,25 @@
+use ["std", "forms", "functional"]
+
+text = join(map(range(1, 16), def(x) = "line " + x), "\n")
+label = newLabel()
+textArea = newTextArea(text)
+textArea.addCaretListener(def(event) = updateInfo())
+textArea.addDocumentListener(def(type, event) = updateInfo())
+updateInfo()
+
+def updateInfo() {
+  text = "Text length: " + textArea.getText().length
+  text += ", lines: " + textArea.getLineCount()
+  selectedText = default(textArea.getSelectedText(), "")
+  if (!selectedText.isEmpty()) {
+    text += ", selected: " + selectedText.length
+  }
+  label.setText(text)
+}
+
+window = newWindow("JTextArea example")
+window.add(newScrollPane(textArea), BorderLayout.CENTER)
+window.add(label, BorderLayout.SOUTH)
+window.setSize(300, 200)
+window.setLocationByPlatform()
+window.setVisible()

@@ -11,6 +11,12 @@ plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "2.0.2"
     id "org.sonarqube" version "2.6.2"
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+javafx {
+    version = "13"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.base', 'javafx.graphics', 'javafx.media', 'javafx.swing', 'javafx.web' ]
 }
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar

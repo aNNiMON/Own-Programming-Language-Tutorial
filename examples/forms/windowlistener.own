@@ -1,0 +1,24 @@
+use "forms"
+
+textArea = newTextArea("Window logs:")
+
+window = newWindow("Window listener example")
+window.addWindowListener(def(type, event) {
+  textArea.append("\n" + type + ", id: " + match event.id {
+    case WINDOW_OPENED: "WINDOW_OPENED"
+    case WINDOW_CLOSING: "WINDOW_CLOSING"
+    case WINDOW_CLOSED: "WINDOW_CLOSED"
+    case WINDOW_ICONIFIED: "WINDOW_ICONIFIED"
+    case WINDOW_DEICONIFIED: "WINDOW_DEICONIFIED"
+    case WINDOW_ACTIVATED: "WINDOW_ACTIVATED"
+    case WINDOW_DEACTIVATED: "WINDOW_DEACTIVATED"
+    case WINDOW_GAINED_FOCUS: "WINDOW_GAINED_FOCUS"
+    case WINDOW_LOST_FOCUS: "WINDOW_LOST_FOCUS"
+    case WINDOW_STATE_CHANGED: "WINDOW_STATE_CHANGED"
+    case _: "unknown type"
+  })
+})
+window.add(newScrollPane(textArea))
+window.setSize(300, 200)
+window.setLocationByPlatform()
+window.setVisible()

@@ -10,7 +10,7 @@ public final class SourceLoader {
     private SourceLoader() { }
 
     public static String readSource(String name) throws IOException {
-        InputStream is = SourceLoader.class.getResourceAsStream(name);
+        InputStream is = SourceLoader.class.getResourceAsStream("/" + name);
         if (is != null) return readAndCloseStream(is);
 
         is = new FileInputStream(name);

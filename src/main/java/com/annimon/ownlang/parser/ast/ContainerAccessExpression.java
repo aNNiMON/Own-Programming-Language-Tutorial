@@ -73,6 +73,10 @@ public final class ContainerAccessExpression implements Expression, Accessible {
                 ((MapValue) container).set(lastIndex, value);
                 return value;
                 
+            case Types.CLASS:
+                ((ClassInstanceValue) container).set(lastIndex, value);
+                return value;
+                
             default:
                 throw new TypeException("Array or map expected. Got " + container.type());
         }

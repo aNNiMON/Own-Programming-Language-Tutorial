@@ -43,6 +43,15 @@ public class ClassInstanceValue implements Value {
         return thisMap.get(value);
     }
 
+    public void set(Value key, Value value) {
+        final Value v = thisMap.get(key);
+        if (v == null) {
+            throw new RuntimeException("Unable to add new field " 
+                    + key.asString() + " to class " + className);
+        }
+        thisMap.set(key, value);
+    }
+
     @Override
     public Object raw() {
         return null;

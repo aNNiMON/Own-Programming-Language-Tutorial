@@ -1,0 +1,16 @@
+use "json"
+
+data = {
+  "name": "Json Example",
+  "version": 1,
+  "arrayData": [
+     1, 2, 3, 4
+  ],
+  "objectData": {
+    "key": "value",
+    10: "1000"
+  }
+}
+println "Json encode"
+println "Minified: " + jsonencode(data)
+println "Pretty-print: " + jsonencode(data, 2)

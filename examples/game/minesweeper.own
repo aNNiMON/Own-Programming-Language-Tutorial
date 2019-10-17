@@ -7,11 +7,11 @@ use "canvasfx"
 CELL_NONE = -100
 CELL_MINE = -200
 // Colors
-BACKGROUND_COLOR = Color.new(#FF283593)
-OPENED_CELL_COLOR = Color.new(0xFF9FA8DA)
-DEFAULT_CELL_COLOR = Color.new(#FF5C6BC0)
-MINE_CELL_COLOR = Color.new(#FF1A237E)
-FLAG_COLOR = Color.new(#FF7A231E)
+BACKGROUND_COLOR = Color.`new`(#FF283593)
+OPENED_CELL_COLOR = Color.`new`(0xFF9FA8DA)
+DEFAULT_CELL_COLOR = Color.`new`(#FF5C6BC0)
+MINE_CELL_COLOR = Color.`new`(#FF1A237E)
+FLAG_COLOR = Color.`new`(#FF7A231E)
 
 // Parameters
 WIDTH = 400  HEIGHT = 400
@@ -73,7 +73,7 @@ def drawGameTable(showBombs = false) {
 
 def drawWin() {
   drawGameTable(true)
-  g.setFill(Color.new(#60FFFFFF))
+  g.setFill(Color.`new`(#60FFFFFF))
   g.fillRect(0, 0, WIDTH, HEIGHT)
   g.setFill(Color.DARKGREEN)
   g.fillText("YOU WIN", WIDTH / 2, HEIGHT / 2)
@@ -81,7 +81,7 @@ def drawWin() {
 
 def drawGameOver() {
   drawGameTable(true)
-  g.setFill(Color.new(#60000000))
+  g.setFill(Color.`new`(#60000000))
   g.fillRect(0, 0, WIDTH, HEIGHT)
   g.setFill(Color.PINK)
   g.fillText("Game Over", WIDTH / 2, HEIGHT / 2)

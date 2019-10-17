@@ -1,0 +1,16 @@
+use "zip"
+
+// println "Zip single file"
+// zip("absolute path to file", "example.zip")
+
+println "Zip files"
+zipFiles(["json.own", "yaml.own", "zip.own"], "example1.zip")
+
+println "Zip files"
+zipFiles({
+  "json.own": "json.txt",
+  "yaml.own": "yaml/yaml.own",
+  "zip.own": "readme.md"}, "example2.zip")
+
+println "List zip entries"
+println listZipEntries("example2.zip").joinToString(", ")

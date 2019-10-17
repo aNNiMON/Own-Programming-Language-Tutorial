@@ -1,7 +1,6 @@
 use "yaml"
 
-println "Yaml encode"
-println yamlencode({
+data = {
   "name": "Yaml Example",
   "version": 1,
   "arrayData": [
@@ -11,6 +10,14 @@ println yamlencode({
     "key": "value",
     10: "1000"
   }
+}
+println "Yaml encode"
+println yamlencode(data)
+println "Yaml encode with options"
+println yamlencode(data, {
+  "indent": 6,
+  "prettyFlow": true,
+  "defaultFlowStyle": "BLOCK"
 })
 
 println "\nYaml decode"

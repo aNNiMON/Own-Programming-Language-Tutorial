@@ -1,0 +1,110 @@
+use ["std", "functional", "gzip", "json", "java"]
+
+title("Added std::getBytes, std::stringFromBytes")
+arr = [119, 111, 114, 108, 100]
+println getBytes("Hello")
+println stringFromBytes(arr)
+println getBytes("👍", "UTF-8")
+
+
+title("Added std::stripMargin")
+println "123
+        | 456
+        |  789".stripMargin("|")
+println "
+  >   123
+  >  456
+  > 789
+  ".stripMargin("> ")
+
+
+title("Added functional::stream::joining")
+println stream(range(1, 10))
+  .filter(def(x) = x % 2 == 0)
+  .joining(", ")
+println stream(range(1, 4))
+  .joining(" | ", "<", ">")
+
+
+title("Added properties and functions for arrays")
+println arr.length
+if (!arr.isEmpty()) {
+  println arr.joinToString("-")
+}
+
+
+title("Added null coalesce operator")
+obj = {"a": {"b": 12}}
+println obj.b ?? 1
+println obj.a.b ?? 2
+println obj.test1.test2 ?? 3
+
+
+title("Added basic classes support")
+class Point {
+  def Point(x, y) {
+    this.x = x
+    this.y = y
+  }
+  def move(dx, dy) {
+    this.x += dx
+    this.y += dy
+  }
+
+  def info() = "[" + this.x + ", " + this.y + "]"
+}
+a = new Point(10, 12)
+println a.info()
+b = new Point(2, 4)
+a.move(b.x, b.y)
+println a.info()
+
+
+title("Ability to iterate strings and arrays with index")
+for ch : "test "
+  print ch
+for ch, code : "test"
+  print "{" + ch + ", " + code + "} "
+
+println ""
+for el : arr
+  print " " + el
+println ""
+for el, index : arr
+  print "{" + el + ", " + index + "} "
+
+
+title("Ability to pretty-print json")
+data = {"xyz": 123, "uvw": 456, "rst": 789}
+println jsonencode(data)
+println jsonencode(data, 2)
+
+
+title("Added gzip module")
+text = "Lorem ipsum dolor sit amet" * 80
+bytesOriginal = getBytes(text)
+bytesGzipped = gzipBytes(bytesOriginal)
+println "Original bytes count: " + bytesOriginal.length
+println "Gzipped bytes count: " + bytesGzipped.length
+println "Ungzip"
+ungzippedBytes = ungzipBytes(bytesGzipped)
+println stringFromBytes(ungzippedBytes) == text ? "match" : "not match"
+
+
+title("Improved java interoperability")
+Random = newClass("java.util.Random")
+rnd = new Random()
+println rnd.nextInt(100)
+
+
+
+title("Other")
+println "Added zip, okhttp module"
+
+// helpers
+def title(s) {
+  println "\n"
+  println "=" * s.length
+  println s
+  println "=" * s.length
+}

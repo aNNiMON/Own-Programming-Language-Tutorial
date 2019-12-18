@@ -116,7 +116,7 @@ public final class functional_stream implements Function {
             }
             return result;
         }
-        
+
         private FunctionValue wrapIntermediate(Function f) {
             return wrap(f, true);
         }

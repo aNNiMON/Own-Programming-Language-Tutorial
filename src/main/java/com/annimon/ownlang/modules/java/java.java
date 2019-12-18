@@ -329,7 +329,7 @@ public final class java implements Module {
                 + " not found or non accessible in " + className);
         };
     }
-    
+
     private static boolean isMatch(Value[] args, Class<?>[] types) {
         for (int i = 0; i < args.length; i++) {
             final Value arg = args[i];

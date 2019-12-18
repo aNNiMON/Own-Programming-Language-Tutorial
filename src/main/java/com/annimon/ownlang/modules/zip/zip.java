@@ -221,7 +221,7 @@ public class zip implements Module {
     }
     
     private void generateFileList(Map<File, String> mappings, String rootPath, File node, Function mapper) {
-        if (!rootPath.equals(node.getAbsolutePath())) {
+        if (rootPath != null && !rootPath.equals(node.getAbsolutePath())) {
             String entryPath = node.getAbsolutePath().substring(rootPath.length() + 1);
             if (mapper != null) {
                 entryPath = mapper.execute(new StringValue(entryPath)).asString();
@@ -233,10 +233,18 @@ public class zip implements Module {
         }
         
         if (node.isDirectory()) {
-            for (File file : node.listFiles()) {
+            for (File file : safeListFiles(node)) {
                 generateFileList(mappings, rootPath, file, mapper);
             }
         }
+    }
+
+    private File[] safeListFiles(File node) {
+        final File[] files = node.listFiles();
+        if (files != null) {
+            return files;
+        }
+        return new File[0];
     }
     
     private String[] listEntries(File input) {

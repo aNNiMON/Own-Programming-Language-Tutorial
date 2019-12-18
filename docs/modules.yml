@@ -12,7 +12,7 @@
       - name: OwnLang
         typeName: map
         type: 4
-        value: "{PLATFORM=android/desktop, VERSION=1.4.0_000000, VERSION_MAJOR=1, VERSION_MINOR=4, VERSION_PATCH=0}"
+        value: "{PLATFORM=android/desktop, VERSION=1.5.0_000000, VERSION_MAJOR=1, VERSION_MINOR=5, VERSION_PATCH=0}"
         since: 1.4.0
     functions:
       - name: arrayCombine
@@ -187,6 +187,7 @@
         args: input, charset = "UTF-8"
         desc: returns a string from byte array in the given charset 
         desc_ru: возвращает строку из массива байт в заданной кодировке
+        since: 1.5.0
       - name: stripMargin
         args: input, marginPrefix = "|"
         desc: trims leading whitespaces followed by `marginPrefix` on each line and removes the first and the last lines if they are blank
@@ -1304,7 +1305,7 @@
 
           downloader(url, file, def(progress, bytesDownloaded, bytesMax) {
             bar = "#" * (progress / 2)
-            print sprintf("%-50s %d%% %.2f / %.2f MiB\r", bar, progress, bytesDownloaded / MBYTES, bytesMax / MBYTES)
+            print sprintf("%-50s %d%% %.2f / %.2f MiB\\r", bar, progress, bytesDownloaded / MBYTES, bytesMax / MBYTES)
           })
   - name: base64
     scope: both
@@ -1346,7 +1347,7 @@
           print jsondecode("{\"key1\":1,\"key2\":[1,2,3],\"key3\":\"text\"}") // {key2=[1, 2, 3], key3=text, key1=1}
       - 
         name: "jsonencode"
-        args: "jsonString"
+        args: "jsonString, indent = 0"
         desc: "converts string to data"
         desc_ru: "преобразует строку в формате json в данные"
         example: |-
@@ -1651,6 +1652,7 @@
             - `custom(func)` - performs custom operation
             - `reduce(func)` - converts elements to one value
             - `forEach(func)` - executes function for each element
+            - `joining(delimiter = "", prefix = "", suffix = "")` - joins elements into a string
             - `toArray()` - returns array of elements
             - `count()` - returns count of elements
         desc_ru: |-
@@ -1670,6 +1672,7 @@
             - `custom(func)` - выполняет пользовательскую операцию над данными
             - `reduce(func)` - преобразует элементы в одно значение
             - `forEach(func)` - вызывает функцию для каждого элемента
+            - `joining(delimiter = "", prefix = "", suffix = "")` - склеивает элементы в строку
             - `toArray()` - возвращает массив элементов
             - `count()` - возвращает количество элементов
       - name: takewhile
@@ -2604,8 +2607,23 @@
         args: 'layoutManager = ...'
         desc: 'creates new panel with optional layout manager'
         desc_ru: 'создаёт новую панель с опциональным LayoutManager'
-      - name: newTextField
+      - name: newProgressBar
+        args: 'isVertical = false, min = 0, max = 100'
+        desc: 'creates new progress bar'
+        desc_ru: 'создаёт новый прогрессбар'
+        since: 1.5.0
+      - name: newScrollPane
+        args: 'view, verticalPolicy = AS_NEEDED, horizontalPolicy = AS_NEEDED'
+        desc: 'creates new scroll pane'
+        desc_ru: 'создаёт новую область прокрутки'
+        since: 1.5.0
+      - name: newTextArea
         args: 'text = ""'
+        desc: 'creates new text area'
+        desc_ru: 'создаёт новую область ввода'
+        since: 1.5.0
+      - name: newTextField
+        args: 'text = "", rows = 0, cols = 0'
         desc: 'creates new text field'
         desc_ru: 'создаёт новое поле ввода'
       - name: newWindow
@@ -3777,46 +3795,43 @@
         typeName: map
         type: 4
         value: "{TRIANGLES=0, TRIANGLE_STRIP=1, TRIANGLE_FAN=2}"
-      - 
-        name: "Action"
+      - name: "Action"
         typeName: map
         type: 4
         value: "{DOWN=0, UP=1, MOVE=2, MULTIPLE=2, CANCEL=3, OUTSIDE=4, POINTER_DOWN=5, POINTER_UP=6, POINTER_INDEX_SHIFT=8, MASK=255, POINTER_INDEX_MASK=65280}"
-      - 
-        name: "BitmapCompressFormat"
+      - name: "BitmapCompressFormat"
         typeName: map
         type: 4
         value: "{JPEG=0, PNG=1, WEBP=2}"
-      - 
-        name: "EdgeType"
+      - name: "EdgeType"
         typeName: map
         type: 4
         value: "{BW=0, AA=1}"
-      - 
-        name: "Cap"
+      - name: "Cap"
         typeName: map
         type: 4
         value: "{BUTT=0, ROUND=1, SQUARE=2}"
-      - 
-        name: "Style"
+      - name: "Style"
         typeName: map
         type: 4
         value: "{FILL=0, STROKE=1, FILL_AND_STROKE=2}"
-      - 
-        name: "BitmapConfig"
+      - name: "BitmapConfig"
         typeName: map
         type: 4
         value: "{ALPHA_8=0, RGB_565=1, ARGB_4444=2, ARGB_8888=3}"
-      - 
-        name: "Join"
+      - name: "Join"
         typeName: map
         type: 4
         value: "{MITER=0, ROUND=1, BEVEL=2}"
-      - 
-        name: "Align"
+      - name: "Align"
         typeName: map
         type: 4
         value: "{LEFT=0, CENTER=1, RIGHT=2}"
+      - name: "DisplayMetrics"
+        typeName: map
+        type: 4
+        value: "{density=, densityDpi=, scaledDensity=, widthPixels=, heightPixels=, xdpi=, ydpi=}"
+        since: 1.5.1
     functions: 
       - name: "createBitmap"
         args: "..."
@@ -3865,48 +3880,74 @@
           bitmap = createBitmap(imageBytes)
           g.drawBitmap(bitmap, 0, 0)
           repaint()
-      - 
-        name: "createScaledBitmap"
+      - name: "createScaledBitmap"
         args: "srcBitmap, width, height, filter"
         desc: "scales bitmap to size and returns new BitmapValue"
         desc_ru: "возвращает BitmapValue с изменённым размером заданного изображения"
-      - 
-        name: "getScreenBitmap"
+      - name: "getScreenBitmap"
         args: ""
         desc: "returns current screen as bitmap"
         desc_ru: "возвращает содержимое экрана в виде изображения"
-      - 
-        name: "hidecanvas"
+      - name: "hidecanvas"
         args: ""
         desc: "closes canvas screen and releases resources"
         desc_ru: "закрывает экран канваса и освобождает ресурсы"
-      - 
-        name: "repaint"
+      - name: "newPath"
+        args: "path = null"
+        desc: "creates new PathValue"
+        desc_ru: "создаёт новый PathValue"
+        since: 1.5.1
+      - name: "newLinearGradient"
+        args: "x0, y0, x1, y1, colors|color1, positions|color2, tileMode"
+        desc: "creates new shader"
+        desc_ru: "создаёт новый шейдер"
+        since: 1.5.1
+      - name: "newRadialGradient"
+        args: "cx, cy, radius, colors|color1, positions|color2, tileMode"
+        desc: "creates new shader"
+        desc_ru: "создаёт новый шейдер"
+        since: 1.5.1
+      - name: "newSweepGradient"
+        args: "cx, cy, colors|color1, positions|color2"
+        desc: "creates new shader"
+        desc_ru: "создаёт новый шейдер"
+        since: 1.5.1
+      - name: "newBitmapShader"
+        args: "bitmap, modeX, modeY"
+        desc: "creates new bitmap shader"
+        desc_ru: "создаёт новый шейдер из картинки"
+        since: 1.5.1
+      - name: "newComposeShader"
+        args: "shader1, shader2, mode = SRC_OVER"
+        desc: "creates new composition shader"
+        desc_ru: "создаёт новый композитный шейдер"
+        since: 1.5.1
+      - name: "repaint"
         args: ""
         desc: ""
         desc_ru: ""
-      - 
-        name: "setOnKeyDownEvent"
+      - name: "setOnKeyDownEvent"
         args: ""
         desc: ""
         desc_ru: ""
-      - 
-        name: "setOnKeyUpEvent"
+      - name: "setOnKeyUpEvent"
         args: ""
         desc: ""
         desc_ru: ""
-      - 
-        name: "setOnLongPressEvent"
+      - name: "setOnLongPressEvent"
         args: ""
         desc: ""
         desc_ru: ""
-      - 
-        name: "setOnTouchEvent"
+      - name: "setOnTouchEvent"
         args: ""
         desc: ""
         desc_ru: ""
-      - 
-        name: "showcanvas"
+      - name: "setGestureDetectorListener"
+        args: "listener"
+        desc: "sets gesture detector listener"
+        desc_ru: "устанавливает обработчик детектора жестов"
+        since: 1.5.1
+      - name: "showcanvas"
         args: ""
         desc: "shows canvas screen and returns GraphicsValue"
         desc_ru: "показывает экран канваса и возвращает GraphicsValue"
@@ -4054,9 +4095,13 @@
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "clipRect"
-            args: ""
+          - name: "clipPath"
+            args: "path"
+            desc: ""
+            desc_ru: ""
+            since: 1.5.1
+          - name: "clipRect"
+            args: "x, y, w, h, op = 0"
             desc: ""
             desc_ru: ""
           - 
@@ -4099,13 +4144,16 @@
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "drawPoint"
+          - name: "drawPath"
+            args: "path"
+            desc: ""
+            desc_ru: ""
+            since: 1.5.1
+          - name: "drawPoint"
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "drawRGB"
+          - name: "drawRGB"
             args: ""
             desc: ""
             desc_ru: ""
@@ -4119,13 +4167,16 @@
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "drawText"
+          - name: "drawText"
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "fillCircle"
+          - name: "drawTextOnPath"
+            args: "text, path, hOffset, vOffset"
+            desc: ""
+            desc_ru: ""
+            since: 1.5.1
+          - name: "fillCircle"
             args: ""
             desc: ""
             desc_ru: ""
@@ -4154,13 +4205,16 @@
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "getColor"
+          - name: "getColor"
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "getDensity"
+          - name: "getFillPath"
+            args: "src, dst"
+            desc: ""
+            desc_ru: ""
+            since: 1.5.1
+          - name: "getDensity"
             args: ""
             desc: ""
             desc_ru: ""
@@ -4394,29 +4448,29 @@
             args: ""
             desc: ""
             desc_ru: ""
-          - 
-            name: "setShadowLayer"
-            args: ""
+          - name: "setShader"
+            args: "shader"
             desc: ""
             desc_ru: ""
-          - 
-            name: "setStrikeThruText"
-            args: ""
+            since: 1.5.1
+          - name: "setShadowLayer"
+            args: "radius, dx, dy, shadowColor"
             desc: ""
             desc_ru: ""
-          - 
-            name: "setStrokeCap"
-            args: ""
+          - name: "setStrikeThruText"
+            args: "isEnabled"
             desc: ""
             desc_ru: ""
-          - 
-            name: "setStrokeJoin"
-            args: ""
+          - name: "setStrokeCap"
+            args: "cap"
             desc: ""
             desc_ru: ""
-          - 
-            name: "setStrokeMiter"
-            args: ""
+          - name: "setStrokeJoin"
+            args: "join"
+            desc: ""
+            desc_ru: ""
+          - name: "setStrokeMiter"
+            args: "miter"
             desc: ""
             desc_ru: ""
           - 

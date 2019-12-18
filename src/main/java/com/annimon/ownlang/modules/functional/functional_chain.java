@@ -18,5 +18,5 @@ public final class functional_chain implements Function {
         }
         return result;
     }
-    
+
 }

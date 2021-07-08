@@ -4,6 +4,7 @@ import com.annimon.ownlang.exceptions.TypeException;
 import java.util.Objects;
 
 public class ClassInstanceValue implements Value {
+    
     private final String className;
     private final MapValue thisMap;
     private ClassMethod constructor;
@@ -76,8 +77,7 @@ public class ClassInstanceValue implements Value {
         if (toString != null) {
             return toString.execute(new Value[] {}).asString();
         }
-        System.out.println(toString);
-        return className;
+        return className + "@" + thisMap;
     }
 
     @Override

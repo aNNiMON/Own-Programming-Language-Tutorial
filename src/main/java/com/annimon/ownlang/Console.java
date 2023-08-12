@@ -6,7 +6,7 @@ import com.annimon.ownlang.outputsettings.OutputSettings;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 public class Console {
 
@@ -69,11 +69,7 @@ public class Console {
             throwable.printStackTrace(ps);
             ps.flush();
         }
-        try {
-            error(baos.toString("UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-            error(baos.toString());
-        }
+        error(baos.toString(StandardCharsets.UTF_8));
     }
 
     public static File fileInstance(String path) {

@@ -1,8 +1,10 @@
 package com.annimon.ownlang.parser.ast;
 
-import static com.annimon.ownlang.parser.ast.ASTHelper.*;
+import org.junit.jupiter.api.Test;
 import com.annimon.ownlang.exceptions.VariableDoesNotExistsException;
-import org.junit.Test;
+
+import static com.annimon.ownlang.parser.ast.ASTHelper.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -27,8 +29,9 @@ public class VariableExpressionTest {
         assertValue(number(8), var("a").eval());
     }
     
-    @Test(expected = VariableDoesNotExistsException.class)
+    @Test
     public void testUnknownVariable() {
-        var("a").eval();
+        assertThrows(VariableDoesNotExistsException.class,
+                () -> var("a").eval());
     }
 }

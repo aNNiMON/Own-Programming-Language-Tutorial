@@ -4,7 +4,8 @@ import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Helper for build and test AST nodes.

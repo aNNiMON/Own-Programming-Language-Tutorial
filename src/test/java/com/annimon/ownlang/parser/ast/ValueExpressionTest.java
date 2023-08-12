@@ -1,7 +1,8 @@
 package com.annimon.ownlang.parser.ast;
 
+import org.junit.jupiter.api.Test;
+
 import static com.annimon.ownlang.parser.ast.ASTHelper.*;
-import org.junit.Test;
 
 /**
  *

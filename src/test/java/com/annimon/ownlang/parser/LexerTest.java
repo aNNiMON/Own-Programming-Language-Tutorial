@@ -1,11 +1,13 @@
 package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.exceptions.LexerException;
-import static com.annimon.ownlang.parser.TokenType.*;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static com.annimon.ownlang.parser.TokenType.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -25,10 +27,10 @@ public class LexerTest {
         assertEquals("f7d6c5", result.get(3).getText());
     }
     
-    @Test(expected = LexerException.class)
+    @Test
     public void testNumbersError() {
-        String input = "3.14.15 0Xf7_p6_s5";
-        Lexer.tokenize(input);
+        final String input = "3.14.15 0Xf7_p6_s5";
+        assertThrows(LexerException.class, () -> Lexer.tokenize(input));
     }
     
     @Test
@@ -74,13 +76,15 @@ public class LexerTest {
         assertEquals("", result.get(0).getText());
     }
     
-    @Test(expected = LexerException.class)
+    @Test
     public void testStringError() {
         String input = "\"1\"\"";
         List<Token> expList = list(TEXT);
-        List<Token> result = Lexer.tokenize(input);
-        assertTokens(expList, result);
-        assertEquals("1", result.get(0).getText());
+        assertThrows(LexerException.class, () -> {
+            List<Token> result = Lexer.tokenize(input);
+            assertTokens(expList, result);
+            assertEquals("1", result.get(0).getText());
+        });
     }
     
     @Test
@@ -117,16 +121,16 @@ public class LexerTest {
         assertTokens(expList, result);
     }
     
-    @Test(expected = LexerException.class)
+    @Test
     public void testCommentsError() {
-        String input = "/* 1234 \n";
-        Lexer.tokenize(input);
+        final String input = "/* 1234 \n";
+        assertThrows(LexerException.class, () -> Lexer.tokenize(input));
     }
 
-    @Test(expected = LexerException.class)
+    @Test
     public void testExtendedWordError() {
-        String input = "` 1234";
-        Lexer.tokenize(input);
+        final String input = "` 1234";
+        assertThrows(LexerException.class, () -> Lexer.tokenize(input));
     }
 
     @Test

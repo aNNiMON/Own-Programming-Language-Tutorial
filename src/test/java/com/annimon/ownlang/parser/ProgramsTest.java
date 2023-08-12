@@ -11,37 +11,25 @@ import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.Assert;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
-@RunWith(value = Parameterized.class)
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ProgramsTest {
-
     private static final String RES_DIR = "src/test/resources";
 
-    private final String programPath;
-
-    public ProgramsTest(String programPath) {
-        this.programPath = programPath;
-    }
-
-    @Parameters(name = "{index}: {0}")
-    public static Collection<String> data() {
+    public static Stream<String> data() {
         final File resDir = new File(RES_DIR);
         return scanDirectory(resDir)
-                .map(File::getPath)
-                .collect(Collectors.toList());
+                .map(File::getPath);
     }
 
     private static Stream<File> scanDirectory(File dir) {
@@ -59,7 +47,7 @@ public class ProgramsTest {
                 .filter(f -> f.getName().endsWith(".own"));
     }
 
-    @Before
+    @BeforeEach
     public void initialize() {
         Variables.clear();
         Functions.clear();
@@ -85,25 +73,22 @@ public class ProgramsTest {
             return NumberValue.ONE;
         });
         Functions.set("assertFail", (args) -> {
-            try {
-                ((FunctionValue) args[0]).getValue().execute();
-                fail("Function should fail");
-            } catch (Throwable thr) {
-
-            }
+            assertThrows(Throwable.class,
+                    () -> ((FunctionValue) args[0]).getValue().execute());
             return NumberValue.ONE;
         });
     }
 
-    @Test
-    public void testProgram() throws IOException {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testProgram(String programPath) throws IOException {
         final String source = SourceLoader.readSource(programPath);
         final Statement s = Parser.parse(Lexer.tokenize(source));
         try {
             s.execute();
             s.accept(testFunctionsExecutor);
         } catch (Exception oae) {
-            Assert.fail(oae.toString());
+            fail(oae.toString());
         }
     }
 
@@ -117,7 +102,7 @@ public class ProgramsTest {
             s.execute();
             assertEquals("012345", Console.text());
         } catch (Exception oae) {
-            Assert.fail(oae.toString());
+            fail(oae.toString());
         } finally {
             Console.useSettings(oldSettings);
         }

@@ -173,14 +173,14 @@ def fact2(n) = match n {
 println fact1(6)
 println fact2(6)
 
-class = {
+functions = {
   "add": def(a, b) = a + b,
   "sub": def(a, b) = a - b,
   "mul": def(a, b) = a * b,
   "div": def(a, b) = a / b
 }
 
-println class.add(2, class.mul(2, 2))
+println functions.add(2, functions.mul(2, 2))
 
 println split("1/2/3/4/5/6", "/")
 println join(nums, ", ")

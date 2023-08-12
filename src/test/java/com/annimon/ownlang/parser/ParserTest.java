@@ -3,9 +3,10 @@ package com.annimon.ownlang.parser;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.ast.*;
+import org.junit.jupiter.api.Test;
+
 import static com.annimon.ownlang.parser.ast.ASTHelper.*;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author aNNiMON

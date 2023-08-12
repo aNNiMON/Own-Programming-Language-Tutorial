@@ -1,8 +1,10 @@
 package com.annimon.ownlang.parser.ast;
 
+import org.junit.jupiter.api.Test;
+
 import static com.annimon.ownlang.parser.ast.ASTHelper.*;
 import static com.annimon.ownlang.parser.ast.BinaryExpression.Operator.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author aNNiMON
@@ -36,14 +38,16 @@ public class OperatorExpressionTest {
         assertValue(number(30), operator(DIVIDE, value(-900), operator(DIVIDE, value(60), value(-2))).eval());
     }
     
-    @Test()
+    @Test
     public void testDivisionZero() {
         assertValue(number(Double.POSITIVE_INFINITY), operator(DIVIDE, value(2.0), value(0.0)).eval());
     }
     
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDivisionZeroOnIntegers() {
-        operator(DIVIDE, value(2), value(0)).eval();
+        assertThrows(RuntimeException.class,
+                () -> operator(DIVIDE, value(2), value(0)).eval());
+
     }
     
     @Test
@@ -57,9 +61,10 @@ public class OperatorExpressionTest {
         assertValue(number(Double.NaN), operator(REMAINDER, value(2.0), value(0.0)).eval());
     }
     
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testRemainderZeroOnIntegers() {
-        operator(REMAINDER, value(2), value(0)).eval();
+        assertThrows(RuntimeException.class,
+                () -> operator(REMAINDER, value(2), value(0)).eval());
     }
     
     @Test

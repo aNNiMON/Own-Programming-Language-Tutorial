@@ -58,7 +58,7 @@ public final class date implements Module {
             value.set(YEAR, NumberValue.of(calendar.get(Calendar.YEAR)));
             value.set(MONTH, NumberValue.of(calendar.get(Calendar.MONTH)));
             value.set(DAY, NumberValue.of(calendar.get(Calendar.DAY_OF_MONTH)));
-            value.set(HOUR, NumberValue.of(calendar.get(Calendar.HOUR)));
+            value.set(HOUR, NumberValue.of(calendar.get(Calendar.HOUR_OF_DAY)));
             value.set(MINUTE, NumberValue.of(calendar.get(Calendar.MINUTE)));
             value.set(SECOND, NumberValue.of(calendar.get(Calendar.SECOND)));
             value.set(MILLISECOND, NumberValue.of(calendar.get(Calendar.MILLISECOND)));

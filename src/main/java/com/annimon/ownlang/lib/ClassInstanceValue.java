@@ -8,6 +8,7 @@ public class ClassInstanceValue implements Value {
     private final String className;
     private final MapValue thisMap;
     private ClassMethod constructor;
+    private UserDefinedFunction toString;
 
     public ClassInstanceValue(String name) {
         this.className = name;
@@ -17,28 +18,32 @@ public class ClassInstanceValue implements Value {
     public MapValue getThisMap() {
         return thisMap;
     }
-    
+
     public String getClassName() {
         return className;
     }
-    
+
     public void addField(String name, Value value) {
         thisMap.set(name, value);
     }
-    
+
     public void addMethod(String name, ClassMethod method) {
+        if (name.equals("toString")) {
+            toString = method;
+        }
         thisMap.set(name, method);
         if (name.equals(className)) {
             constructor = method;
         }
     }
-    
+
+
     public void callConstructor(Value[] args) {
         if (constructor != null) {
             constructor.execute(args);
         }
     }
-    
+
     public Value access(Value value) {
         return thisMap.get(value);
     }
@@ -46,7 +51,7 @@ public class ClassInstanceValue implements Value {
     public void set(Value key, Value value) {
         final Value v = thisMap.get(key);
         if (v == null) {
-            throw new RuntimeException("Unable to add new field " 
+            throw new RuntimeException("Unable to add new field "
                     + key.asString() + " to class " + className);
         }
         thisMap.set(key, value);
@@ -69,14 +74,17 @@ public class ClassInstanceValue implements Value {
 
     @Override
     public String asString() {
-        return "class " + className + "@" + thisMap;
+        if (toString != null) {
+            return toString.execute(new Value[] {}).asString();
+        }
+        return className + "@" + thisMap;
     }
 
     @Override
     public int type() {
         return Types.CLASS;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -99,7 +107,7 @@ public class ClassInstanceValue implements Value {
     public int compareTo(Value o) {
         return asString().compareTo(o.asString());
     }
-    
+
     @Override
     public String toString() {
         return asString();

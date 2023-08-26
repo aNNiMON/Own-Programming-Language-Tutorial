@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.annimon'
+version = '2.0-SNAPSHOT'
+
+application {
+    mainClass ='com.annimon.ownlang.Main'
+}
+
+dependencies {
+    implementation project(":ownlang-core")
+    implementation project(":ownlang-parser")
+    implementation project(":ownlang-utils")
+    implementation project(":modules:main")
+
+    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+/*tasks.register('run', JavaExec) {
+    dependsOn classes
+    mainClass = project.mainClass
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    ignoreExitValue true
+}
+
+tasks.register('runOptimizing', JavaExec) {
+    dependsOn classes
+    mainClass = project.mainClass
+    classpath = sourceSets.main.runtimeClasspath
+    ignoreExitValue true
+    args '-o 9 -m -a -f program.own'.split(' ')
+}*/

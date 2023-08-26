@@ -1,1 +1,9 @@
 rootProject.name = 'OwnLang'
+
+include 'ownlang-core'
+include 'ownlang-parser'
+include 'ownlang-desktop'
+include 'ownlang-utils'
+
+include 'modules:main'
+findProject(':modules:main')?.name = 'main'

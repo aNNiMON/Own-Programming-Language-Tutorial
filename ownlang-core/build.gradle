@@ -1,0 +1,36 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.annimon'
+version = '2.0-SNAPSHOT'
+
+dependencies {
+    implementation 'org.json:json:20230227'
+
+    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+ext.generatedJavaDir = "${project.buildDir}/gen/src/main/java"
+sourceSets.main.java.srcDirs += project.generatedJavaDir
+
+tasks.register('generateJavaSources') {
+    doLast {
+        def source = """
+            package com.annimon.ownlang;
+            class Gen {
+                private Gen() {}
+                public static final String BUILD_DATE = "${new Date().format('YYMMdd')}";
+            }
+            """.stripIndent()
+        def genFile = new File("${project.generatedJavaDir}/com/annimon/ownlang/Gen.java")
+        genFile.getParentFile().mkdirs()
+        genFile.write(source)
+    }
+}
+compileJava.dependsOn(generateJavaSources)

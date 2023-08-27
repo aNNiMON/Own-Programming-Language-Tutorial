@@ -9,14 +9,14 @@ version = '2.0-SNAPSHOT'
 dependencies {
     api project(":ownlang-core")
 
-    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
-    implementation ('io.socket:socket.io-client:1.0.2') {
+    implementation "com.squareup.okhttp3:okhttp:${versions.okhttp}"
+    implementation ("io.socket:socket.io-client:${versions.socket}") {
         exclude group: 'org.json', module: 'json'
     }
-    implementation 'org.json:json:20230227'
-    implementation 'org.yaml:snakeyaml:1.20'
+    implementation "org.json:json:${versions.json}"
+    implementation "org.yaml:snakeyaml:${versions.snakeyaml}"
 
-    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation platform("org.junit:junit-bom:${versions.junit}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 

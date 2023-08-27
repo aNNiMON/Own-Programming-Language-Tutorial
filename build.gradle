@@ -1,12 +1,27 @@
+ext {
+    versions = [
+            json: '20230227', // org.json:json
+            snakeyaml: '1.20', // org.yaml:snakeyaml
+            okhttp: '3.8.1', // com.squareup.okhttp3:okhttp
+            socket: '1.0.2', // io.socket:socket.io-client
+            jline: '2.14.5', // jline:jline
+
+            junit: '5.9.2', // org.junit:junit-bom
+            jmh: '1.37' // org.openjdk.jmh:jmh-core
+    ]
+}
+
 allprojects {
     repositories {
         mavenCentral()
     }
 
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        tasks.withType(JavaCompile).tap {
+            configureEach {
+                [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+                options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+            }
         }
     }
 }

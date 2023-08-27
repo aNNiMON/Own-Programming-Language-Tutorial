@@ -7,8 +7,9 @@ plugins {
 group = 'com.annimon'
 version = '2.0-SNAPSHOT'
 
+ext.mainClassName = 'com.annimon.ownlang.Main'
 application {
-    mainClass ='com.annimon.ownlang.Main'
+    mainClass = project.mainClassName
 }
 
 dependencies {
@@ -25,18 +26,23 @@ test {
     useJUnitPlatform()
 }
 
-/*tasks.register('run', JavaExec) {
+tasks.register('runProgram', JavaExec) {
+    group = "application"
+    description = "Run sample program"
     dependsOn classes
-    mainClass = project.mainClass
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     ignoreExitValue true
+    args '-f ../program.own'.split(' ')
 }
 
 tasks.register('runOptimizing', JavaExec) {
+    group = "application"
+    description = "Run sample program with optimizations and measurements"
     dependsOn classes
-    mainClass = project.mainClass
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     ignoreExitValue true
-    args '-o 9 -m -a -f program.own'.split(' ')
-}*/
+    args '-o 9 -m -a -f ../program.own'.split(' ')
+}

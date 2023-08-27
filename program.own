@@ -242,9 +242,6 @@ println 1 :: 2 :: 3
 
 println "\u042a"
 
-include "visitor.own"
-
-
 use "date"
 d = newDate();
 println d

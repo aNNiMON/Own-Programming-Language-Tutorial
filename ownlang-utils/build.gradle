@@ -7,11 +7,11 @@ version = '2.0-SNAPSHOT'
 
 dependencies {
     api project(":ownlang-parser")
-    implementation 'org.json:json:20230227'
-    implementation 'org.yaml:snakeyaml:1.20'
-    implementation 'jline:jline:2.14.5'
+    implementation "org.json:json:${versions.json}"
+    implementation "org.yaml:snakeyaml:${versions.snakeyaml}"
+    implementation "jline:jline:${versions.jline}"
 
-    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation platform("org.junit:junit-bom:${versions.junit}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 

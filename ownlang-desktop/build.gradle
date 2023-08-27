@@ -1,4 +1,5 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
     id 'application'
 }
@@ -16,7 +17,7 @@ dependencies {
     implementation project(":ownlang-utils")
     implementation project(":modules:main")
 
-    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation platform("org.junit:junit-bom:${versions.junit}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 

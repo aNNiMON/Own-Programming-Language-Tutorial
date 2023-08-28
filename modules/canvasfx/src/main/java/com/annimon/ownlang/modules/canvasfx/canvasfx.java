@@ -1,6 +1,6 @@
 package com.annimon.ownlang.modules.canvasfx;
 
-/*import com.annimon.ownlang.exceptions.TypeException;
+import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import static com.annimon.ownlang.lib.Converters.*;
@@ -37,15 +37,15 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.TextAlignment;
-import javax.swing.JFrame;*/
+import javax.swing.JFrame;
 
 /**
  *
  * @author aNNiMON
  */
-public final class canvasfx /*implements Module*/ {
+public final class canvasfx implements Module {
     
-    /*private static final int FX_EFFECT_TYPE = 5301;
+    private static final int FX_EFFECT_TYPE = 5301;
     private static final int FX_COLOR_TYPE = 5302;
     
     private static JFrame frame;
@@ -1112,6 +1112,6 @@ public final class canvasfx /*implements Module*/ {
         map.set("isConsumed", NumberValue.fromBoolean(e.isConsumed()));
         map.set("isDropCompleted", NumberValue.fromBoolean(e.isDropCompleted()));
         handler.execute(map);
-    }*/
+    }
     
 }

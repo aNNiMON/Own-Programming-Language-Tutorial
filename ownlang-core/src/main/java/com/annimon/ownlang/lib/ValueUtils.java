@@ -14,18 +14,13 @@ public final class ValueUtils {
     private ValueUtils() { }
 
     public static Object toObject(Value val) {
-        switch (val.type()) {
-            case Types.ARRAY:
-                return toObject((ArrayValue) val);
-            case Types.MAP:
-                return toObject((MapValue) val);
-            case Types.NUMBER:
-                return val.raw();
-            case Types.STRING:
-                return val.asString();
-            default:
-                return JSONObject.NULL;
-        }
+        return switch (val.type()) {
+            case Types.ARRAY -> toObject((ArrayValue) val);
+            case Types.MAP -> toObject((MapValue) val);
+            case Types.NUMBER -> val.raw();
+            case Types.STRING -> val.asString();
+            default -> JSONObject.NULL;
+        };
     }
 
     public static JSONObject toObject(MapValue map) {
@@ -47,20 +42,20 @@ public final class ValueUtils {
     }
 
     public static Value toValue(Object obj) {
-        if (obj instanceof JSONObject) {
-            return toValue((JSONObject) obj);
+        if (obj instanceof JSONObject jsonObj) {
+            return toValue(jsonObj);
         }
-        if (obj instanceof JSONArray) {
-            return toValue((JSONArray) obj);
+        if (obj instanceof JSONArray jsonArr) {
+            return toValue(jsonArr);
         }
-        if (obj instanceof String) {
-            return new StringValue((String) obj);
+        if (obj instanceof String str) {
+            return new StringValue(str);
         }
-        if (obj instanceof Number) {
-            return NumberValue.of(((Number) obj));
+        if (obj instanceof Number num) {
+            return NumberValue.of(num);
         }
-        if (obj instanceof Boolean) {
-            return NumberValue.fromBoolean((Boolean) obj);
+        if (obj instanceof Boolean flag) {
+            return NumberValue.fromBoolean(flag);
         }
         // NULL or other
         return NumberValue.ZERO;
@@ -119,6 +114,7 @@ public final class ValueUtils {
         return ((FunctionValue) value).getValue();
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Number> MapValue collectNumberConstants(Class<?> clazz, Class<T> type) {
         MapValue result = new MapValue(20);
         for (Field field : clazz.getDeclaredFields()) {

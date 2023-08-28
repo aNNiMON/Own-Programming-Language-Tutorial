@@ -27,7 +27,7 @@ public class UserDefinedFunction implements Function {
 
     public String getArgsName(int index) {
         if (index < 0 || index >= getArgsCount()) return "";
-        return arguments.get(index).getName();
+        return arguments.get(index).name();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class UserDefinedFunction implements Function {
             // Optional args if exists
             for (int i = size; i < totalArgsCount; i++) {
                 final Argument arg = arguments.get(i);
-                Variables.define(arg.getName(), arg.getValueExpr().eval());
+                Variables.define(arg.name(), arg.valueExpr().eval());
             }
             body.execute();
             return NumberValue.ZERO;
@@ -65,8 +65,8 @@ public class UserDefinedFunction implements Function {
 
     @Override
     public String toString() {
-        if (body instanceof ReturnStatement) {
-            return String.format("def%s = %s", arguments, ((ReturnStatement)body).expression);
+        if (body instanceof ReturnStatement returnStmt) {
+            return String.format("def%s = %s", arguments, returnStmt.expression);
         }
         return String.format("def%s %s", arguments, body);
     }

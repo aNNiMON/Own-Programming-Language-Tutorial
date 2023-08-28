@@ -2,7 +2,7 @@ package com.annimon.ownlang.outputsettings;
 
 import java.io.File;
 
-public interface OutputSettings {
+public sealed interface OutputSettings permits ConsoleOutputSettings, StringOutputSettings {
 
     String newline();
 

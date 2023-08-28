@@ -128,16 +128,15 @@ public class DeadCodeElimination extends OptimizationVisitor<Map<String, Variabl
             if (node != statement) {
                 changed = true;
             }
-            if (node instanceof ExprStatement
-                    && isConstantValue( ((ExprStatement) node).expr )) {
+            if (node instanceof ExprStatement expr && isConstantValue(expr.expr)) {
                 changed = true;
                 continue;
             }
 
-            if (node instanceof Statement) {
-                result.add((Statement) node);
-            } else if (node instanceof Expression) {
-                result.add(new ExprStatement((Expression) node));
+            if (node instanceof Statement stmt) {
+                result.add(stmt);
+            } else if (node instanceof Expression expr) {
+                result.add(new ExprStatement(expr));
             }
         }
         if (changed) {

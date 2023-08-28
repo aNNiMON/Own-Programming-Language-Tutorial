@@ -2,7 +2,7 @@ package com.annimon.ownlang.outputsettings;
 
 import java.io.File;
 
-public class ConsoleOutputSettings implements OutputSettings {
+public non-sealed class ConsoleOutputSettings implements OutputSettings {
 
     @Override
     public String newline() {

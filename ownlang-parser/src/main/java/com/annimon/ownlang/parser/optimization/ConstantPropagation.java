@@ -50,7 +50,7 @@ public class ConstantPropagation extends OptimizationVisitor<Map<String, Value>>
     public String summaryInfo() {
         if (optimizationsCount() == 0) return "";
         final StringBuilder sb = new StringBuilder();
-        if (propagatedVariables.size() > 0) {
+        if (!propagatedVariables.isEmpty()) {
             sb.append("\nConstant propagations: ").append(propagatedVariables.size());
             for (Map.Entry<String, Integer> e : propagatedVariables.entrySet()) {
                 sb.append("\n  ").append(e.getKey()).append(": ").append(e.getValue());

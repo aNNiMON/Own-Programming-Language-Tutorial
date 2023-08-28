@@ -7,3 +7,5 @@ include 'ownlang-utils'
 
 include 'modules:main'
 findProject(':modules:main')?.name = 'main'
+include 'modules:canvasfx'
+findProject(':modules:canvasfx')?.name = 'canvasfx'

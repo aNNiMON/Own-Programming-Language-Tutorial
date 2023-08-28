@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+    id 'org.openjfx.javafxplugin' version '0.0.14'
+}
+
+group = 'com.annimon.module'
+version = '2.0-SNAPSHOT'
+
+javafx {
+    version = "17"
+    modules = [ 'javafx.controls', 'javafx.swing' ]
+}
+
+dependencies {
+    api project(":ownlang-core")
+
+    testImplementation platform("org.junit:junit-bom:${versions.junit}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

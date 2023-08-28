@@ -2,7 +2,7 @@ package com.annimon.ownlang.outputsettings;
 
 import java.io.File;
 
-public class StringOutputSettings implements OutputSettings {
+public non-sealed class StringOutputSettings implements OutputSettings {
 
     private final StringBuffer out, err;
 

@@ -22,8 +22,8 @@ public final class ObjectCreationExpression implements Expression {
             // Is Instantiable?
             if (Variables.isExists(className)) {
                 final Value variable = Variables.get(className);
-                if (variable instanceof Instantiable) {
-                    return ((Instantiable) variable).newInstance(ctorArgs());
+                if (variable instanceof Instantiable instantiable) {
+                    return instantiable.newInstance(ctorArgs());
                 }
             }
             throw new UnknownClassException(className);

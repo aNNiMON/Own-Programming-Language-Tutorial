@@ -261,8 +261,8 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         boolean changed = expression != s.expression;
         final List<MatchExpression.Pattern> patterns = new ArrayList<>(s.patterns.size());
         for (MatchExpression.Pattern pattern : s.patterns) {
-            if (pattern instanceof MatchExpression.VariablePattern) {
-                final String variable = ((MatchExpression.VariablePattern) pattern).variable;
+            if (pattern instanceof MatchExpression.VariablePattern varPattern) {
+                final String variable = varPattern.variable;
                 final VariableExpression expr = new VariableExpression(variable);
                 final Node node = expr.accept(this, t);
                 if ((node != expr) && isValue(node)) {
@@ -276,8 +276,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
                 }
             }
             
-            if (pattern instanceof MatchExpression.TuplePattern) {
-                final MatchExpression.TuplePattern tuple = (MatchExpression.TuplePattern) pattern;
+            if (pattern instanceof MatchExpression.TuplePattern tuple) {
                 final List<Expression> newValues = new ArrayList<>(tuple.values.size());
                 boolean valuesChanged = false;
                 for (Expression value : tuple.values) {
@@ -437,15 +436,15 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     protected boolean visit(final Arguments in, final Arguments out, T t) {
         boolean changed = false;
         for (Argument argument : in) {
-            final Expression valueExpr = argument.getValueExpr();
+            final Expression valueExpr = argument.valueExpr();
             if (valueExpr == null) {
-                out.addRequired(argument.getName());
+                out.addRequired(argument.name());
             } else {
                 final Node expr = valueExpr.accept(this, t);
                 if (expr != valueExpr) {
                     changed = true;
                 }
-                out.addOptional(argument.getName(), (Expression) expr);
+                out.addOptional(argument.name(), (Expression) expr);
             }
         }
         return changed;

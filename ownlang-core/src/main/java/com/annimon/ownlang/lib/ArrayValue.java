@@ -52,7 +52,7 @@ public class ArrayValue implements Value, Iterable<Value> {
     public static StringValue joinToString(ArrayValue array, String delimiter, String prefix, String suffix) {
         final StringBuilder sb = new StringBuilder();
         for (Value value : array) {
-            if (sb.length() > 0) sb.append(delimiter);
+            if (!sb.isEmpty()) sb.append(delimiter);
             else sb.append(prefix);
             sb.append(value.asString());
         }
@@ -100,37 +100,26 @@ public class ArrayValue implements Value, Iterable<Value> {
     }
 
     public Value get(Value index) {
-        final String prop = index.asString();
-        switch (prop) {
+        return switch (index.asString()) {
             // Properties
-            case "length":
-                return NumberValue.of(size());
+            case "length" -> NumberValue.of(size());
 
             // Functions
-            case "isEmpty":
-                return Converters.voidToBoolean(() -> size() == 0);
-            case "joinToString":
-                return new FunctionValue(this::joinToString);
-
-            default:
-                return get(index.asInt());
-        }
+            case "isEmpty" -> Converters.voidToBoolean(() -> size() == 0);
+            case "joinToString" -> new FunctionValue(this::joinToString);
+            default -> get(index.asInt());
+        };
     }
     
     public Value joinToString(Value[] args) {
         Arguments.checkRange(0, 3, args.length);
-        switch (args.length) {
-            case 0: 
-                return joinToString(this, "", "", "");
-            case 1:
-                return joinToString(this, args[0].asString(), "", "");
-            case 2:
-                return joinToString(this, args[0].asString(), args[1].asString(), args[1].asString());
-            case 3:
-                return joinToString(this, args[0].asString(), args[1].asString(), args[2].asString());
-            default:
-                throw new ArgumentsMismatchException("Wrong number of arguments");
-        }
+        return switch (args.length) {
+            case 0 -> joinToString(this, "", "", "");
+            case 1 -> joinToString(this, args[0].asString(), "", "");
+            case 2 -> joinToString(this, args[0].asString(), args[1].asString(), args[1].asString());
+            case 3 -> joinToString(this, args[0].asString(), args[1].asString(), args[2].asString());
+            default -> throw new ArgumentsMismatchException("Wrong number of arguments");
+        };
     }
 
     public void set(int index, Value value) {

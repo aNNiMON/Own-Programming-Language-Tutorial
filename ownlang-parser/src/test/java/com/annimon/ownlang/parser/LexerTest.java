@@ -21,10 +21,10 @@ public class LexerTest {
         List<Token> expList = list(NUMBER, NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER);
         List<Token> result = Lexer.tokenize(input);
         assertTokens(expList, result);
-        assertEquals("0", result.get(0).getText());
-        assertEquals("3.1415", result.get(1).getText());
-        assertEquals("CAFEBABE", result.get(2).getText());
-        assertEquals("f7d6c5", result.get(3).getText());
+        assertEquals("0", result.get(0).text());
+        assertEquals("3.1415", result.get(1).text());
+        assertEquals("CAFEBABE", result.get(2).text());
+        assertEquals("f7d6c5", result.get(3).text());
     }
     
     @Test
@@ -39,7 +39,7 @@ public class LexerTest {
         List<Token> expList = list(WORD, EQ, MINUS, NUMBER, PLUS, NUMBER, STAR, NUMBER, PERCENT, NUMBER, SLASH, NUMBER);
         List<Token> result = Lexer.tokenize(input);
         assertTokens(expList, result);
-        assertEquals("x", result.get(0).getText());
+        assertEquals("x", result.get(0).text());
     }
     
     @Test
@@ -64,7 +64,7 @@ public class LexerTest {
         List<Token> expList = list(TEXT);
         List<Token> result = Lexer.tokenize(input);
         assertTokens(expList, result);
-        assertEquals("1\"2", result.get(0).getText());
+        assertEquals("1\"2", result.get(0).text());
     }
     
     @Test
@@ -73,7 +73,7 @@ public class LexerTest {
         List<Token> expList = list(TEXT);
         List<Token> result = Lexer.tokenize(input);
         assertTokens(expList, result);
-        assertEquals("", result.get(0).getText());
+        assertEquals("", result.get(0).text());
     }
     
     @Test
@@ -83,7 +83,7 @@ public class LexerTest {
         assertThrows(LexerException.class, () -> {
             List<Token> result = Lexer.tokenize(input);
             assertTokens(expList, result);
-            assertEquals("1", result.get(0).getText());
+            assertEquals("1", result.get(0).text());
         });
     }
     
@@ -110,7 +110,7 @@ public class LexerTest {
         List<Token> expList = list(NUMBER);
         List<Token> result = Lexer.tokenize(input);
         assertTokens(expList, result);
-        assertEquals("123", result.get(0).getText());
+        assertEquals("123", result.get(0).text());
     }
     
     @Test
@@ -159,7 +159,7 @@ public class LexerTest {
         final int length = expList.size();
         assertEquals(length, result.size());
         for (int i = 0; i < length; i++) {
-            assertEquals(expList.get(i).getType(), result.get(i).getType());
+            assertEquals(expList.get(i).type(), result.get(i).type());
         }
     }
     

@@ -25,15 +25,7 @@ public final class CallStack {
         return calls;
     }
     
-    public static class CallInfo {
-        String name;
-        Function function;
-
-        public CallInfo(String name, Function function) {
-            this.name = name;
-            this.function = function;
-        }
-
+    public record CallInfo(String name, Function function) {
         @Override
         public String toString() {
             return String.format("%s: %s", name, function.toString().trim());

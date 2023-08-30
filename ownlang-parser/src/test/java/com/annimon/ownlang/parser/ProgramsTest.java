@@ -18,33 +18,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
+import static com.annimon.ownlang.parser.TestDataUtil.scanDirectory;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProgramsTest {
     private static final String RES_DIR = "src/test/resources";
 
     public static Stream<String> data() {
-        final File resDir = new File(RES_DIR);
-        return scanDirectory(resDir)
+        return scanDirectory(RES_DIR)
                 .map(File::getPath);
-    }
-
-    private static Stream<File> scanDirectory(File dir) {
-        final File[] files = dir.listFiles();
-        if (files == null || files.length == 0) {
-            return Stream.empty();
-        }
-        return Arrays.stream(files)
-                .flatMap(file -> {
-                    if (file.isDirectory()) {
-                        return scanDirectory(file);
-                    }
-                    return Stream.of(file);
-                })
-                .filter(f -> f.getName().endsWith(".own"));
     }
 
     @BeforeEach

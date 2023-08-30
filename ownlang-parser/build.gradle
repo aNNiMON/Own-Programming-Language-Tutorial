@@ -14,6 +14,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation "org.openjdk.jmh:jmh-core:${versions.jmh}"
     testImplementation "org.openjdk.jmh:jmh-generator-annprocess:${versions.jmh}"
+    testAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${versions.jmh}"
 }
 
 test {

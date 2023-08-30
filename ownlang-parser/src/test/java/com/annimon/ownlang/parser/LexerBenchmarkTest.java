@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -23,13 +24,13 @@ public class LexerBenchmarkTest {
 
     @Setup(Level.Trial)
     public void initializeTrial() throws IOException {
-        input = SourceLoader.readSource("program.own");
+        input = SourceLoader.readSource("../program.own");
     }
 
     @Benchmark
-    public void lexerBenchmark() {
+    public void lexerBenchmark(Blackhole bh) {
         for (int i = 0; i < iterations; i++) {
-            Lexer.tokenize(input);
+            bh.consume(Lexer.tokenize(input));
         }
     }
 

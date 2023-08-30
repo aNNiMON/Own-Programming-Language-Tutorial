@@ -25,7 +25,7 @@ public class ParserBenchmarkTest {
 
     @Setup(Level.Trial)
     public void initializeTrial() throws IOException {
-        input = Lexer.tokenize(SourceLoader.readSource("program.own"));
+        input = Lexer.tokenize(SourceLoader.readSource("../program.own"));
     }
 
     @Benchmark

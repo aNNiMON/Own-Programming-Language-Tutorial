@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'org.openjfx.javafxplugin' version '0.0.14'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'com.annimon.module'
@@ -12,7 +13,7 @@ javafx {
 }
 
 dependencies {
-    api project(":ownlang-core")
+    compileOnlyApi project(":ownlang-core")
 
     testImplementation platform("org.junit:junit-bom:${versions.junit}")
     testImplementation 'org.junit.jupiter:junit-jupiter'

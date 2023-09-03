@@ -17,8 +17,7 @@ public final class UseWithNonStringValueValidator extends LintVisitor {
     public void visit(UseStatement st) {
         super.visit(st);
 
-        if (st.expression instanceof ArrayExpression) {
-            ArrayExpression ae = (ArrayExpression) st.expression;
+        if (st.expression instanceof ArrayExpression ae) {
             for (Expression expr : ae.elements) {
                 if (!checkExpression(expr)) {
                     return;
@@ -32,18 +31,18 @@ public final class UseWithNonStringValueValidator extends LintVisitor {
     }
 
     private boolean checkExpression(Expression expr) {
-        if (!(expr instanceof ValueExpression)) {
+        if (expr instanceof ValueExpression valueExpr) {
+            final Value value = valueExpr.value;
+            if (value.type() != Types.STRING) {
+                warnWrongType(value);
+                return false;
+            }
+            return true;
+        } else {
             Console.error(String.format(
                     "Warning: `use` with %s, not ValueExpression", expr.getClass().getSimpleName()));
             return false;
         }
-
-        final Value value = ((ValueExpression) expr).value;
-        if (value.type() != Types.STRING) {
-            warnWrongType(value);
-            return false;
-        }
-        return true;
     }
 
     private void warnWrongType(Value value) {

@@ -28,17 +28,10 @@ public final class ForeachArrayStatement extends InterruptableNode implements St
 
         final Value containerValue = container.eval();
         switch (containerValue.type()) {
-            case Types.STRING:
-                iterateString(containerValue.asString());
-                break;
-            case Types.ARRAY:
-                iterateArray((ArrayValue) containerValue);
-                break;
-            case Types.MAP:
-                iterateMap((MapValue) containerValue);
-                break;
-            default:
-                throw new TypeException("Cannot iterate " + Types.typeToString(containerValue.type()));
+            case Types.STRING -> iterateString(containerValue.asString());
+            case Types.ARRAY -> iterateArray((ArrayValue) containerValue);
+            case Types.MAP -> iterateMap((MapValue) containerValue);
+            default -> throw new TypeException("Cannot iterate " + Types.typeToString(containerValue.type()));
         }
 
         // Restore variables

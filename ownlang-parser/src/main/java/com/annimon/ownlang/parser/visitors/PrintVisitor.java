@@ -373,8 +373,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
                 break;
             case Types.FUNCTION:  {
                 final Function function = ((FunctionValue) s.value).getValue();
-                if (function instanceof UserDefinedFunction) {
-                    UserDefinedFunction f = (UserDefinedFunction) function;
+                if (function instanceof UserDefinedFunction f) {
                     t.append("def");
                     t.append(f.arguments);
                     return visitFunctionBody(f.body, t);
@@ -457,9 +456,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
     }
 
     private void printIndent(StringBuilder sb) {
-        for (int i = 0; i < indent; i++) {
-            sb.append(' ');
-        }
+        sb.append(" ".repeat(Math.max(0, indent)));
     }
 
     private void increaseIndent() {

@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 public final class SourceLoader {
 
@@ -26,6 +27,6 @@ public final class SourceLoader {
             result.write(buffer, 0, read);
         }
         is.close();
-        return result.toString("UTF-8");
+        return result.toString(StandardCharsets.UTF_8);
     }
 }

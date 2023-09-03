@@ -11,7 +11,6 @@ import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.modules.Module;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -92,7 +91,7 @@ public final class ounit implements Module {
             List<TestInfo> tests = Functions.getFunctions().entrySet().stream()
                     .filter(e -> e.getKey().toLowerCase().startsWith("test"))
                     .map(e -> runTest(e.getKey(), e.getValue()))
-                    .collect(Collectors.toList());
+                    .toList();
             
             int failures = 0;
             long summaryTime = 0;
@@ -135,10 +134,10 @@ public final class ounit implements Module {
     }
     
     private static class TestInfo {
-        String name;
-        boolean isPassed;
-        String failureDescription;
-        long elapsedTimeInMicros;
+        final String name;
+        final boolean isPassed;
+        final String failureDescription;
+        final long elapsedTimeInMicros;
 
         public TestInfo(String name, boolean isPassed, String failureDescription, long elapsedTimeInMicros) {
             this.name = name;

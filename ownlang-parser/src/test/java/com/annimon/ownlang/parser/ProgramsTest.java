@@ -88,7 +88,7 @@ public class ProgramsTest {
         }
     }
 
-    private static Visitor testFunctionsExecutor = new AbstractVisitor() {
+    private static final Visitor testFunctionsExecutor = new AbstractVisitor() {
         @Override
         public void visit(FunctionDefineStatement s) {
             if (s.name.startsWith("test")) {

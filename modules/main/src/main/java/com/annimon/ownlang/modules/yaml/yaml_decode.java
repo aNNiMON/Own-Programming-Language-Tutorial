@@ -31,28 +31,28 @@ public final class yaml_decode implements Function {
     }
     
     private Value process(Object obj) {
-        if (obj instanceof Map) {
-            return process((Map) obj);
+        if (obj instanceof Map<?, ?> map) {
+            return process(map);
         }
-        if (obj instanceof List) {
-            return process((List) obj);
+        if (obj instanceof List<?> list) {
+            return process(list);
         }
-        if (obj instanceof String) {
-            return new StringValue((String) obj);
+        if (obj instanceof String str) {
+            return new StringValue(str);
         }
-        if (obj instanceof Number) {
-            return NumberValue.of(((Number) obj));
+        if (obj instanceof Number number) {
+            return NumberValue.of(number);
         }
-        if (obj instanceof Boolean) {
-            return NumberValue.fromBoolean((Boolean) obj);
+        if (obj instanceof Boolean bool) {
+            return NumberValue.fromBoolean(bool);
         }
         // NULL or other
         return NumberValue.ZERO;
     }
     
-    private MapValue process(Map<Object, Object> map) {
+    private MapValue process(Map<?, ?> map) {
         final MapValue result = new MapValue(new LinkedHashMap<>(map.size()));
-        for (Map.Entry<Object, Object> entry : map.entrySet()) {
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
             final String key = entry.getKey().toString();
             final Value value = process(entry.getValue());
             result.set(new StringValue(key), value);
@@ -60,7 +60,7 @@ public final class yaml_decode implements Function {
         return result;
     }
     
-    private ArrayValue process(List list) {
+    private ArrayValue process(List<?> list) {
         final int length = list.size();
         final ArrayValue result = new ArrayValue(length);
         for (int i = 0; i < length; i++) {

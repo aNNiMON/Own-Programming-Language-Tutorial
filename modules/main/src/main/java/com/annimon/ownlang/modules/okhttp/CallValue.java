@@ -36,7 +36,7 @@ public class CallValue extends MapValue {
         final Function onResponse = ValueUtils.consumeFunction(args[0], 0);
         call.enqueue(new Callback() {
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) {
                 onResponse.execute(new CallValue(call), new ResponseValue(response));
             }
 

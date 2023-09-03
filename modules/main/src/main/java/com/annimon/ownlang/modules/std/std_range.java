@@ -128,7 +128,7 @@ public final class std_range implements Function {
             if (isIntegerRange()) {
                 final int toInt = (int) to;
                 final int stepInt = (int) step;
-                return new Iterator<Value>() {
+                return new Iterator<>() {
 
                     int value = (int) from;
 
@@ -145,10 +145,11 @@ public final class std_range implements Function {
                     }
 
                     @Override
-                    public void remove() { }
+                    public void remove() {
+                    }
                 };
             }
-            return new Iterator<Value>() {
+            return new Iterator<>() {
 
                 long value = from;
 
@@ -165,7 +166,8 @@ public final class std_range implements Function {
                 }
 
                 @Override
-                public void remove() { }
+                public void remove() {
+                }
             };
         }
 
@@ -197,8 +199,7 @@ public final class std_range implements Function {
                 final int lengthCompare = Integer.compare(size(), ((ArrayValue) o).size());
                 if (lengthCompare != 0) return lengthCompare;
 
-                if (o instanceof RangeValue) {
-                    final RangeValue o2 = ((RangeValue) o);
+                if (o instanceof RangeValue o2) {
                     int compareResult;
                     compareResult = Long.compare(this.from, o2.from);
                     if (compareResult != 0) return compareResult;

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -138,7 +139,7 @@ public final class files implements Module {
             if (mode.contains("rb")) {
                 dis = new DataInputStream(new FileInputStream(file));
             } else if (mode.contains("r")) {
-                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
             }
             
             DataOutputStream dos = null;
@@ -147,7 +148,7 @@ public final class files implements Module {
             if (mode.contains("wb")) {
                 dos = new DataOutputStream(new FileOutputStream(file, append));
             } else if (mode.contains("w")) {
-                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8"));
+                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), StandardCharsets.UTF_8));
             }
             
             final int key = files.size();

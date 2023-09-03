@@ -46,7 +46,7 @@ public final class Repl {
         final StringBuilder buffer = new StringBuilder();
         final ReplConsole console = initReplConsole();
         while (true) {
-            console.setPrompt((buffer.length() == 0) ? "\n> " : "  ");
+            console.setPrompt((buffer.isEmpty()) ? "\n> " : "  ");
 
             final String line = console.readLine();
             if (line == null || EXIT.equalsIgnoreCase(line)) break;

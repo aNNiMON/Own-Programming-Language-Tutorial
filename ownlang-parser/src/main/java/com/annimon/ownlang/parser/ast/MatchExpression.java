@@ -31,14 +31,12 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         super.interruptionCheck();
         final Value value = expression.eval();
         for (Pattern p : patterns) {
-            if (p instanceof ConstantPattern) {
-                final ConstantPattern pattern = (ConstantPattern) p;
+            if (p instanceof ConstantPattern pattern) {
                 if (match(value, pattern.constant) && optMatches(p)) {
                     return evalResult(p.result);
                 }
             }
-            if (p instanceof VariablePattern) {
-                final VariablePattern pattern = (VariablePattern) p;
+            if (p instanceof VariablePattern pattern) {
                 if (pattern.variable.equals("_")) return evalResult(p.result);
 
                 if (ScopeHandler.isVariableOrConstantExists(pattern.variable)) {
@@ -55,8 +53,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
                     ScopeHandler.removeVariable(pattern.variable);
                 }
             }
-            if ((value.type() == Types.ARRAY) && (p instanceof ListPattern)) {
-                final ListPattern pattern = (ListPattern) p;
+            if ((value.type() == Types.ARRAY) && (p instanceof ListPattern pattern)) {
                 if (matchListPattern((ArrayValue) value, pattern)) {
                     // Clean up variables if matched
                     final Value result = evalResult(p.result);
@@ -66,8 +63,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
                     return result;
                 }
             }
-            if ((value.type() == Types.ARRAY) && (p instanceof TuplePattern)) {
-                final TuplePattern pattern = (TuplePattern) p;
+            if ((value.type() == Types.ARRAY) && (p instanceof TuplePattern pattern)) {
                 if (matchTuplePattern((ArrayValue) value, pattern) && optMatches(p)) {
                     return evalResult(p.result);
                 }
@@ -106,6 +102,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
                 if (optMatches(p)) {
                     return true;
                 }
+                // TODO remove is dangerous
                 ScopeHandler.removeVariable(variable);
                 return false;
 
@@ -203,7 +200,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         return sb.toString();
     }
 
-    public abstract static class Pattern {
+    public abstract static sealed class Pattern {
         public Statement result;
         public Expression optCondition;
 
@@ -218,8 +215,8 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         }
     }
 
-    public static class ConstantPattern extends Pattern {
-        Value constant;
+    public static final class ConstantPattern extends Pattern {
+        final Value constant;
 
         public ConstantPattern(Value pattern) {
             this.constant = pattern;
@@ -231,8 +228,8 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         }
     }
 
-    public static class VariablePattern extends Pattern {
-        public String variable;
+    public static final class VariablePattern extends Pattern {
+        public final String variable;
 
         public VariablePattern(String pattern) {
             this.variable = pattern;
@@ -244,8 +241,8 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         }
     }
 
-    public static class ListPattern extends Pattern {
-        List<String> parts;
+    public static final class ListPattern extends Pattern {
+        final List<String> parts;
 
         public ListPattern() {
             this(new ArrayList<>());
@@ -275,11 +272,11 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         }
     }
 
-    public static class TuplePattern extends Pattern {
-        public List<Expression> values;
+    public static final class TuplePattern extends Pattern {
+        public final List<Expression> values;
 
         public TuplePattern() {
-            this(new ArrayList<Expression>());
+            this(new ArrayList<>());
         }
 
         public TuplePattern(List<Expression> parts) {

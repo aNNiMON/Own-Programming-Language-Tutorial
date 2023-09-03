@@ -89,8 +89,8 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        if (functionExpr instanceof ValueExpression && ((ValueExpression)functionExpr).value.type() == Types.STRING) {
-            sb.append(((ValueExpression)functionExpr).value.asString()).append('(');
+        if (functionExpr instanceof ValueExpression valueExpr && (valueExpr.value.type() == Types.STRING)) {
+            sb.append(valueExpr.value.asString()).append('(');
         } else {
             sb.append(functionExpr).append('(');
         }

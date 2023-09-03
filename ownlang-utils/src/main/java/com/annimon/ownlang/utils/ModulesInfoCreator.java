@@ -1,10 +1,6 @@
 package com.annimon.ownlang.utils;
 
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.io.File;
 import java.util.*;
@@ -20,14 +16,14 @@ public final class ModulesInfoCreator {
     private static final String MODULES_PATH = "src/main/java/com/annimon/ownlang/modules";
 
     public static void main(String[] args)
-            throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+            throws ReflectiveOperationException {
         final Class<Module> clazz = Module.class; // get classloader for package
 
         final List<ModuleInfo> moduleInfos = new ArrayList<>();
 
         String[] moduleNames = Optional.ofNullable(new File(MODULES_PATH).listFiles())
-                .map(Arrays::stream)
-                .orElse(Stream.empty())
+                .stream()
+                .flatMap(Arrays::stream)
                 .filter(File::isDirectory)
                 .map(File::getName)
                 .toArray(String[]::new);
@@ -36,7 +32,7 @@ public final class ModulesInfoCreator {
             Class<?> moduleClass = Class.forName(moduleClassPath);
             Functions.getFunctions().clear();
             Variables.variables().clear();
-            final Module module = (Module) moduleClass.newInstance();
+            final Module module = (Module) moduleClass.getDeclaredConstructor().newInstance();
             module.init();
 
             final ModuleInfo moduleInfo = new ModuleInfo(moduleName);
@@ -80,24 +76,26 @@ public final class ModulesInfoCreator {
         System.out.println(new Yaml(options).dump(infos));
     }
 
-    private static List<String> listValues(Class moduleClass) {
+    private static List<String> listValues(Class<?> moduleClass) {
         return Arrays.stream(moduleClass.getDeclaredClasses())
                 .filter(clazz -> getAllInterfaces(clazz).stream().anyMatch(i -> i.equals(Value.class)))
                 .map(Class::getSimpleName)
                 .collect(Collectors.toList());
     }
 
-    private static Set<Class> getAllInterfaces(Class clazz) {
-        if (clazz.getSuperclass() == null) return Collections.emptySet();
+    private static Set<Class<?>> getAllInterfaces(Class<?> clazz) {
+        if (clazz.getSuperclass() == null) {
+            return Collections.emptySet();
+        }
         return Stream.concat(Arrays.stream(clazz.getInterfaces()), getAllInterfaces(clazz.getSuperclass()).stream())
                 .collect(Collectors.toSet());
     }
 
     static class ModuleInfo {
         private final String name;
-        List<String> functions;
-        Map<String, Value> constants;
-        List<String> types;
+        final List<String> functions;
+        final Map<String, Value> constants;
+        final List<String> types;
 
         public ModuleInfo(String name) {
             this.name = name;
@@ -122,26 +120,26 @@ public final class ModulesInfoCreator {
         public List<Map<String, Object>> constants() {
             final List<Map<String, Object>> result = new ArrayList<>();
             constants.entrySet().stream()
-                    .sorted(Comparator.comparing(Map.Entry::getKey))
+                    .sorted(Map.Entry.comparingByKey())
                     .forEach(entry -> {
-                final Value value = entry.getValue();
+                        final Value value = entry.getValue();
 
-                final Map<String, Object> constant = new LinkedHashMap<>();
-                constant.put("name", entry.getKey());
-                constant.put("type", value.type());
-                constant.put("typeName", Types.typeToString(value.type()));
-                if (value.type() == Types.MAP) {
-                    String text = ((MapValue) value).getMap().entrySet().stream()
-                            .sorted(Comparator.comparing(
-                                    e -> ((MapValue)value).size() > 16 ? e.getKey() : e.getValue()))
-                            .map(Object::toString)
-                            .collect(Collectors.joining(", ", "{", "}"));
-                    constant.put("value", text);
-                } else {
-                    constant.put("value", value.asString());
-                }
-                result.add(constant);
-            });
+                        final Map<String, Object> constant = new LinkedHashMap<>();
+                        constant.put("name", entry.getKey());
+                        constant.put("type", value.type());
+                        constant.put("typeName", Types.typeToString(value.type()));
+                        if (value.type() == Types.MAP) {
+                            String text = ((MapValue) value).getMap().entrySet().stream()
+                                    .sorted(Comparator.comparing(
+                                            e -> ((MapValue)value).size() > 16 ? e.getKey() : e.getValue()))
+                                    .map(Object::toString)
+                                    .collect(Collectors.joining(", ", "{", "}"));
+                            constant.put("value", text);
+                        } else {
+                            constant.put("value", value.asString());
+                        }
+                        result.add(constant);
+                    });
             return result;
         }
 

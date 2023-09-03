@@ -246,9 +246,7 @@ public final class Beautifier {
     }
 
     private void indent(int count) {
-        for (int i = 0; i < count; i++) {
-            beautifiedCode.append(' ');
-        }
+        beautifiedCode.append(" ".repeat(Math.max(0, count)));
     }
 
     private void skipTo(String text) {
@@ -262,7 +260,7 @@ public final class Beautifier {
     }
 
     private void skipTo(int position) {
-        beautifiedCode.append(input.substring(pos, position));
+        beautifiedCode.append(input, pos, position);
         pos += (position - pos);
     }
 

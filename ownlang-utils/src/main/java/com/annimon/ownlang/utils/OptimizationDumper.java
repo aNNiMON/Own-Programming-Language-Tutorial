@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -103,7 +104,7 @@ public final class OptimizationDumper {
 
     private static void writeContent(File file, ThrowableConsumer<Writer> consumer) throws IOException {
         try (OutputStream out = new FileOutputStream(file);
-             OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8")) {
+             OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {
             consumer.accept(writer);
         }
     }

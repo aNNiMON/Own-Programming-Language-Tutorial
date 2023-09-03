@@ -15,7 +15,7 @@ public final class functional_combine implements Function {
         Function result = null;
         for (Value arg : args) {
             if (arg.type() != Types.FUNCTION) {
-                throw new TypeException(arg.toString() + " is not a function");
+                throw new TypeException(arg + " is not a function");
             }
             final Function current = result;
             final Function next = ((FunctionValue) arg).getValue();

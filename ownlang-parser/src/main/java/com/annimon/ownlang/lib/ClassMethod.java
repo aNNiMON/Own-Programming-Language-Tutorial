@@ -14,13 +14,13 @@ public class ClassMethod extends UserDefinedFunction {
     
     @Override
     public Value execute(Value[] values) {
-        Variables.push();
-        Variables.define("this", classInstance.getThisMap());
+        ScopeHandler.push();
+        ScopeHandler.defineVariableInCurrentScope("this", classInstance.getThisMap());
         
         try {
             return super.execute(values);
         } finally {
-            Variables.pop();
+            ScopeHandler.pop();
         }
     }
 }

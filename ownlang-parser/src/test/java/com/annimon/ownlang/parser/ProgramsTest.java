@@ -1,10 +1,7 @@
 package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.outputsettings.OutputSettings;
 import com.annimon.ownlang.outputsettings.StringOutputSettings;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
@@ -33,8 +30,7 @@ public class ProgramsTest {
 
     @BeforeEach
     public void initialize() {
-        Variables.clear();
-        Functions.clear();
+        ScopeHandler.resetScope();
         // Let's mock junit methods as ounit functions
         Functions.set("assertEquals", (args) -> {
             assertEquals(args[0], args[1]);

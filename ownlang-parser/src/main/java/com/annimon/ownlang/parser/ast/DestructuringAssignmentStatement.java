@@ -1,10 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +39,7 @@ public final class DestructuringAssignmentStatement extends InterruptableNode im
         for (int i = 0; i < size; i++) {
             final String variable = variables.get(i);
             if (variable != null) {
-                Variables.define(variable, array.get(i));
+                ScopeHandler.defineVariableInCurrentScope(variable, array.get(i));
             }
         }
     }
@@ -51,7 +48,7 @@ public final class DestructuringAssignmentStatement extends InterruptableNode im
         for (Map.Entry<Value, Value> entry : map) {
             final String variable = variables.get(i);
             if (variable != null) {
-                Variables.define(variable, new ArrayValue(
+                ScopeHandler.defineVariableInCurrentScope(variable, new ArrayValue(
                         new Value[] { entry.getKey(), entry.getValue() }
                 ));
             }

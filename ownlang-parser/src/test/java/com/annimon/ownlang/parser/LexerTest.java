@@ -164,7 +164,7 @@ public class LexerTest {
     }
     
     private static List<Token> list(TokenType... types) {
-        final List<Token> list = new ArrayList<Token>();
+        final List<Token> list = new ArrayList<>();
         for (TokenType t : types) {
             list.add(token(t));
         }

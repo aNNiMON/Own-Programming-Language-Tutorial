@@ -74,22 +74,21 @@ public final class BinaryExpression implements Expression {
     }
     
     private Value eval(Value value1, Value value2) {
-        switch (operation) {
-            case ADD: return add(value1, value2);
-            case SUBTRACT: return subtract(value1, value2);
-            case MULTIPLY: return multiply(value1, value2);
-            case DIVIDE: return divide(value1, value2);
-            case REMAINDER: return remainder(value1, value2);
-            case PUSH: return push(value1, value2);
-            case AND: return and(value1, value2);
-            case OR: return or(value1, value2);
-            case XOR: return xor(value1, value2);
-            case LSHIFT: return lshift(value1, value2);
-            case RSHIFT: return rshift(value1, value2);
-            case URSHIFT: return urshift(value1, value2);
-            default:
-                throw new OperationIsNotSupportedException(operation);
-        }
+        return switch (operation) {
+            case ADD -> add(value1, value2);
+            case SUBTRACT -> subtract(value1, value2);
+            case MULTIPLY -> multiply(value1, value2);
+            case DIVIDE -> divide(value1, value2);
+            case REMAINDER -> remainder(value1, value2);
+            case PUSH -> push(value1, value2);
+            case AND -> and(value1, value2);
+            case OR -> or(value1, value2);
+            case XOR -> xor(value1, value2);
+            case LSHIFT -> lshift(value1, value2);
+            case RSHIFT -> rshift(value1, value2);
+            case URSHIFT -> urshift(value1, value2);
+            default -> throw new OperationIsNotSupportedException(operation);
+        };
     }
     
     private Value add(Value value1, Value value2) {
@@ -217,11 +216,7 @@ public final class BinaryExpression implements Expression {
     private Value multiply(StringValue value1, Value value2) {
         final String string1 = value1.asString();
         final int iterations = value2.asInt();
-        final StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < iterations; i++) {
-            buffer.append(string1);
-        }
-        return new StringValue(buffer.toString());
+        return new StringValue(String.valueOf(string1).repeat(Math.max(0, iterations)));
     }
     
     private Value divide(Value value1, Value value2) {

@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class ModuleDetector extends AbstractVisitor {
 
-    private Set<String> modules;
+    private final Set<String> modules;
 
     public ModuleDetector() {
         modules = new HashSet<>();
@@ -23,14 +23,12 @@ public class ModuleDetector extends AbstractVisitor {
 
     @Override
     public void visit(UseStatement st) {
-        if (st.expression instanceof ArrayExpression) {
-            ArrayExpression ae = (ArrayExpression) st.expression;
+        if (st.expression instanceof ArrayExpression ae) {
             for (Expression expr : ae.elements) {
                 modules.add(expr.eval().asString());
             }
         }
-        if (st.expression instanceof ValueExpression) {
-            ValueExpression ve = (ValueExpression) st.expression;
+        if (st.expression instanceof ValueExpression ve) {
             modules.add(ve.value.asString());
         }
         super.visit(st);

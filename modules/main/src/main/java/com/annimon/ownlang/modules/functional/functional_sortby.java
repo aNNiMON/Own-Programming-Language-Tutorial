@@ -8,6 +8,7 @@ import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.ValueUtils;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public final class functional_sortby implements Function {
 
@@ -20,7 +21,7 @@ public final class functional_sortby implements Function {
 
         final Value[] elements = ((ArrayValue) args[0]).getCopyElements();
         final Function function = ValueUtils.consumeFunction(args[1], 1);
-        Arrays.sort(elements, (o1, o2) -> function.execute(o1).compareTo(function.execute(o2)));
+        Arrays.sort(elements, Comparator.comparing(function::execute));
         return new ArrayValue(elements);
     }
     

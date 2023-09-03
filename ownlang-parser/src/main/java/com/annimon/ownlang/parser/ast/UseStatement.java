@@ -27,22 +27,21 @@ public final class UseStatement extends InterruptableNode implements Statement {
         super.interruptionCheck();
         final Value value = expression.eval();
         switch (value.type()) {
-            case Types.ARRAY:
+            case Types.ARRAY -> {
                 for (Value module : ((ArrayValue) value)) {
                     loadModule(module.asString());
                 }
-                break;
-            case Types.STRING:
-                loadModule(value.asString());
-                break;
-            default:
-                throw typeException(value);
+            }
+            case Types.STRING -> loadModule(value.asString());
+            default -> throw typeException(value);
         }
     }
 
     private void loadModule(String name) {
         try {
-            final Module module = (Module) Class.forName(String.format(PACKAGE, name, name)).newInstance();
+            final Module module = (Module) Class.forName(String.format(PACKAGE, name, name))
+                    .getDeclaredConstructor()
+                    .newInstance();
             module.init();
         } catch (Exception ex) {
             throw new RuntimeException("Unable to load module " + name, ex);
@@ -50,14 +49,12 @@ public final class UseStatement extends InterruptableNode implements Statement {
     }
 
     public void loadConstants() {
-        if (expression instanceof ArrayExpression) {
-            ArrayExpression ae = (ArrayExpression) expression;
+        if (expression instanceof ArrayExpression ae) {
             for (Expression expr : ae.elements) {
                 loadConstants(expr.eval().asString());
             }
         }
-        if (expression instanceof ValueExpression) {
-            ValueExpression ve = (ValueExpression) expression;
+        if (expression instanceof ValueExpression ve) {
             loadConstants(ve.value.asString());
         }
     }
@@ -71,9 +68,7 @@ public final class UseStatement extends InterruptableNode implements Statement {
         try {
             final Class<?> moduleClass = Class.forName(String.format(PACKAGE, moduleName, moduleName));
             final Method method = moduleClass.getMethod(INIT_CONSTANTS_METHOD);
-            if (method != null) {
-                method.invoke(this);
-            }
+            method.invoke(this);
         } catch (Exception ex) {
             // ignore
         }

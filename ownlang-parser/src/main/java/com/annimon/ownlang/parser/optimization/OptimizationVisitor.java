@@ -386,8 +386,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(ValueExpression s, T t) {
-        if ( (s.value.type() == Types.FUNCTION) && (s.value.raw() instanceof UserDefinedFunction) ) {
-            final UserDefinedFunction function = (UserDefinedFunction) s.value.raw();
+        if ( (s.value.type() == Types.FUNCTION) && (s.value.raw() instanceof UserDefinedFunction function) ) {
             final UserDefinedFunction accepted = visit(function, t);
             if (accepted != function) {
                 return new ValueExpression(accepted);

@@ -159,7 +159,7 @@ public final class Main {
         final Statement parsedProgram = parser.parse();
         measurement.stop("Parse time");
         if (options.showAst) {
-            System.out.println(parsedProgram.toString());
+            System.out.println(parsedProgram);
         }
         if (parser.getParseErrors().hasErrors()) {
             System.out.println(parser.getParseErrors());

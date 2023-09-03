@@ -2,7 +2,7 @@ package com.annimon.ownlang.modules.base64;
 
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class base64 implements Module {
@@ -45,17 +45,11 @@ public class base64 implements Module {
 
 
     private byte[] getInputToEncode(Value[] args) {
-        byte[] input;
         if (args[0].type() == Types.ARRAY) {
-            input = ValueUtils.toByteArray((ArrayValue) args[0]);
+            return ValueUtils.toByteArray((ArrayValue) args[0]);
         } else {
-            try {
-                input = args[0].asString().getBytes("UTF-8");
-            } catch (UnsupportedEncodingException ex) {
-                input = args[0].asString().getBytes();
-            }
+            return args[0].asString().getBytes(StandardCharsets.UTF_8);
         }
-        return input;
     }
 
     private Base64.Encoder getEncoder(Value[] args) {

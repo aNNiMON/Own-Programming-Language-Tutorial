@@ -25,12 +25,8 @@ public final class DestructuringAssignmentStatement extends InterruptableNode im
         super.interruptionCheck();
         final Value container = containerExpression.eval();
         switch (container.type()) {
-            case Types.ARRAY:
-                execute((ArrayValue) container);
-                break;
-            case Types.MAP:
-                execute((MapValue) container);
-                break;
+            case Types.ARRAY -> execute((ArrayValue) container);
+            case Types.MAP -> execute((MapValue) container);
         }
     }
     

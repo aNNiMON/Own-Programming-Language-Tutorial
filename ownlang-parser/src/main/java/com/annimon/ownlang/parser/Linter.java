@@ -1,13 +1,12 @@
 package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.parser.linters.AssignValidator;
-import com.annimon.ownlang.parser.linters.UseWithNonStringValueValidator;
-import com.annimon.ownlang.parser.linters.DefaultFunctionsOverrideValidator;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.Visitor;
+import com.annimon.ownlang.parser.linters.AssignValidator;
+import com.annimon.ownlang.parser.linters.DefaultFunctionsOverrideValidator;
+import com.annimon.ownlang.parser.linters.UseWithNonStringValueValidator;
 
 public final class Linter {
 
@@ -36,7 +35,6 @@ public final class Linter {
     }
 
     private void resetState() {
-        Variables.clear();
-        Functions.getFunctions().clear();
+        ScopeHandler.resetScope();
     }
 }

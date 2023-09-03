@@ -64,11 +64,11 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
     }
     
     private Function getFunction(String key) {
-        if (Functions.isExists(key)) {
-            return Functions.get(key);
+        if (ScopeHandler.isFunctionExists(key)) {
+            return ScopeHandler.getFunction(key);
         }
-        if (Variables.isExists(key)) {
-            final Value variable = Variables.get(key);
+        if (ScopeHandler.isVariableOrConstantExists(key)) {
+            final Value variable = ScopeHandler.getVariableOrConstant(key);
             if (variable.type() == Types.FUNCTION) {
                 return ((FunctionValue)variable).getValue();
             }

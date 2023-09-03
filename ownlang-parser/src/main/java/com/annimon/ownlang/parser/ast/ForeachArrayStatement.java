@@ -23,7 +23,8 @@ public final class ForeachArrayStatement extends InterruptableNode implements St
     @Override
     public void execute() {
         super.interruptionCheck();
-        final Value previousVariableValue = Variables.isExists(variable) ? Variables.get(variable) : null;
+        // TODO removing without checking shadowing is dangerous
+        final Value previousVariableValue = ScopeHandler.getVariable(variable);
 
         final Value containerValue = container.eval();
         switch (containerValue.type()) {
@@ -42,15 +43,15 @@ public final class ForeachArrayStatement extends InterruptableNode implements St
 
         // Restore variables
         if (previousVariableValue != null) {
-            Variables.set(variable, previousVariableValue);
+            ScopeHandler.setVariable(variable, previousVariableValue);
         } else {
-            Variables.remove(variable);
+            ScopeHandler.removeVariable(variable);
         }
     }
 
     private void iterateString(String str) {
         for (char ch : str.toCharArray()) {
-            Variables.set(variable, new StringValue(String.valueOf(ch)));
+            ScopeHandler.setVariable(variable, new StringValue(String.valueOf(ch)));
             try {
                 body.execute();
             } catch (BreakStatement bs) {
@@ -63,7 +64,7 @@ public final class ForeachArrayStatement extends InterruptableNode implements St
 
     private void iterateArray(ArrayValue containerValue) {
         for (Value value : containerValue) {
-            Variables.set(variable, value);
+            ScopeHandler.setVariable(variable, value);
             try {
                 body.execute();
             } catch (BreakStatement bs) {
@@ -76,7 +77,7 @@ public final class ForeachArrayStatement extends InterruptableNode implements St
 
     private void iterateMap(MapValue containerValue) {
         for (Map.Entry<Value, Value> entry : containerValue) {
-            Variables.set(variable, new ArrayValue(new Value[] {
+            ScopeHandler.setVariable(variable, new ArrayValue(new Value[] {
                     entry.getKey(),
                     entry.getValue()
             }));

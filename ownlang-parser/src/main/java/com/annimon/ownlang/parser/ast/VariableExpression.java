@@ -1,6 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.exceptions.VariableDoesNotExistsException;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 
@@ -30,7 +31,7 @@ public final class VariableExpression extends InterruptableNode implements Expre
 
     @Override
     public Value set(Value value) {
-        Variables.set(name, value);
+        ScopeHandler.setVariable(name, value);
         return value;
     }
     

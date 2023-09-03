@@ -24,8 +24,9 @@ public final class ForeachMapStatement extends InterruptableNode implements Stat
     @Override
     public void execute() {
         super.interruptionCheck();
-        final Value previousVariableValue1 = Variables.isExists(key) ? Variables.get(key) : null;
-        final Value previousVariableValue2 = Variables.isExists(value) ? Variables.get(value) : null;
+        // TODO removing without checking shadowing is dangerous
+        final Value previousVariableValue1 = ScopeHandler.getVariable(key);
+        final Value previousVariableValue2 = ScopeHandler.getVariable(value);
 
         final Value containerValue = container.eval();
         switch (containerValue.type()) {
@@ -44,21 +45,21 @@ public final class ForeachMapStatement extends InterruptableNode implements Stat
 
         // Restore variables
         if (previousVariableValue1 != null) {
-            Variables.set(key, previousVariableValue1);
+            ScopeHandler.setVariable(key, previousVariableValue1);
         } else {
-            Variables.remove(key);
+            ScopeHandler.removeVariable(key);
         }
         if (previousVariableValue2 != null) {
-            Variables.set(value, previousVariableValue2);
+            ScopeHandler.setVariable(value, previousVariableValue2);
         } else {
-            Variables.remove(value);
+            ScopeHandler.removeVariable(value);
         }
     }
 
     private void iterateString(String str) {
         for (char ch : str.toCharArray()) {
-            Variables.set(key, new StringValue(String.valueOf(ch)));
-            Variables.set(value, NumberValue.of(ch));
+            ScopeHandler.setVariable(key, new StringValue(String.valueOf(ch)));
+            ScopeHandler.setVariable(value, NumberValue.of(ch));
             try {
                 body.execute();
             } catch (BreakStatement bs) {
@@ -72,8 +73,8 @@ public final class ForeachMapStatement extends InterruptableNode implements Stat
     private void iterateArray(ArrayValue containerValue) {
         int index = 0;
         for (Value v : containerValue) {
-            Variables.set(key, v);
-            Variables.set(value, NumberValue.of(index++));
+            ScopeHandler.setVariable(key, v);
+            ScopeHandler.setVariable(value, NumberValue.of(index++));
             try {
                 body.execute();
             } catch (BreakStatement bs) {
@@ -86,8 +87,8 @@ public final class ForeachMapStatement extends InterruptableNode implements Stat
 
     private void iterateMap(MapValue containerValue) {
         for (Map.Entry<Value, Value> entry : containerValue) {
-            Variables.set(key, entry.getKey());
-            Variables.set(value, entry.getValue());
+            ScopeHandler.setVariable(key, entry.getKey());
+            ScopeHandler.setVariable(value, entry.getValue());
             try {
                 body.execute();
             } catch (BreakStatement bs) {

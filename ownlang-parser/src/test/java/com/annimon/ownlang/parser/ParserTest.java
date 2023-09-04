@@ -1,7 +1,7 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.ast.*;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ public class ParserTest {
     private static void assertEval(Value expectedValue, String input, Expression expected) {
         BlockStatement program = assertExpression(input, expected);
         program.execute();
-        final Value actual = Variables.get("a");
+        final Value actual = ScopeHandler.getVariable("a");
         try {
             assertEquals(expectedValue.asNumber(), actual.asNumber(), 0.001);
         } catch (NumberFormatException nfe) {

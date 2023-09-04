@@ -20,8 +20,8 @@ public final class ObjectCreationExpression implements Expression {
         final ClassDeclarationStatement cd = ClassDeclarations.get(className);
         if (cd == null) {
             // Is Instantiable?
-            if (Variables.isExists(className)) {
-                final Value variable = Variables.get(className);
+            if (ScopeHandler.isVariableOrConstantExists(className)) {
+                final Value variable = ScopeHandler.getVariableOrConstant(className);
                 if (variable instanceof Instantiable instantiable) {
                     return instantiable.newInstance(ctorArgs());
                 }

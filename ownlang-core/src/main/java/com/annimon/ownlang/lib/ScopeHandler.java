@@ -100,6 +100,10 @@ public final class ScopeHandler {
         }
     }
 
+    public static boolean isConstantExists(String name) {
+        return rootScope.containsConstant(name);
+    }
+
     public static void setConstant(String name, Value value) {
         rootScope.setConstant(name, value);
     }

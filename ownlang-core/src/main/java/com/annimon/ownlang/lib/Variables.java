@@ -12,22 +12,21 @@ public final class Variables {
     public static Map<String, Value> variables() {
         return ScopeHandler.variables();
     }
-    
-    public static boolean isExists(String name) {
-        return ScopeHandler.isVariableOrConstantExists(name);
-    }
-    
-    public static Value get(String name) {
-        return ScopeHandler.getVariableOrConstant(name);
-    }
-    
+
+    /**
+     * @deprecated This function remains for backward compatibility with old separate modules
+     * Use {@link ScopeHandler#setVariable(String, Value)}
+     */
+    @Deprecated
     public static void set(String name, Value value) {
         ScopeHandler.setVariable(name, value);
     }
 
     /**
-     * For compatibility with other modules
+     * @deprecated This function remains for backward compatibility with old separate modules
+     * Use {@link ScopeHandler#setConstant(String, Value)}
      */
+    @Deprecated
     public static void define(String name, Value value) {
         ScopeHandler.setConstant(name, value);
     }

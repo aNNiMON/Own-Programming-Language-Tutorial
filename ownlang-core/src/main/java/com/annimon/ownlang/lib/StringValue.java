@@ -47,8 +47,8 @@ public final class StringValue implements Value {
             case "isEmpty" -> Converters.voidToBoolean(value::isEmpty);
 
             default -> {
-                if (Functions.isExists(prop)) {
-                    final Function f = Functions.get(prop);
+                if (ScopeHandler.isFunctionExists(prop)) {
+                    final Function f = ScopeHandler.getFunction(prop);
                     yield new FunctionValue(args -> {
                         final Value[] newArgs = new Value[args.length + 1];
                         newArgs[0] = this;

@@ -14,7 +14,7 @@ import java.util.Map;
 public final class std_arrayKeys implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(1, args.length);
         if (args[0].type() != Types.MAP) {
             throw new TypeException("Map expected in first argument");

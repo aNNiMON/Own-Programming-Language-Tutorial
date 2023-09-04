@@ -29,7 +29,7 @@ public final class files implements Module {
     private static Map<Integer, FileInfo> files;
 
     public static void initConstants() {
-        Variables.define("FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction()));
+        ScopeHandler.setConstant("FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction()));
     }
 
     @Override
@@ -37,68 +37,68 @@ public final class files implements Module {
         files = new HashMap<>();
         initConstants();
 
-        Functions.set("fopen", new fopen());
-        Functions.set("flush", new flush());
-        Functions.set("fclose", new fclose());
+        ScopeHandler.setFunction("fopen", new fopen());
+        ScopeHandler.setFunction("flush", new flush());
+        ScopeHandler.setFunction("fclose", new fclose());
         
         // Operations
-        Functions.set("copy", new copy());
-        Functions.set("delete", fileToBoolean(File::delete));
-        Functions.set("listFiles", new listFiles());
-        Functions.set("mkdir", fileToBoolean(File::mkdir));
-        Functions.set("mkdirs", fileToBoolean(File::mkdirs));
-        Functions.set("rename", new rename());
+        ScopeHandler.setFunction("copy", new copy());
+        ScopeHandler.setFunction("delete", fileToBoolean(File::delete));
+        ScopeHandler.setFunction("listFiles", new listFiles());
+        ScopeHandler.setFunction("mkdir", fileToBoolean(File::mkdir));
+        ScopeHandler.setFunction("mkdirs", fileToBoolean(File::mkdirs));
+        ScopeHandler.setFunction("rename", new rename());
 
         // Permissions and statuses
-        Functions.set("canExecute", fileToBoolean(File::canExecute));
-        Functions.set("canRead", fileToBoolean(File::canRead));
-        Functions.set("canWrite", fileToBoolean(File::canWrite));
-        Functions.set("isDirectory", fileToBoolean(File::isDirectory));
-        Functions.set("isFile", fileToBoolean(File::isFile));
-        Functions.set("isHidden", fileToBoolean(File::isHidden));
-        Functions.set("setExecutable", new setExecutable());
-        Functions.set("setReadable", new setReadable());
-        Functions.set("setReadOnly", new setReadOnly());
-        Functions.set("setWritable", new setWritable());
+        ScopeHandler.setFunction("canExecute", fileToBoolean(File::canExecute));
+        ScopeHandler.setFunction("canRead", fileToBoolean(File::canRead));
+        ScopeHandler.setFunction("canWrite", fileToBoolean(File::canWrite));
+        ScopeHandler.setFunction("isDirectory", fileToBoolean(File::isDirectory));
+        ScopeHandler.setFunction("isFile", fileToBoolean(File::isFile));
+        ScopeHandler.setFunction("isHidden", fileToBoolean(File::isHidden));
+        ScopeHandler.setFunction("setExecutable", new setExecutable());
+        ScopeHandler.setFunction("setReadable", new setReadable());
+        ScopeHandler.setFunction("setReadOnly", new setReadOnly());
+        ScopeHandler.setFunction("setWritable", new setWritable());
 
-        Functions.set("exists", fileToBoolean(File::exists));
-        Functions.set("fileSize", new fileSize());
-        Functions.set("getParent", new getParent());
-        Functions.set("lastModified", new lastModified());
-        Functions.set("setLastModified", new setLastModified());
+        ScopeHandler.setFunction("exists", fileToBoolean(File::exists));
+        ScopeHandler.setFunction("fileSize", new fileSize());
+        ScopeHandler.setFunction("getParent", new getParent());
+        ScopeHandler.setFunction("lastModified", new lastModified());
+        ScopeHandler.setFunction("setLastModified", new setLastModified());
 
         // IO
-        Functions.set("readBoolean", new readBoolean());
-        Functions.set("readByte", new readByte());
-        Functions.set("readBytes", new readBytes());
-        Functions.set("readAllBytes", new readAllBytes());
-        Functions.set("readChar", new readChar());
-        Functions.set("readShort", new readShort());
-        Functions.set("readInt", new readInt());
-        Functions.set("readLong", new readLong());
-        Functions.set("readFloat", new readFloat());
-        Functions.set("readDouble", new readDouble());
-        Functions.set("readUTF", new readUTF());
-        Functions.set("readLine", new readLine());
-        Functions.set("readText", new readText());
-        Functions.set("writeBoolean", new writeBoolean());
-        Functions.set("writeByte", new writeByte());
-        Functions.set("writeBytes", new writeBytes());
-        Functions.set("writeChar", new writeChar());
-        Functions.set("writeShort", new writeShort());
-        Functions.set("writeInt", new writeInt());
-        Functions.set("writeLong", new writeLong());
-        Functions.set("writeFloat", new writeFloat());
-        Functions.set("writeDouble", new writeDouble());
-        Functions.set("writeUTF", new writeUTF());
-        Functions.set("writeLine", new writeLine());
-        Functions.set("writeText", new writeText());
+        ScopeHandler.setFunction("readBoolean", new readBoolean());
+        ScopeHandler.setFunction("readByte", new readByte());
+        ScopeHandler.setFunction("readBytes", new readBytes());
+        ScopeHandler.setFunction("readAllBytes", new readAllBytes());
+        ScopeHandler.setFunction("readChar", new readChar());
+        ScopeHandler.setFunction("readShort", new readShort());
+        ScopeHandler.setFunction("readInt", new readInt());
+        ScopeHandler.setFunction("readLong", new readLong());
+        ScopeHandler.setFunction("readFloat", new readFloat());
+        ScopeHandler.setFunction("readDouble", new readDouble());
+        ScopeHandler.setFunction("readUTF", new readUTF());
+        ScopeHandler.setFunction("readLine", new readLine());
+        ScopeHandler.setFunction("readText", new readText());
+        ScopeHandler.setFunction("writeBoolean", new writeBoolean());
+        ScopeHandler.setFunction("writeByte", new writeByte());
+        ScopeHandler.setFunction("writeBytes", new writeBytes());
+        ScopeHandler.setFunction("writeChar", new writeChar());
+        ScopeHandler.setFunction("writeShort", new writeShort());
+        ScopeHandler.setFunction("writeInt", new writeInt());
+        ScopeHandler.setFunction("writeLong", new writeLong());
+        ScopeHandler.setFunction("writeFloat", new writeFloat());
+        ScopeHandler.setFunction("writeDouble", new writeDouble());
+        ScopeHandler.setFunction("writeUTF", new writeUTF());
+        ScopeHandler.setFunction("writeLine", new writeLine());
+        ScopeHandler.setFunction("writeText", new writeText());
     }
 
     private static class filesComparatorFunction implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.checkAtLeast(2, args.length);
             
             final int fd1 = args[0].asInt();
@@ -119,7 +119,7 @@ public final class files implements Module {
     private static class fopen implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.checkAtLeast(1, args.length);
             
             final File file = Console.fileInstance(args[0].asString());
@@ -160,7 +160,7 @@ public final class files implements Module {
     private abstract static class FileFunction implements Function {
         
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             if (args.length < 1) throw new ArgumentsMismatchException("File descriptor expected");
             final int key = args[0].asInt();
             try {
@@ -183,7 +183,7 @@ public final class files implements Module {
     private static class copy implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(2, args.length);
             try {
                 final FileInputStream is = new FileInputStream(fileFrom(args[0]));
@@ -202,7 +202,7 @@ public final class files implements Module {
     private static class rename implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(2, args.length);
             return NumberValue.fromBoolean( fileFrom(args[0]).renameTo(fileFrom(args[1])) );
         }

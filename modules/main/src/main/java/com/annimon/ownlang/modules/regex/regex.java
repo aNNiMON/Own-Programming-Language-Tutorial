@@ -1,13 +1,6 @@
 package com.annimon.ownlang.modules.regex;
 
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.util.regex.Pattern;
 
@@ -44,13 +37,13 @@ public final class regex implements Module {
             return ArrayValue.of(pattern.split(args[1].asString(), limit));
         });
         map.set("compile", regex::compile);
-        Variables.define("Pattern", map);
+        ScopeHandler.setConstant("Pattern", map);
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("regex", regex::compile);
+        ScopeHandler.setFunction("regex", regex::compile);
     }
 
     private static Value compile(Value[] args) {

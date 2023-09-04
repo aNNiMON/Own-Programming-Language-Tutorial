@@ -10,28 +10,28 @@ public class base64 implements Module {
     private static final int TYPE_URL_SAFE = 8;
 
     public static void initConstants() {
-        Variables.define("BASE64_URL_SAFE", NumberValue.of(TYPE_URL_SAFE));
+        ScopeHandler.setConstant("BASE64_URL_SAFE", NumberValue.of(TYPE_URL_SAFE));
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("base64encode", this::base64encode);
-        Functions.set("base64decode", this::base64decode);
-        Functions.set("base64encodeToString", this::base64encodeToString);
+        ScopeHandler.setFunction("base64encode", this::base64encode);
+        ScopeHandler.setFunction("base64decode", this::base64decode);
+        ScopeHandler.setFunction("base64encodeToString", this::base64encodeToString);
     }
 
-    private Value base64encode(Value... args) {
+    private Value base64encode(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
         return ArrayValue.of(getEncoder(args).encode(getInputToEncode(args)));
     }
 
-    private Value base64encodeToString(Value... args) {
+    private Value base64encodeToString(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
         return new StringValue(getEncoder(args).encodeToString(getInputToEncode(args)));
     }
 
-    private Value base64decode(Value... args) {
+    private Value base64decode(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
         final Base64.Decoder decoder = getDecoder(args);
         final byte[] result;

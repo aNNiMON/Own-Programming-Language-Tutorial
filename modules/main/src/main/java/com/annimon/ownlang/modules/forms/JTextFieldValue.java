@@ -32,7 +32,7 @@ public class JTextFieldValue extends JTextComponentValue {
         set("setScrollOffset", intToVoid(textField::setScrollOffset));
     }
 
-    private Value addActionListener(Value... args) {
+    private Value addActionListener(Value[] args) {
         Arguments.check(1, args.length);
         Function action = consumeFunction(args[0], 1);
         textField.addActionListener(e -> action.execute());

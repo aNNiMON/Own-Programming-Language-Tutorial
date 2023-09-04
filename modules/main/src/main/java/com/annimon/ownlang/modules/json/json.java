@@ -1,6 +1,6 @@
 package com.annimon.ownlang.modules.json;
 
-import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.modules.Module;
 
 /**
@@ -15,7 +15,7 @@ public final class json implements Module {
     @Override
     public void init() {
         initConstants();
-        Functions.set("jsonencode", new json_encode());
-        Functions.set("jsondecode", new json_decode());
+        ScopeHandler.setFunction("jsonencode", new json_encode());
+        ScopeHandler.setFunction("jsondecode", new json_decode());
     }
 }

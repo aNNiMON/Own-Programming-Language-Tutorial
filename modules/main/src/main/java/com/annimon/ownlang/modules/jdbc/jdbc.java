@@ -1,16 +1,7 @@
 package com.annimon.ownlang.modules.jdbc;
 
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -35,38 +26,38 @@ import java.util.function.Function;
 public final class jdbc implements Module {
 
     public static void initConstants() {
-        Variables.define("TRANSACTION_NONE", NumberValue.of(Connection.TRANSACTION_NONE));
-        Variables.define("TRANSACTION_READ_COMMITTED", NumberValue.of(Connection.TRANSACTION_READ_COMMITTED));
-        Variables.define("TRANSACTION_READ_UNCOMMITTED", NumberValue.of(Connection.TRANSACTION_READ_UNCOMMITTED));
-        Variables.define("TRANSACTION_REPEATABLE_READ", NumberValue.of(Connection.TRANSACTION_REPEATABLE_READ));
-        Variables.define("TRANSACTION_SERIALIZABLE", NumberValue.of(Connection.TRANSACTION_SERIALIZABLE));
+        ScopeHandler.setConstant("TRANSACTION_NONE", NumberValue.of(Connection.TRANSACTION_NONE));
+        ScopeHandler.setConstant("TRANSACTION_READ_COMMITTED", NumberValue.of(Connection.TRANSACTION_READ_COMMITTED));
+        ScopeHandler.setConstant("TRANSACTION_READ_UNCOMMITTED", NumberValue.of(Connection.TRANSACTION_READ_UNCOMMITTED));
+        ScopeHandler.setConstant("TRANSACTION_REPEATABLE_READ", NumberValue.of(Connection.TRANSACTION_REPEATABLE_READ));
+        ScopeHandler.setConstant("TRANSACTION_SERIALIZABLE", NumberValue.of(Connection.TRANSACTION_SERIALIZABLE));
 
-        Variables.define("CLOSE_ALL_RESULTS", NumberValue.of(Statement.CLOSE_ALL_RESULTS));
-        Variables.define("CLOSE_CURRENT_RESULT", NumberValue.of(Statement.CLOSE_CURRENT_RESULT));
-        Variables.define("EXECUTE_FAILED", NumberValue.of(Statement.EXECUTE_FAILED));
-        Variables.define("KEEP_CURRENT_RESULT", NumberValue.of(Statement.KEEP_CURRENT_RESULT));
-        Variables.define("NO_GENERATED_KEYS", NumberValue.of(Statement.NO_GENERATED_KEYS));
-        Variables.define("RETURN_GENERATED_KEYS", NumberValue.of(Statement.RETURN_GENERATED_KEYS));
-        Variables.define("SUCCESS_NO_INFO", NumberValue.of(Statement.SUCCESS_NO_INFO));
+        ScopeHandler.setConstant("CLOSE_ALL_RESULTS", NumberValue.of(Statement.CLOSE_ALL_RESULTS));
+        ScopeHandler.setConstant("CLOSE_CURRENT_RESULT", NumberValue.of(Statement.CLOSE_CURRENT_RESULT));
+        ScopeHandler.setConstant("EXECUTE_FAILED", NumberValue.of(Statement.EXECUTE_FAILED));
+        ScopeHandler.setConstant("KEEP_CURRENT_RESULT", NumberValue.of(Statement.KEEP_CURRENT_RESULT));
+        ScopeHandler.setConstant("NO_GENERATED_KEYS", NumberValue.of(Statement.NO_GENERATED_KEYS));
+        ScopeHandler.setConstant("RETURN_GENERATED_KEYS", NumberValue.of(Statement.RETURN_GENERATED_KEYS));
+        ScopeHandler.setConstant("SUCCESS_NO_INFO", NumberValue.of(Statement.SUCCESS_NO_INFO));
 
-        Variables.define("CLOSE_CURSORS_AT_COMMIT", NumberValue.of(ResultSet.CLOSE_CURSORS_AT_COMMIT));
-        Variables.define("CONCUR_READ_ONLY", NumberValue.of(ResultSet.CONCUR_READ_ONLY));
-        Variables.define("CONCUR_UPDATABLE", NumberValue.of(ResultSet.CONCUR_UPDATABLE));
-        Variables.define("FETCH_FORWARD", NumberValue.of(ResultSet.FETCH_FORWARD));
-        Variables.define("FETCH_REVERSE", NumberValue.of(ResultSet.FETCH_REVERSE));
-        Variables.define("FETCH_UNKNOWN", NumberValue.of(ResultSet.FETCH_UNKNOWN));
-        Variables.define("HOLD_CURSORS_OVER_COMMIT", NumberValue.of(ResultSet.HOLD_CURSORS_OVER_COMMIT));
-        Variables.define("TYPE_FORWARD_ONLY", NumberValue.of(ResultSet.TYPE_FORWARD_ONLY));
-        Variables.define("TYPE_SCROLL_INSENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_INSENSITIVE));
-        Variables.define("TYPE_SCROLL_SENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_SENSITIVE));
+        ScopeHandler.setConstant("CLOSE_CURSORS_AT_COMMIT", NumberValue.of(ResultSet.CLOSE_CURSORS_AT_COMMIT));
+        ScopeHandler.setConstant("CONCUR_READ_ONLY", NumberValue.of(ResultSet.CONCUR_READ_ONLY));
+        ScopeHandler.setConstant("CONCUR_UPDATABLE", NumberValue.of(ResultSet.CONCUR_UPDATABLE));
+        ScopeHandler.setConstant("FETCH_FORWARD", NumberValue.of(ResultSet.FETCH_FORWARD));
+        ScopeHandler.setConstant("FETCH_REVERSE", NumberValue.of(ResultSet.FETCH_REVERSE));
+        ScopeHandler.setConstant("FETCH_UNKNOWN", NumberValue.of(ResultSet.FETCH_UNKNOWN));
+        ScopeHandler.setConstant("HOLD_CURSORS_OVER_COMMIT", NumberValue.of(ResultSet.HOLD_CURSORS_OVER_COMMIT));
+        ScopeHandler.setConstant("TYPE_FORWARD_ONLY", NumberValue.of(ResultSet.TYPE_FORWARD_ONLY));
+        ScopeHandler.setConstant("TYPE_SCROLL_INSENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_INSENSITIVE));
+        ScopeHandler.setConstant("TYPE_SCROLL_SENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_SENSITIVE));
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("getConnection", getConnectionFunction());
-        Functions.set("sqlite", getConnectionFunction("jdbc:sqlite:"));
-        Functions.set("mysql", getConnectionFunction("jdbc:"));
+        ScopeHandler.setFunction("getConnection", getConnectionFunction());
+        ScopeHandler.setFunction("sqlite", getConnectionFunction("jdbc:sqlite:"));
+        ScopeHandler.setFunction("mysql", getConnectionFunction("jdbc:"));
     }
 
     private static com.annimon.ownlang.lib.Function getConnectionFunction() {
@@ -151,7 +142,7 @@ public final class jdbc implements Module {
             set("getSchema", stringFunction(connection::getSchema));
         }
 
-        private Value createStatement(Value... args) {
+        private Value createStatement(Value[] args) {
             try {
                 switch (args.length) {
                     case 0:
@@ -168,7 +159,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value prepareStatement(Value... args) {
+        private Value prepareStatement(Value[] args) {
             Arguments.checkRange(1, 4, args.length);
             try {
                 final String sql = args[0].asString();
@@ -193,7 +184,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value close(Value... args) {
+        private Value close(Value[] args) {
             try {
                 if (connection != null) {
                     connection.close();
@@ -293,7 +284,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value addBatch(Value... args) {
+        private Value addBatch(Value[] args) {
             if (ps != null) Arguments.checkOrOr(0, 1, args.length);
             else Arguments.check(1, args.length);
             try {
@@ -305,7 +296,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value execute(Value... args) {
+        private Value execute(Value[] args) {
             if (ps != null) Arguments.checkRange(0, 2, args.length);
             else Arguments.checkOrOr(1, 2, args.length);
             try {
@@ -323,7 +314,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value executeQuery(Value... args) {
+        private Value executeQuery(Value[] args) {
             if (ps != null) Arguments.checkOrOr(0, 1, args.length);
             else Arguments.check(1, args.length);
             try {
@@ -334,7 +325,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value executeUpdate(Value... args) {
+        private Value executeUpdate(Value[] args) {
             if (ps != null) Arguments.checkRange(0, 2, args.length);
             else Arguments.checkOrOr(1, 2, args.length);
             try {
@@ -352,7 +343,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value executeLargeUpdate(Value... args) {
+        private Value executeLargeUpdate(Value[] args) {
             if (ps != null) Arguments.checkRange(0, 2, args.length);
             else Arguments.checkOrOr(1, 2, args.length);
             try {
@@ -462,7 +453,7 @@ public final class jdbc implements Module {
             set("updateTimestamp", updateData(rs::updateTimestamp, rs::updateTimestamp, (args) -> new Timestamp(getNumber(args[1]).longValue())));
         }
 
-        private Value findColumn(Value... args) {
+        private Value findColumn(Value[] args) {
             try {
                 return NumberValue.of(rs.findColumn(args[0].asString()));
             } catch (SQLException sqlex) {
@@ -470,7 +461,7 @@ public final class jdbc implements Module {
             }
         }
 
-        private Value updateNull(Value... args) {
+        private Value updateNull(Value[] args) {
             Arguments.check(1, args.length);
             try {
                 if (args[0].type() == Types.NUMBER) {

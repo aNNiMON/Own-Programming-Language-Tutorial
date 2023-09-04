@@ -5,7 +5,7 @@ import com.annimon.ownlang.lib.*;
 public final class std_try implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
         try {
             return ValueUtils.consumeFunction(args[0], 0).execute();

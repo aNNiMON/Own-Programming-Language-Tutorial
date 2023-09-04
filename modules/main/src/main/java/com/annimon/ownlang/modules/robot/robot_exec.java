@@ -18,7 +18,7 @@ public final class robot_exec implements Function {
     }
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkAtLeast(1, args.length);
         
         try {

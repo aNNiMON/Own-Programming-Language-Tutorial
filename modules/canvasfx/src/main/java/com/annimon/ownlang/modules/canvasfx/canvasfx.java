@@ -47,10 +47,8 @@ public final class canvasfx implements Module {
     
     private static final int FX_EFFECT_TYPE = 5301;
     private static final int FX_COLOR_TYPE = 5302;
-    
-    private static JFrame frame;
+
     private static JFXPanel panel;
-    private static GraphicsContext graphics;
     private static Canvas canvas;
     
     private enum Events {
@@ -76,7 +74,7 @@ public final class canvasfx implements Module {
 
         private final EventType<? extends Event> handler;
 
-        private Events(EventType<? extends Event> handler) {
+        Events(EventType<? extends Event> handler) {
             this.handler = handler;
         }
 
@@ -100,94 +98,94 @@ public final class canvasfx implements Module {
         colors.put(new StringValue("rgb"), new FunctionValue(new rgbColor()));
         colors.put(new StringValue("hsb"), new FunctionValue(new hsbColor()));
         colors.put(new StringValue("web"), new FunctionValue(new webColor()));
-        Variables.define("Color", new MapValue(colors));
+        ScopeHandler.setConstant("Color", new MapValue(colors));
 
         final MapValue arcType = new MapValue(ArcType.values().length);
         for (ArcType value : ArcType.values()) {
             arcType.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("ArcType", arcType);
+        ScopeHandler.setConstant("ArcType", arcType);
 
         final MapValue fillRule = new MapValue(FillRule.values().length);
         for (FillRule value : FillRule.values()) {
             fillRule.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("FillRule", fillRule);
+        ScopeHandler.setConstant("FillRule", fillRule);
 
         final MapValue blendMode = new MapValue(BlendMode.values().length);
         for (BlendMode value : BlendMode.values()) {
             blendMode.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("BlendMode", blendMode);
+        ScopeHandler.setConstant("BlendMode", blendMode);
 
         final MapValue lineCap = new MapValue(StrokeLineCap.values().length);
         for (StrokeLineCap value : StrokeLineCap.values()) {
             lineCap.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("StrokeLineCap", lineCap);
+        ScopeHandler.setConstant("StrokeLineCap", lineCap);
 
         final MapValue lineJoin = new MapValue(StrokeLineJoin.values().length);
         for (StrokeLineJoin value : StrokeLineJoin.values()) {
             lineJoin.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("StrokeLineJoin", lineJoin);
+        ScopeHandler.setConstant("StrokeLineJoin", lineJoin);
 
         final MapValue textAlignment = new MapValue(TextAlignment.values().length);
         for (TextAlignment value : TextAlignment.values()) {
             textAlignment.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("TextAlignment", textAlignment);
+        ScopeHandler.setConstant("TextAlignment", textAlignment);
 
         final MapValue vPos = new MapValue(VPos.values().length);
         for (VPos value : VPos.values()) {
             vPos.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("VPos", vPos);
+        ScopeHandler.setConstant("VPos", vPos);
 
         final MapValue events = new MapValue(Events.values().length);
         for (Events value : Events.values()) {
             events.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("Events", events);
+        ScopeHandler.setConstant("Events", events);
 
         final MapValue mouseButton = new MapValue(MouseButton.values().length);
         for (MouseButton value : MouseButton.values()) {
             mouseButton.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("MouseButton", mouseButton);
+        ScopeHandler.setConstant("MouseButton", mouseButton);
 
         final MapValue keyCodes = new MapValue(KeyCode.values().length);
         for (KeyCode value : KeyCode.values()) {
             keyCodes.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        Variables.define("KeyCode", keyCodes);
+        ScopeHandler.setConstant("KeyCode", keyCodes);
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("window", new CreateWindow());
-        Functions.set("repaint", new Repaint());
+        ScopeHandler.setFunction("window", new CreateWindow());
+        ScopeHandler.setFunction("repaint", new Repaint());
         
-        Functions.set("BlendEffect", new BlendEffect());
-        Functions.set("BloomEffect", new BloomEffect());
-        Functions.set("BoxBlurEffect", new BoxBlurEffect());
-        Functions.set("ColorAdjustEffect", new ColorAdjustEffect());
-        Functions.set("ColorInputEffect", new ColorInputEffect());
-        Functions.set("DropShadowEffect", new DropShadowEffect());
-        Functions.set("GaussianBlurEffect", new GaussianBlurEffect());
-        Functions.set("GlowEffect", new GlowEffect());
-        Functions.set("InnerShadowEffect", new InnerShadowEffect());
-        Functions.set("LightingEffect", new LightingEffect());
-        Functions.set("MotionBlurEffect", new MotionBlurEffect());
-        Functions.set("PerspectiveTransformEffect", new PerspectiveTransformEffect());
-        Functions.set("ReflectionEffect", new ReflectionEffect());
-        Functions.set("SepiaToneEffect", new SepiaToneEffect());
-        Functions.set("ShadowEffect", new ShadowEffect());
+        ScopeHandler.setFunction("BlendEffect", new BlendEffect());
+        ScopeHandler.setFunction("BloomEffect", new BloomEffect());
+        ScopeHandler.setFunction("BoxBlurEffect", new BoxBlurEffect());
+        ScopeHandler.setFunction("ColorAdjustEffect", new ColorAdjustEffect());
+        ScopeHandler.setFunction("ColorInputEffect", new ColorInputEffect());
+        ScopeHandler.setFunction("DropShadowEffect", new DropShadowEffect());
+        ScopeHandler.setFunction("GaussianBlurEffect", new GaussianBlurEffect());
+        ScopeHandler.setFunction("GlowEffect", new GlowEffect());
+        ScopeHandler.setFunction("InnerShadowEffect", new InnerShadowEffect());
+        ScopeHandler.setFunction("LightingEffect", new LightingEffect());
+        ScopeHandler.setFunction("MotionBlurEffect", new MotionBlurEffect());
+        ScopeHandler.setFunction("PerspectiveTransformEffect", new PerspectiveTransformEffect());
+        ScopeHandler.setFunction("ReflectionEffect", new ReflectionEffect());
+        ScopeHandler.setFunction("SepiaToneEffect", new SepiaToneEffect());
+        ScopeHandler.setFunction("ShadowEffect", new ShadowEffect());
         
-        Functions.set("addEventFilter", new addEventFilter());
-        Functions.set("addEventHandler", new addEventHandler());
-        Functions.set("createImage", new createImage());
+        ScopeHandler.setFunction("addEventFilter", new addEventFilter());
+        ScopeHandler.setFunction("addEventHandler", new addEventHandler());
+        ScopeHandler.setFunction("createImage", new createImage());
     }
     
     private static class ColorValue implements Value {
@@ -242,7 +240,7 @@ public final class canvasfx implements Module {
     private static class newColor implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             double r, g, b, opacity;
             if (args.length == 1) {
                 final int color = args[0].asInt();
@@ -263,7 +261,7 @@ public final class canvasfx implements Module {
     private static class rgbColor implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             int r = args[0].asInt();
             int g = args[1].asInt();
             int b = args[2].asInt();
@@ -275,7 +273,7 @@ public final class canvasfx implements Module {
     private static class hsbColor implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             double h = args[0].asNumber();
             double s = args[1].asNumber();
             double b = args[2].asNumber();
@@ -287,7 +285,7 @@ public final class canvasfx implements Module {
     private static class webColor implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             return new ColorValue(Color.web(args[0].asString(),
                     (args.length >= 2) ? args[1].asNumber() : 1d ));
         }
@@ -341,7 +339,7 @@ public final class canvasfx implements Module {
     
     private static class BlendEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Blend effect = new Blend();
             if (args.length >= 1) {
                 effect.setMode(BlendMode.values()[args[0].asInt()]);
@@ -359,7 +357,7 @@ public final class canvasfx implements Module {
     
     private static class BloomEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Bloom effect = new Bloom();
             if (args.length >= 1) {
                 effect.setThreshold(args[0].asNumber());
@@ -373,7 +371,7 @@ public final class canvasfx implements Module {
     
     private static class BoxBlurEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             BoxBlur effect = new BoxBlur();
             if (args.length >= 3) {
                 effect.setWidth(args[0].asNumber());
@@ -389,7 +387,7 @@ public final class canvasfx implements Module {
     
     private static class ColorAdjustEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             return new EffectValue(new ColorAdjust(
                     args[0].asNumber(), args[1].asNumber(), args[2].asNumber(), args[3].asNumber()));
         }
@@ -397,7 +395,7 @@ public final class canvasfx implements Module {
     
     private static class ColorInputEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             return new EffectValue(new ColorInput(
                     args[0].asNumber(), args[1].asNumber(), args[2].asNumber(), args[3].asNumber(), (Color) args[4].raw()));
         }
@@ -405,31 +403,22 @@ public final class canvasfx implements Module {
     
     private static class DropShadowEffect implements Function {
         @Override
-        public Value execute(Value... args) {
-            DropShadow effect;
-            switch (args.length) {
-                case 2:
-                    effect = new DropShadow(args[0].asNumber(), (Color) args[1].raw());
-                    break;
-                case 4:
-                    effect = new DropShadow(args[0].asNumber(),
-                            args[1].asInt(), args[2].asInt(),
-                            (Color) args[3].raw());
-                    break;
-                case 6:
-                    effect = new DropShadow(BlurType.values()[args[0].asInt()], (Color) args[1].raw(),
-                            args[2].asNumber(), args[3].asNumber(), args[4].asNumber(), args[5].asNumber());
-                    break;
-                default:
-                    effect = new DropShadow();
-            }
+        public Value execute(Value[] args) {
+            DropShadow effect = switch (args.length) {
+                case 2 -> new DropShadow(args[0].asNumber(), (Color) args[1].raw());
+                case 4 -> new DropShadow(args[0].asNumber(), args[1].asInt(), args[2].asInt(),
+                        (Color) args[3].raw());
+                case 6 -> new DropShadow(BlurType.values()[args[0].asInt()], (Color) args[1].raw(),
+                        args[2].asNumber(), args[3].asNumber(), args[4].asNumber(), args[5].asNumber());
+                default -> new DropShadow();
+            };
             return new EffectValue(effect);
         }
     }
     
     private static class GaussianBlurEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             GaussianBlur effect = new GaussianBlur();
             if (args.length >= 1) {
                 effect.setRadius(args[0].asNumber());
@@ -443,7 +432,7 @@ public final class canvasfx implements Module {
     
     private static class GlowEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Glow effect = new Glow();
             if (args.length >= 1) {
                 effect.setLevel(args[0].asNumber());
@@ -457,46 +446,33 @@ public final class canvasfx implements Module {
     
     private static class InnerShadowEffect implements Function {
         @Override
-        public Value execute(Value... args) {
-            InnerShadow effect;
-            switch (args.length) {
-                case 2:
-                    effect = new InnerShadow(args[0].asNumber(), (Color) args[1].raw());
-                    break;
-                case 4:
-                    effect = new InnerShadow(args[0].asNumber(),
-                            args[1].asInt(), args[2].asInt(),
-                            (Color) args[3].raw());
-                    break;
-                case 6:
-                    effect = new InnerShadow(BlurType.values()[args[0].asInt()], (Color) args[1].raw(),
-                            args[2].asNumber(), args[3].asNumber(), args[4].asNumber(), args[5].asNumber());
-                    break;
-                default:
-                    effect = new InnerShadow();
-            }
+        public Value execute(Value[] args) {
+            InnerShadow effect = switch (args.length) {
+                case 2 -> new InnerShadow(args[0].asNumber(), (Color) args[1].raw());
+                case 4 -> new InnerShadow(args[0].asNumber(), args[1].asInt(), args[2].asInt(),
+                        (Color) args[3].raw());
+                case 6 -> new InnerShadow(BlurType.values()[args[0].asInt()], (Color) args[1].raw(),
+                        args[2].asNumber(), args[3].asNumber(), args[4].asNumber(), args[5].asNumber());
+                default -> new InnerShadow();
+            };
             return new EffectValue(effect);
         }
     }
     
     private static class LightingEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Light light;
             final ArrayValue l = (ArrayValue) args[0];
-            switch (l.size()) {
-                case 3:
-                    light = new Light.Distant(l.get(0).asNumber(), l.get(1).asNumber(), (Color) l.get(2).raw());
-                    break;
-                case 4:
-                    light = new Light.Point(l.get(0).asNumber(), l.get(1).asNumber(), l.get(2).asNumber(), (Color) l.get(3).raw());
-                    break;
-                case 5:
-                    light = new Light.Spot(l.get(0).asNumber(), l.get(1).asNumber(), l.get(2).asNumber(), l.get(3).asNumber(), (Color) l.get(4).raw());
-                    break;
-                default:
-                    light = null;
-            }
+            light = switch (l.size()) {
+                case 3 -> new Light.Distant(l.get(0).asNumber(), l.get(1).asNumber(),
+                        (Color) l.get(2).raw());
+                case 4 -> new Light.Point(l.get(0).asNumber(), l.get(1).asNumber(), l.get(2).asNumber(),
+                        (Color) l.get(3).raw());
+                case 5 -> new Light.Spot(l.get(0).asNumber(), l.get(1).asNumber(), l.get(2).asNumber(),
+                        l.get(3).asNumber(), (Color) l.get(4).raw());
+                default -> null;
+            };
             Lighting effect = new Lighting(light);
             if (args.length >= 2) {
                 effect.setSurfaceScale(args[1].asNumber());
@@ -518,7 +494,7 @@ public final class canvasfx implements Module {
     
     private static class MotionBlurEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             MotionBlur effect = new MotionBlur();
             if (args.length >= 2) {
                 effect.setAngle(args[0].asNumber());
@@ -533,7 +509,7 @@ public final class canvasfx implements Module {
     
     private static class PerspectiveTransformEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             return new EffectValue(new PerspectiveTransform(
                     args[0].asNumber(), args[1].asNumber(), args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber(), args[6].asNumber(), args[7].asNumber() ));
@@ -542,7 +518,7 @@ public final class canvasfx implements Module {
     
     private static class ReflectionEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             return new EffectValue(new Reflection(
                     args[0].asNumber(), args[1].asNumber(), args[2].asNumber(), args[3].asNumber()));
         }
@@ -550,7 +526,7 @@ public final class canvasfx implements Module {
     
     private static class SepiaToneEffect implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             SepiaTone effect = new SepiaTone();
             if (args.length >= 1) {
                 effect.setLevel(args[0].asNumber());
@@ -564,19 +540,13 @@ public final class canvasfx implements Module {
     
     private static class ShadowEffect implements Function {
         @Override
-        public Value execute(Value... args) {
-            Shadow effect;
-            switch (args.length) {
-                case 2:
-                    effect = new Shadow(args[0].asNumber(), (Color) args[1].raw());
-                    break;
-                case 3:
-                    effect = new Shadow(BlurType.values()[args[0].asInt()], (Color) args[1].raw(),
-                            args[2].asNumber());
-                    break;
-                default:
-                    effect = new Shadow();
-            }
+        public Value execute(Value[] args) {
+            Shadow effect = switch (args.length) {
+                case 2 -> new Shadow(args[0].asNumber(), (Color) args[1].raw());
+                case 3 -> new Shadow(BlurType.values()[args[0].asInt()], (Color) args[1].raw(),
+                        args[2].asNumber());
+                default -> new Shadow();
+            };
             return new EffectValue(effect);
         }
     }
@@ -600,7 +570,7 @@ public final class canvasfx implements Module {
             set("getPixels", this::getPixels);
         }
 
-        private Value getPixels(Value... args) {
+        private Value getPixels(Value[] args) {
             final int w = (int) image.getWidth();
             final int h = (int) image.getHeight();
             final int size = w * h;
@@ -625,21 +595,15 @@ public final class canvasfx implements Module {
     private static class createImage implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.checkAtLeast(1, args.length);
-            final Image result;
-            switch (args.length) {
-                case 1:
-                    // createImage(url)
-                    result = new Image(args[0].asString());
-                    break;
-                case 2:
-                default:
-                    // createImage(width, height)
-                    result = new WritableImage(args[0].asInt(), args[1].asInt());
-                    break;
-                case 3:
-                    // createImage(w, h, pixels)
+            final Image result = switch (args.length) {
+                // createImage(url)
+                case 1 -> new Image(args[0].asString());
+                // createImage(width, height)
+                default -> new WritableImage(args[0].asInt(), args[1].asInt());
+                // createImage(w, h, pixels)
+                case 3 -> {
                     final int w = args[0].asInt();
                     final int h = args[1].asInt();
                     final int size = w * h;
@@ -652,9 +616,9 @@ public final class canvasfx implements Module {
                         buffer[i] = array.get(i).asInt();
                     }
                     pw.setPixels(0, 0, w, h, format, buffer, 0, w);
-                    result = writableImage;
-
-            }
+                    yield writableImage;
+                }
+            };
             return new ImageFXValue(result);
         }
     }
@@ -734,7 +698,7 @@ public final class canvasfx implements Module {
             set("translate", double2ToVoid(graphics::translate));
         }
 
-        private Value applyEffect(Value... args) {
+        private Value applyEffect(Value[] args) {
             if (args[0].type() != FX_EFFECT_TYPE) {
                 throw new TypeException("Effect expected, found " + Types.typeToString(args[0].type()));
             }
@@ -742,33 +706,33 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value arc(Value... args) {
+        private Value arc(Value[] args) {
             graphics.arc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
             return NumberValue.ZERO;
         }
 
-        private Value appendSVGPath(Value... args) {
+        private Value appendSVGPath(Value[] args) {
             graphics.appendSVGPath(args[0].asString());
             return NumberValue.ZERO;
         }
 
-        private Value arcTo(Value... args) {
+        private Value arcTo(Value[] args) {
             graphics.arcTo(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber());
             return NumberValue.ZERO;
         }
 
-        private Value bezierCurveTo(Value... args) {
+        private Value bezierCurveTo(Value[] args) {
             graphics.bezierCurveTo(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
             return NumberValue.ZERO;
         }
 
-        private Value drawImage(Value... args) {
+        private Value drawImage(Value[] args) {
             Arguments.checkAtLeast(3, args.length);
             if (!(args[0] instanceof ImageFXValue)) {
                 throw new TypeException("ImageFX expected");
@@ -798,7 +762,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value fillArc(Value... args) {
+        private Value fillArc(Value[] args) {
             graphics.fillArc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber(),
@@ -806,7 +770,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value fillPolygon(Value... args) {
+        private Value fillPolygon(Value[] args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -822,14 +786,14 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value fillRoundRect(Value... args) {
+        private Value fillRoundRect(Value[] args) {
             graphics.fillRoundRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber() );
             return NumberValue.ZERO;
         }
 
-        private Value fillText(Value... args) {
+        private Value fillText(Value[] args) {
             if (args.length < 4) {
                 // str x y
                 graphics.fillText(args[0].asString(), args[1].asNumber(),
@@ -841,19 +805,19 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value getFill(Value... args) {
+        private Value getFill(Value[] args) {
             return new ColorValue((Color)graphics.getFill());
         }
 
-        private Value getStroke(Value... args) {
+        private Value getStroke(Value[] args) {
             return new ColorValue((Color)graphics.getStroke());
         }
 
-        private Value isPointInPath(Value... args) {
+        private Value isPointInPath(Value[] args) {
             return NumberValue.fromBoolean(graphics.isPointInPath(args[0].asNumber(), args[1].asNumber()));
         }
 
-        private Value setEffect(Value... args) {
+        private Value setEffect(Value[] args) {
             if (args[0].type() != FX_EFFECT_TYPE) {
                 throw new TypeException("Effect expected, found " + Types.typeToString(args[0].type()));
             }
@@ -861,47 +825,47 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value setFill(Value... args) {
+        private Value setFill(Value[] args) {
             graphics.setFill((Color) args[0].raw());
             return NumberValue.ZERO;
         }
 
-        private Value setFillRule(Value... args) {
+        private Value setFillRule(Value[] args) {
             graphics.setFillRule(FillRule.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        private Value setGlobalBlendMode(Value... args) {
+        private Value setGlobalBlendMode(Value[] args) {
             graphics.setGlobalBlendMode(BlendMode.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        private Value setLineCap(Value... args) {
+        private Value setLineCap(Value[] args) {
             graphics.setLineCap(StrokeLineCap.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        private Value setLineJoin(Value... args) {
+        private Value setLineJoin(Value[] args) {
             graphics.setLineJoin(StrokeLineJoin.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        private Value setStroke(Value... args) {
+        private Value setStroke(Value[] args) {
             graphics.setStroke((Color) args[0].raw());
             return NumberValue.ZERO;
         }
 
-        private Value setTextAlign(Value... args) {
+        private Value setTextAlign(Value[] args) {
             graphics.setTextAlign(TextAlignment.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        private Value setTextBaseline(Value... args) {
+        private Value setTextBaseline(Value[] args) {
             graphics.setTextBaseline(VPos.values()[args[0].asInt()]);
             return NumberValue.ZERO;
         }
 
-        private Value strokeArc(Value... args) {
+        private Value strokeArc(Value[] args) {
             graphics.strokeArc(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber(),
@@ -909,7 +873,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value strokePolygon(Value... args) {
+        private Value strokePolygon(Value[] args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -925,7 +889,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value strokePolyline(Value... args) {
+        private Value strokePolyline(Value[] args) {
             final ArrayValue xarr = (ArrayValue) args[0];
             final ArrayValue yarr = (ArrayValue) args[1];
 
@@ -941,14 +905,14 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value strokeRoundRect(Value... args) {
+        private Value strokeRoundRect(Value[] args) {
             graphics.strokeRoundRect(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber() );
             return NumberValue.ZERO;
         }
 
-        private Value strokeText(Value... args) {
+        private Value strokeText(Value[] args) {
             if (args.length < 4) {
                 // str x y
                 graphics.strokeText(args[0].asString(), args[1].asNumber(),
@@ -960,7 +924,7 @@ public final class canvasfx implements Module {
             return NumberValue.ZERO;
         }
 
-        private Value transform(Value... args) {
+        private Value transform(Value[] args) {
             graphics.transform(args[0].asNumber(), args[1].asNumber(),
                     args[2].asNumber(), args[3].asNumber(),
                     args[4].asNumber(), args[5].asNumber());
@@ -976,7 +940,7 @@ public final class canvasfx implements Module {
     private static class CreateWindow implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             String title = "";
             int width = 640;
             int height = 480;
@@ -1000,9 +964,9 @@ public final class canvasfx implements Module {
             canvas = new Canvas(width, height);
             canvas.setFocusTraversable(true);
             canvas.requestFocus();
-            graphics = canvas.getGraphicsContext2D();
-            
-            frame = new JFrame(title);
+            GraphicsContext graphics = canvas.getGraphicsContext2D();
+
+            JFrame frame = new JFrame(title);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.add(panel);
             frame.pack();
@@ -1021,7 +985,7 @@ public final class canvasfx implements Module {
     private static class Repaint implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             panel.invalidate();
             panel.repaint();
             return NumberValue.ZERO;
@@ -1030,7 +994,7 @@ public final class canvasfx implements Module {
     
     private static class addEventFilter implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             final Function handler = ((FunctionValue) args[1]).getValue();
             final Events event = Events.values()[args[0].asInt()];
             canvas.addEventFilter(event.getHandler(), e -> handleEvent(e, handler));
@@ -1040,7 +1004,7 @@ public final class canvasfx implements Module {
     
     private static class addEventHandler implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             final Function handler = ((FunctionValue) args[1]).getValue();
             final Events event = Events.values()[args[0].asInt()];
             canvas.addEventHandler(event.getHandler(), e -> handleEvent(e, handler));

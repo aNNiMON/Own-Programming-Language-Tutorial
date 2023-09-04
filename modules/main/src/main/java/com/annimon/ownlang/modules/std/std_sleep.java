@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_sleep implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(1, args.length);
         
         try {

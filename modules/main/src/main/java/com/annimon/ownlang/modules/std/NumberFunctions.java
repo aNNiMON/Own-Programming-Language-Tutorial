@@ -10,7 +10,7 @@ public final class NumberFunctions {
 
     private NumberFunctions() { }
 
-    static Value toHexString(Value... args) {
+    static Value toHexString(Value[] args) {
         Arguments.check(1, args.length);
         long value;
         if (args[0].type() == Types.NUMBER) {

@@ -28,20 +28,20 @@ public final class date implements Module {
             MILLISECOND = new StringValue("millisecond");
 
     public static void initConstants() {
-        Variables.define("STYLE_FULL", NumberValue.of(DateFormat.FULL));
-        Variables.define("STYLE_LONG", NumberValue.of(DateFormat.LONG));
-        Variables.define("STYLE_MEDIUM", NumberValue.of(DateFormat.MEDIUM));
-        Variables.define("STYLE_SHORT", NumberValue.of(DateFormat.SHORT));
+        ScopeHandler.setConstant("STYLE_FULL", NumberValue.of(DateFormat.FULL));
+        ScopeHandler.setConstant("STYLE_LONG", NumberValue.of(DateFormat.LONG));
+        ScopeHandler.setConstant("STYLE_MEDIUM", NumberValue.of(DateFormat.MEDIUM));
+        ScopeHandler.setConstant("STYLE_SHORT", NumberValue.of(DateFormat.SHORT));
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("newDate", new date_newDate());
-        Functions.set("newFormat", new date_newFormat());
-        Functions.set("formatDate", new date_format());
-        Functions.set("parseDate", new date_parse());
-        Functions.set("toTimestamp", new date_toTimestamp());
+        ScopeHandler.setFunction("newDate", new date_newDate());
+        ScopeHandler.setFunction("newFormat", new date_newFormat());
+        ScopeHandler.setFunction("formatDate", new date_format());
+        ScopeHandler.setFunction("parseDate", new date_parse());
+        ScopeHandler.setFunction("toTimestamp", new date_toTimestamp());
     }
 
     //<editor-fold defaultstate="collapsed" desc="Values">
@@ -152,7 +152,7 @@ public final class date implements Module {
     private static class date_newDate implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             final Calendar calendar = Calendar.getInstance();
             calendar.clear();
             switch (args.length) {
@@ -213,7 +213,7 @@ public final class date implements Module {
     private static class date_newFormat implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             if (args.length == 0) {
                 return new DateFormatValue(new SimpleDateFormat());
             }
@@ -256,7 +256,7 @@ public final class date implements Module {
     private static class date_parse implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.checkOrOr(1, 2, args.length);
 
             final DateFormat format;
@@ -280,7 +280,7 @@ public final class date implements Module {
     private static class date_format implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.checkOrOr(1, 2, args.length);
 
             final DateFormat format;
@@ -300,7 +300,7 @@ public final class date implements Module {
     private static class date_toTimestamp implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(1, args.length);
             return NumberValue.of(((Calendar) args[0].raw()).getTimeInMillis() );
         }

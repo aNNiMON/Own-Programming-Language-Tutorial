@@ -29,15 +29,15 @@ public final class robot implements Module {
     private static Robot awtRobot;
 
     public static void initConstants() {
-        Variables.define("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
-        Variables.define("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
-        Variables.define("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
-        Variables.define("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
-        Variables.define("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
+        ScopeHandler.setConstant("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
+        ScopeHandler.setConstant("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
+        ScopeHandler.setConstant("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
+        ScopeHandler.setConstant("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
+        ScopeHandler.setConstant("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
 
-        Variables.define("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK));
-        Variables.define("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK));
-        Variables.define("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK));
+        ScopeHandler.setConstant("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK));
+        ScopeHandler.setConstant("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK));
+        ScopeHandler.setConstant("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK));
     }
 
     @Override
@@ -45,33 +45,33 @@ public final class robot implements Module {
         initConstants();
         boolean isRobotInitialized = initialize();
         if (isRobotInitialized) {
-            Functions.set("click", convertFunction(robot::click));
-            Functions.set("delay", convertFunction(awtRobot::delay));
-            Functions.set("setAutoDelay", convertFunction(awtRobot::setAutoDelay));
-            Functions.set("keyPress", convertFunction(awtRobot::keyPress));
-            Functions.set("keyRelease", convertFunction(awtRobot::keyRelease));
-            Functions.set("mousePress", convertFunction(awtRobot::mousePress));
-            Functions.set("mouseRelease", convertFunction(awtRobot::mouseRelease));
-            Functions.set("mouseWheel", convertFunction(awtRobot::mouseWheel));
-            Functions.set("mouseMove", (args) -> {
+            ScopeHandler.setFunction("click", convertFunction(robot::click));
+            ScopeHandler.setFunction("delay", convertFunction(awtRobot::delay));
+            ScopeHandler.setFunction("setAutoDelay", convertFunction(awtRobot::setAutoDelay));
+            ScopeHandler.setFunction("keyPress", convertFunction(awtRobot::keyPress));
+            ScopeHandler.setFunction("keyRelease", convertFunction(awtRobot::keyRelease));
+            ScopeHandler.setFunction("mousePress", convertFunction(awtRobot::mousePress));
+            ScopeHandler.setFunction("mouseRelease", convertFunction(awtRobot::mouseRelease));
+            ScopeHandler.setFunction("mouseWheel", convertFunction(awtRobot::mouseWheel));
+            ScopeHandler.setFunction("mouseMove", (args) -> {
                 Arguments.check(2, args.length);
                 try {
                     awtRobot.mouseMove(args[0].asInt(), args[1].asInt());
                 } catch (IllegalArgumentException iae) { }
                 return NumberValue.ZERO;
             });
-            Functions.set("typeText", (args) -> {
+            ScopeHandler.setFunction("typeText", (args) -> {
                 Arguments.check(1, args.length);
                 try {
                     typeText(args[0].asString());
                 } catch (IllegalArgumentException iae) { }
                 return NumberValue.ZERO;
             });
-            Functions.set("toClipboard", new robot_toclipboard());
-            Functions.set("fromClipboard", new robot_fromclipboard());
+            ScopeHandler.setFunction("toClipboard", new robot_toclipboard());
+            ScopeHandler.setFunction("fromClipboard", new robot_fromclipboard());
         }
-        Functions.set("execProcess", new robot_exec(robot_exec.Mode.EXEC));
-        Functions.set("execProcessAndWait", new robot_exec(robot_exec.Mode.EXEC_AND_WAIT));
+        ScopeHandler.setFunction("execProcess", new robot_exec(robot_exec.Mode.EXEC));
+        ScopeHandler.setFunction("execProcessAndWait", new robot_exec(robot_exec.Mode.EXEC_AND_WAIT));
     }
     
     private static boolean initialize() {

@@ -11,7 +11,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_join implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkRange(1, 4, args.length);
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected in first argument");

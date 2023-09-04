@@ -29,7 +29,7 @@ public final class http_http implements Function {
     private final OkHttpClient client = new OkHttpClient();
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         String url, method;
         switch (args.length) {
             case 1: // http(url)

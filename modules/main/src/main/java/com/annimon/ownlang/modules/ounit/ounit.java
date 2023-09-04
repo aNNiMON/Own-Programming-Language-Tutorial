@@ -1,13 +1,7 @@
 package com.annimon.ownlang.modules.ounit;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -24,12 +18,12 @@ public final class ounit implements Module {
     @Override
     public void init() {
         initConstants();
-        Functions.set("assertEquals", new assertEquals());
-        Functions.set("assertNotEquals", new assertNotEquals());
-        Functions.set("assertSameType", new assertSameType());
-        Functions.set("assertTrue", new assertTrue());
-        Functions.set("assertFalse", new assertFalse());
-        Functions.set("runTests", new runTests());
+        ScopeHandler.setFunction("assertEquals", new assertEquals());
+        ScopeHandler.setFunction("assertNotEquals", new assertNotEquals());
+        ScopeHandler.setFunction("assertSameType", new assertSameType());
+        ScopeHandler.setFunction("assertTrue", new assertTrue());
+        ScopeHandler.setFunction("assertFalse", new assertFalse());
+        ScopeHandler.setFunction("runTests", new runTests());
     }
     
     private static String microsToSeconds(long micros) {
@@ -38,7 +32,7 @@ public final class ounit implements Module {
     
     private static class assertEquals implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(2, args.length);
             if (args[0].equals(args[1])) return NumberValue.ONE;
             throw new OUnitAssertionException("Values are not equals: "
@@ -48,7 +42,7 @@ public final class ounit implements Module {
     
     private static class assertNotEquals implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(2, args.length);
             if (!args[0].equals(args[1])) return NumberValue.ONE;
             throw new OUnitAssertionException("Values are equals: " + args[0]);
@@ -57,7 +51,7 @@ public final class ounit implements Module {
     
     private static class assertSameType implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(2, args.length);
             if (args[0].type() == args[1].type()) return NumberValue.ONE;
             throw new OUnitAssertionException("Types mismatch. "
@@ -68,7 +62,7 @@ public final class ounit implements Module {
     
     private static class assertTrue implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(1, args.length);
             if (args[0].asInt() != 0) return NumberValue.ONE;
             throw new OUnitAssertionException("Expected true, but found false.");
@@ -77,7 +71,7 @@ public final class ounit implements Module {
     
     private static class assertFalse implements Function {
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(1, args.length);
             if (args[0].asInt() == 0) return NumberValue.ONE;
             throw new OUnitAssertionException("Expected false, but found true.");
@@ -87,7 +81,7 @@ public final class ounit implements Module {
     private static class runTests implements Function {
         
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             List<TestInfo> tests = Functions.getFunctions().entrySet().stream()
                     .filter(e -> e.getKey().toLowerCase().startsWith("test"))
                     .map(e -> runTest(e.getKey(), e.getValue()))

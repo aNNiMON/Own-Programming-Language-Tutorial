@@ -15,29 +15,29 @@ import java.net.URISyntaxException;
 public final class socket implements Module {
 
     public static void initConstants() {
-        Variables.define("EVENT_CONNECT", new StringValue(Socket.EVENT_CONNECT));
-        Variables.define("EVENT_CONNECTING", new StringValue(Socket.EVENT_CONNECTING));
-        Variables.define("EVENT_CONNECT_ERROR", new StringValue(Socket.EVENT_CONNECT_ERROR));
-        Variables.define("EVENT_CONNECT_TIMEOUT", new StringValue(Socket.EVENT_CONNECT_TIMEOUT));
-        Variables.define("EVENT_DISCONNECT", new StringValue(Socket.EVENT_DISCONNECT));
-        Variables.define("EVENT_ERROR", new StringValue(Socket.EVENT_ERROR));
-        Variables.define("EVENT_MESSAGE", new StringValue(Socket.EVENT_MESSAGE));
-        Variables.define("EVENT_PING", new StringValue(Socket.EVENT_PING));
-        Variables.define("EVENT_PONG", new StringValue(Socket.EVENT_PONG));
-        Variables.define("EVENT_RECONNECT", new StringValue(Socket.EVENT_RECONNECT));
-        Variables.define("EVENT_RECONNECTING", new StringValue(Socket.EVENT_RECONNECTING));
-        Variables.define("EVENT_RECONNECT_ATTEMPT", new StringValue(Socket.EVENT_RECONNECT_ATTEMPT));
-        Variables.define("EVENT_RECONNECT_ERROR", new StringValue(Socket.EVENT_RECONNECT_ERROR));
-        Variables.define("EVENT_RECONNECT_FAILED", new StringValue(Socket.EVENT_RECONNECT_FAILED));
+        ScopeHandler.setConstant("EVENT_CONNECT", new StringValue(Socket.EVENT_CONNECT));
+        ScopeHandler.setConstant("EVENT_CONNECTING", new StringValue(Socket.EVENT_CONNECTING));
+        ScopeHandler.setConstant("EVENT_CONNECT_ERROR", new StringValue(Socket.EVENT_CONNECT_ERROR));
+        ScopeHandler.setConstant("EVENT_CONNECT_TIMEOUT", new StringValue(Socket.EVENT_CONNECT_TIMEOUT));
+        ScopeHandler.setConstant("EVENT_DISCONNECT", new StringValue(Socket.EVENT_DISCONNECT));
+        ScopeHandler.setConstant("EVENT_ERROR", new StringValue(Socket.EVENT_ERROR));
+        ScopeHandler.setConstant("EVENT_MESSAGE", new StringValue(Socket.EVENT_MESSAGE));
+        ScopeHandler.setConstant("EVENT_PING", new StringValue(Socket.EVENT_PING));
+        ScopeHandler.setConstant("EVENT_PONG", new StringValue(Socket.EVENT_PONG));
+        ScopeHandler.setConstant("EVENT_RECONNECT", new StringValue(Socket.EVENT_RECONNECT));
+        ScopeHandler.setConstant("EVENT_RECONNECTING", new StringValue(Socket.EVENT_RECONNECTING));
+        ScopeHandler.setConstant("EVENT_RECONNECT_ATTEMPT", new StringValue(Socket.EVENT_RECONNECT_ATTEMPT));
+        ScopeHandler.setConstant("EVENT_RECONNECT_ERROR", new StringValue(Socket.EVENT_RECONNECT_ERROR));
+        ScopeHandler.setConstant("EVENT_RECONNECT_FAILED", new StringValue(Socket.EVENT_RECONNECT_FAILED));
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("newSocket", socket::newSocket);
+        ScopeHandler.setFunction("newSocket", socket::newSocket);
     }
 
-    private static Value newSocket(Value... args) {
+    private static Value newSocket(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
 
         try {
@@ -81,33 +81,33 @@ public final class socket implements Module {
             set("send", this::send);
         }
 
-        private Value close(Value... args) {
+        private Value close(Value[] args) {
             socket.close();
             return this;
         }
 
-        private Value connect(Value... args) {
+        private Value connect(Value[] args) {
             socket.connect();
             return this;
         }
 
-        private Value connected(Value... args) {
+        private Value connected(Value[] args) {
             return NumberValue.fromBoolean(socket.connected());
         }
 
-        private Value disconnect(Value... args) {
+        private Value disconnect(Value[] args) {
             socket.disconnect();
             return this;
         }
 
-        private Value hasListeners(Value... args) {
+        private Value hasListeners(Value[] args) {
             Arguments.check(1, args.length);
             return NumberValue.fromBoolean(
                     socket.hasListeners(args[0].asString())
             );
         }
 
-        private Value emit(Value... args) {
+        private Value emit(Value[] args) {
             Arguments.checkOrOr(2, 3, args.length);
             final String event = args[0].asString();
             final Value value = args[1];
@@ -118,11 +118,11 @@ public final class socket implements Module {
             return this;
         }
 
-        private Value id(Value... args) {
+        private Value id(Value[] args) {
             return new StringValue(socket.id());
         }
 
-        private Value off(Value... args) {
+        private Value off(Value[] args) {
             Arguments.checkOrOr(0, 1, args.length);
             if (args.length == 1) {
                 socket.off(args[0].asString());
@@ -132,7 +132,7 @@ public final class socket implements Module {
             return this;
         }
 
-        private Value on(Value... args) {
+        private Value on(Value[] args) {
             Arguments.check(2, args.length);
             final String event = args[0].asString();
             final Function listener = ((FunctionValue) args[1]).getValue();
@@ -142,7 +142,7 @@ public final class socket implements Module {
             return this;
         }
 
-        private Value once(Value... args) {
+        private Value once(Value[] args) {
             Arguments.check(2, args.length);
             final String event = args[0].asString();
             final Function listener = ((FunctionValue) args[1]).getValue();
@@ -152,12 +152,12 @@ public final class socket implements Module {
             return this;
         }
 
-        private Value open(Value... args) {
+        private Value open(Value[] args) {
             socket.open();
             return this;
         }
 
-        private Value send(Value... args) {
+        private Value send(Value[] args) {
             Arguments.check(1, args.length);
             socket.send(ValueUtils.toObject(args[0]));
             return this;

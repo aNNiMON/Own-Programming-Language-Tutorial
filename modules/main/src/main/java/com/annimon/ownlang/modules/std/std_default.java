@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_default implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(2, args.length);
         if (isEmpty(args[0])) {
             return args[1];

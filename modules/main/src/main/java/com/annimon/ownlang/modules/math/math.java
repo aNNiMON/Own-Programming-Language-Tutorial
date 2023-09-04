@@ -16,52 +16,52 @@ public final class math implements Module {
     private static final DoubleFunction<NumberValue> doubleToNumber = NumberValue::of;
 
     public static void initConstants() {
-        Variables.define("PI", NumberValue.of(Math.PI));
-        Variables.define("E", NumberValue.of(Math.E));
+        ScopeHandler.setConstant("PI", NumberValue.of(Math.PI));
+        ScopeHandler.setConstant("E", NumberValue.of(Math.E));
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("abs", math::abs);
-        Functions.set("acos", functionConvert(Math::acos));
-        Functions.set("asin", functionConvert(Math::asin));
-        Functions.set("atan", functionConvert(Math::atan));
-        Functions.set("atan2", biFunctionConvert(Math::atan2));
-        Functions.set("cbrt", functionConvert(Math::cbrt));
-        Functions.set("ceil", functionConvert(Math::ceil));
-        Functions.set("copySign", math::copySign);
-        Functions.set("cos", functionConvert(Math::cos));
-        Functions.set("cosh", functionConvert(Math::cosh));
-        Functions.set("exp", functionConvert(Math::exp));
-        Functions.set("expm1", functionConvert(Math::expm1));
-        Functions.set("floor", functionConvert(Math::floor));
-        Functions.set("getExponent", math::getExponent);
-        Functions.set("hypot", biFunctionConvert(Math::hypot));
-        Functions.set("IEEEremainder", biFunctionConvert(Math::IEEEremainder));
-        Functions.set("log", functionConvert(Math::log));
-        Functions.set("log1p", functionConvert(Math::log1p));
-        Functions.set("log10", functionConvert(Math::log10));
-        Functions.set("max", math::max);
-        Functions.set("min", math::min);
-        Functions.set("nextAfter", math::nextAfter);
-        Functions.set("nextUp", functionConvert(Math::nextUp, Math::nextUp));
-        Functions.set("nextDown", functionConvert(Math::nextDown, Math::nextDown));
-        Functions.set("pow", biFunctionConvert(Math::pow));
-        Functions.set("rint", functionConvert(Math::rint));
-        Functions.set("round", math::round);
-        Functions.set("signum", functionConvert(Math::signum, Math::signum));
-        Functions.set("sin", functionConvert(Math::sin));
-        Functions.set("sinh", functionConvert(Math::sinh));
-        Functions.set("sqrt", functionConvert(Math::sqrt));
-        Functions.set("tan", functionConvert(Math::tan));
-        Functions.set("tanh", functionConvert(Math::tanh));
-        Functions.set("toDegrees", functionConvert(Math::toDegrees));
-        Functions.set("toRadians", functionConvert(Math::toRadians));
-        Functions.set("ulp", functionConvert(Math::ulp, Math::ulp));
+        ScopeHandler.setFunction("abs", math::abs);
+        ScopeHandler.setFunction("acos", functionConvert(Math::acos));
+        ScopeHandler.setFunction("asin", functionConvert(Math::asin));
+        ScopeHandler.setFunction("atan", functionConvert(Math::atan));
+        ScopeHandler.setFunction("atan2", biFunctionConvert(Math::atan2));
+        ScopeHandler.setFunction("cbrt", functionConvert(Math::cbrt));
+        ScopeHandler.setFunction("ceil", functionConvert(Math::ceil));
+        ScopeHandler.setFunction("copySign", math::copySign);
+        ScopeHandler.setFunction("cos", functionConvert(Math::cos));
+        ScopeHandler.setFunction("cosh", functionConvert(Math::cosh));
+        ScopeHandler.setFunction("exp", functionConvert(Math::exp));
+        ScopeHandler.setFunction("expm1", functionConvert(Math::expm1));
+        ScopeHandler.setFunction("floor", functionConvert(Math::floor));
+        ScopeHandler.setFunction("getExponent", math::getExponent);
+        ScopeHandler.setFunction("hypot", biFunctionConvert(Math::hypot));
+        ScopeHandler.setFunction("IEEEremainder", biFunctionConvert(Math::IEEEremainder));
+        ScopeHandler.setFunction("log", functionConvert(Math::log));
+        ScopeHandler.setFunction("log1p", functionConvert(Math::log1p));
+        ScopeHandler.setFunction("log10", functionConvert(Math::log10));
+        ScopeHandler.setFunction("max", math::max);
+        ScopeHandler.setFunction("min", math::min);
+        ScopeHandler.setFunction("nextAfter", math::nextAfter);
+        ScopeHandler.setFunction("nextUp", functionConvert(Math::nextUp, Math::nextUp));
+        ScopeHandler.setFunction("nextDown", functionConvert(Math::nextDown, Math::nextDown));
+        ScopeHandler.setFunction("pow", biFunctionConvert(Math::pow));
+        ScopeHandler.setFunction("rint", functionConvert(Math::rint));
+        ScopeHandler.setFunction("round", math::round);
+        ScopeHandler.setFunction("signum", functionConvert(Math::signum, Math::signum));
+        ScopeHandler.setFunction("sin", functionConvert(Math::sin));
+        ScopeHandler.setFunction("sinh", functionConvert(Math::sinh));
+        ScopeHandler.setFunction("sqrt", functionConvert(Math::sqrt));
+        ScopeHandler.setFunction("tan", functionConvert(Math::tan));
+        ScopeHandler.setFunction("tanh", functionConvert(Math::tanh));
+        ScopeHandler.setFunction("toDegrees", functionConvert(Math::toDegrees));
+        ScopeHandler.setFunction("toRadians", functionConvert(Math::toRadians));
+        ScopeHandler.setFunction("ulp", functionConvert(Math::ulp, Math::ulp));
     }
 
-    private static Value abs(Value... args) {
+    private static Value abs(Value[] args) {
         Arguments.check(1, args.length);
         final Object raw = args[0].raw();
         if (raw instanceof Double) {
@@ -76,7 +76,7 @@ public final class math implements Module {
         return NumberValue.of(Math.abs(args[0].asInt()));
     }
 
-    private static Value copySign(Value... args) {
+    private static Value copySign(Value[] args) {
         Arguments.check(2, args.length);
         final Object raw = args[0].raw();
         if (raw instanceof Float) {
@@ -85,7 +85,7 @@ public final class math implements Module {
         return NumberValue.of(Math.copySign(args[0].asNumber(), args[1].asNumber()));
     }
 
-    private static Value getExponent(Value... args) {
+    private static Value getExponent(Value[] args) {
         Arguments.check(1, args.length);
         final Object raw = args[0].raw();
         if (raw instanceof Float) {
@@ -94,7 +94,7 @@ public final class math implements Module {
         return NumberValue.of(Math.getExponent(args[0].asNumber()));
     }
 
-    private static Value max(Value... args) {
+    private static Value max(Value[] args) {
         Arguments.check(2, args.length);
         final Object raw = args[0].raw();
         if (raw instanceof Double) {
@@ -109,7 +109,7 @@ public final class math implements Module {
         return NumberValue.of(Math.max(args[0].asInt(), args[1].asInt()));
     }
 
-    private static Value min(Value... args) {
+    private static Value min(Value[] args) {
         Arguments.check(2, args.length);
         final Object raw = args[0].raw();
         if (raw instanceof Double) {
@@ -124,7 +124,7 @@ public final class math implements Module {
         return NumberValue.of(Math.min(args[0].asInt(), args[1].asInt()));
     }
 
-    private static Value nextAfter(Value... args) {
+    private static Value nextAfter(Value[] args) {
         Arguments.check(2, args.length);
         final Object raw = args[0].raw();
         if (raw instanceof Float) {
@@ -133,7 +133,7 @@ public final class math implements Module {
         return NumberValue.of(Math.nextAfter(args[0].asNumber(), args[1].asNumber()));
     }
 
-    private static Value round(Value... args) {
+    private static Value round(Value[] args) {
         Arguments.check(1, args.length);
         final Object raw = args[0].raw();
         if (raw instanceof Float) {

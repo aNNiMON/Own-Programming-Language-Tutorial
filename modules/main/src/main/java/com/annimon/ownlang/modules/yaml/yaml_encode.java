@@ -11,7 +11,7 @@ import org.yaml.snakeyaml.Yaml;
 public final class yaml_encode implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
         try {
             final Object root = process(args[0]);

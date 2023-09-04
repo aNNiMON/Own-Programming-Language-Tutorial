@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_echo implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         final StringBuilder sb = new StringBuilder();
         for (Value arg : args) {
             sb.append(arg.asString());

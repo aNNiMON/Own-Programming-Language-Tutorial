@@ -21,11 +21,11 @@ public class zip implements Module {
 
     @Override
     public void init() {
-        Functions.set("zip", this::zipWithMapper);
-        Functions.set("zipFiles", this::zipFiles);
-        Functions.set("unzip", this::unzip);
-        Functions.set("unzipFiles", this::unzipFiles);
-        Functions.set("listZipEntries", this::listZipEntries);
+        ScopeHandler.setFunction("zip", this::zipWithMapper);
+        ScopeHandler.setFunction("zipFiles", this::zipFiles);
+        ScopeHandler.setFunction("unzip", this::unzip);
+        ScopeHandler.setFunction("unzipFiles", this::unzipFiles);
+        ScopeHandler.setFunction("listZipEntries", this::listZipEntries);
     }
 
     private Value zipWithMapper(Value[] args) {

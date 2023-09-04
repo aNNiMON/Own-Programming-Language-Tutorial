@@ -1,13 +1,7 @@
 package com.annimon.ownlang.modules.downloader;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,16 +14,16 @@ public final class downloader implements Module {
 
     @Override
     public void init() {
-        Functions.set("getContentLength", this::getContentLength);
-        Functions.set("downloader", this::downloader);
+        ScopeHandler.setFunction("getContentLength", this::getContentLength);
+        ScopeHandler.setFunction("downloader", this::downloader);
     }
 
-    private Value getContentLength(Value... args) {
+    private Value getContentLength(Value[] args) {
         Arguments.check(1, args.length);
         return NumberValue.of(getContentLength(args[0].asString()));
     }
 
-    private Value downloader(Value... args) {
+    private Value downloader(Value[] args) {
         Arguments.checkRange(2, 4, args.length);
         final String downloadUrl = args[0].asString();
         final String filePath = args[1].asString();

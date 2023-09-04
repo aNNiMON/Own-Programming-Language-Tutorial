@@ -13,7 +13,7 @@ import java.util.Comparator;
 public final class functional_sortby implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(2, args.length);
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected at first argument");

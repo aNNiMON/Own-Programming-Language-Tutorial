@@ -11,7 +11,7 @@ public final class yaml implements Module {
 
     @Override
     public void init() {
-        Functions.set("yamlencode", new yaml_encode());
-        Functions.set("yamldecode", new yaml_decode());
+        ScopeHandler.setFunction("yamlencode", new yaml_encode());
+        ScopeHandler.setFunction("yamldecode", new yaml_decode());
     }
 }

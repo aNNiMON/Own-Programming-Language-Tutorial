@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_replaceall implements Function {
     
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(3, args.length);
         
         final String input = args[0].asString();

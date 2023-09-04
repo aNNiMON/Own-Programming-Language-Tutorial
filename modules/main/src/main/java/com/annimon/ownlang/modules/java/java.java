@@ -26,42 +26,42 @@ public final class java implements Module {
     @Override
     public void init() {
         initConstants();
-        Variables.define("null", NULL);
-        Variables.define("boolean.class", new ClassValue(boolean.class));
-        Variables.define("boolean[].class", new ClassValue(boolean[].class));
-        Variables.define("boolean[][].class", new ClassValue(boolean[][].class));
-        Variables.define("byte.class", new ClassValue(byte.class));
-        Variables.define("byte[].class", new ClassValue(byte[].class));
-        Variables.define("byte[][].class", new ClassValue(byte[][].class));
-        Variables.define("short.class", new ClassValue(short.class));
-        Variables.define("short[].class", new ClassValue(short[].class));
-        Variables.define("short[][].class", new ClassValue(short[][].class));
-        Variables.define("char.class", new ClassValue(char.class));
-        Variables.define("char[].class", new ClassValue(char[].class));
-        Variables.define("char[][].class", new ClassValue(char[][].class));
-        Variables.define("int.class", new ClassValue(int.class));
-        Variables.define("int[].class", new ClassValue(int[].class));
-        Variables.define("int[][].class", new ClassValue(int[][].class));
-        Variables.define("long.class", new ClassValue(long.class));
-        Variables.define("long[].class", new ClassValue(long[].class));
-        Variables.define("long[][].class", new ClassValue(long[][].class));
-        Variables.define("float.class", new ClassValue(float.class));
-        Variables.define("float[].class", new ClassValue(float[].class));
-        Variables.define("float[][].class", new ClassValue(float[][].class));
-        Variables.define("double.class", new ClassValue(double.class));
-        Variables.define("double[].class", new ClassValue(double[].class));
-        Variables.define("double[][].class", new ClassValue(double[][].class));
-        Variables.define("String.class", new ClassValue(String.class));
-        Variables.define("String[].class", new ClassValue(String[].class));
-        Variables.define("String[][].class", new ClassValue(String[][].class));
-        Variables.define("Object.class", new ClassValue(Object.class));
-        Variables.define("Object[].class", new ClassValue(Object[].class));
-        Variables.define("Object[][].class", new ClassValue(Object[][].class));
+        ScopeHandler.setConstant("null", NULL);
+        ScopeHandler.setConstant("boolean.class", new ClassValue(boolean.class));
+        ScopeHandler.setConstant("boolean[].class", new ClassValue(boolean[].class));
+        ScopeHandler.setConstant("boolean[][].class", new ClassValue(boolean[][].class));
+        ScopeHandler.setConstant("byte.class", new ClassValue(byte.class));
+        ScopeHandler.setConstant("byte[].class", new ClassValue(byte[].class));
+        ScopeHandler.setConstant("byte[][].class", new ClassValue(byte[][].class));
+        ScopeHandler.setConstant("short.class", new ClassValue(short.class));
+        ScopeHandler.setConstant("short[].class", new ClassValue(short[].class));
+        ScopeHandler.setConstant("short[][].class", new ClassValue(short[][].class));
+        ScopeHandler.setConstant("char.class", new ClassValue(char.class));
+        ScopeHandler.setConstant("char[].class", new ClassValue(char[].class));
+        ScopeHandler.setConstant("char[][].class", new ClassValue(char[][].class));
+        ScopeHandler.setConstant("int.class", new ClassValue(int.class));
+        ScopeHandler.setConstant("int[].class", new ClassValue(int[].class));
+        ScopeHandler.setConstant("int[][].class", new ClassValue(int[][].class));
+        ScopeHandler.setConstant("long.class", new ClassValue(long.class));
+        ScopeHandler.setConstant("long[].class", new ClassValue(long[].class));
+        ScopeHandler.setConstant("long[][].class", new ClassValue(long[][].class));
+        ScopeHandler.setConstant("float.class", new ClassValue(float.class));
+        ScopeHandler.setConstant("float[].class", new ClassValue(float[].class));
+        ScopeHandler.setConstant("float[][].class", new ClassValue(float[][].class));
+        ScopeHandler.setConstant("double.class", new ClassValue(double.class));
+        ScopeHandler.setConstant("double[].class", new ClassValue(double[].class));
+        ScopeHandler.setConstant("double[][].class", new ClassValue(double[][].class));
+        ScopeHandler.setConstant("String.class", new ClassValue(String.class));
+        ScopeHandler.setConstant("String[].class", new ClassValue(String[].class));
+        ScopeHandler.setConstant("String[][].class", new ClassValue(String[][].class));
+        ScopeHandler.setConstant("Object.class", new ClassValue(Object.class));
+        ScopeHandler.setConstant("Object[].class", new ClassValue(Object[].class));
+        ScopeHandler.setConstant("Object[][].class", new ClassValue(Object[][].class));
 
-        Functions.set("isNull", this::isNull);
-        Functions.set("newClass", this::newClass);
-        Functions.set("toObject", this::toObject);
-        Functions.set("toValue", this::toValue);
+        ScopeHandler.setFunction("isNull", this::isNull);
+        ScopeHandler.setFunction("newClass", this::newClass);
+        ScopeHandler.setFunction("toObject", this::toObject);
+        ScopeHandler.setFunction("toValue", this::toValue);
     }
 
     //<editor-fold defaultstate="collapsed" desc="Values">

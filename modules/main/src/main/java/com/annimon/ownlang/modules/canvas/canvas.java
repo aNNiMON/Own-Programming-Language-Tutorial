@@ -21,8 +21,7 @@ import javax.swing.JPanel;
  * @author aNNiMON
  */
 public final class canvas implements Module {
-    
-    private static JFrame frame;
+
     private static CanvasPanel panel;
     private static Graphics2D graphics;
     private static BufferedImage img;
@@ -31,30 +30,30 @@ public final class canvas implements Module {
     private static ArrayValue mouseHover;
 
     public static void initConstants() {
-        Variables.define("VK_UP", NumberValue.of(KeyEvent.VK_UP));
-        Variables.define("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
-        Variables.define("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
-        Variables.define("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
-        Variables.define("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
-        Variables.define("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
+        ScopeHandler.setConstant("VK_UP", NumberValue.of(KeyEvent.VK_UP));
+        ScopeHandler.setConstant("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
+        ScopeHandler.setConstant("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
+        ScopeHandler.setConstant("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
+        ScopeHandler.setConstant("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
+        ScopeHandler.setConstant("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("window", new CreateWindow());
-        Functions.set("prompt", new Prompt());
-        Functions.set("keypressed", new KeyPressed());
-        Functions.set("mousehover", new MouseHover());
-        Functions.set("line", intConsumer4Convert(canvas::line));
-        Functions.set("oval", intConsumer4Convert(canvas::oval));
-        Functions.set("foval", intConsumer4Convert(canvas::foval));
-        Functions.set("rect", intConsumer4Convert(canvas::rect));
-        Functions.set("frect", intConsumer4Convert(canvas::frect));
-        Functions.set("clip", intConsumer4Convert(canvas::clip));
-        Functions.set("drawstring", new DrawString());
-        Functions.set("color", new SetColor());
-        Functions.set("repaint", new Repaint());
+        ScopeHandler.setFunction("window", new CreateWindow());
+        ScopeHandler.setFunction("prompt", new Prompt());
+        ScopeHandler.setFunction("keypressed", new KeyPressed());
+        ScopeHandler.setFunction("mousehover", new MouseHover());
+        ScopeHandler.setFunction("line", intConsumer4Convert(canvas::line));
+        ScopeHandler.setFunction("oval", intConsumer4Convert(canvas::oval));
+        ScopeHandler.setFunction("foval", intConsumer4Convert(canvas::foval));
+        ScopeHandler.setFunction("rect", intConsumer4Convert(canvas::rect));
+        ScopeHandler.setFunction("frect", intConsumer4Convert(canvas::frect));
+        ScopeHandler.setFunction("clip", intConsumer4Convert(canvas::clip));
+        ScopeHandler.setFunction("drawstring", new DrawString());
+        ScopeHandler.setFunction("color", new SetColor());
+        ScopeHandler.setFunction("repaint", new Repaint());
 
         lastKey = NumberValue.MINUS_ONE;
         mouseHover = new ArrayValue(new Value[] { NumberValue.ZERO, NumberValue.ZERO });
@@ -135,7 +134,7 @@ public final class canvas implements Module {
     private static class CreateWindow implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             String title = "";
             int width = 640;
             int height = 480;
@@ -154,8 +153,8 @@ public final class canvas implements Module {
                     break;
             }
             panel = new CanvasPanel(width, height);
-            
-            frame = new JFrame(title);
+
+            JFrame frame = new JFrame(title);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.add(panel);
             frame.pack();
@@ -167,7 +166,7 @@ public final class canvas implements Module {
     private static class KeyPressed implements Function {
         
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             return lastKey;
         }
     }
@@ -175,7 +174,7 @@ public final class canvas implements Module {
     private static class MouseHover implements Function {
         
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             return mouseHover;
         }
     }
@@ -183,7 +182,7 @@ public final class canvas implements Module {
     private static class DrawString implements Function {
         
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             Arguments.check(3, args.length);
             int x = args[1].asInt();
             int y = args[2].asInt();
@@ -195,7 +194,7 @@ public final class canvas implements Module {
     private static class Prompt implements Function {
         
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             final String v = JOptionPane.showInputDialog(args[0].asString());
             return new StringValue(v == null ? "0" : v);
         }
@@ -204,7 +203,7 @@ public final class canvas implements Module {
     private static class Repaint implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             panel.invalidate();
             panel.repaint();
             return NumberValue.ZERO;
@@ -214,7 +213,7 @@ public final class canvas implements Module {
     private static class SetColor implements Function {
 
         @Override
-        public Value execute(Value... args) {
+        public Value execute(Value[] args) {
             if (args.length == 1) {
                 graphics.setColor(new Color(args[0].asInt()));
                 return NumberValue.ZERO;

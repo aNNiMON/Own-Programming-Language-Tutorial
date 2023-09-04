@@ -13,7 +13,7 @@ import java.util.Arrays;
 public final class std_sort implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkAtLeast(1, args.length);
         if (args[0].type() != Types.ARRAY) {
             throw new TypeException("Array expected in first argument");

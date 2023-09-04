@@ -7,7 +7,7 @@ import java.util.Map;
 public final class functional_foreach implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(2, args.length);
         final Value container = args[0];
         final Function consumer = ValueUtils.consumeFunction(args[1], 1);

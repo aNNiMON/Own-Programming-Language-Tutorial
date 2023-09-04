@@ -1,6 +1,6 @@
 package com.annimon.ownlang.modules.http;
 
-import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.modules.Module;
 
 /**
@@ -15,8 +15,8 @@ public final class http implements Module {
     @Override
     public void init() {
         initConstants();
-        Functions.set("urlencode", new http_urlencode());
-        Functions.set("http", new http_http());
-        Functions.set("download", new http_download());
+        ScopeHandler.setFunction("urlencode", new http_urlencode());
+        ScopeHandler.setFunction("http", new http_http());
+        ScopeHandler.setFunction("download", new http_download());
     }
 }

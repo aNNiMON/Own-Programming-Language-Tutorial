@@ -13,7 +13,7 @@ import java.util.Map;
 public final class functional_map implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkOrOr(2, 3, args.length);
         
         final Value container = args[0];

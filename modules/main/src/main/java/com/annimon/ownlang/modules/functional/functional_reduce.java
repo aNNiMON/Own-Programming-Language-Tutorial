@@ -13,7 +13,7 @@ import java.util.Map;
 public final class functional_reduce implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(3, args.length);
         
         final Value container = args[0];

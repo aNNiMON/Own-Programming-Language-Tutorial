@@ -33,7 +33,7 @@ public abstract class ContainerValue extends ComponentValue {
         set("setLayout", new FunctionValue(this::setLayout));
     }
 
-    private Value add(Value... args) {
+    private Value add(Value[] args) {
         Arguments.checkRange(1, 3, args.length);
 
         final Component newComponent;
@@ -63,7 +63,7 @@ public abstract class ContainerValue extends ComponentValue {
         return NumberValue.ZERO;
     }
 
-    private Value remove(Value... args) {
+    private Value remove(Value[] args) {
         Arguments.check(1, args.length);
         if (args[0] instanceof JComponentValue) {
             container.remove(((JComponentValue) args[0]).component);
@@ -73,7 +73,7 @@ public abstract class ContainerValue extends ComponentValue {
         return NumberValue.ZERO;
     }
 
-    private Value setLayout(Value... args) {
+    private Value setLayout(Value[] args) {
         Arguments.check(1, args.length);
         container.setLayout(((LayoutManagerValue) args[0]).layout);
         return NumberValue.ZERO;

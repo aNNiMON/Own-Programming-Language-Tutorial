@@ -2,13 +2,7 @@ package com.annimon.ownlang.modules.okhttp;
 
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.StringValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.ValueUtils;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -55,7 +49,7 @@ public final class okhttp implements Module {
                     args[1].asString()
             ));
         });
-        Variables.define("RequestBody", requestBody);
+        ScopeHandler.setConstant("RequestBody", requestBody);
 
 
         MapValue multipartBody = new MapValue(10);
@@ -65,13 +59,13 @@ public final class okhttp implements Module {
         multipartBody.set("MIXED", new StringValue(MultipartBody.MIXED.toString()));
         multipartBody.set("PARALLEL", new StringValue(MultipartBody.PARALLEL.toString()));
         multipartBody.set("builder", args -> new MultipartBodyBuilderValue());
-        Variables.define("MultipartBody", multipartBody);
+        ScopeHandler.setConstant("MultipartBody", multipartBody);
 
 
         MapValue okhttp = new MapValue(5);
         okhttp.set("client", defaultClient);
         okhttp.set("request", args -> new RequestBuilderValue());
-        Variables.define("okhttp", okhttp);
+        ScopeHandler.setConstant("okhttp", okhttp);
     }
 
     @Override

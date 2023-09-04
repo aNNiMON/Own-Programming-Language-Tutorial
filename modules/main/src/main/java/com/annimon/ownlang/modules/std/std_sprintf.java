@@ -9,7 +9,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_sprintf implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkAtLeast(1, args.length);
         
         final String format = args[0].asString();

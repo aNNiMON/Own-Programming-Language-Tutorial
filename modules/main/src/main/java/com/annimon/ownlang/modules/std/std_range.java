@@ -6,7 +6,7 @@ import java.util.Iterator;
 public final class std_range implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkRange(1, 3, args.length);
 
         final long from, to, step;

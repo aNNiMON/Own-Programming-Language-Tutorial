@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 public final class http_urlencode implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
         
         String charset = "UTF-8";

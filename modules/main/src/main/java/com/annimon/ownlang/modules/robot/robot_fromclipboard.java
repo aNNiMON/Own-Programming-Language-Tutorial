@@ -9,7 +9,7 @@ import java.awt.datatransfer.DataFlavor;
 public final class robot_fromclipboard implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         try {
             Object data = Toolkit.getDefaultToolkit().getSystemClipboard()
                     .getData(DataFlavor.stringFlavor);

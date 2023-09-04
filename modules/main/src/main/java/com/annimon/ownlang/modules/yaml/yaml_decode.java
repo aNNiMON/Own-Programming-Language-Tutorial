@@ -10,7 +10,7 @@ import org.yaml.snakeyaml.Yaml;
 public final class yaml_decode implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkOrOr(1, 2, args.length);
         try {
             final String yamlRaw = args[0].asString();

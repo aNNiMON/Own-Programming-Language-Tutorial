@@ -12,7 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public final class std_sync implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(1, args.length);
 
         final BlockingQueue<Value> queue = new LinkedBlockingQueue<>(2);

@@ -11,7 +11,7 @@ public final class std_rand implements Function {
     private static final Random RND = new Random();
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkRange(0, 2, args.length);
         if (args.length == 0) return NumberValue.of(RND.nextDouble());
 

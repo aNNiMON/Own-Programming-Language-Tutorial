@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.ValueUtils;
 public final class functional_chain implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkAtLeast(2, args.length);
 
         Value result = args[0];

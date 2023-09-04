@@ -17,10 +17,10 @@ public final class forms implements Module {
 
     public static void initConstants() {
         // JFrame constants
-        Variables.define("DISPOSE_ON_CLOSE", NumberValue.of(JFrame.DISPOSE_ON_CLOSE));
-        Variables.define("DO_NOTHING_ON_CLOSE", NumberValue.of(JFrame.DO_NOTHING_ON_CLOSE));
-        Variables.define("EXIT_ON_CLOSE", NumberValue.of(JFrame.EXIT_ON_CLOSE));
-        Variables.define("HIDE_ON_CLOSE", NumberValue.of(JFrame.HIDE_ON_CLOSE));
+        ScopeHandler.setConstant("DISPOSE_ON_CLOSE", NumberValue.of(JFrame.DISPOSE_ON_CLOSE));
+        ScopeHandler.setConstant("DO_NOTHING_ON_CLOSE", NumberValue.of(JFrame.DO_NOTHING_ON_CLOSE));
+        ScopeHandler.setConstant("EXIT_ON_CLOSE", NumberValue.of(JFrame.EXIT_ON_CLOSE));
+        ScopeHandler.setConstant("HIDE_ON_CLOSE", NumberValue.of(JFrame.HIDE_ON_CLOSE));
 
         // SwinfConstants
         final MapValue swing = new MapValue(20);
@@ -43,7 +43,7 @@ public final class forms implements Module {
         swing.set("TRAILING", NumberValue.of(SwingConstants.TRAILING));
         swing.set("VERTICAL", NumberValue.of(SwingConstants.VERTICAL));
         swing.set("WEST", NumberValue.of(SwingConstants.WEST));
-        Variables.define("SwingConstants", swing);
+        ScopeHandler.setConstant("SwingConstants", swing);
 
         // LayoutManagers constants
         final MapValue border = new MapValue(13);
@@ -60,7 +60,7 @@ public final class forms implements Module {
         border.set("PAGE_START", new StringValue(BorderLayout.PAGE_START));
         border.set("SOUTH", new StringValue(BorderLayout.SOUTH));
         border.set("WEST", new StringValue(BorderLayout.WEST));
-        Variables.define("BorderLayout", border);
+        ScopeHandler.setConstant("BorderLayout", border);
         
         // ScrollPane constants
         final MapValue scrollpane = new MapValue(13);
@@ -85,14 +85,14 @@ public final class forms implements Module {
         scrollpane.set("VERTICAL_SCROLLBAR_ALWAYS", NumberValue.of(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS));
         scrollpane.set("VERTICAL_SCROLLBAR_AS_NEEDED", NumberValue.of(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED));
         scrollpane.set("VERTICAL_SCROLLBAR_NEVER", NumberValue.of(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER));
-        Variables.define("ScrollPaneConstants", scrollpane);
+        ScopeHandler.setConstant("ScrollPaneConstants", scrollpane);
 
         final MapValue box = new MapValue(4);
         box.set("LINE_AXIS", NumberValue.of(BoxLayout.LINE_AXIS));
         box.set("PAGE_AXIS", NumberValue.of(BoxLayout.PAGE_AXIS));
         box.set("X_AXIS", NumberValue.of(BoxLayout.X_AXIS));
         box.set("Y_AXIS", NumberValue.of(BoxLayout.Y_AXIS));
-        Variables.define("BoxLayout", box);
+        ScopeHandler.setConstant("BoxLayout", box);
         
         final MapValue windowEvent = new MapValue(4);
         windowEvent.set("WINDOW_FIRST", NumberValue.of(WindowEvent.WINDOW_FIRST));
@@ -107,27 +107,27 @@ public final class forms implements Module {
         windowEvent.set("WINDOW_LOST_FOCUS", NumberValue.of(WindowEvent.WINDOW_LOST_FOCUS));
         windowEvent.set("WINDOW_STATE_CHANGED", NumberValue.of(WindowEvent.WINDOW_STATE_CHANGED));
         windowEvent.set("WINDOW_LAST", NumberValue.of(WindowEvent.WINDOW_LAST));
-        Variables.define("WindowEvent", windowEvent);
+        ScopeHandler.setConstant("WindowEvent", windowEvent);
     }
 
     @Override
     public void init() {
         initConstants();
         // Components
-        Functions.set("newButton", Components::newButton);
-        Functions.set("newLabel", Components::newLabel);
-        Functions.set("newPanel", Components::newPanel);
-        Functions.set("newProgressBar", Components::newProgressBar);
-        Functions.set("newScrollPane", Components::newScrollPane);
-        Functions.set("newTextArea", Components::newTextArea);
-        Functions.set("newTextField", Components::newTextField);
-        Functions.set("newWindow", Components::newWindow);
+        ScopeHandler.setFunction("newButton", Components::newButton);
+        ScopeHandler.setFunction("newLabel", Components::newLabel);
+        ScopeHandler.setFunction("newPanel", Components::newPanel);
+        ScopeHandler.setFunction("newProgressBar", Components::newProgressBar);
+        ScopeHandler.setFunction("newScrollPane", Components::newScrollPane);
+        ScopeHandler.setFunction("newTextArea", Components::newTextArea);
+        ScopeHandler.setFunction("newTextField", Components::newTextField);
+        ScopeHandler.setFunction("newWindow", Components::newWindow);
 
         // LayoutManagers
-        Functions.set("borderLayout", LayoutManagers::borderLayout);
-        Functions.set("boxLayout", LayoutManagers::boxLayout);
-        Functions.set("cardLayout", LayoutManagers::cardLayout);
-        Functions.set("gridLayout", LayoutManagers::gridLayout);
-        Functions.set("flowLayout", LayoutManagers::flowLayout);
+        ScopeHandler.setFunction("borderLayout", LayoutManagers::borderLayout);
+        ScopeHandler.setFunction("boxLayout", LayoutManagers::boxLayout);
+        ScopeHandler.setFunction("cardLayout", LayoutManagers::cardLayout);
+        ScopeHandler.setFunction("gridLayout", LayoutManagers::gridLayout);
+        ScopeHandler.setFunction("flowLayout", LayoutManagers::flowLayout);
     }
 }

@@ -11,7 +11,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_arrayKeyExists implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(2, args.length);
         if (args[1].type() != Types.MAP) {
             throw new TypeException("Map expected in second argument");

@@ -12,7 +12,7 @@ import com.annimon.ownlang.lib.Value;
 public final class std_thread implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.checkAtLeast(1, args.length);
         
         Function body;

@@ -5,7 +5,7 @@ import com.annimon.ownlang.lib.*;
 public final class std_length implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(1, args.length);
 
         final Value val = args[0];

@@ -10,7 +10,7 @@ import java.awt.datatransfer.StringSelection;
 public final class robot_toclipboard implements Function {
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(1, args.length);
         Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new StringSelection(args[0].asString()), null);

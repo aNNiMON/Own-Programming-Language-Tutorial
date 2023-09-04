@@ -18,10 +18,10 @@ public class gzip implements Module {
 
     @Override
     public void init() {
-        Functions.set("gzip", this::gzipFile);
-        Functions.set("gzipBytes", this::gzipBytes);
-        Functions.set("ungzip", this::ungzipFile);
-        Functions.set("ungzipBytes", this::ungzipBytes);
+        ScopeHandler.setFunction("gzip", this::gzipFile);
+        ScopeHandler.setFunction("gzipBytes", this::gzipBytes);
+        ScopeHandler.setFunction("ungzip", this::ungzipFile);
+        ScopeHandler.setFunction("ungzipBytes", this::ungzipBytes);
     }
 
     private Value gzipFile(Value[] args) {

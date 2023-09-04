@@ -9,7 +9,7 @@ public final class http_download implements Function {
     private final OkHttpClient client = new OkHttpClient();
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(1, args.length);
         try {
             final Response response = client.newCall(

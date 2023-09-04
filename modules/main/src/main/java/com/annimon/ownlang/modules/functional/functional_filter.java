@@ -15,7 +15,7 @@ public final class functional_filter implements Function {
     }
 
     @Override
-    public Value execute(Value... args) {
+    public Value execute(Value[] args) {
         Arguments.check(2, args.length);
         final Value container = args[0];
         final Function predicate = ValueUtils.consumeFunction(args[1], 1);

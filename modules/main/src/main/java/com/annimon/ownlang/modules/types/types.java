@@ -10,26 +10,26 @@ import com.annimon.ownlang.modules.Module;
 public final class types implements Module {
 
     public static void initConstants() {
-        Variables.define("OBJECT", NumberValue.of(Types.OBJECT));
-        Variables.define("NUMBER", NumberValue.of(Types.NUMBER));
-        Variables.define("STRING", NumberValue.of(Types.STRING));
-        Variables.define("ARRAY", NumberValue.of(Types.ARRAY));
-        Variables.define("MAP", NumberValue.of(Types.MAP));
-        Variables.define("FUNCTION", NumberValue.of(Types.FUNCTION));
+        ScopeHandler.setConstant("OBJECT", NumberValue.of(Types.OBJECT));
+        ScopeHandler.setConstant("NUMBER", NumberValue.of(Types.NUMBER));
+        ScopeHandler.setConstant("STRING", NumberValue.of(Types.STRING));
+        ScopeHandler.setConstant("ARRAY", NumberValue.of(Types.ARRAY));
+        ScopeHandler.setConstant("MAP", NumberValue.of(Types.MAP));
+        ScopeHandler.setConstant("FUNCTION", NumberValue.of(Types.FUNCTION));
     }
 
     @Override
     public void init() {
         initConstants();
-        Functions.set("typeof", args -> NumberValue.of(args[0].type()));
-        Functions.set("string", args -> new StringValue(args[0].asString()));
-        Functions.set("number", args -> NumberValue.of(args[0].asNumber()));
+        ScopeHandler.setFunction("typeof", args -> NumberValue.of(args[0].type()));
+        ScopeHandler.setFunction("string", args -> new StringValue(args[0].asString()));
+        ScopeHandler.setFunction("number", args -> NumberValue.of(args[0].asNumber()));
         
-        Functions.set("byte", args -> NumberValue.of((byte)args[0].asInt()));
-        Functions.set("short", args -> NumberValue.of((short)args[0].asInt()));
-        Functions.set("int", args -> NumberValue.of(args[0].asInt()));
-        Functions.set("long", args -> NumberValue.of((long)args[0].asNumber()));
-        Functions.set("float", args -> NumberValue.of((float)args[0].asNumber()));
-        Functions.set("double", args -> NumberValue.of(args[0].asNumber()));
+        ScopeHandler.setFunction("byte", args -> NumberValue.of((byte)args[0].asInt()));
+        ScopeHandler.setFunction("short", args -> NumberValue.of((short)args[0].asInt()));
+        ScopeHandler.setFunction("int", args -> NumberValue.of(args[0].asInt()));
+        ScopeHandler.setFunction("long", args -> NumberValue.of((long)args[0].asNumber()));
+        ScopeHandler.setFunction("float", args -> NumberValue.of((float)args[0].asNumber()));
+        ScopeHandler.setFunction("double", args -> NumberValue.of(args[0].asNumber()));
     }
 }

@@ -2,13 +2,7 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
 import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.StringValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.*;
 
 /**
  *
@@ -66,8 +60,8 @@ public final class BinaryExpression implements Expression {
         try {
             return eval(value1, value2);
         } catch (OperationIsNotSupportedException ex) {
-            if (Functions.isExists(operation.toString())) {
-                return Functions.get(operation.toString()).execute(value1, value2);
+            if (ScopeHandler.isFunctionExists(operation.toString())) {
+                return ScopeHandler.getFunction(operation.toString()).execute(value1, value2);
             }
             throw ex;
         }

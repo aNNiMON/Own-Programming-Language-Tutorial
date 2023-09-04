@@ -32,27 +32,27 @@ public class ProgramsTest {
     public void initialize() {
         ScopeHandler.resetScope();
         // Let's mock junit methods as ounit functions
-        Functions.set("assertEquals", (args) -> {
+        ScopeHandler.setFunction("assertEquals", (args) -> {
             assertEquals(args[0], args[1]);
             return NumberValue.ONE;
         });
-        Functions.set("assertNotEquals", (args) -> {
+        ScopeHandler.setFunction("assertNotEquals", (args) -> {
             assertNotEquals(args[0], args[1]);
             return NumberValue.ONE;
         });
-        Functions.set("assertSameType", (args) -> {
+        ScopeHandler.setFunction("assertSameType", (args) -> {
             assertEquals(args[0].type(), args[1].type());
             return NumberValue.ONE;
         });
-        Functions.set("assertTrue", (args) -> {
+        ScopeHandler.setFunction("assertTrue", (args) -> {
             assertTrue(args[0].asInt() != 0);
             return NumberValue.ONE;
         });
-        Functions.set("assertFalse", (args) -> {
+        ScopeHandler.setFunction("assertFalse", (args) -> {
             assertFalse(args[0].asInt() != 0);
             return NumberValue.ONE;
         });
-        Functions.set("assertFail", (args) -> {
+        ScopeHandler.setFunction("assertFail", (args) -> {
             assertThrows(Throwable.class,
                     () -> ((FunctionValue) args[0]).getValue().execute());
             return NumberValue.ONE;
@@ -73,7 +73,7 @@ public class ProgramsTest {
     }
 
     @Test
-    public void testOutput() throws IOException {
+    public void testOutput() {
         OutputSettings oldSettings = Console.getSettings();
         Console.useSettings(new StringOutputSettings());
         String source = "for i = 0, i <= 5, i++\n  print i";
@@ -93,7 +93,7 @@ public class ProgramsTest {
         public void visit(FunctionDefineStatement s) {
             if (s.name.startsWith("test")) {
                 try {
-                    Functions.get(s.name).execute();
+                    ScopeHandler.getFunction(s.name).execute();
                 } catch (AssertionError err) {
                     throw new AssertionError(s.name + ": " + err.getMessage(), err);
                 }

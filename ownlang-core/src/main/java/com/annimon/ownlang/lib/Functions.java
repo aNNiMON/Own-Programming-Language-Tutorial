@@ -12,15 +12,12 @@ public final class Functions {
     public static Map<String, Function> getFunctions() {
         return ScopeHandler.functions();
     }
-    
-    public static boolean isExists(String name) {
-        return ScopeHandler.isFunctionExists(name);
-    }
-    
-    public static Function get(String name) {
-        return ScopeHandler.getFunction(name);
-    }
-    
+
+    /**
+     * @deprecated This function remains for backward compatibility with old separate modules
+     * Use {@link ScopeHandler#setFunction(String, Function)}
+     */
+    @Deprecated
     public static void set(String key, Function function) {
         ScopeHandler.setFunction(key, function);
     }

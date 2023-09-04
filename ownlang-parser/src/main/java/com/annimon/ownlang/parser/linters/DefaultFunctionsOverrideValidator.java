@@ -1,7 +1,7 @@
 package com.annimon.ownlang.parser.linters;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.*;
 
 public final class DefaultFunctionsOverrideValidator extends LintVisitor {
@@ -9,7 +9,7 @@ public final class DefaultFunctionsOverrideValidator extends LintVisitor {
     @Override
     public void visit(FunctionDefineStatement s) {
         super.visit(s);
-        if (Functions.isExists(s.name)) {
+        if (ScopeHandler.isFunctionExists(s.name)) {
             Console.error(String.format(
                     "Warning: function \"%s\" overrides default module function", s.name));
         }

@@ -1,7 +1,7 @@
 package com.annimon.ownlang.parser.linters;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.*;
 
 /**
@@ -15,7 +15,7 @@ public final class AssignValidator extends LintVisitor {
         super.visit(s);
         if (s.target instanceof VariableExpression varExpr) {
             final String variable = varExpr.name;
-            if (Variables.isExists(variable)) {
+            if (ScopeHandler.isConstantExists(variable)) {
                 Console.error(String.format(
                     "Warning: variable \"%s\" overrides constant", variable));
             }

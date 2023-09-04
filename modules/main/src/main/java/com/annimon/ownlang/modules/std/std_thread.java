@@ -1,13 +1,7 @@
 package com.annimon.ownlang.modules.std;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.*;
 
 public final class std_thread implements Function {
 
@@ -19,10 +13,10 @@ public final class std_thread implements Function {
         if (args[0].type() == Types.FUNCTION) {
             body = ((FunctionValue) args[0]).getValue();
         } else {
-            body = Functions.get(args[0].asString());
+            body = ScopeHandler.getFunction(args[0].asString());
         }
         
-        // Сдвигаем аргументы
+        // Shift arguments
         final Value[] params = new Value[args.length - 1];
         if (params.length > 0) {
             System.arraycopy(args, 1, params, 0, params.length);

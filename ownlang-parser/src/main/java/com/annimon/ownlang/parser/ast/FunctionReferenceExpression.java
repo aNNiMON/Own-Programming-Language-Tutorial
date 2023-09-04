@@ -17,7 +17,7 @@ public final class FunctionReferenceExpression extends InterruptableNode impleme
     @Override
     public FunctionValue eval() {
         super.interruptionCheck();
-        return new FunctionValue(Functions.get(name));
+        return new FunctionValue(ScopeHandler.getFunction(name));
     }
     
     @Override

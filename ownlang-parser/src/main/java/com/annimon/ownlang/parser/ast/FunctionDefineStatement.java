@@ -1,6 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.Functions;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 
 /**
@@ -21,7 +21,7 @@ public final class FunctionDefineStatement implements Statement {
 
     @Override
     public void execute() {
-        Functions.set(name, new UserDefinedFunction(arguments, body));
+        ScopeHandler.setFunction(name, new UserDefinedFunction(arguments, body));
     }
     
     @Override

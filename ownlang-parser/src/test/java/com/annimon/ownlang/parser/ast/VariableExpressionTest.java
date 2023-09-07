@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.ScopeHandler;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.annimon.ownlang.exceptions.VariableDoesNotExistsException;
 
@@ -11,6 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author aNNiMON
  */
 public class VariableExpressionTest {
+
+    @BeforeEach
+    void setUp() {
+        ScopeHandler.resetScope();
+    }
     
     @Test
     public void testVariable() {

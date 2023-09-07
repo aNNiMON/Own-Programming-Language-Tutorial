@@ -28,3 +28,16 @@ def testStringIterate() {
   assertEquals("ABCD", str)
   assertEquals(394/*97 + 98 + 99 + 100*/, sum)
 }
+
+def testScope() {
+  a = 100
+  b = 200
+  sum = 0
+  for a, b : {14: 3} {
+    sum += a
+    sum += b
+  }
+  assertEquals(17, sum)
+  assertEquals(14, a)
+  assertEquals(3, b)
+}

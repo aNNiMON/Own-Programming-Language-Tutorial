@@ -1,0 +1,179 @@
+use "types"
+
+def testMatchValue() {
+  value = 20
+  result = match value {
+    case 10: "ten"
+    case 20: "twenty"
+  }
+  assertEquals("twenty", result)
+}
+
+def testMatchValueAny() {
+  value = 20
+  result = match value {
+    case 0: "zero"
+    case 1: "one"
+    case _: "other"
+  }
+  assertEquals("other", result)
+}
+
+def testMatchAdditionalCheck() {
+  value = 20
+  result = match value {
+    case 10: "ten"
+    case x if x < 10: "" + x + "<10"
+    case x if x > 10: "" + x + ">10"
+  }
+  assertEquals("20>10", result)
+}
+
+def testMatchAdditionalCheckScope() {
+  x = 20
+  result = match x {
+    case 10: "ten"
+    case x if x < 10: fail()
+    case y if y > 10: assertEquals(20, y)
+  }
+  assertEquals(20, x)
+  assertEquals(true, result)
+}
+
+def printArrayRecursive(arr) = match arr {
+  case [head :: tail]: "[" + head + ", " + printArrayRecursive(tail) + "]"
+  case []: "[]"
+  case last: "[" + last + ", []]"
+}
+
+def testMatchEmptyArray() {
+  result = printArrayRecursive([])
+  assertEquals("[]", result)
+}
+
+def testMatchOneElementArray() {
+  result = printArrayRecursive([1])
+  assertEquals("[[1], []]", result)
+}
+
+def testMatchTwoElementsArray() {
+  result = printArrayRecursive([1, 2])
+  assertEquals("[1, [2, []]]", result)
+}
+
+def testMatchArray() {
+  result = printArrayRecursive([1, 2, 3, 4])
+  assertEquals("[1, [2, [3, [4, []]]]]", result)
+}
+
+def testMatchArray2() {
+  def elementsCount(arr) = match arr {
+    case [a :: b :: c :: d :: e]: 5
+    case [a :: b :: c :: d]: 4
+    case [a :: b :: c]: 3
+    case [a :: b]: 2
+    case (7): -7 // special case 1
+    case [a] if a == [8]: -8 // special case 2
+    case []: 0
+    case [a]: 1
+  }
+  assertEquals(4, elementsCount([1, 2, 3, 4]))
+  assertEquals(3, elementsCount([1, 2, 3]))
+  assertEquals(2, elementsCount([1, 2]))
+  assertEquals(1, elementsCount([1]))
+  assertEquals(-7, elementsCount([7]))
+  assertEquals(-8, elementsCount([8]))
+  assertEquals(0, elementsCount([]))
+}
+
+def testMatchOneElementArrayScope() {
+  head = 100
+  tail = 200
+  result = match [1] {
+    case [head :: tail]: fail("Multi-array")
+    case []: fail("Empty array")
+    case last: assertEquals(1, last[0])
+  }
+  assertEquals(100, head)
+  assertEquals(200, tail)
+  assertEquals(true, result)
+}
+
+def testMatchOneElementArrayDefinedVariableScope() {
+  head = 100
+  tail = 200
+  last = 300
+  result = match [1] {
+    case [head :: tail]: fail("Multi-array")
+    case []: fail("Empty array")
+    case last: fail("Array should not be equal " + last)
+    case rest: assertEquals(1, rest[0])
+  }
+  assertEquals(100, head)
+  assertEquals(200, tail)
+  assertEquals(300, last)
+  assertEquals(true, result)
+}
+
+def testMatchArrayScope() {
+  head = 100
+  tail = 200
+  result = match [1, 2, 3] {
+    case [head :: tail]: assertEquals(1, head)
+    case []: fail("Empty array")
+    case last: fail("One element")
+  }
+  assertEquals(100, head)
+  assertEquals(200, tail)
+  assertEquals(true, result)
+}
+
+def testMatchTuple() {
+  result = match [1, 2] {
+    case (0, 1): "(0, 1)"
+    case (1, 2): "(1, 2)"
+    case (2, 3): "(2, 3)"
+  }
+  assertEquals("(1, 2)", result)
+}
+
+def testMatchTupleDifferentLength() {
+  result = match [1, 2] {
+    case (1): "(1)"
+    case (1, 2, 3, 4): "(1, 2, 3, 4)"
+    case _: "not matched"
+  }
+  assertEquals("not matched", result)
+}
+
+def testMatchTupleAny1() {
+  result = match [1, 2] {
+    case (0, _): "(0, _)"
+    case (1, _): "(1, _)"
+    case (2, _): "(2, _)"
+  }
+  assertEquals("(1, _)", result)
+}
+
+def testMatchTupleAny2() {
+  result = match [2, 3] {
+    case (0, _): "(0, _)"
+    case (1, _): "(1, _)"
+    case (_, _): "(_, _)"
+  }
+  assertEquals("(_, _)", result)
+}
+
+def testMatchTupleAny3() {
+  result = match [2, 3] {
+    case (0, _): "(0, _)"
+    case (1, _): "(1, _)"
+    case _: "_"
+  }
+  assertEquals("_", result)
+}
+
+def testScope() {
+
+}
+

@@ -1,6 +1,6 @@
 use "canvasfx"
 
 g = window("JavaFX Image demo", 400, 200)
-img = createImage("http://lorempixel.com/400/200/")
+img = createImage("https://picsum.photos/400/200/")
 g.drawImage(img, 0, 0)
 repaint()

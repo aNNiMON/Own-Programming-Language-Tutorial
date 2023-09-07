@@ -90,10 +90,14 @@ public final class MatchExpression extends InterruptableNode implements Expressi
             case 0: // match [] { case []: ... }
                 return (arraySize == 0) && optMatches(p);
 
-            case 1: // match arr { case [x]: x = arr ... }
-                final String variable = parts.get(0);
-                ScopeHandler.defineVariableInCurrentScope(variable, array);
-                return optMatches(p);
+            case 1: // match arr { case [x]: x = arr[0] ... }
+                if (arraySize == 1) {
+                    final String variable = parts.get(0);
+                    final var value = array.get(0);
+                    ScopeHandler.defineVariableInCurrentScope(variable, value);
+                    return optMatches(p);
+                }
+                return false;
 
             default: { // match arr { case [...]: .. }
                 if (partsSize == arraySize) {

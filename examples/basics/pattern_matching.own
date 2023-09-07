@@ -36,7 +36,7 @@ println printArrayRecursive([1, 2, 3, 4, 5, 6, 7])
 def printArrayRecursive(arr) = match arr {
   case [head :: tail]: "[" + head + ", " + printArrayRecursive(tail) + "]"
   case []: "[]"
-  case last: "[" + last + ", []]"
+  case other: "[" + other + ", []]"
 }
 
 println "\nPattern matching on arrays by value"

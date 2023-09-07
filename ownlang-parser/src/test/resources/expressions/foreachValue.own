@@ -36,6 +36,6 @@ def testScope() {
     sum += v
   }
   assertEquals(6, sum)
-  assertEquals(45, v)
+  assertEquals(3, v)
 }
 

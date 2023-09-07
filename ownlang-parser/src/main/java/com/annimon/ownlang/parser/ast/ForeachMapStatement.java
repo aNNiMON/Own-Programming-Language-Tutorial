@@ -24,28 +24,14 @@ public final class ForeachMapStatement extends InterruptableNode implements Stat
     @Override
     public void execute() {
         super.interruptionCheck();
-        // TODO removing without checking shadowing is dangerous
-        final Value previousVariableValue1 = ScopeHandler.getVariable(key);
-        final Value previousVariableValue2 = ScopeHandler.getVariable(value);
-
-        final Value containerValue = container.eval();
-        switch (containerValue.type()) {
-            case Types.STRING -> iterateString(containerValue.asString());
-            case Types.ARRAY -> iterateArray((ArrayValue) containerValue);
-            case Types.MAP -> iterateMap((MapValue) containerValue);
-            default -> throw new TypeException("Cannot iterate " + Types.typeToString(containerValue.type()) + " as key, value pair");
-        }
-
-        // Restore variables
-        if (previousVariableValue1 != null) {
-            ScopeHandler.setVariable(key, previousVariableValue1);
-        } else {
-            ScopeHandler.removeVariable(key);
-        }
-        if (previousVariableValue2 != null) {
-            ScopeHandler.setVariable(value, previousVariableValue2);
-        } else {
-            ScopeHandler.removeVariable(value);
+        try (final var ignored = ScopeHandler.closeableScope()) {
+            final Value containerValue = container.eval();
+            switch (containerValue.type()) {
+                case Types.STRING -> iterateString(containerValue.asString());
+                case Types.ARRAY -> iterateArray((ArrayValue) containerValue);
+                case Types.MAP -> iterateMap((MapValue) containerValue);
+                default -> throw new TypeException("Cannot iterate " + Types.typeToString(containerValue.type()) + " as key, value pair");
+            }
         }
     }
 

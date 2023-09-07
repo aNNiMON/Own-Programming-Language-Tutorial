@@ -23,22 +23,14 @@ public final class ForeachArrayStatement extends InterruptableNode implements St
     @Override
     public void execute() {
         super.interruptionCheck();
-        // TODO removing without checking shadowing is dangerous
-        final Value previousVariableValue = ScopeHandler.getVariable(variable);
-
-        final Value containerValue = container.eval();
-        switch (containerValue.type()) {
-            case Types.STRING -> iterateString(containerValue.asString());
-            case Types.ARRAY -> iterateArray((ArrayValue) containerValue);
-            case Types.MAP -> iterateMap((MapValue) containerValue);
-            default -> throw new TypeException("Cannot iterate " + Types.typeToString(containerValue.type()));
-        }
-
-        // Restore variables
-        if (previousVariableValue != null) {
-            ScopeHandler.setVariable(variable, previousVariableValue);
-        } else {
-            ScopeHandler.removeVariable(variable);
+        try (final var ignored = ScopeHandler.closeableScope()) {
+            final Value containerValue = container.eval();
+            switch (containerValue.type()) {
+                case Types.STRING -> iterateString(containerValue.asString());
+                case Types.ARRAY -> iterateArray((ArrayValue) containerValue);
+                case Types.MAP -> iterateMap((MapValue) containerValue);
+                default -> throw new TypeException("Cannot iterate " + Types.typeToString(containerValue.type()));
+            }
         }
     }
 

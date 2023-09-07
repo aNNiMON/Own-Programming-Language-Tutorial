@@ -54,13 +54,10 @@ public final class MatchExpression extends InterruptableNode implements Expressi
                 }
             }
             if ((value.type() == Types.ARRAY) && (p instanceof ListPattern pattern)) {
-                if (matchListPattern((ArrayValue) value, pattern)) {
-                    // Clean up variables if matched
-                    final Value result = evalResult(p.result);
-                    for (String var : pattern.parts) {
-                        ScopeHandler.removeVariable(var);
+                try (final var ignored = ScopeHandler.closeableScope()) {
+                    if (matchListPattern((ArrayValue) value, pattern)) {
+                        return evalResult(p.result);
                     }
-                    return result;
                 }
             }
             if ((value.type() == Types.ARRAY) && (p instanceof TuplePattern pattern)) {
@@ -91,20 +88,12 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         final int arraySize = array.size();
         switch (partsSize) {
             case 0: // match [] { case []: ... }
-                if ((arraySize == 0) && optMatches(p)) {
-                    return true;
-                }
-                return false;
+                return (arraySize == 0) && optMatches(p);
 
             case 1: // match arr { case [x]: x = arr ... }
                 final String variable = parts.get(0);
                 ScopeHandler.defineVariableInCurrentScope(variable, array);
-                if (optMatches(p)) {
-                    return true;
-                }
-                // TODO remove is dangerous
-                ScopeHandler.removeVariable(variable);
-                return false;
+                return optMatches(p);
 
             default: { // match arr { case [...]: .. }
                 if (partsSize == arraySize) {
@@ -124,16 +113,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         for (int i = 0; i < partsSize; i++) {
             ScopeHandler.defineVariableInCurrentScope(parts.get(i), array.get(i));
         }
-        if (optMatches(p)) {
-            // Clean up will be provided after evaluate result
-            return true;
-        }
-        // Clean up variables if no match
-        for (String var : parts) {
-            // TODO removing without checking shadowing is dangerous
-            ScopeHandler.removeVariable(var);
-        }
-        return false;
+        return optMatches(p);
     }
 
     private boolean matchListPatternWithTail(ListPattern p, List<String> parts, int partsSize, ArrayValue array, int arraySize) {
@@ -148,16 +128,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
             tail.set(i - lastPart, array.get(i));
         }
         ScopeHandler.defineVariableInCurrentScope(parts.get(lastPart), tail);
-        // Check optional condition
-        if (optMatches(p)) {
-            // Clean up will be provided after evaluate result
-            return true;
-        }
-        // Clean up variables
-        for (String var : parts) {
-            ScopeHandler.removeVariable(var);
-        }
-        return false;
+        return optMatches(p);
     }
 
     private boolean match(Value value, Value constant) {

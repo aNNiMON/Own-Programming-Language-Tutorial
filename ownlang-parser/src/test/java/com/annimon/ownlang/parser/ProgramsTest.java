@@ -57,6 +57,14 @@ public class ProgramsTest {
                     () -> ((FunctionValue) args[0]).getValue().execute());
             return NumberValue.ONE;
         });
+        ScopeHandler.setFunction("fail", (args) -> {
+            if (args.length > 0) {
+                fail(args[0].asString());
+            } else {
+                fail();
+            }
+            return NumberValue.ONE;
+        });
     }
 
     @ParameterizedTest

@@ -36,6 +36,11 @@ public final class ScopeHandler {
         scope = rootScope;
     }
 
+    public static AutoCloseableScope closeableScope() {
+        push();
+        return new AutoCloseableScope();
+    }
+
     public static void push() {
         synchronized (lock) {
             scope = new Scope(scope);

@@ -4,6 +4,8 @@ import com.annimon.ownlang.Shared;
 import com.annimon.ownlang.Version;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
+import java.util.Map;
+import static java.util.Map.entry;
 
 /**
  *
@@ -11,63 +13,68 @@ import com.annimon.ownlang.modules.Module;
  */
 public final class std implements Module {
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
         MapValue ownlang = new MapValue(5);
         ownlang.set("PLATFORM", new StringValue("desktop"));
         ownlang.set("VERSION", new StringValue(Version.VERSION));
         ownlang.set("VERSION_MAJOR", NumberValue.of(Version.VERSION_MAJOR));
         ownlang.set("VERSION_MINOR", NumberValue.of(Version.VERSION_MINOR));
         ownlang.set("VERSION_PATCH", NumberValue.of(Version.VERSION_PATCH));
-        ScopeHandler.setConstant("OwnLang", ownlang);
+
+        return Map.of(
+                "OwnLang", ownlang,
+                "ARGS", ArrayValue.of(Shared.getOwnlangArgs())
+        );
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setConstant("ARGS", ArrayValue.of(Shared.getOwnlangArgs())); // is not constant
-        ScopeHandler.setFunction("echo", new std_echo());
-        ScopeHandler.setFunction("readln", new std_readln());
-        ScopeHandler.setFunction("length", new std_length());
-        ScopeHandler.setFunction("rand", new std_rand());
-        ScopeHandler.setFunction("time", new std_time());
-        ScopeHandler.setFunction("sleep", new std_sleep());
-        ScopeHandler.setFunction("thread", new std_thread());
-        ScopeHandler.setFunction("sync", new std_sync());
-        ScopeHandler.setFunction("try", new std_try());
-        ScopeHandler.setFunction("default", new std_default());
+    public Map<String, Function> functions() {
+        return Map.ofEntries(
+                entry("echo", new std_echo()),
+                entry("readln", new std_readln()),
+                entry("length", new std_length()),
+                entry("rand", new std_rand()),
+                entry("time", new std_time()),
+                entry("sleep", new std_sleep()),
+                entry("thread", new std_thread()),
+                entry("sync", new std_sync()),
+                entry("try", new std_try()),
+                entry("default", new std_default()),
 
-        // Numbers
-        ScopeHandler.setFunction("toHexString", NumberFunctions::toHexString);
+                // Numbers
+                entry("toHexString", NumberFunctions::toHexString),
 
-        // String
-        ScopeHandler.setFunction("getBytes", StringFunctions::getBytes);
-        ScopeHandler.setFunction("sprintf", new std_sprintf());
-        ScopeHandler.setFunction("split", new std_split());
-        ScopeHandler.setFunction("indexOf", new std_indexof());
-        ScopeHandler.setFunction("lastIndexOf", new std_lastindexof());
-        ScopeHandler.setFunction("charAt", new std_charat());
-        ScopeHandler.setFunction("toChar", new std_tochar());
-        ScopeHandler.setFunction("substring", new std_substring());
-        ScopeHandler.setFunction("toLowerCase", new std_tolowercase());
-        ScopeHandler.setFunction("toUpperCase", new std_touppercase());
-        ScopeHandler.setFunction("trim", new std_trim());
-        ScopeHandler.setFunction("replace", new std_replace());
-        ScopeHandler.setFunction("replaceAll", new std_replaceall());
-        ScopeHandler.setFunction("replaceFirst", new std_replacefirst());
-        ScopeHandler.setFunction("parseInt", StringFunctions::parseInt);
-        ScopeHandler.setFunction("parseLong", StringFunctions::parseLong);
-        ScopeHandler.setFunction("stripMargin", StringFunctions::stripMargin);
+                // String
+                entry("getBytes", StringFunctions::getBytes),
+                entry("sprintf", new std_sprintf()),
+                entry("split", new std_split()),
+                entry("indexOf", new std_indexof()),
+                entry("lastIndexOf", new std_lastindexof()),
+                entry("charAt", new std_charat()),
+                entry("toChar", new std_tochar()),
+                entry("substring", new std_substring()),
+                entry("toLowerCase", new std_tolowercase()),
+                entry("toUpperCase", new std_touppercase()),
+                entry("trim", new std_trim()),
+                entry("replace", new std_replace()),
+                entry("replaceAll", new std_replaceall()),
+                entry("replaceFirst", new std_replacefirst()),
+                entry("parseInt", StringFunctions::parseInt),
+                entry("parseLong", StringFunctions::parseLong),
+                entry("stripMargin", StringFunctions::stripMargin),
 
-        // Arrays and maps
-        ScopeHandler.setFunction("newarray", new std_newarray());
-        ScopeHandler.setFunction("join", new std_join());
-        ScopeHandler.setFunction("sort", new std_sort());
-        ScopeHandler.setFunction("arrayCombine", new std_arrayCombine());
-        ScopeHandler.setFunction("arrayKeyExists", new std_arrayKeyExists());
-        ScopeHandler.setFunction("arrayKeys", new std_arrayKeys());
-        ScopeHandler.setFunction("arrayValues", new std_arrayValues());
-        ScopeHandler.setFunction("arraySplice", new std_arraySplice());
-        ScopeHandler.setFunction("range", new std_range());
-        ScopeHandler.setFunction("stringFromBytes", ArrayFunctions::stringFromBytes);
+                // Arrays and map,
+                entry("newarray", new std_newarray()),
+                entry("join", new std_join()),
+                entry("sort", new std_sort()),
+                entry("arrayCombine", new std_arrayCombine()),
+                entry("arrayKeyExists", new std_arrayKeyExists()),
+                entry("arrayKeys", new std_arrayKeys()),
+                entry("arrayValues", new std_arrayValues()),
+                entry("arraySplice", new std_arraySplice()),
+                entry("range", new std_range()),
+                entry("stringFromBytes", ArrayFunctions::stringFromBytes)
+        );
     }
 }

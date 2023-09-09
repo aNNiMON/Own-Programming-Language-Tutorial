@@ -2,6 +2,8 @@ package com.annimon.ownlang.modules.types;
 
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
+import java.util.Map;
+import static java.util.Map.entry;
 
 /**
  *
@@ -9,27 +11,31 @@ import com.annimon.ownlang.modules.Module;
  */
 public final class types implements Module {
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("OBJECT", NumberValue.of(Types.OBJECT));
-        ScopeHandler.setConstant("NUMBER", NumberValue.of(Types.NUMBER));
-        ScopeHandler.setConstant("STRING", NumberValue.of(Types.STRING));
-        ScopeHandler.setConstant("ARRAY", NumberValue.of(Types.ARRAY));
-        ScopeHandler.setConstant("MAP", NumberValue.of(Types.MAP));
-        ScopeHandler.setConstant("FUNCTION", NumberValue.of(Types.FUNCTION));
+    @Override
+    public Map<String, Value> constants() {
+        return Map.ofEntries(
+                entry("OBJECT", NumberValue.of(Types.OBJECT)),
+                entry("NUMBER", NumberValue.of(Types.NUMBER)),
+                entry("STRING", NumberValue.of(Types.STRING)),
+                entry("ARRAY", NumberValue.of(Types.ARRAY)),
+                entry("MAP", NumberValue.of(Types.MAP)),
+                entry("FUNCTION", NumberValue.of(Types.FUNCTION))
+        );
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("typeof", args -> NumberValue.of(args[0].type()));
-        ScopeHandler.setFunction("string", args -> new StringValue(args[0].asString()));
-        ScopeHandler.setFunction("number", args -> NumberValue.of(args[0].asNumber()));
-        
-        ScopeHandler.setFunction("byte", args -> NumberValue.of((byte)args[0].asInt()));
-        ScopeHandler.setFunction("short", args -> NumberValue.of((short)args[0].asInt()));
-        ScopeHandler.setFunction("int", args -> NumberValue.of(args[0].asInt()));
-        ScopeHandler.setFunction("long", args -> NumberValue.of((long)args[0].asNumber()));
-        ScopeHandler.setFunction("float", args -> NumberValue.of((float)args[0].asNumber()));
-        ScopeHandler.setFunction("double", args -> NumberValue.of(args[0].asNumber()));
+    public Map<String, Function> functions() {
+        return Map.ofEntries(
+                entry("typeof", args -> NumberValue.of(args[0].type())),
+                entry("string", args -> new StringValue(args[0].asString())),
+                entry("number", args -> NumberValue.of(args[0].asNumber())),
+
+                entry("byte", args -> NumberValue.of((byte)args[0].asInt())),
+                entry("short", args -> NumberValue.of((short)args[0].asInt())),
+                entry("int", args -> NumberValue.of(args[0].asInt())),
+                entry("long", args -> NumberValue.of((long)args[0].asNumber())),
+                entry("float", args -> NumberValue.of((float)args[0].asNumber())),
+                entry("double", args -> NumberValue.of(args[0].asNumber()))
+        );
     }
 }

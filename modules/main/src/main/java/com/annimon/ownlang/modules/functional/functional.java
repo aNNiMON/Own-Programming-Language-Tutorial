@@ -1,8 +1,11 @@
 package com.annimon.ownlang.modules.functional;
 
+import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.ScopeHandler;
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.modules.Module;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -10,24 +13,26 @@ import com.annimon.ownlang.modules.Module;
  */
 public final class functional implements Module {
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("IDENTITY", new FunctionValue(args -> args[0]));
+    @Override
+    public Map<String, Value> constants() {
+        return Map.of("IDENTITY", new FunctionValue(args -> args[0]));
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("foreach", new functional_foreach());
-        ScopeHandler.setFunction("map", new functional_map());
-        ScopeHandler.setFunction("flatmap", new functional_flatmap());
-        ScopeHandler.setFunction("reduce", new functional_reduce());
-        ScopeHandler.setFunction("filter", new functional_filter(false));
-        ScopeHandler.setFunction("sortby", new functional_sortby());
-        ScopeHandler.setFunction("takewhile", new functional_filter(true));
-        ScopeHandler.setFunction("dropwhile", new functional_dropwhile());
+    public Map<String, Function> functions() {
+        final var result = new HashMap<String, Function>(15);
+        result.put("foreach", new functional_foreach());
+        result.put("map", new functional_map());
+        result.put("flatmap", new functional_flatmap());
+        result.put("reduce", new functional_reduce());
+        result.put("filter", new functional_filter(false));
+        result.put("sortby", new functional_sortby());
+        result.put("takewhile", new functional_filter(true));
+        result.put("dropwhile", new functional_dropwhile());
 
-        ScopeHandler.setFunction("chain", new functional_chain());
-        ScopeHandler.setFunction("stream", new functional_stream());
-        ScopeHandler.setFunction("combine", new functional_combine());
+        result.put("chain", new functional_chain());
+        result.put("stream", new functional_stream());
+        result.put("combine", new functional_combine());
+        return result;
     }
 }

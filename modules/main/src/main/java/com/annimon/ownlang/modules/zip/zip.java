@@ -9,23 +9,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import static java.util.Map.entry;
 
 public class zip implements Module {
 
     @Override
-    public void init() {
-        ScopeHandler.setFunction("zip", this::zipWithMapper);
-        ScopeHandler.setFunction("zipFiles", this::zipFiles);
-        ScopeHandler.setFunction("unzip", this::unzip);
-        ScopeHandler.setFunction("unzipFiles", this::unzipFiles);
-        ScopeHandler.setFunction("listZipEntries", this::listZipEntries);
+    public Map<String, Value> constants() {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public Map<String, Function> functions() {
+        return Map.ofEntries(
+                entry("zip", this::zipWithMapper),
+                entry("zipFiles", this::zipFiles),
+                entry("unzip", this::unzip),
+                entry("unzipFiles", this::unzipFiles),
+                entry("listZipEntries", this::listZipEntries)
+        );
     }
 
     private Value zipWithMapper(Value[] args) {

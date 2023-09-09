@@ -7,9 +7,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import static java.util.Map.entry;
 
 /**
  * Java interoperability module.
@@ -20,48 +19,51 @@ public final class java implements Module {
 
     private static final Value NULL = new NullValue();
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
+        final var result = new LinkedHashMap<String, Value>(16);
+        result.put("null", NULL);
+        result.put("boolean.class", new ClassValue(boolean.class));
+        result.put("boolean[].class", new ClassValue(boolean[].class));
+        result.put("boolean[][].class", new ClassValue(boolean[][].class));
+        result.put("byte.class", new ClassValue(byte.class));
+        result.put("byte[].class", new ClassValue(byte[].class));
+        result.put("byte[][].class", new ClassValue(byte[][].class));
+        result.put("short.class", new ClassValue(short.class));
+        result.put("short[].class", new ClassValue(short[].class));
+        result.put("short[][].class", new ClassValue(short[][].class));
+        result.put("char.class", new ClassValue(char.class));
+        result.put("char[].class", new ClassValue(char[].class));
+        result.put("char[][].class", new ClassValue(char[][].class));
+        result.put("int.class", new ClassValue(int.class));
+        result.put("int[].class", new ClassValue(int[].class));
+        result.put("int[][].class", new ClassValue(int[][].class));
+        result.put("long.class", new ClassValue(long.class));
+        result.put("long[].class", new ClassValue(long[].class));
+        result.put("long[][].class", new ClassValue(long[][].class));
+        result.put("float.class", new ClassValue(float.class));
+        result.put("float[].class", new ClassValue(float[].class));
+        result.put("float[][].class", new ClassValue(float[][].class));
+        result.put("double.class", new ClassValue(double.class));
+        result.put("double[].class", new ClassValue(double[].class));
+        result.put("double[][].class", new ClassValue(double[][].class));
+        result.put("String.class", new ClassValue(String.class));
+        result.put("String[].class", new ClassValue(String[].class));
+        result.put("String[][].class", new ClassValue(String[][].class));
+        result.put("Object.class", new ClassValue(Object.class));
+        result.put("Object[].class", new ClassValue(Object[].class));
+        result.put("Object[][].class", new ClassValue(Object[][].class));
+        return result;
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setConstant("null", NULL);
-        ScopeHandler.setConstant("boolean.class", new ClassValue(boolean.class));
-        ScopeHandler.setConstant("boolean[].class", new ClassValue(boolean[].class));
-        ScopeHandler.setConstant("boolean[][].class", new ClassValue(boolean[][].class));
-        ScopeHandler.setConstant("byte.class", new ClassValue(byte.class));
-        ScopeHandler.setConstant("byte[].class", new ClassValue(byte[].class));
-        ScopeHandler.setConstant("byte[][].class", new ClassValue(byte[][].class));
-        ScopeHandler.setConstant("short.class", new ClassValue(short.class));
-        ScopeHandler.setConstant("short[].class", new ClassValue(short[].class));
-        ScopeHandler.setConstant("short[][].class", new ClassValue(short[][].class));
-        ScopeHandler.setConstant("char.class", new ClassValue(char.class));
-        ScopeHandler.setConstant("char[].class", new ClassValue(char[].class));
-        ScopeHandler.setConstant("char[][].class", new ClassValue(char[][].class));
-        ScopeHandler.setConstant("int.class", new ClassValue(int.class));
-        ScopeHandler.setConstant("int[].class", new ClassValue(int[].class));
-        ScopeHandler.setConstant("int[][].class", new ClassValue(int[][].class));
-        ScopeHandler.setConstant("long.class", new ClassValue(long.class));
-        ScopeHandler.setConstant("long[].class", new ClassValue(long[].class));
-        ScopeHandler.setConstant("long[][].class", new ClassValue(long[][].class));
-        ScopeHandler.setConstant("float.class", new ClassValue(float.class));
-        ScopeHandler.setConstant("float[].class", new ClassValue(float[].class));
-        ScopeHandler.setConstant("float[][].class", new ClassValue(float[][].class));
-        ScopeHandler.setConstant("double.class", new ClassValue(double.class));
-        ScopeHandler.setConstant("double[].class", new ClassValue(double[].class));
-        ScopeHandler.setConstant("double[][].class", new ClassValue(double[][].class));
-        ScopeHandler.setConstant("String.class", new ClassValue(String.class));
-        ScopeHandler.setConstant("String[].class", new ClassValue(String[].class));
-        ScopeHandler.setConstant("String[][].class", new ClassValue(String[][].class));
-        ScopeHandler.setConstant("Object.class", new ClassValue(Object.class));
-        ScopeHandler.setConstant("Object[].class", new ClassValue(Object[].class));
-        ScopeHandler.setConstant("Object[][].class", new ClassValue(Object[][].class));
-
-        ScopeHandler.setFunction("isNull", this::isNull);
-        ScopeHandler.setFunction("newClass", this::newClass);
-        ScopeHandler.setFunction("toObject", this::toObject);
-        ScopeHandler.setFunction("toValue", this::toValue);
+    public Map<String, Function> functions() {
+        return Map.ofEntries(
+                entry("isNull", this::isNull),
+                entry("newClass", this::newClass),
+                entry("toObject", this::toObject),
+                entry("toValue", this::toValue)
+        );
     }
 
     //<editor-fold defaultstate="collapsed" desc="Values">

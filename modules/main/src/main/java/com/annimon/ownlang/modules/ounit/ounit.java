@@ -4,7 +4,10 @@ import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -12,18 +15,21 @@ import java.util.List;
  */
 public final class ounit implements Module {
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
+        return Collections.emptyMap();
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("assertEquals", new assertEquals());
-        ScopeHandler.setFunction("assertNotEquals", new assertNotEquals());
-        ScopeHandler.setFunction("assertSameType", new assertSameType());
-        ScopeHandler.setFunction("assertTrue", new assertTrue());
-        ScopeHandler.setFunction("assertFalse", new assertFalse());
-        ScopeHandler.setFunction("runTests", new runTests());
+    public Map<String, Function> functions() {
+        final var result = new LinkedHashMap<String, Function>(16);
+        result.put("assertEquals", new assertEquals());
+        result.put("assertNotEquals", new assertNotEquals());
+        result.put("assertSameType", new assertSameType());
+        result.put("assertTrue", new assertTrue());
+        result.put("assertFalse", new assertFalse());
+        result.put("runTests", new runTests());
+        return result;
     }
     
     private static String microsToSeconds(long micros) {
@@ -35,7 +41,7 @@ public final class ounit implements Module {
         public Value execute(Value[] args) {
             Arguments.check(2, args.length);
             if (args[0].equals(args[1])) return NumberValue.ONE;
-            throw new OUnitAssertionException("Values are not equals: "
+            throw new OUnitAssertionException("Values are not equal: "
                     + "1: " + args[0] + ", 2: " + args[1]);
         }
     }
@@ -45,7 +51,7 @@ public final class ounit implements Module {
         public Value execute(Value[] args) {
             Arguments.check(2, args.length);
             if (!args[0].equals(args[1])) return NumberValue.ONE;
-            throw new OUnitAssertionException("Values are equals: " + args[0]);
+            throw new OUnitAssertionException("Values are equal: " + args[0]);
         }
     }
     

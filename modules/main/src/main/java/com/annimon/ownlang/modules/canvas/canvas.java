@@ -12,9 +12,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import static java.util.Map.entry;
 
 /**
  *
@@ -29,36 +32,41 @@ public final class canvas implements Module {
     private static NumberValue lastKey;
     private static ArrayValue mouseHover;
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("VK_UP", NumberValue.of(KeyEvent.VK_UP));
-        ScopeHandler.setConstant("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN));
-        ScopeHandler.setConstant("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT));
-        ScopeHandler.setConstant("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT));
-        ScopeHandler.setConstant("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER));
-        ScopeHandler.setConstant("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE));
+
+    @Override
+    public Map<String, Value> constants() {
+        return Map.ofEntries(
+                entry("VK_UP", NumberValue.of(KeyEvent.VK_UP)),
+                entry("VK_DOWN", NumberValue.of(KeyEvent.VK_DOWN)),
+                entry("VK_LEFT", NumberValue.of(KeyEvent.VK_LEFT)),
+                entry("VK_RIGHT", NumberValue.of(KeyEvent.VK_RIGHT)),
+                entry("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER)),
+                entry("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE))
+        );
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("window", new CreateWindow());
-        ScopeHandler.setFunction("prompt", new Prompt());
-        ScopeHandler.setFunction("keypressed", new KeyPressed());
-        ScopeHandler.setFunction("mousehover", new MouseHover());
-        ScopeHandler.setFunction("line", intConsumer4Convert(canvas::line));
-        ScopeHandler.setFunction("oval", intConsumer4Convert(canvas::oval));
-        ScopeHandler.setFunction("foval", intConsumer4Convert(canvas::foval));
-        ScopeHandler.setFunction("rect", intConsumer4Convert(canvas::rect));
-        ScopeHandler.setFunction("frect", intConsumer4Convert(canvas::frect));
-        ScopeHandler.setFunction("clip", intConsumer4Convert(canvas::clip));
-        ScopeHandler.setFunction("drawstring", new DrawString());
-        ScopeHandler.setFunction("color", new SetColor());
-        ScopeHandler.setFunction("repaint", new Repaint());
-
+    public Map<String, Function> functions() {
         lastKey = NumberValue.MINUS_ONE;
         mouseHover = new ArrayValue(new Value[] { NumberValue.ZERO, NumberValue.ZERO });
+
+        final var result = new LinkedHashMap<String, Function>(15);
+        result.put("window", new CreateWindow());
+        result.put("prompt", new Prompt());
+        result.put("keypressed", new KeyPressed());
+        result.put("mousehover", new MouseHover());
+        result.put("line", intConsumer4Convert(canvas::line));
+        result.put("oval", intConsumer4Convert(canvas::oval));
+        result.put("foval", intConsumer4Convert(canvas::foval));
+        result.put("rect", intConsumer4Convert(canvas::rect));
+        result.put("frect", intConsumer4Convert(canvas::frect));
+        result.put("clip", intConsumer4Convert(canvas::clip));
+        result.put("drawstring", new DrawString());
+        result.put("color", new SetColor());
+        result.put("repaint", new Repaint());
+        return result;
     }
-    
+
     @FunctionalInterface
     private interface IntConsumer4 {
         void accept(int i1, int i2, int i3, int i4);

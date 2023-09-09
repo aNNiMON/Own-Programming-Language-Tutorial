@@ -3,25 +3,27 @@ package com.annimon.ownlang.modules.gzip;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.Collections;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class gzip implements Module {
 
     @Override
-    public void init() {
-        ScopeHandler.setFunction("gzip", this::gzipFile);
-        ScopeHandler.setFunction("gzipBytes", this::gzipBytes);
-        ScopeHandler.setFunction("ungzip", this::ungzipFile);
-        ScopeHandler.setFunction("ungzipBytes", this::ungzipBytes);
+    public Map<String, Value> constants() {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public Map<String, Function> functions() {
+        return Map.of(
+                "gzip", this::gzipFile,
+                "gzipBytes", this::gzipBytes,
+                "ungzip", this::ungzipFile,
+                "ungzipBytes", this::ungzipBytes
+        );
     }
 
     private Value gzipFile(Value[] args) {

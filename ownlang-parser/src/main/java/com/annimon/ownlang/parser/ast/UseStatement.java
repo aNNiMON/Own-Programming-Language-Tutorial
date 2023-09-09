@@ -1,18 +1,17 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.ModuleLoader;
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.modules.Module;
-import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
  * @author aNNiMON
  */
 public final class UseStatement extends InterruptableNode implements Statement {
-
-    private static final String PACKAGE = "com.annimon.ownlang.modules.%s.%s";
-    private static final String INIT_CONSTANTS_METHOD = "initConstants";
-    
     public final Collection<String> modules;
     
     public UseStatement(Collection<String> modules) {
@@ -23,35 +22,17 @@ public final class UseStatement extends InterruptableNode implements Statement {
     public void execute() {
         super.interruptionCheck();
         for (String module : modules) {
-            loadModule(module);
+            ModuleLoader.loadAndUse(module);
         }
     }
 
-    private void loadModule(String name) {
-        try {
-            final Module module = (Module) Class.forName(String.format(PACKAGE, name, name))
-                    .getDeclaredConstructor()
-                    .newInstance();
-            module.init();
-        } catch (Exception ex) {
-            throw new RuntimeException("Unable to load module " + name, ex);
+    public Map<String, Value> loadConstants() {
+        final var result = new LinkedHashMap<String, Value>();
+        for (String moduleName : modules) {
+            final Module module = ModuleLoader.load(moduleName);
+            result.putAll(module.constants());
         }
-    }
-
-    public void loadConstants() {
-        for (String module : modules) {
-            loadConstants(module);
-        }
-    }
-
-    private void loadConstants(String moduleName) {
-        try {
-            final Class<?> moduleClass = Class.forName(String.format(PACKAGE, moduleName, moduleName));
-            final Method method = moduleClass.getMethod(INIT_CONSTANTS_METHOD);
-            method.invoke(this);
-        } catch (Exception ex) {
-            // ignore
-        }
+        return result;
     }
     
     @Override

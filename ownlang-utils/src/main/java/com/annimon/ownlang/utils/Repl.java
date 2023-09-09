@@ -135,7 +135,7 @@ public final class Repl {
         final int maxCols = 2;
         final int size = commands.size();
         for (int i = 0; i < size; i += maxCols) {
-            // Pad to max length and print in tab-separatex maxCols columns
+            // Pad to max length and print in tab-separated maxCols columns
             System.out.println(commands
                     .subList(i, Math.min(size, i + maxCols))
                     .stream()

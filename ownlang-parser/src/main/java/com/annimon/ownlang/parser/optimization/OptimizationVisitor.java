@@ -412,10 +412,6 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(UseStatement s, T t) {
-        final Node expression = s.expression.accept(this, t);
-        if (expression != s.expression) {
-            return new UseStatement((Expression) expression);
-        }
         return s;
     }
 
@@ -450,8 +446,8 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     }
 
     protected Statement consumeStatement(Node node) {
-        if (node instanceof Statement) {
-            return (Statement) node;
+        if (node instanceof Statement statement) {
+            return statement;
         }
         return new ExprStatement((Expression) node);
     }

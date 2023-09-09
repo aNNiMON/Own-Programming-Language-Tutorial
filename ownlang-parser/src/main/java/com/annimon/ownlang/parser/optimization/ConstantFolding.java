@@ -1,12 +1,7 @@
 package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.exceptions.OperationIsNotSupportedException;
-import com.annimon.ownlang.parser.ast.BinaryExpression;
-import com.annimon.ownlang.parser.ast.ConditionalExpression;
-import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
-import com.annimon.ownlang.parser.ast.Node;
-import com.annimon.ownlang.parser.ast.UnaryExpression;
-import com.annimon.ownlang.parser.ast.ValueExpression;
+import com.annimon.ownlang.parser.ast.*;
 import com.annimon.ownlang.parser.visitors.VisitorUtils;
 import java.util.HashSet;
 import java.util.Set;
@@ -102,6 +97,11 @@ public class ConstantFolding extends OptimizationVisitor<Void> implements Optimi
             }
         }
         return super.visit(s, t);
+    }
+
+    @Override
+    public Node visit(UseStatement s, Void unused) {
+        return null;
     }
 
     @Override

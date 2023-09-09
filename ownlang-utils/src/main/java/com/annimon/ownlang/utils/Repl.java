@@ -7,10 +7,7 @@ import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.lib.Variables;
-import com.annimon.ownlang.parser.Lexer;
-import com.annimon.ownlang.parser.Parser;
-import com.annimon.ownlang.parser.Token;
-import com.annimon.ownlang.parser.TokenType;
+import com.annimon.ownlang.parser.*;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.PrintVisitor;
@@ -36,7 +33,7 @@ public final class Repl {
             RESET = ":reset",
             EXIT = ":exit";
 
-    private static final Token PRINTLN_TOKEN = new Token(TokenType.PRINTLN, "", 0, 0);
+    private static final Token PRINTLN_TOKEN = new Token(TokenType.PRINTLN, "", new Pos(0, 0));
 
     public static void main(String[] args) {
         System.out.println("Welcome to OwnLang " + Version.VERSION + " REPL");

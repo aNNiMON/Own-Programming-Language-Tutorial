@@ -1,25 +1,9 @@
 package com.annimon.ownlang.parser;
 
-public final class ParseError {
-
-    private final int line;
-    private final Exception exception;
-
-    public ParseError(int line, Exception exception) {
-        this.line = line;
-        this.exception = exception;
-    }
-
-    public int getLine() {
-        return line;
-    }
-
-    public Exception getException() {
-        return exception;
-    }
+public record ParseError(Exception exception, Pos pos) {
 
     @Override
     public String toString() {
-        return "ParseError on line " + line + ": " + exception.getMessage();
+        return "ParseError on line " + pos.row() + ": " + exception;
     }
 }

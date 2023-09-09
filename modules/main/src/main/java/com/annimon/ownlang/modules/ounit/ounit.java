@@ -88,11 +88,13 @@ public final class ounit implements Module {
         
         @Override
         public Value execute(Value[] args) {
-            List<TestInfo> tests = Functions.getFunctions().entrySet().stream()
+            final var testFunctions = ScopeHandler.functions().entrySet().stream()
                     .filter(e -> e.getKey().toLowerCase().startsWith("test"))
+                    .toList();
+            List<TestInfo> tests = testFunctions.stream()
                     .map(e -> runTest(e.getKey(), e.getValue()))
                     .toList();
-            
+
             int failures = 0;
             long summaryTime = 0;
             final StringBuilder result = new StringBuilder();
@@ -132,20 +134,13 @@ public final class ounit implements Module {
             super(message);
         }
     }
-    
-    private static class TestInfo {
-        final String name;
-        final boolean isPassed;
-        final String failureDescription;
-        final long elapsedTimeInMicros;
 
-        public TestInfo(String name, boolean isPassed, String failureDescription, long elapsedTimeInMicros) {
-            this.name = name;
-            this.isPassed = isPassed;
-            this.failureDescription = failureDescription;
-            this.elapsedTimeInMicros = elapsedTimeInMicros;
-        }
-        
+    private record TestInfo(
+            String name,
+            boolean isPassed,
+            String failureDescription,
+            long elapsedTimeInMicros
+    ) {
         public String info() {
             return String.format("%s [%s]\n%sElapsed: %s\n",
                     name,

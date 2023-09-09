@@ -1,4 +1,4 @@
-use "yaml"
+use yaml
 
 data = {
   "name": "Yaml Example",

@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testIncludeClass() {
   include "src/test/resources/expressions/includeClass.own.txt"

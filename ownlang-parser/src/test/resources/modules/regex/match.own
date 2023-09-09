@@ -1,4 +1,4 @@
-use ["regex", "types"]
+use regex, types
 
 def testMatchGitUrl() {
   pattern = Pattern.compile("https?://((git(hu|la)b\.com)|bitbucket\.org)/?")

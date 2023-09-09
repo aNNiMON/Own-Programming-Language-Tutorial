@@ -1,4 +1,4 @@
-use ["regex", "types"]
+use regex, types
 
 def testReplaceCallback() {
   in = "[1-2-3-4]"

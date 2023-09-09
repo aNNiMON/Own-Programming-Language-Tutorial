@@ -1,4 +1,4 @@
-use "date"
+use date
 
 def testDateParse() {
   d = parseDate("2016/05/10", newFormat("yyyy/MM/dd"))

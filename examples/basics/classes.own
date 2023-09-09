@@ -1,4 +1,4 @@
-use ["std"]
+use std
 
 class Point {
   def Point(x = 0, y = 0) {

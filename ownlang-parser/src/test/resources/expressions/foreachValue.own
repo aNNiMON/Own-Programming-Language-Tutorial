@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testArrayIterate() {
   sum = 0

@@ -1,4 +1,4 @@
-use "canvas"
+use canvas
 
 w = 800   h = 600
 window("canvas example", w, h);

@@ -1,5 +1,4 @@
-use "std"
-use "types"
+use std, types
 
 v = rand(10)
 println match v {

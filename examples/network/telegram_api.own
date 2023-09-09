@@ -1,7 +1,4 @@
-use "std"
-use "http"
-use "json"
-use "functional"
+use std, http, json, functional
 
 // Telegram API example
 

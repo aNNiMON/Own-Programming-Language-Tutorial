@@ -1,5 +1,4 @@
-use "std"
-use "http"
+use std, http
 
 http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
   println "Added: " + v

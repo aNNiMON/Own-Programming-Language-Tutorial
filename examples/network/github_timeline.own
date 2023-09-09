@@ -1,4 +1,4 @@
-use ["std", "http", "json", "functional", "date"]
+use std, http, json, functional, date
 
 header = "* Prints current GitHub timeline *"
 println "*" * header.length

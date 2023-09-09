@@ -1,4 +1,4 @@
-use "java"
+use java
 System = newClass("java.lang.System")
 println "OS name: " + System.getProperty("os.name")
 println "OS version: " + System.getProperty("os.version")

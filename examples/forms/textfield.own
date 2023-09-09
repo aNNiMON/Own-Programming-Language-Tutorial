@@ -1,5 +1,4 @@
-use "std"
-use "forms"
+use std, forms
 
 textField = newTextField("Some text")
 

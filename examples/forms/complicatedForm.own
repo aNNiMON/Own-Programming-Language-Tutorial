@@ -1,5 +1,4 @@
-use "std"
-use "forms"
+use std, forms
 
 actionsPanel = newPanel()
 actionsPanel.setLayout(boxLayout(actionsPanel, BoxLayout.PAGE_AXIS))

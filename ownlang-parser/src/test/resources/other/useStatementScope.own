@@ -1,0 +1,26 @@
+use std
+
+def testRegular() {
+  assertEquals("7f", "127".toHexString())
+}
+
+def testInCondition() {
+  if (true) {
+    use date
+  }
+  assertNotEquals("", newDate())
+}
+
+def testInScope() {
+  PI = "fallback"
+  assertEquals("fallback", PI)
+
+  useMath()
+
+  assertEquals("fallback", PI)
+  assertEquals(3, abs(-3))
+}
+
+def useMath() {
+  use math
+}

@@ -1,6 +1,4 @@
-use "math"
-use "std"
-use "functional"
+use math, std, functional
 
 word = 2 + 2
 word2 = PI + word
@@ -105,7 +103,7 @@ for (v : arr1 << arr2) print "" + v + ", "
 print "\n"
 for v : [1,2,3,4,5,6,7,8,9] print "" + v + ", "
 
-use "types"
+use types
 println typeof(1)
 println typeof("1")
 println typeof(arr1)
@@ -133,7 +131,7 @@ foreach(nums, ::echo)
 println "sort"
 foreach(sort(nums, def(a,b) = b - a), ::echo)
 
-use "http"
+use http
 
 /*http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
   println "Added: " + v
@@ -144,7 +142,7 @@ def http_get_demo(v) {
   http("http://jsonplaceholder.typicode.com/users", ::echo)
 }*/
 
-use "json"
+use json
 println "json"
 println jsonencode({
   "name": "JSON Example",
@@ -242,7 +240,7 @@ println 1 :: 2 :: 3
 
 println "\u042a"
 
-use "date"
+use date
 d = newDate();
 println d
 println formatDate(d)

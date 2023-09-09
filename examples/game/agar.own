@@ -1,6 +1,4 @@
-use "canvas"
-use "math"
-use "std"
+use canvas, math, std
 
 w = 800  h = 600
 w2 = w/2 h2 = h/2

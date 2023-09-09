@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testLastIndexOf() {
   assertEquals(8, lastIndexOf("/123/456/789", "/"))

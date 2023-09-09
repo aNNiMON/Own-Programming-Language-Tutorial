@@ -1,4 +1,4 @@
-use ["std", "jdbc"]
+use std, jdbc
 
 // Example from https://github.com/xerial/sqlite-jdbc
 

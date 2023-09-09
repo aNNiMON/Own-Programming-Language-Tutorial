@@ -1,5 +1,4 @@
-use "canvas"
-use "std"
+use canvas, std
 
 w = 640 h = 480
 window("Управление точкой", w, h)

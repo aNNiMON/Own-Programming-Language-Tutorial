@@ -1,7 +1,4 @@
-use "std"
-use "math"
-use "types"
-use "canvasfx"
+use std, math, types, canvasfx
 
 // Constants
 CELL_NONE = -100

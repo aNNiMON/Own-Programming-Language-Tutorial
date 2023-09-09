@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testGetBytes() {
   assertEquals([111, 119, 110, 108, 97, 110, 103], getBytes("ownlang"))

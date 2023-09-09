@@ -1,4 +1,4 @@
-use "zip"
+use zip
 
 // println "Zip single file"
 // zip("absolute path to file", "example.zip")

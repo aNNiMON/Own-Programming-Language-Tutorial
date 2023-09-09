@@ -1,5 +1,5 @@
 for i = 0, i < 50, i++ {
-  use "std"
-  use "files"
-  use ["math", "functional"]
+  use std
+  use files
+  use math, functional
 }

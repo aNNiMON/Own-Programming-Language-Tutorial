@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testParseInt() {
   assertEquals(141, parseInt("141"))

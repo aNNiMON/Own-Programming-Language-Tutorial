@@ -1,4 +1,4 @@
-use ["std", "yaml", "ounit"]
+use std, yaml, ounit
 
 yml = yamlencode({
   "name": "Yaml Example",

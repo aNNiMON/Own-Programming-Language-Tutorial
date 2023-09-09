@@ -1,11 +1,5 @@
 // Twitch Tools
-use "std"
-use "math"
-use "http"
-use "json"
-use "date"
-use "types"
-use "functional"
+use std, math, http, json, date, types, functional
 
 match ARGS {
   case (): usage()

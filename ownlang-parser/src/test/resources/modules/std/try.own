@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testTryOnly() {
   assertEquals(1, try(def() = 1))

@@ -1,6 +1,4 @@
-use "std"
-use "math"
-use "functional"
+use std, math, functional
 
 add = def(a,b) = a + b
 sub = def(a,b) = a - b

@@ -1,6 +1,4 @@
-use "canvas"
-use "math"
-use "std"
+use canvas, math, std
 
 msg = ""
 NUM_POINTS = 0

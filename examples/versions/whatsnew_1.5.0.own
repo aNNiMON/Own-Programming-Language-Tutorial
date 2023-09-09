@@ -1,4 +1,4 @@
-use ["std", "functional", "gzip", "json", "java"]
+use std, functional, gzip, json, java
 
 title("Added std::getBytes, std::stringFromBytes")
 arr = [119, 111, 114, 108, 100]

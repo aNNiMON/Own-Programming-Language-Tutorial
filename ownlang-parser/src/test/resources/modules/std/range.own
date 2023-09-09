@@ -1,4 +1,4 @@
-use ["std", "types", "functional"]
+use std, types, functional
 
 def testRangeParams() {
   x = range(10)

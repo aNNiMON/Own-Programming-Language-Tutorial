@@ -71,7 +71,7 @@ fizzbuzz()
 Operate data in functional style.
 
 ```scala
-use ["std", "functional"]
+use std, functional
 
 nums = [1,2,3,4,5,6,7,8,9,10]
 nums = filter(nums, def(x) = x % 2 == 0)
@@ -93,7 +93,7 @@ println "Sum: " + stream(range(1, 11))
 Why not?
 
 ```scala
-use ["std", "types", "math"]
+use std, types, math
 
 def `..`(a, b) = range(a, b)
 def `**`(a, b) = int(pow(a, b))
@@ -107,13 +107,11 @@ for y : 1 .. 10 {
 Easy async HTTP requests with `http` module.
 
 ```scala
-use "std"
-use "http"
-use "functional"
+use std, http, functional
 
 // GET request
 http("https://api.github.com/events", def(r) {
-  use "json"
+  use json
   events = jsondecode(r)
   println events[0]
 })

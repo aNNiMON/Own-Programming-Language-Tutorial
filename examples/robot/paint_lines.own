@@ -1,4 +1,4 @@
-use "robot"
+use robot
 
 pause = 5
 xstep = 50 ystep = 5

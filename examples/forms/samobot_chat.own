@@ -1,4 +1,4 @@
-use ["std", "http", "forms"]
+use std, http, forms
 
 chatHistory = newLabel("<html>Чат с самоботом<br>")
 messageField = newTextField()

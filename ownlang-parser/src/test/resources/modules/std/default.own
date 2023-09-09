@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testDefaultNumber() {
   assertEquals(123, default(0, 123))
@@ -9,7 +9,7 @@ def testDefaultString() {
 }
 
 def testDefaultNull() {
-  use "java"
+  use java
   assertEquals("not null", default(null, "not null"))
 }
 

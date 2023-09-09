@@ -1,4 +1,4 @@
-use "std"
+use std
 
 println "Destructuring assignment"
 arr = ["a", "b", "c"]

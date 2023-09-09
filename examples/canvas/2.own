@@ -1,5 +1,4 @@
-use "std"
-use "canvas"
+use std, canvas
 
 w = 800   h = 600
 window("canvas example 2", w, h);

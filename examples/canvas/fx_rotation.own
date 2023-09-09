@@ -1,5 +1,4 @@
-use "canvasfx"
-use "std"
+use canvasfx, std
 
 // http://www.developer.com/java/data/using-graphics-in-javafx.html
 

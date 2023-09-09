@@ -50,14 +50,14 @@
         desc_ru: возвращает значение `a`, если оно не пустое, иначе возвращается значение `b`
         since: 1.4.0
         example: |-
-          use "std"
+          use std
 
           user = {"name": "", "lastname": "Doe"}
           name = default(user.name, "Unknown")
           lastname = default(user.lastname, "Unknown")
           println name + " " + lastname  // Unknown Doe
         example_ru: |-
-          use "std"
+          use std
 
           user = {"name": "", "lastname": "Иванов"}
           name = default(user.name, "Имя неизвестно")
@@ -68,12 +68,12 @@
         desc: "prints values to console, separate them by space and puts newline at the end. Takes variable number of arguments"
         desc_ru: "выводит значения в консоль, разделяя их пробелом, а потом ставит перенос строки. Может принимать переменное значение аргументов"
         example: |-
-          use "std"
+          use std
 
           echo(1, "abc") // prints "1 abc" to console
           echo(1, 2, 3, 4, 5, "a", "b") // prints "1 2 3 4 5 a b"
         example_ru: |-
-          use "std"
+          use std
 
           echo(1, "abc") // выведет строку "1 abc" в консоль
           echo(1, 2, 3, 4, 5, "a", "b") // выведет строку "1 2 3 4 5 a b" в консоль"
@@ -103,7 +103,7 @@
         desc: "creates array with `size`.\n`newarray(x)` - creates 1D array, `newarray(x,y)` - creates 2D array"
         desc_ru: "оздаёт массив с размером size. Если указать 1 аргумент - создаётся одномерный массив, если 2 аргумента - двухмерный и т.д"
         example: |-
-          use "std"
+          use std
 
           println newarray(4) // [0, 0, 0, 0]
           println newarray(2, 3) // [[0, 0, 0], [0, 0, 0]]
@@ -136,7 +136,7 @@
           `range(from, to)` - создаёт промежуток от `from` до `to` (не включительно) с шагом 1
           `range(from, to, step)` - создаёт промежуток от `from` до `to` (не включительно) с шагом `step`
         example: |-
-          use "std"
+          use std
 
           println range(3) // [0, 1, 2]
           r = range(-5, 0) // [-5, -4, -3, -2, -1]
@@ -175,7 +175,7 @@
         desc: "splits string `str` with regular expression `regex` into array. `limit` parameter affects the length of resulting array"
         desc_ru: "разделяет строку `str` по шаблону `regex` и помещает элементы в массив. Если указан параметр `limit`, то будет произведено не более limit разбиений, соответственно размер результирующего массива будет ограничен этим значением limit"
         example: |-
-          use "std"
+          use std
 
           println split("a5b5c5d5e", "5") // ["a", "b", "c", "d", "e"]
           println split("a5b5c5d5e", "5", 3) // ["a", "b", "c5d5e"]
@@ -194,7 +194,7 @@
         desc_ru: обрезает начальные пробелы, сопровождаемые `marginPrefix` в каждой строке, и удаляет первую и последнюю строки, если они пустые
         since: 1.5.0
         example: |-
-          use "std"
+          use std
 
           println "
                   |123
@@ -205,7 +205,7 @@
         desc: "returns string from `startIndex` to `endIndex` or to end of string if `endIndex` is not set"
         desc_ru: "обрезает строку `str`, начиная от символа после позиции `startIndex` и по `endIndex`. Если `endIndex` не указан, обрезается до конца строки"
         example: |-
-          use "std"
+          use std
 
           println substring("abcde", 1) // bcde
           println substring("abcde", 2, 4) // cd
@@ -214,7 +214,7 @@
         desc: calls an asynchronous function synchronously
         desc_ru: делает асинхронный вызов синхронным
         example: |-
-          use ["std", "http"]
+          use std, http
 
           url = "https://whatthecommit.com/index.txt"
           result = sync(def(ret) {
@@ -231,7 +231,7 @@
 
             `args` - 0 или более аргументов, которые необходимо передать в функцию func
         example: |-
-          use "std"
+          use std
 
           thread(def() {
             println "New Thread"
@@ -252,7 +252,7 @@
         desc: "converts char code to string"
         desc_ru: "переводит код символа в строку"
         example: |-
-          use "std"
+          use std
 
           println toChar(48) // "0"
       - name: toHexString
@@ -276,14 +276,14 @@
         desc: suppress any error in `unsafeFunction` and returns the result of the `catchFunction` if any error occurs
         desc_ru: подавляет любые ошибки в `unsafeFunction` и возрвщает результат функции `catchFunction`, если была ошибка
         example: |-
-          use "std"
+          use std
 
           println try(def() = "success") // success
           println try(def() = try + 2) // -1
           println try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))
           println try(def() = try(), 42) // 42
         example_ru: |-
-          use "std"
+          use std
 
           println try(def() = "успех") // успех
           println try(def() = try + 2) // -1
@@ -356,7 +356,7 @@
         desc: "converts value to number if possible"
         desc_ru: "преобразует значение к числу, если это возможно"
         example: |-
-          use "types"
+          use types
 
           println typeof(number("2.3")) // 1 (NUMBER)
       - 
@@ -370,7 +370,7 @@
         desc: "converts value to string"
         desc_ru: "преобразует значение в строку"
         example: |-
-          use "types"
+          use types
 
           println typeof(string(1)) // 2 (STRING)
       - 
@@ -379,7 +379,7 @@
         desc: "returns the type of value"
         desc_ru: "возвращает тип переданного значения"
         example: |-
-          use "types"
+          use types
 
           println typeof(1) // 1 (NUMBER)
           println typeof("text") // 2 (STRING)
@@ -436,7 +436,7 @@
         desc: "returns the ceiling of `x`"
         desc_ru: "округляет вещественное число в большую сторону"
         example: |-
-          use "math"
+          use math
 
           ceil(6.4) // 7
       - 
@@ -470,7 +470,7 @@
         desc: "returns floor of `x`"
         desc_ru: "округляет вещественное число в меньшую сторону"
         example: |-
-          use "math"
+          use math
 
           floor(3.8) // 3
       - 
@@ -677,7 +677,7 @@
         desc: formats date by given format and returns string
         desc_ru: форматирует дату в указанном формате и возвращает строку
         example: |-
-          use "date"
+          use date
 
           d = newDate(2016, 4, 8)
           println formatDate(d, newFormat("yyyy/MM/dd")) // "2016/05/08"
@@ -687,7 +687,7 @@
         desc: parses date from string by given pattern. Returns DateValue
         desc_ru: парсит дату из строки в указанном шаблоне. Возвращает DateValue
         example: |-
-          use "date"
+          use date
 
           println parseDate("2016/05/08", newFormat("yyyy/MM/dd"))
       - 
@@ -795,12 +795,12 @@
 
             Возвращает дескриптор файла, который необходим для остальных функций.
         example: |-
-          use "files"
+          use files
 
           f1 = fopen("text.txt") // opens file text.txt for read in text mode
           f2 = fopen("E:/1.dat", "rbwb") // opens file 1.dat on drive E for binary read and write"
         example_ru: |-
-          use "files"
+          use files
 
           f1 = fopen("text.txt") // открывает файл text.txt для текстового чтения
           f2 = fopen("E:/1.dat", "rbwb") // открывает файл 1.dat на диске E для бинарного чтения и записи"
@@ -835,12 +835,12 @@
         desc: "returns array with filenames in given directory.\n\n f - directory descriptor"
         desc_ru: "возвращает массив с именами файлов в указанной директории.\n\n f - дескриптор папки"
         example: |-
-          use "files"
+          use files
 
           f1 = fopen("E:/examples", "") // opens directory examples for getting information
           list = listFiles(f1) // gets array with filenames in directory
         example_ru: |-
-          use "files"
+          use files
 
           f1 = fopen("E:/examples", "") // открыть папку examples для получения информации
           list = listFiles(f1) // получить массив с именами файлов в этой папке
@@ -860,7 +860,7 @@
         desc: "reads all bytes from file. Returns array with bytes"
         desc_ru: "чтение всех байт файла. Возвращает массив байт файла"
         example: |-
-          use ["std", "files"]
+          use std, files
 
           f1 = fopen("file.bin", "rb")
           array = readAllBytes(f1)
@@ -881,7 +881,7 @@
         desc: "reads `length` bytes of file `f` and stores to `array` starting from `offset+1` byte. Returns number of read bytes"
         desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то читается length байт в массив array, начиная с `offset+1` байта"
         example: |-
-          use "files"
+          use files
 
           f1 = fopen("file.bin", "rb") // file.bin must contain more than 5000 bytes
           array = newarray(2048)
@@ -889,7 +889,7 @@
           readCount = readBytes(f1, array, 10) // reads 2048 bytes starting from 11 byte
           readCount = readBytes(f1, array, 20, 10) // reads 10 bytes, starting from 21 byte
         example_ru: |-
-          use "files"
+          use files
 
           f1 = fopen("file.bin", "rb") // file.bin должен иметь больше 5000 байтов
           array = newarray(2048)
@@ -947,7 +947,7 @@
         desc: "renames (or moves) file"
         desc_ru: "переименование (или перемещение) файла"
         example: |-
-          use "files"
+          use files
 
           f1 = fopen("C:/file1", "i")
           f2 = fopen("E:/file2", "i")
@@ -1103,7 +1103,7 @@
               - `content_length` - Content-Length
               - `content_type` - Content-Type
         example: |-
-          use "http"
+          use http
           http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
             println "Added: " + v
           })
@@ -1112,7 +1112,7 @@
         desc: "downloads content by url as bytes array"
         desc_ru: "получает содержимое по указанному адресу в виде массива байт"
         example: |-
-          use ["http", "files"]
+          use http, files
           bytes = download("http://url")
           f = fopen("file", "wb")
           writeBytes(f, bytes)
@@ -1297,7 +1297,7 @@
         desc: 'downloads file from `downloadUrl` to `filePath`'
         desc_ru: 'скачивает файл по адресу `downloadUrl` и сохраняет в `filePath`'
         example: |-
-          use ["downloader", "std"]
+          use downloader, std
 
           MBYTES = 1048576.0 // 1024*1024
           url = "http://www.ovh.net/files/10Mb.dat"
@@ -1343,7 +1343,7 @@
         desc: "converts data to json string"
         desc_ru: "преобразует переданные данные в строку в формате json"
         example: |-
-          use "json"
+          use json
           print jsondecode("{\"key1\":1,\"key2\":[1,2,3],\"key3\":\"text\"}") // {key2=[1, 2, 3], key3=text, key1=1}
       - 
         name: "jsonencode"
@@ -1351,7 +1351,7 @@
         desc: "converts string to data"
         desc_ru: "преобразует строку в формате json в данные"
         example: |-
-          use "json"
+          use json
           data = {
             "key1": 1,
             "key2": [1, 2, 3],
@@ -1391,13 +1391,13 @@
           `mapper` используется для задания имени конечного файла внутри архива, а также для фильтрации. Если в mapper вернуть пустую строку, то файл будет пропущен.  
           Возвращает количество заархивированных файлов, либо -1, если создать архив не удалось.
         example: |-
-          use "zip"
+          use zip
           // Zip all files in directory
           zip("/tmp/dir", "/tmp/1.zip")
           // Zip .txt files
           zip("/tmp/dir", "/tmp/2.zip", def(p) = p.endsWith(".txt") ? p : "")
         example_ru: |-
-          use "zip"
+          use zip
           // Архивировать все файлы в директории
           zip("/tmp/dir", "/tmp/1.zip")
           // Архивировать .txt файлы
@@ -1418,7 +1418,7 @@
           Если `input` — ассоциативный массив, то архивируются файлы и папки перечисленные в ключах, а именами внутри архива будут служить значения.  
           Возвращает количество заархивированных файлов, либо -1, если создать архив не удалось.
         example: |-
-          use "zip"
+          use zip
           zipFiles("/tmp/dir/file.txt", "/tmp/1.zip")
           zipFiles(["/tmp/dir/file.txt", "/tmp/dir/readme.md"], "/tmp/2.zip")
           zipFiles({"/tmp/dir/file.txt" : "docs/1.md", "/tmp/dir/readme.md" : "docs/2.md"}, "/tmp/3.zip")
@@ -1434,13 +1434,13 @@
           `mapper` используется для задания имени конечного файла, а также для фильтрации. Если в mapper вернуть пустую строку, то файл будет пропущен.  
           Возвращает количество разархивированных файлов, либо -1, если разархивировать архив не удалось.
         example: |-
-          use "zip"
+          use zip
           // Unzip all files in directory
           unzip("/tmp/1.zip", "/tmp/dir")
           // Unzip .txt files
           unzip("/tmp/2.zip", "/tmp/dir", def(p) = p.endsWith(".txt") ? p : "")
         example_ru: |-
-          use "zip"
+          use zip
           // Распаковать все файлы в директории
           unzip("/tmp/1.zip", "/tmp/dir")
           // Распаковать .txt файлы
@@ -1461,7 +1461,7 @@
           Если `output` — ассоциативный массив, то разархивируются файлы перечисленные в ключах, а именами файлов будут служить значения.  
           Возвращает количество разархивированных файлов, либо -1, если разархивировать архив не удалось.
         example: |-
-          use "zip"
+          use zip
           unzipFiles("/tmp/1.zip", "file.txt")
           unzipFiles("/tmp/2.zip", ["file.txt", "readme.md"])
           unzipFiles("/tmp/3.zip", {"docs/1.md" : "/tmp/dir/file.txt", "docs/2.md" : "/tmp/dir/readme.md"})
@@ -1487,7 +1487,7 @@
           создаёт gzip архив с файлом `inputFile` и сохраняет в `outputFile`.  
           Возвращает 1 если компрессия завершилась успешно, и -1 в противном случае.
         example: |-
-          use "gzip"
+          use gzip
           gzip("/tmp/readme.md", "/tmp/readme.md.gz")
       - 
         name: gzipBytes
@@ -1495,7 +1495,7 @@
         desc: returns gzip-compressed input bytes.  
         desc_ru: возвращает сжатый в gzip массив байт.
         example: |-
-          use "gzip"
+          use gzip
           bytes = gzipBytes([0, 119, 87, 80/* ... */])
       - 
         name: ungzip
@@ -1507,7 +1507,7 @@
           распаковывает gzip архив в файл `outputFile`.  
           Возвращает 1 если операция завершилась успешно, и -1 в противном случае.
         example: |-
-          use "gzip"
+          use gzip
           gzip("/tmp/readme.md.gz", "/tmp/readme.md")
       - 
         name: ungzipBytes
@@ -1515,7 +1515,7 @@
         desc: returns uncompressed bytes.  
         desc_ru: возвращает распакованный gzip массив байт.
         example: |-
-          use "gzip"
+          use gzip
           bytes = ungzipBytes([0, 119, 87, 80/* ... */])
   - name: functional
     scope: "both"
@@ -1539,7 +1539,7 @@
         desc: "combines functions"
         desc_ru: "комбинирует функции (композиция)"
         example: |-
-          use "functional"
+          use functional
 
           def f1() = 2
           def f2(a) = a*2
@@ -1551,7 +1551,7 @@
           f = def() = f3(f2(f1()))
           println f() // 1
         example_ru: |-
-          use "functional"
+          use functional
 
           def f1() = 2
           def f2(a) = a*2
@@ -1571,7 +1571,7 @@
         desc: "filters array or object.\n\n`predicate` is a function which takes one argument for arrays or two arguments for objects"
         desc_ru: "фильтрует массив или объект и возвращает массив только с теми элементами, которые удовлетворяют предикату `predicate`.\n\n`predicate` - функция которая принимает один (для массивов) и два (для объектов) аргумента"
         example: |-
-          use "functional"
+          use functional
 
           nums = [1,2,3,4,5]
           print filter(nums, def(x) = x % 2 == 0) // [2, 4]
@@ -1580,7 +1580,7 @@
         desc: "converts each element of an array to other array"
         desc_ru: "преобразует каждый элемент массива в массив элементов"
         example: |-
-          use "functional"
+          use functional
 
           nums = [1,2,3,4]
           print flatmap(nums, def(x) {
@@ -1594,7 +1594,7 @@
         desc: "invokes function `consumer` for each element of array or map `data`\n\nIf `data` - массив, то в функции consumer необходим один параметр, если объект - два (ключ и значение)."
         desc_ru: "для каждого элемента в массиве или объекте `data` вызывает функцию `consumer`\n\nЕсли `data` - массив, то в функции `consumer` необходим один параметр, если объект - два (ключ и значение)."
         example: |-
-          use "functional"
+          use functional
 
           foreach([1, 2, 3], def(v) { print v })
           foreach({"key": 1, "key2": "text"}, def(key, value) {
@@ -1605,7 +1605,7 @@
         desc: "converts elements of array or map. If `data` is array - `mapper` converts his elements, if `data` is object - you need to pass `keyMapper` - converts keys and `valueMapper` - converts values"
         desc_ru: "преобразует элементы массива или объекта.\n\nЕсли `data` - массив, то функция `mapper` преобразует значения, если объект - необходимо передать две функции: `keyMapper` - преобразует ключи и `valueMapper` - преобразует значения"
         example: |-
-          use "functional"
+          use functional
 
           nums = [3,4,5]
           print map(nums, def(x) = x * x) // [9, 16, 25]
@@ -1614,7 +1614,7 @@
         desc: "converts elements of an array or a map to one value, e.g. sum of elements or concatenation string. `accumulator` takes one argument for array and two arguments for object (key and value)."
         desc_ru: "преобразует элементы массива или объекта в одно значение, например сумма элементов или объединение в строку.\n\nЕсли `data` - массив, то в функции `accumulator` необходим один параметр, если объект - два (ключ и значение)"
         example: |-
-          use "functional"
+          use functional
 
           nums = [1,2,3,4,5]
           print reduce(nums, 0, def(x, y) = x + y) // 15
@@ -1623,7 +1623,7 @@
         desc: "sorts elements of an array or an object by `function` result"
         desc_ru: "сортирует элементы массива по данным в функции `function`"
         example: |-
-          use "functional"
+          use functional
 
           data = [
             {"k1": 2, "k2": "x"},
@@ -1748,11 +1748,11 @@
         desc: "performs click with given mouse buttons"
         desc_ru: "осуществляет клик мышью с заданными клавишами"
         example: |-
-          use "robot"
+          use robot
 
           click(BUTTON3) // right mouse button click
         example_ru: |-
-          use "robot"
+          use robot
 
           click(BUTTON3) // клик правой кнопкой мыши
       - 
@@ -1767,7 +1767,7 @@
         desc: "executes the process with parameters"
         desc_ru: "запускает процесс с параметрами\n\n  Если функции переданы несколько аргументов, то они все передаются как параметры.\n  Если функции передан только один параметр - массив, то его элементы передаются как параметры.\n  Если функции передан только один параметр, то он служит единственным параметром."
         example: |-
-          use "robot"
+          use robot
 
           execProcess("mkdir", "Test")
           execProcess("mkdir Test")
@@ -1878,7 +1878,7 @@
         desc: "executes tests and returns information about it's results"
         desc_ru: "запускает тесты и возвращает информацию о них по завершению работы в виде строки"
         example: |-
-          use "ounit"
+          use ounit
 
           def testAdditionOnNumbers() {
             assertEquals(6, 0 + 1 + 2 + 3)
@@ -2191,7 +2191,7 @@
 
           Возвращает ImageFXValue.
         example: |-
-          use "canvasfx"
+          use canvasfx
 
           g = showcanvas()
           url = "http://lorempixel.com/640/480/nature"
@@ -3608,12 +3608,12 @@
             desc: "replaces input with the result of the given callback"
             desc_ru: "заменяет строку результатом заданной функции"
             example: |-
-              use "regex"
+              use regex
               in = "dog cat"
               pattern = regex("(\w+)\s(\w+)", Pattern.I)
               println pattern.replaceCallback(in, def(m) = m.group(2) + "" + m.group(1))
             example_ru: |-
-              use "regex"
+              use regex
               in = "пёс кот"
               pattern = regex("(\w+)\s(\w+)", Pattern.U | Pattern.I)
               println pattern.replaceCallback(in, def(m) = m.group(2) + "о" + m.group(1))
@@ -3656,13 +3656,13 @@
             desc: "replaces input with the result of the given callback"
             desc_ru: "заменяет строку результатом заданной функции"
             example: |-
-              use "regex"
+              use regex
               in = "dog cat"
               pattern = regex("(\w+)\s(\w+)", Pattern.I)
               matcher = pattern.matcher(in)
               println matcher.replaceCallback(def(m) = m.group(2) + m.group(1))
             example_ru: |-
-              use "regex"
+              use regex
               in = "пёс кот"
               pattern = regex("(\w+)\s(\w+)", Pattern.U | Pattern.I)
               matcher = pattern.matcher(in)
@@ -3872,7 +3872,7 @@
 
           Возвращает BitmapValue.
         example: |-
-          use ["http", "canvas"]
+          use http, canvas
 
           g = showcanvas()
           url = "http://lorempixel.com/640/480/nature"
@@ -3952,7 +3952,7 @@
         desc: "shows canvas screen and returns GraphicsValue"
         desc_ru: "показывает экран канваса и возвращает GraphicsValue"
         example: |-
-          use "canvas"
+          use canvas
           g = showcanvas()
     types:
       - name: "BitmapValue"
@@ -4599,7 +4599,7 @@
         desc: ''
         desc_ru: ''
         example: |-
-          use ["std", "android", "forms"]
+          use std, android, forms
 
           img1 = assetBitmap("ownlang.png")
           img2 = img1
@@ -4679,7 +4679,7 @@
         desc: 'creates ProgressBar'
         desc_ru: 'создаёт ProgressBar'
         example: |-
-          use ["android", "forms"]
+          use android, forms
           pb1 = newProgressBar(R.attr.progressBarStyleHorizontal)
           pb1.setMax(100)
           pb1.setProgress(10)
@@ -6730,7 +6730,7 @@
         desc_ru: |-
           подписывается на обработчик получения местоположения
         example: |-
-          use ["std", "gps"]
+          use std, gps
 
           provider = "gps" // or passive, network if exists
           // requestUpdates(provider, 0, 25, def(loc) = echo("location changed: ", loc))

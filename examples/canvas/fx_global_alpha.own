@@ -1,4 +1,4 @@
-use "canvasfx"
+use canvasfx
 
 steps = 20
 size = 25

@@ -1,5 +1,4 @@
-use "canvas"
-use "std"
+use canvas, std
 
 w = 800  h = 600
 window("Animate line with thread", w, h)

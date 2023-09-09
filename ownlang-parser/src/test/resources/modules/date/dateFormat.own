@@ -1,4 +1,4 @@
-use "date"
+use date
 
 def testDateFormat() {
   d = formatDate(newDate(2016, 04, 10), newFormat("yyyy/MM/dd HH:mm:ss"))

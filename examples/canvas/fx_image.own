@@ -1,4 +1,4 @@
-use "canvasfx"
+use canvasfx
 
 g = window("JavaFX Image demo", 400, 200)
 img = createImage("https://picsum.photos/400/200/")

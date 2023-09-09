@@ -1,4 +1,4 @@
-use ["std", "gzip"]
+use std, gzip
 
 // println "Gzip single file"
 // gzip("absolute path to file", "example.gz")

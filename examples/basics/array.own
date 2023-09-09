@@ -3,7 +3,7 @@ println arr1[0]
 println arr1[1]
 println arr1
 
-use "std"
+use std
 arr2 = newarray(5)
 arr2[2] = 9
 arr2 = arr2 :: 4

@@ -1,5 +1,4 @@
-use "canvasfx"
-use "std"
+use canvasfx, std
 
 w = 800   h = 600
 g = window("JavaFX Event handler example", w, h)

@@ -1,5 +1,4 @@
-use "std"
-use "canvasfx"
+use std, canvasfx
 
 graphics = window("JavaFX Image negation demo", 400, 400)
 imgSource = createImage("https://picsum.photos/400/200/")

@@ -1,6 +1,5 @@
 // Simple parser example
-use "std"
-use "types"
+use std, types
 
 operations = {
   "+" : def(a,b) = a+b,

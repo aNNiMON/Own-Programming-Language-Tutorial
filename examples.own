@@ -5,7 +5,7 @@
  *
  */
 
-use ["date", "files", "robot", "std"]
+use date, files, robot, std
 
 DEBUG = true
 EXAMPLES_DIR = "examples"

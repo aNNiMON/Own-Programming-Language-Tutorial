@@ -45,7 +45,7 @@ def testIsEmpty() {
 }
 
 def testExtensionFunction() {
-  use "std"
+  use std
   s = "1es1"
   assertEquals("test", s.replace("1", "t"))
 }

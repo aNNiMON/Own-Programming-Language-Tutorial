@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testToHexString() {
   assertEquals("8d", toHexString(141))

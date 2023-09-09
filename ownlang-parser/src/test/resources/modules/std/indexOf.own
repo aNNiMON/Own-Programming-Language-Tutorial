@@ -1,4 +1,4 @@
-use "std"
+use std
 
 def testIndexOf() {
   assertEquals(3, indexOf("123/456/789", "/"))

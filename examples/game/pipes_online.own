@@ -1,6 +1,4 @@
-use "std"
-use "canvas"
-use "socket"
+use std, canvas, socket
 
 /// --- PIPES CELL ---
 CELL_START = 0

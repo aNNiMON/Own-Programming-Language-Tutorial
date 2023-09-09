@@ -1,4 +1,4 @@
-use "forms"
+use forms
 
 button = newButton("Click me")
 button.onClick(def() {

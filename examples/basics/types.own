@@ -1,5 +1,4 @@
-use "std"
-use "types"
+use std, types
 
 println typeof(1)
 println typeof("1")

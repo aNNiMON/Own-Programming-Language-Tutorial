@@ -28,14 +28,14 @@ arr = [1, 2, 3, 4, 5]
 for a : arr
   print a
 
-use "std"
+use std
 println "\n\nForeach loop on map"
 object = {"key1": "value1", "key2": 100, "arr": [0, 1]}
 for key, value : object
   echo(key, ":", value)
 
 
-use "functional"
+use functional
 
 // Functional loop
 println "\n\nFunctional loop on array"

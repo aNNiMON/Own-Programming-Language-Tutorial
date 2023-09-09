@@ -8,12 +8,15 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import java.util.Collections;
+import java.util.Map;
 
 public final class okhttp implements Module {
 
     private static final HttpClientValue defaultClient = new HttpClientValue(new OkHttpClient());
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
         MapValue requestBody = new MapValue(5);
         requestBody.set("bytes", args -> {
             Arguments.checkOrOr(2, 4, args.length);
@@ -49,27 +52,30 @@ public final class okhttp implements Module {
                     args[1].asString()
             ));
         });
-        ScopeHandler.setConstant("RequestBody", requestBody);
 
 
-        MapValue multipartBody = new MapValue(10);
+        MapValue multipartBody = new MapValue(6);
         multipartBody.set("ALTERNATIVE", new StringValue(MultipartBody.ALTERNATIVE.toString()));
         multipartBody.set("DIGEST", new StringValue(MultipartBody.DIGEST.toString()));
         multipartBody.set("FORM", new StringValue(MultipartBody.FORM.toString()));
         multipartBody.set("MIXED", new StringValue(MultipartBody.MIXED.toString()));
         multipartBody.set("PARALLEL", new StringValue(MultipartBody.PARALLEL.toString()));
         multipartBody.set("builder", args -> new MultipartBodyBuilderValue());
-        ScopeHandler.setConstant("MultipartBody", multipartBody);
 
 
-        MapValue okhttp = new MapValue(5);
+        MapValue okhttp = new MapValue(3);
         okhttp.set("client", defaultClient);
         okhttp.set("request", args -> new RequestBuilderValue());
-        ScopeHandler.setConstant("okhttp", okhttp);
+
+        return Map.of(
+                "RequestBody", requestBody,
+                "MultipartBody", multipartBody,
+                "okhttp", okhttp
+        );
     }
 
     @Override
-    public void init() {
-        initConstants();
+    public Map<String, Function> functions() {
+        return Collections.emptyMap();
     }
 }

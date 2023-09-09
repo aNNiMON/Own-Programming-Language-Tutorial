@@ -6,9 +6,7 @@ import com.annimon.ownlang.modules.Module;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 /**
  *
@@ -27,21 +25,25 @@ public final class date implements Module {
             SECOND = new StringValue("second"),
             MILLISECOND = new StringValue("millisecond");
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("STYLE_FULL", NumberValue.of(DateFormat.FULL));
-        ScopeHandler.setConstant("STYLE_LONG", NumberValue.of(DateFormat.LONG));
-        ScopeHandler.setConstant("STYLE_MEDIUM", NumberValue.of(DateFormat.MEDIUM));
-        ScopeHandler.setConstant("STYLE_SHORT", NumberValue.of(DateFormat.SHORT));
+    @Override
+    public Map<String, Value> constants() {
+        return Map.of(
+                "STYLE_FULL", NumberValue.of(DateFormat.FULL),
+                "STYLE_LONG", NumberValue.of(DateFormat.LONG),
+                "STYLE_MEDIUM", NumberValue.of(DateFormat.MEDIUM),
+                "STYLE_SHORT", NumberValue.of(DateFormat.SHORT)
+        );
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("newDate", new date_newDate());
-        ScopeHandler.setFunction("newFormat", new date_newFormat());
-        ScopeHandler.setFunction("formatDate", new date_format());
-        ScopeHandler.setFunction("parseDate", new date_parse());
-        ScopeHandler.setFunction("toTimestamp", new date_toTimestamp());
+    public Map<String, Function> functions() {
+        return Map.of(
+                "newDate", new date_newDate(),
+                "newFormat", new date_newFormat(),
+                "formatDate", new date_format(),
+                "parseDate", new date_parse(),
+                "toTimestamp", new date_toTimestamp()
+        );
     }
 
     //<editor-fold defaultstate="collapsed" desc="Values">

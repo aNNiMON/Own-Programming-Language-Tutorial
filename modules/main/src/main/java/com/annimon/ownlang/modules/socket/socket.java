@@ -6,6 +6,8 @@ import com.annimon.ownlang.modules.Module;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * socket.io module.
@@ -14,27 +16,29 @@ import java.net.URISyntaxException;
  */
 public final class socket implements Module {
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("EVENT_CONNECT", new StringValue(Socket.EVENT_CONNECT));
-        ScopeHandler.setConstant("EVENT_CONNECTING", new StringValue(Socket.EVENT_CONNECTING));
-        ScopeHandler.setConstant("EVENT_CONNECT_ERROR", new StringValue(Socket.EVENT_CONNECT_ERROR));
-        ScopeHandler.setConstant("EVENT_CONNECT_TIMEOUT", new StringValue(Socket.EVENT_CONNECT_TIMEOUT));
-        ScopeHandler.setConstant("EVENT_DISCONNECT", new StringValue(Socket.EVENT_DISCONNECT));
-        ScopeHandler.setConstant("EVENT_ERROR", new StringValue(Socket.EVENT_ERROR));
-        ScopeHandler.setConstant("EVENT_MESSAGE", new StringValue(Socket.EVENT_MESSAGE));
-        ScopeHandler.setConstant("EVENT_PING", new StringValue(Socket.EVENT_PING));
-        ScopeHandler.setConstant("EVENT_PONG", new StringValue(Socket.EVENT_PONG));
-        ScopeHandler.setConstant("EVENT_RECONNECT", new StringValue(Socket.EVENT_RECONNECT));
-        ScopeHandler.setConstant("EVENT_RECONNECTING", new StringValue(Socket.EVENT_RECONNECTING));
-        ScopeHandler.setConstant("EVENT_RECONNECT_ATTEMPT", new StringValue(Socket.EVENT_RECONNECT_ATTEMPT));
-        ScopeHandler.setConstant("EVENT_RECONNECT_ERROR", new StringValue(Socket.EVENT_RECONNECT_ERROR));
-        ScopeHandler.setConstant("EVENT_RECONNECT_FAILED", new StringValue(Socket.EVENT_RECONNECT_FAILED));
+    @Override
+    public Map<String, Value> constants() {
+        final var result = new LinkedHashMap<String, Value>(15);
+        result.put("EVENT_CONNECT", new StringValue(Socket.EVENT_CONNECT));
+        result.put("EVENT_CONNECTING", new StringValue(Socket.EVENT_CONNECTING));
+        result.put("EVENT_CONNECT_ERROR", new StringValue(Socket.EVENT_CONNECT_ERROR));
+        result.put("EVENT_CONNECT_TIMEOUT", new StringValue(Socket.EVENT_CONNECT_TIMEOUT));
+        result.put("EVENT_DISCONNECT", new StringValue(Socket.EVENT_DISCONNECT));
+        result.put("EVENT_ERROR", new StringValue(Socket.EVENT_ERROR));
+        result.put("EVENT_MESSAGE", new StringValue(Socket.EVENT_MESSAGE));
+        result.put("EVENT_PING", new StringValue(Socket.EVENT_PING));
+        result.put("EVENT_PONG", new StringValue(Socket.EVENT_PONG));
+        result.put("EVENT_RECONNECT", new StringValue(Socket.EVENT_RECONNECT));
+        result.put("EVENT_RECONNECTING", new StringValue(Socket.EVENT_RECONNECTING));
+        result.put("EVENT_RECONNECT_ATTEMPT", new StringValue(Socket.EVENT_RECONNECT_ATTEMPT));
+        result.put("EVENT_RECONNECT_ERROR", new StringValue(Socket.EVENT_RECONNECT_ERROR));
+        result.put("EVENT_RECONNECT_FAILED", new StringValue(Socket.EVENT_RECONNECT_FAILED));
+        return result;
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("newSocket", socket::newSocket);
+    public Map<String, Function> functions() {
+        return Map.of("newSocket", socket::newSocket);
     }
 
     private static Value newSocket(Value[] args) {

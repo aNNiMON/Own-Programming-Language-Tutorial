@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.lang.reflect.Modifier;
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
@@ -83,7 +85,9 @@ public final class canvasfx implements Module {
         }
     }
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
+        final var result = new HashMap<String, Value>(11);
         // Color class
         final Map<Value, Value> colors = Arrays.stream(Color.class.getDeclaredFields())
                 .filter(f -> Modifier.isStatic(f.getModifiers()))
@@ -98,94 +102,96 @@ public final class canvasfx implements Module {
         colors.put(new StringValue("rgb"), new FunctionValue(new rgbColor()));
         colors.put(new StringValue("hsb"), new FunctionValue(new hsbColor()));
         colors.put(new StringValue("web"), new FunctionValue(new webColor()));
-        ScopeHandler.setConstant("Color", new MapValue(colors));
+        result.put("Color", new MapValue(colors));
 
         final MapValue arcType = new MapValue(ArcType.values().length);
         for (ArcType value : ArcType.values()) {
             arcType.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("ArcType", arcType);
+        result.put("ArcType", arcType);
 
         final MapValue fillRule = new MapValue(FillRule.values().length);
         for (FillRule value : FillRule.values()) {
             fillRule.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("FillRule", fillRule);
+        result.put("FillRule", fillRule);
 
         final MapValue blendMode = new MapValue(BlendMode.values().length);
         for (BlendMode value : BlendMode.values()) {
             blendMode.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("BlendMode", blendMode);
+        result.put("BlendMode", blendMode);
 
         final MapValue lineCap = new MapValue(StrokeLineCap.values().length);
         for (StrokeLineCap value : StrokeLineCap.values()) {
             lineCap.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("StrokeLineCap", lineCap);
+        result.put("StrokeLineCap", lineCap);
 
         final MapValue lineJoin = new MapValue(StrokeLineJoin.values().length);
         for (StrokeLineJoin value : StrokeLineJoin.values()) {
             lineJoin.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("StrokeLineJoin", lineJoin);
+        result.put("StrokeLineJoin", lineJoin);
 
         final MapValue textAlignment = new MapValue(TextAlignment.values().length);
         for (TextAlignment value : TextAlignment.values()) {
             textAlignment.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("TextAlignment", textAlignment);
+        result.put("TextAlignment", textAlignment);
 
         final MapValue vPos = new MapValue(VPos.values().length);
         for (VPos value : VPos.values()) {
             vPos.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("VPos", vPos);
+        result.put("VPos", vPos);
 
         final MapValue events = new MapValue(Events.values().length);
         for (Events value : Events.values()) {
             events.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("Events", events);
+        result.put("Events", events);
 
         final MapValue mouseButton = new MapValue(MouseButton.values().length);
         for (MouseButton value : MouseButton.values()) {
             mouseButton.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("MouseButton", mouseButton);
+        result.put("MouseButton", mouseButton);
 
         final MapValue keyCodes = new MapValue(KeyCode.values().length);
         for (KeyCode value : KeyCode.values()) {
             keyCodes.set(value.name(), NumberValue.of(value.ordinal()));
         }
-        ScopeHandler.setConstant("KeyCode", keyCodes);
+        result.put("KeyCode", keyCodes);
+        return result;
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("window", new CreateWindow());
-        ScopeHandler.setFunction("repaint", new Repaint());
-        
-        ScopeHandler.setFunction("BlendEffect", new BlendEffect());
-        ScopeHandler.setFunction("BloomEffect", new BloomEffect());
-        ScopeHandler.setFunction("BoxBlurEffect", new BoxBlurEffect());
-        ScopeHandler.setFunction("ColorAdjustEffect", new ColorAdjustEffect());
-        ScopeHandler.setFunction("ColorInputEffect", new ColorInputEffect());
-        ScopeHandler.setFunction("DropShadowEffect", new DropShadowEffect());
-        ScopeHandler.setFunction("GaussianBlurEffect", new GaussianBlurEffect());
-        ScopeHandler.setFunction("GlowEffect", new GlowEffect());
-        ScopeHandler.setFunction("InnerShadowEffect", new InnerShadowEffect());
-        ScopeHandler.setFunction("LightingEffect", new LightingEffect());
-        ScopeHandler.setFunction("MotionBlurEffect", new MotionBlurEffect());
-        ScopeHandler.setFunction("PerspectiveTransformEffect", new PerspectiveTransformEffect());
-        ScopeHandler.setFunction("ReflectionEffect", new ReflectionEffect());
-        ScopeHandler.setFunction("SepiaToneEffect", new SepiaToneEffect());
-        ScopeHandler.setFunction("ShadowEffect", new ShadowEffect());
-        
-        ScopeHandler.setFunction("addEventFilter", new addEventFilter());
-        ScopeHandler.setFunction("addEventHandler", new addEventHandler());
-        ScopeHandler.setFunction("createImage", new createImage());
+    public Map<String, Function> functions() {
+        final var result = new LinkedHashMap<String, Function>(20);
+        result.put("window", new CreateWindow());
+        result.put("repaint", new Repaint());
+
+        result.put("BlendEffect", new BlendEffect());
+        result.put("BloomEffect", new BloomEffect());
+        result.put("BoxBlurEffect", new BoxBlurEffect());
+        result.put("ColorAdjustEffect", new ColorAdjustEffect());
+        result.put("ColorInputEffect", new ColorInputEffect());
+        result.put("DropShadowEffect", new DropShadowEffect());
+        result.put("GaussianBlurEffect", new GaussianBlurEffect());
+        result.put("GlowEffect", new GlowEffect());
+        result.put("InnerShadowEffect", new InnerShadowEffect());
+        result.put("LightingEffect", new LightingEffect());
+        result.put("MotionBlurEffect", new MotionBlurEffect());
+        result.put("PerspectiveTransformEffect", new PerspectiveTransformEffect());
+        result.put("ReflectionEffect", new ReflectionEffect());
+        result.put("SepiaToneEffect", new SepiaToneEffect());
+        result.put("ShadowEffect", new ShadowEffect());
+
+        result.put("addEventFilter", new addEventFilter());
+        result.put("addEventHandler", new addEventHandler());
+        result.put("createImage", new createImage());
+        return result;
     }
     
     private static class ColorValue implements Value {

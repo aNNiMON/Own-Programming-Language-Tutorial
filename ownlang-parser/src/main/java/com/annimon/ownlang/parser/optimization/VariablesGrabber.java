@@ -1,13 +1,11 @@
 package com.annimon.ownlang.parser.optimization;
 
-import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.lib.Value;
-import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.ast.*;
-import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
-import static com.annimon.ownlang.parser.visitors.VisitorUtils.isVariable;
 import java.util.HashMap;
 import java.util.Map;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
+import static com.annimon.ownlang.parser.visitors.VisitorUtils.isVariable;
 
 public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableInfo>> {
 
@@ -100,18 +98,11 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
     @Override
     public Node visit(UseStatement s, Map<String, VariableInfo> t) {
         if (grabModuleConstants) {
-            // To get module constants we need to store current constants, clear all, then load module.
-            final Map<String, Value> currentConstants = new HashMap<>(ScopeHandler.constants());
-            ScopeHandler.constants().clear();
-            s.loadConstants();
-            // Grab module constants
-            for (Map.Entry<String, Value> entry : ScopeHandler.constants().entrySet()) {
+            for (Map.Entry<String, Value> entry : s.loadConstants().entrySet()) {
                 final VariableInfo var = variableInfo(t, entry.getKey());
                 var.value = entry.getValue();
                 t.put(entry.getKey(), var);
             }
-            // Restore previous constants
-            ScopeHandler.constants().putAll(currentConstants);
         }
         return super.visit(s, t);
     }

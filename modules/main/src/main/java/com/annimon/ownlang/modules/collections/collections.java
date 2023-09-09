@@ -3,29 +3,28 @@ package com.annimon.ownlang.modules.collections;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Supplier;
+import static java.util.Map.entry;
 
 public class collections implements Module {
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
+        return Collections.emptyMap();
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("hashMap", mapFunction(HashMap::new));
-        ScopeHandler.setFunction("linkedHashMap", mapFunction(LinkedHashMap::new));
-        ScopeHandler.setFunction("concurrentHashMap", mapFunction(ConcurrentHashMap::new));
-        ScopeHandler.setFunction("treeMap", sortedMapFunction(TreeMap::new, TreeMap::new));
-        ScopeHandler.setFunction("concurrentSkipListMap", sortedMapFunction(ConcurrentSkipListMap::new, ConcurrentSkipListMap::new));
+    public Map<String, Function> functions() {
+        return Map.ofEntries(
+                entry("hashMap", mapFunction(HashMap::new)),
+                entry("linkedHashMap", mapFunction(LinkedHashMap::new)),
+                entry("concurrentHashMap", mapFunction(ConcurrentHashMap::new)),
+                entry("treeMap", sortedMapFunction(TreeMap::new, TreeMap::new)),
+                entry("concurrentSkipListMap", sortedMapFunction(ConcurrentSkipListMap::new, ConcurrentSkipListMap::new))
+        );
     }
 
     private Function mapFunction(final Supplier<Map<Value, Value>> mapSupplier) {

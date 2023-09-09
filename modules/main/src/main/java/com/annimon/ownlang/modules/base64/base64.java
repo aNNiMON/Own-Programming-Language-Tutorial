@@ -4,21 +4,24 @@ import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Map;
 
 public class base64 implements Module {
 
     private static final int TYPE_URL_SAFE = 8;
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("BASE64_URL_SAFE", NumberValue.of(TYPE_URL_SAFE));
+    @Override
+    public Map<String, Value> constants() {
+        return Map.of("BASE64_URL_SAFE", NumberValue.of(TYPE_URL_SAFE));
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("base64encode", this::base64encode);
-        ScopeHandler.setFunction("base64decode", this::base64decode);
-        ScopeHandler.setFunction("base64encodeToString", this::base64encodeToString);
+    public Map<String, Function> functions() {
+        return Map.of(
+                "base64encode", this::base64encode,
+                "base64decode", this::base64decode,
+                "base64encodeToString", this::base64encodeToString
+        );
     }
 
     private Value base64encode(Value[] args) {

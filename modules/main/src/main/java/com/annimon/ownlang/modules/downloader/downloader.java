@@ -9,13 +9,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Map;
 
 public final class downloader implements Module {
 
     @Override
-    public void init() {
-        ScopeHandler.setFunction("getContentLength", this::getContentLength);
-        ScopeHandler.setFunction("downloader", this::downloader);
+    public Map<String, Value> constants() {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public Map<String, Function> functions() {
+        return Map.of(
+                "getContentLength", this::getContentLength,
+                "downloader", this::downloader
+        );
     }
 
     private Value getContentLength(Value[] args) {

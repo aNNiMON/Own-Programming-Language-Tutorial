@@ -28,6 +28,10 @@ public final class ScopeHandler {
         return rootScope.getFunctions();
     }
 
+    static RootScope rootScope() {
+        return rootScope;
+    }
+
     /**
      * Resets a scope for new program execution
      */
@@ -54,7 +58,6 @@ public final class ScopeHandler {
             }
         }
     }
-
 
 
     public static boolean isFunctionExists(String name) {

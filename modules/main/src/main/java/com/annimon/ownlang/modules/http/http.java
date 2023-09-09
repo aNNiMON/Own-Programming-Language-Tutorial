@@ -1,7 +1,10 @@
 package com.annimon.ownlang.modules.http;
 
-import com.annimon.ownlang.lib.ScopeHandler;
+import com.annimon.ownlang.lib.Function;
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.modules.Module;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  *
@@ -9,14 +12,17 @@ import com.annimon.ownlang.modules.Module;
  */
 public final class http implements Module {
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
+        return Collections.emptyMap();
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("urlencode", new http_urlencode());
-        ScopeHandler.setFunction("http", new http_http());
-        ScopeHandler.setFunction("download", new http_download());
+    public Map<String, Function> functions() {
+        return Map.of(
+                "urlencode", new http_urlencode(),
+                "http", new http_http(),
+                "download", new http_download()
+        );
     }
 }

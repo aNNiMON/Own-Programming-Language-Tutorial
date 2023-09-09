@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -25,39 +27,43 @@ import java.util.function.Function;
  */
 public final class jdbc implements Module {
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("TRANSACTION_NONE", NumberValue.of(Connection.TRANSACTION_NONE));
-        ScopeHandler.setConstant("TRANSACTION_READ_COMMITTED", NumberValue.of(Connection.TRANSACTION_READ_COMMITTED));
-        ScopeHandler.setConstant("TRANSACTION_READ_UNCOMMITTED", NumberValue.of(Connection.TRANSACTION_READ_UNCOMMITTED));
-        ScopeHandler.setConstant("TRANSACTION_REPEATABLE_READ", NumberValue.of(Connection.TRANSACTION_REPEATABLE_READ));
-        ScopeHandler.setConstant("TRANSACTION_SERIALIZABLE", NumberValue.of(Connection.TRANSACTION_SERIALIZABLE));
+    @Override
+    public Map<String, Value> constants() {
+        final var result = new LinkedHashMap<String, Value>(25);
+        result.put("TRANSACTION_NONE", NumberValue.of(Connection.TRANSACTION_NONE));
+        result.put("TRANSACTION_READ_COMMITTED", NumberValue.of(Connection.TRANSACTION_READ_COMMITTED));
+        result.put("TRANSACTION_READ_UNCOMMITTED", NumberValue.of(Connection.TRANSACTION_READ_UNCOMMITTED));
+        result.put("TRANSACTION_REPEATABLE_READ", NumberValue.of(Connection.TRANSACTION_REPEATABLE_READ));
+        result.put("TRANSACTION_SERIALIZABLE", NumberValue.of(Connection.TRANSACTION_SERIALIZABLE));
 
-        ScopeHandler.setConstant("CLOSE_ALL_RESULTS", NumberValue.of(Statement.CLOSE_ALL_RESULTS));
-        ScopeHandler.setConstant("CLOSE_CURRENT_RESULT", NumberValue.of(Statement.CLOSE_CURRENT_RESULT));
-        ScopeHandler.setConstant("EXECUTE_FAILED", NumberValue.of(Statement.EXECUTE_FAILED));
-        ScopeHandler.setConstant("KEEP_CURRENT_RESULT", NumberValue.of(Statement.KEEP_CURRENT_RESULT));
-        ScopeHandler.setConstant("NO_GENERATED_KEYS", NumberValue.of(Statement.NO_GENERATED_KEYS));
-        ScopeHandler.setConstant("RETURN_GENERATED_KEYS", NumberValue.of(Statement.RETURN_GENERATED_KEYS));
-        ScopeHandler.setConstant("SUCCESS_NO_INFO", NumberValue.of(Statement.SUCCESS_NO_INFO));
+        result.put("CLOSE_ALL_RESULTS", NumberValue.of(Statement.CLOSE_ALL_RESULTS));
+        result.put("CLOSE_CURRENT_RESULT", NumberValue.of(Statement.CLOSE_CURRENT_RESULT));
+        result.put("EXECUTE_FAILED", NumberValue.of(Statement.EXECUTE_FAILED));
+        result.put("KEEP_CURRENT_RESULT", NumberValue.of(Statement.KEEP_CURRENT_RESULT));
+        result.put("NO_GENERATED_KEYS", NumberValue.of(Statement.NO_GENERATED_KEYS));
+        result.put("RETURN_GENERATED_KEYS", NumberValue.of(Statement.RETURN_GENERATED_KEYS));
+        result.put("SUCCESS_NO_INFO", NumberValue.of(Statement.SUCCESS_NO_INFO));
 
-        ScopeHandler.setConstant("CLOSE_CURSORS_AT_COMMIT", NumberValue.of(ResultSet.CLOSE_CURSORS_AT_COMMIT));
-        ScopeHandler.setConstant("CONCUR_READ_ONLY", NumberValue.of(ResultSet.CONCUR_READ_ONLY));
-        ScopeHandler.setConstant("CONCUR_UPDATABLE", NumberValue.of(ResultSet.CONCUR_UPDATABLE));
-        ScopeHandler.setConstant("FETCH_FORWARD", NumberValue.of(ResultSet.FETCH_FORWARD));
-        ScopeHandler.setConstant("FETCH_REVERSE", NumberValue.of(ResultSet.FETCH_REVERSE));
-        ScopeHandler.setConstant("FETCH_UNKNOWN", NumberValue.of(ResultSet.FETCH_UNKNOWN));
-        ScopeHandler.setConstant("HOLD_CURSORS_OVER_COMMIT", NumberValue.of(ResultSet.HOLD_CURSORS_OVER_COMMIT));
-        ScopeHandler.setConstant("TYPE_FORWARD_ONLY", NumberValue.of(ResultSet.TYPE_FORWARD_ONLY));
-        ScopeHandler.setConstant("TYPE_SCROLL_INSENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_INSENSITIVE));
-        ScopeHandler.setConstant("TYPE_SCROLL_SENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_SENSITIVE));
+        result.put("CLOSE_CURSORS_AT_COMMIT", NumberValue.of(ResultSet.CLOSE_CURSORS_AT_COMMIT));
+        result.put("CONCUR_READ_ONLY", NumberValue.of(ResultSet.CONCUR_READ_ONLY));
+        result.put("CONCUR_UPDATABLE", NumberValue.of(ResultSet.CONCUR_UPDATABLE));
+        result.put("FETCH_FORWARD", NumberValue.of(ResultSet.FETCH_FORWARD));
+        result.put("FETCH_REVERSE", NumberValue.of(ResultSet.FETCH_REVERSE));
+        result.put("FETCH_UNKNOWN", NumberValue.of(ResultSet.FETCH_UNKNOWN));
+        result.put("HOLD_CURSORS_OVER_COMMIT", NumberValue.of(ResultSet.HOLD_CURSORS_OVER_COMMIT));
+        result.put("TYPE_FORWARD_ONLY", NumberValue.of(ResultSet.TYPE_FORWARD_ONLY));
+        result.put("TYPE_SCROLL_INSENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_INSENSITIVE));
+        result.put("TYPE_SCROLL_SENSITIVE", NumberValue.of(ResultSet.TYPE_SCROLL_SENSITIVE));
+        return result;
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("getConnection", getConnectionFunction());
-        ScopeHandler.setFunction("sqlite", getConnectionFunction("jdbc:sqlite:"));
-        ScopeHandler.setFunction("mysql", getConnectionFunction("jdbc:"));
+    public Map<String, com.annimon.ownlang.lib.Function> functions() {
+        return Map.of(
+                "getConnection", getConnectionFunction(),
+                "sqlite", getConnectionFunction("jdbc:sqlite:"),
+                "mysql", getConnectionFunction("jdbc:")
+        );
     }
 
     private static com.annimon.ownlang.lib.Function getConnectionFunction() {

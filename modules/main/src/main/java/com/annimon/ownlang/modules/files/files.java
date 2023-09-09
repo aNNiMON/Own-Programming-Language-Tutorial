@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -28,71 +29,74 @@ public final class files implements Module {
 
     private static Map<Integer, FileInfo> files;
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction()));
+    @Override
+    public Map<String, Value> constants() {
+        return Map.of(
+                "FILES_COMPARATOR", new FunctionValue(new filesComparatorFunction())
+        );
     }
 
     @Override
-    public void init() {
+    public Map<String, Function> functions() {
         files = new HashMap<>();
-        initConstants();
+        final var result = new LinkedHashMap<String, Function>(50);
+        result.put("fopen", new fopen());
+        result.put("flush", new flush());
+        result.put("fclose", new fclose());
 
-        ScopeHandler.setFunction("fopen", new fopen());
-        ScopeHandler.setFunction("flush", new flush());
-        ScopeHandler.setFunction("fclose", new fclose());
-        
         // Operations
-        ScopeHandler.setFunction("copy", new copy());
-        ScopeHandler.setFunction("delete", fileToBoolean(File::delete));
-        ScopeHandler.setFunction("listFiles", new listFiles());
-        ScopeHandler.setFunction("mkdir", fileToBoolean(File::mkdir));
-        ScopeHandler.setFunction("mkdirs", fileToBoolean(File::mkdirs));
-        ScopeHandler.setFunction("rename", new rename());
+        result.put("copy", new copy());
+        result.put("delete", fileToBoolean(File::delete));
+        result.put("listFiles", new listFiles());
+        result.put("mkdir", fileToBoolean(File::mkdir));
+        result.put("mkdirs", fileToBoolean(File::mkdirs));
+        result.put("rename", new rename());
 
         // Permissions and statuses
-        ScopeHandler.setFunction("canExecute", fileToBoolean(File::canExecute));
-        ScopeHandler.setFunction("canRead", fileToBoolean(File::canRead));
-        ScopeHandler.setFunction("canWrite", fileToBoolean(File::canWrite));
-        ScopeHandler.setFunction("isDirectory", fileToBoolean(File::isDirectory));
-        ScopeHandler.setFunction("isFile", fileToBoolean(File::isFile));
-        ScopeHandler.setFunction("isHidden", fileToBoolean(File::isHidden));
-        ScopeHandler.setFunction("setExecutable", new setExecutable());
-        ScopeHandler.setFunction("setReadable", new setReadable());
-        ScopeHandler.setFunction("setReadOnly", new setReadOnly());
-        ScopeHandler.setFunction("setWritable", new setWritable());
+        result.put("canExecute", fileToBoolean(File::canExecute));
+        result.put("canRead", fileToBoolean(File::canRead));
+        result.put("canWrite", fileToBoolean(File::canWrite));
+        result.put("isDirectory", fileToBoolean(File::isDirectory));
+        result.put("isFile", fileToBoolean(File::isFile));
+        result.put("isHidden", fileToBoolean(File::isHidden));
+        result.put("setExecutable", new setExecutable());
+        result.put("setReadable", new setReadable());
+        result.put("setReadOnly", new setReadOnly());
+        result.put("setWritable", new setWritable());
 
-        ScopeHandler.setFunction("exists", fileToBoolean(File::exists));
-        ScopeHandler.setFunction("fileSize", new fileSize());
-        ScopeHandler.setFunction("getParent", new getParent());
-        ScopeHandler.setFunction("lastModified", new lastModified());
-        ScopeHandler.setFunction("setLastModified", new setLastModified());
+        result.put("exists", fileToBoolean(File::exists));
+        result.put("fileSize", new fileSize());
+        result.put("getParent", new getParent());
+        result.put("lastModified", new lastModified());
+        result.put("setLastModified", new setLastModified());
 
         // IO
-        ScopeHandler.setFunction("readBoolean", new readBoolean());
-        ScopeHandler.setFunction("readByte", new readByte());
-        ScopeHandler.setFunction("readBytes", new readBytes());
-        ScopeHandler.setFunction("readAllBytes", new readAllBytes());
-        ScopeHandler.setFunction("readChar", new readChar());
-        ScopeHandler.setFunction("readShort", new readShort());
-        ScopeHandler.setFunction("readInt", new readInt());
-        ScopeHandler.setFunction("readLong", new readLong());
-        ScopeHandler.setFunction("readFloat", new readFloat());
-        ScopeHandler.setFunction("readDouble", new readDouble());
-        ScopeHandler.setFunction("readUTF", new readUTF());
-        ScopeHandler.setFunction("readLine", new readLine());
-        ScopeHandler.setFunction("readText", new readText());
-        ScopeHandler.setFunction("writeBoolean", new writeBoolean());
-        ScopeHandler.setFunction("writeByte", new writeByte());
-        ScopeHandler.setFunction("writeBytes", new writeBytes());
-        ScopeHandler.setFunction("writeChar", new writeChar());
-        ScopeHandler.setFunction("writeShort", new writeShort());
-        ScopeHandler.setFunction("writeInt", new writeInt());
-        ScopeHandler.setFunction("writeLong", new writeLong());
-        ScopeHandler.setFunction("writeFloat", new writeFloat());
-        ScopeHandler.setFunction("writeDouble", new writeDouble());
-        ScopeHandler.setFunction("writeUTF", new writeUTF());
-        ScopeHandler.setFunction("writeLine", new writeLine());
-        ScopeHandler.setFunction("writeText", new writeText());
+        result.put("readBoolean", new readBoolean());
+        result.put("readByte", new readByte());
+        result.put("readBytes", new readBytes());
+        result.put("readAllBytes", new readAllBytes());
+        result.put("readChar", new readChar());
+        result.put("readShort", new readShort());
+        result.put("readInt", new readInt());
+        result.put("readLong", new readLong());
+        result.put("readFloat", new readFloat());
+        result.put("readDouble", new readDouble());
+        result.put("readUTF", new readUTF());
+        result.put("readLine", new readLine());
+        result.put("readText", new readText());
+        result.put("writeBoolean", new writeBoolean());
+        result.put("writeByte", new writeByte());
+        result.put("writeBytes", new writeBytes());
+        result.put("writeChar", new writeChar());
+        result.put("writeShort", new writeShort());
+        result.put("writeInt", new writeInt());
+        result.put("writeLong", new writeLong());
+        result.put("writeFloat", new writeFloat());
+        result.put("writeDouble", new writeDouble());
+        result.put("writeUTF", new writeUTF());
+        result.put("writeLine", new writeLine());
+        result.put("writeText", new writeText());
+        return result;
     }
 
     private static class filesComparatorFunction implements Function {

@@ -2,11 +2,13 @@ package com.annimon.ownlang.modules.regex;
 
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public final class regex implements Module {
 
-    public static void initConstants() {
+    @Override
+    public Map<String, Value> constants() {
         MapValue map = new MapValue(20);
         map.set("UNIX_LINES", NumberValue.of(Pattern.UNIX_LINES));
         map.set("I", NumberValue.of(Pattern.CASE_INSENSITIVE));
@@ -37,13 +39,12 @@ public final class regex implements Module {
             return ArrayValue.of(pattern.split(args[1].asString(), limit));
         });
         map.set("compile", regex::compile);
-        ScopeHandler.setConstant("Pattern", map);
+        return Map.of("Pattern", map);
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("regex", regex::compile);
+    public Map<String, Function> functions() {
+        return Map.of("regex", regex::compile);
     }
 
     private static Value compile(Value[] args) {

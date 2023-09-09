@@ -28,16 +28,12 @@ public final class ModulesInfoCreator {
                 .map(File::getName)
                 .toArray(String[]::new);
         for (String moduleName : moduleNames) {
-            final String moduleClassPath = String.format("com.annimon.ownlang.modules.%s.%s", moduleName, moduleName);
-            Class<?> moduleClass = Class.forName(moduleClassPath);
-            ScopeHandler.resetScope();
-            final Module module = (Module) moduleClass.getDeclaredConstructor().newInstance();
-            module.init();
+            final Module module = ModuleLoader.load(moduleName);
 
             final ModuleInfo moduleInfo = new ModuleInfo(moduleName);
-            moduleInfo.functions.addAll(ScopeHandler.functions().keySet());
-            moduleInfo.constants.putAll(ScopeHandler.constants());
-            moduleInfo.types.addAll(listValues(moduleClass));
+            moduleInfo.functions.addAll(module.functions().keySet());
+            moduleInfo.constants.putAll(module.constants());
+            moduleInfo.types.addAll(listValues(module.getClass()));
             moduleInfos.add(moduleInfo);
         }
 

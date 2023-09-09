@@ -2,6 +2,8 @@ package com.annimon.ownlang.modules.math;
 
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
 import java.util.function.DoubleUnaryOperator;
@@ -15,50 +17,54 @@ public final class math implements Module {
 
     private static final DoubleFunction<NumberValue> doubleToNumber = NumberValue::of;
 
-    public static void initConstants() {
-        ScopeHandler.setConstant("PI", NumberValue.of(Math.PI));
-        ScopeHandler.setConstant("E", NumberValue.of(Math.E));
+    @Override
+    public Map<String, Value> constants() {
+        return Map.of(
+                "PI", NumberValue.of(Math.PI),
+                "E", NumberValue.of(Math.E)
+        );
     }
 
     @Override
-    public void init() {
-        initConstants();
-        ScopeHandler.setFunction("abs", math::abs);
-        ScopeHandler.setFunction("acos", functionConvert(Math::acos));
-        ScopeHandler.setFunction("asin", functionConvert(Math::asin));
-        ScopeHandler.setFunction("atan", functionConvert(Math::atan));
-        ScopeHandler.setFunction("atan2", biFunctionConvert(Math::atan2));
-        ScopeHandler.setFunction("cbrt", functionConvert(Math::cbrt));
-        ScopeHandler.setFunction("ceil", functionConvert(Math::ceil));
-        ScopeHandler.setFunction("copySign", math::copySign);
-        ScopeHandler.setFunction("cos", functionConvert(Math::cos));
-        ScopeHandler.setFunction("cosh", functionConvert(Math::cosh));
-        ScopeHandler.setFunction("exp", functionConvert(Math::exp));
-        ScopeHandler.setFunction("expm1", functionConvert(Math::expm1));
-        ScopeHandler.setFunction("floor", functionConvert(Math::floor));
-        ScopeHandler.setFunction("getExponent", math::getExponent);
-        ScopeHandler.setFunction("hypot", biFunctionConvert(Math::hypot));
-        ScopeHandler.setFunction("IEEEremainder", biFunctionConvert(Math::IEEEremainder));
-        ScopeHandler.setFunction("log", functionConvert(Math::log));
-        ScopeHandler.setFunction("log1p", functionConvert(Math::log1p));
-        ScopeHandler.setFunction("log10", functionConvert(Math::log10));
-        ScopeHandler.setFunction("max", math::max);
-        ScopeHandler.setFunction("min", math::min);
-        ScopeHandler.setFunction("nextAfter", math::nextAfter);
-        ScopeHandler.setFunction("nextUp", functionConvert(Math::nextUp, Math::nextUp));
-        ScopeHandler.setFunction("nextDown", functionConvert(Math::nextDown, Math::nextDown));
-        ScopeHandler.setFunction("pow", biFunctionConvert(Math::pow));
-        ScopeHandler.setFunction("rint", functionConvert(Math::rint));
-        ScopeHandler.setFunction("round", math::round);
-        ScopeHandler.setFunction("signum", functionConvert(Math::signum, Math::signum));
-        ScopeHandler.setFunction("sin", functionConvert(Math::sin));
-        ScopeHandler.setFunction("sinh", functionConvert(Math::sinh));
-        ScopeHandler.setFunction("sqrt", functionConvert(Math::sqrt));
-        ScopeHandler.setFunction("tan", functionConvert(Math::tan));
-        ScopeHandler.setFunction("tanh", functionConvert(Math::tanh));
-        ScopeHandler.setFunction("toDegrees", functionConvert(Math::toDegrees));
-        ScopeHandler.setFunction("toRadians", functionConvert(Math::toRadians));
-        ScopeHandler.setFunction("ulp", functionConvert(Math::ulp, Math::ulp));
+    public Map<String, Function> functions() {
+        final var result = new LinkedHashMap<String, Function>(16);
+        result.put("abs", math::abs);
+        result.put("acos", functionConvert(Math::acos));
+        result.put("asin", functionConvert(Math::asin));
+        result.put("atan", functionConvert(Math::atan));
+        result.put("atan2", biFunctionConvert(Math::atan2));
+        result.put("cbrt", functionConvert(Math::cbrt));
+        result.put("ceil", functionConvert(Math::ceil));
+        result.put("copySign", math::copySign);
+        result.put("cos", functionConvert(Math::cos));
+        result.put("cosh", functionConvert(Math::cosh));
+        result.put("exp", functionConvert(Math::exp));
+        result.put("expm1", functionConvert(Math::expm1));
+        result.put("floor", functionConvert(Math::floor));
+        result.put("getExponent", math::getExponent);
+        result.put("hypot", biFunctionConvert(Math::hypot));
+        result.put("IEEEremainder", biFunctionConvert(Math::IEEEremainder));
+        result.put("log", functionConvert(Math::log));
+        result.put("log1p", functionConvert(Math::log1p));
+        result.put("log10", functionConvert(Math::log10));
+        result.put("max", math::max);
+        result.put("min", math::min);
+        result.put("nextAfter", math::nextAfter);
+        result.put("nextUp", functionConvert(Math::nextUp, Math::nextUp));
+        result.put("nextDown", functionConvert(Math::nextDown, Math::nextDown));
+        result.put("pow", biFunctionConvert(Math::pow));
+        result.put("rint", functionConvert(Math::rint));
+        result.put("round", math::round);
+        result.put("signum", functionConvert(Math::signum, Math::signum));
+        result.put("sin", functionConvert(Math::sin));
+        result.put("sinh", functionConvert(Math::sinh));
+        result.put("sqrt", functionConvert(Math::sqrt));
+        result.put("tan", functionConvert(Math::tan));
+        result.put("tanh", functionConvert(Math::tanh));
+        result.put("toDegrees", functionConvert(Math::toDegrees));
+        result.put("toRadians", functionConvert(Math::toRadians));
+        result.put("ulp", functionConvert(Math::ulp, Math::ulp));
+        return result;
     }
 
     private static Value abs(Value[] args) {

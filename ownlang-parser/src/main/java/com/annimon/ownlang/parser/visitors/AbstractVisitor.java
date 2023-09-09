@@ -192,6 +192,6 @@ public abstract class AbstractVisitor implements Visitor {
 
     @Override
     public void visit(UseStatement st) {
-        st.expression.accept(this);
+
     }
 }

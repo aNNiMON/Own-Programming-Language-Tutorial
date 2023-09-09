@@ -23,14 +23,7 @@ public class ModuleDetector extends AbstractVisitor {
 
     @Override
     public void visit(UseStatement st) {
-        if (st.expression instanceof ArrayExpression ae) {
-            for (Expression expr : ae.elements) {
-                modules.add(expr.eval().asString());
-            }
-        }
-        if (st.expression instanceof ValueExpression ve) {
-            modules.add(ve.value.asString());
-        }
+        modules.addAll(st.modules);
         super.visit(st);
     }
 }

@@ -5,12 +5,7 @@ import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -145,7 +140,7 @@ public final class Parser {
             return new ReturnStatement(expression());
         }
         if (match(TokenType.USE)) {
-            return new UseStatement(expression());
+            return useStatement();
         }
         if (match(TokenType.INCLUDE)) {
             return new IncludeStatement(expression());
@@ -168,13 +163,21 @@ public final class Parser {
         return assignmentStatement();
     }
 
+    private UseStatement useStatement() {
+        final var modules = new HashSet<String>();
+        do {
+            modules.add(consume(TokenType.WORD).text());
+        } while (match(TokenType.COMMA));
+        return new UseStatement(modules);
+    }
+
     private Statement assignmentStatement() {
         if (match(TokenType.EXTRACT)) {
             return destructuringAssignment();
         }
         final Expression expression = expression();
-        if (expression instanceof Statement) {
-            return (Statement) expression;
+        if (expression instanceof Statement statement) {
+            return statement;
         }
         throw new ParseException("Unknown statement: " + get(0));
     }

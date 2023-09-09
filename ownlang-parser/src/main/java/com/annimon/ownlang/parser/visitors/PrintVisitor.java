@@ -358,7 +358,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
     @Override
     public StringBuilder visit(UseStatement s, StringBuilder t) {
         t.append("use ");
-        s.expression.accept(this, t);
+        t.append(String.join(", ", s.modules));
         return t;
     }
 

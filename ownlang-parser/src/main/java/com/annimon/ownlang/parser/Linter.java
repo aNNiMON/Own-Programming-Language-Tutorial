@@ -6,7 +6,6 @@ import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.parser.linters.AssignValidator;
 import com.annimon.ownlang.parser.linters.DefaultFunctionsOverrideValidator;
-import com.annimon.ownlang.parser.linters.UseWithNonStringValueValidator;
 
 public final class Linter {
 
@@ -22,7 +21,6 @@ public final class Linter {
     
     public void execute() {
         final Visitor[] validators = new Visitor[] {
-            new UseWithNonStringValueValidator(),
             new AssignValidator(),
             new DefaultFunctionsOverrideValidator()
         };

@@ -1,11 +1,8 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.exceptions.TypeException;
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.modules.Module;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 /**
  *
@@ -16,24 +13,17 @@ public final class UseStatement extends InterruptableNode implements Statement {
     private static final String PACKAGE = "com.annimon.ownlang.modules.%s.%s";
     private static final String INIT_CONSTANTS_METHOD = "initConstants";
     
-    public final Expression expression;
+    public final Collection<String> modules;
     
-    public UseStatement(Expression expression) {
-        this.expression = expression;
+    public UseStatement(Collection<String> modules) {
+        this.modules = modules;
     }
     
     @Override
     public void execute() {
         super.interruptionCheck();
-        final Value value = expression.eval();
-        switch (value.type()) {
-            case Types.ARRAY -> {
-                for (Value module : ((ArrayValue) value)) {
-                    loadModule(module.asString());
-                }
-            }
-            case Types.STRING -> loadModule(value.asString());
-            default -> throw typeException(value);
+        for (String module : modules) {
+            loadModule(module);
         }
     }
 
@@ -49,19 +39,9 @@ public final class UseStatement extends InterruptableNode implements Statement {
     }
 
     public void loadConstants() {
-        if (expression instanceof ArrayExpression ae) {
-            for (Expression expr : ae.elements) {
-                loadConstants(expr.eval().asString());
-            }
+        for (String module : modules) {
+            loadConstants(module);
         }
-        if (expression instanceof ValueExpression ve) {
-            loadConstants(ve.value.asString());
-        }
-    }
-
-    private TypeException typeException(Value value) {
-        return new TypeException("Array or string required in 'use' statement, " +
-                "got " + Types.typeToString(value.type()) + " " + value);
     }
 
     private void loadConstants(String moduleName) {
@@ -86,6 +66,6 @@ public final class UseStatement extends InterruptableNode implements Statement {
 
     @Override
     public String toString() {
-        return "use " + expression;
+        return "use " + String.join(", ", modules);
     }
 }

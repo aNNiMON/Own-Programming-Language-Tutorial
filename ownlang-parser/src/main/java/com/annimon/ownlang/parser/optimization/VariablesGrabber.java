@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.optimization;
 
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.Variables;
 import com.annimon.ownlang.parser.ast.*;
@@ -99,34 +100,20 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
     @Override
     public Node visit(UseStatement s, Map<String, VariableInfo> t) {
         if (grabModuleConstants) {
-            // To get module variables we need  to store current variables, clear all, then load module.
-            final Map<String, Value> currentVariables = new HashMap<>(Variables.variables());
-            Variables.variables().clear();
-            if (canLoadConstants(s.expression)) {
-                s.loadConstants();
-            }
-            // Grab module variables
-            for (Map.Entry<String, Value> entry : Variables.variables().entrySet()) {
+            // To get module constants we need to store current constants, clear all, then load module.
+            final Map<String, Value> currentConstants = new HashMap<>(ScopeHandler.constants());
+            ScopeHandler.constants().clear();
+            s.loadConstants();
+            // Grab module constants
+            for (Map.Entry<String, Value> entry : ScopeHandler.constants().entrySet()) {
                 final VariableInfo var = variableInfo(t, entry.getKey());
                 var.value = entry.getValue();
                 t.put(entry.getKey(), var);
             }
-            // Restore previous variables
-            Variables.variables().putAll(currentVariables);
+            // Restore previous constants
+            ScopeHandler.constants().putAll(currentConstants);
         }
         return super.visit(s, t);
-    }
-
-    private boolean canLoadConstants(Expression expression) {
-        if (expression instanceof ArrayExpression ae) {
-            for (Expression expr : ae.elements) {
-                if (!isValue(expr)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return isValue(expression);
     }
 
     @Override

@@ -357,10 +357,10 @@ public final class Lexer {
     }
     
     private void addToken(TokenType type, String text) {
-        tokens.add(new Token(type, text, row, col));
+        tokens.add(new Token(type, text, new Pos(row, col)));
     }
     
     private LexerException error(String text) {
-        return new LexerException(row, col, text);
+        return new LexerException(new Pos(row, col), text);
     }
 }

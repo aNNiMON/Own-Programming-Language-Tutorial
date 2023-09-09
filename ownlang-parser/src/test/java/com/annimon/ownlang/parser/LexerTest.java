@@ -172,11 +172,11 @@ public class LexerTest {
     }
     
     private static Token token(TokenType type) {
-        return token(type, "", 0, 0);
+        return token(type, "", new Pos(0, 0));
     }
     
-    private static Token token(TokenType type, String text, int row, int col) {
-        return new Token(type, text, row, col);
+    private static Token token(TokenType type, String text, Pos pos) {
+        return new Token(type, text, pos);
     }
     
 }

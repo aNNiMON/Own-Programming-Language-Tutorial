@@ -17,8 +17,8 @@ public final class ParseErrors implements Iterable<ParseError> {
         errors.clear();
     }
     
-    public void add(Exception ex, int line) {
-        errors.add(new ParseError(line, ex));
+    public void add(Exception ex, Pos pos) {
+        errors.add(new ParseError(ex, pos));
     }
     
     public boolean hasErrors() {

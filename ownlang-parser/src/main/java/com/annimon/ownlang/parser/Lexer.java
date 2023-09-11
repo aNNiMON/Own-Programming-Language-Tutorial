@@ -138,10 +138,7 @@ public final class Lexer {
             else if (isOwnLangIdentifierStart(current)) tokenizeWord();
             else if (current == '`') tokenizeExtendedWord();
             else if (current == '"') tokenizeText();
-            else if (current == '#') {
-                next();
-                tokenizeHexNumber(1);
-            }
+            else if (current == '#') tokenizeHexNumber(1);
             else if (OPERATOR_CHARS.indexOf(current) != -1) {
                 tokenizeOperator();
             } else {
@@ -154,10 +151,9 @@ public final class Lexer {
     
     private void tokenizeNumber() {
         clearBuffer();
+        final Pos startPos = markPos();
         char current = peek(0);
         if (current == '0' && (peek(1) == 'x' || (peek(1) == 'X'))) {
-            next();
-            next();
             tokenizeHexNumber(2);
             return;
         }
@@ -170,11 +166,15 @@ public final class Lexer {
             buffer.append(current);
             current = next();
         }
-        addToken(TokenType.NUMBER, buffer.toString());
+        addToken(TokenType.NUMBER, buffer.toString(), startPos);
     }
     
-    private void tokenizeHexNumber(int skipped) {
+    private void tokenizeHexNumber(int skipChars) {
         clearBuffer();
+        final Pos startPos = markPos();
+        // Skip HEX prefix 0x or #
+        for (int i = 0; i < skipChars; i++) next();
+
         char current = peek(0);
         while (isHexNumber(current) || (current == '_')) {
             if (current != '_') {
@@ -185,7 +185,7 @@ public final class Lexer {
         }
         final int length = buffer.length();
         if (length > 0) {
-            addToken(TokenType.HEX_NUMBER, buffer.toString());
+            addToken(TokenType.HEX_NUMBER, buffer.toString(), startPos);
         }
     }
 
@@ -210,11 +210,13 @@ public final class Lexer {
                 return;
             }
         }
+
+        final Pos startPos = markPos();
         clearBuffer();
         while (true) {
             final String text = buffer.toString();
             if (!text.isEmpty() && !OPERATORS.containsKey(text + current)) {
-                addToken(OPERATORS.get(text));
+                addToken(OPERATORS.get(text), startPos);
                 return;
             }
             buffer.append(current);
@@ -224,6 +226,7 @@ public final class Lexer {
     
     private void tokenizeWord() {
         clearBuffer();
+        final Pos startPos = markPos();
         buffer.append(peek(0));
         char current = next();
         while (true) {
@@ -236,13 +239,14 @@ public final class Lexer {
         
         final String word = buffer.toString();
         if (KEYWORDS.containsKey(word)) {
-            addToken(KEYWORDS.get(word));
+            addToken(KEYWORDS.get(word), startPos);
         } else {
-            addToken(TokenType.WORD, word);
+            addToken(TokenType.WORD, word, startPos);
         }
     }
 
     private void tokenizeExtendedWord() {
+        final Pos startPos = markPos();
         next();// skip `
         clearBuffer();
         char current = peek(0);
@@ -254,10 +258,11 @@ public final class Lexer {
             current = next();
         }
         next(); // skip closing `
-        addToken(TokenType.WORD, buffer.toString());
+        addToken(TokenType.WORD, buffer.toString(), startPos);
     }
     
     private void tokenizeText() {
+        final Pos startPos = markPos();
         next();// skip "
         clearBuffer();
         char current = peek(0);
@@ -303,7 +308,7 @@ public final class Lexer {
         }
         next(); // skip closing "
         
-        addToken(TokenType.TEXT, buffer.toString());
+        addToken(TokenType.TEXT, buffer.toString(), startPos);
     }
     
     private void tokenizeComment() {
@@ -335,15 +340,20 @@ public final class Lexer {
     private void clearBuffer() {
         buffer.setLength(0);
     }
+
+    private Pos markPos() {
+        return new Pos(row, col);
+    }
     
     private char next() {
-        pos++;
         final char result = peek(0);
         if (result == '\n') {
             row++;
             col = 1;
         } else col++;
-        return result;
+
+        pos++;
+        return peek(0);
     }
     
     private char peek(int relativePosition) {
@@ -352,15 +362,15 @@ public final class Lexer {
         return input.charAt(position);
     }
     
-    private void addToken(TokenType type) {
-        addToken(type, "");
+    private void addToken(TokenType type, Pos startPos) {
+        addToken(type, "", startPos);
     }
     
-    private void addToken(TokenType type, String text) {
-        tokens.add(new Token(type, text, new Pos(row, col)));
+    private void addToken(TokenType type, String text, Pos startRow) {
+        tokens.add(new Token(type, text, startRow));
     }
-    
+
     private LexerException error(String text) {
-        return new LexerException(new Pos(row, col), text);
+        return new LexerException(markPos(), text);
     }
 }

@@ -12,6 +12,7 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:${versions.junit}")
     testImplementation "org.junit.jupiter:junit-jupiter-params:${versions.junit}"
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation("org.assertj:assertj-core:${versions.assertj}")
     testImplementation "org.openjdk.jmh:jmh-core:${versions.jmh}"
     testImplementation "org.openjdk.jmh:jmh-generator-annprocess:${versions.jmh}"
     testAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${versions.jmh}"

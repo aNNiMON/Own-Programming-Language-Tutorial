@@ -7,7 +7,8 @@ ext {
             jline: '2.14.5', // jline:jline
 
             junit: '5.9.2', // org.junit:junit-bom
-            jmh: '1.37' // org.openjdk.jmh:jmh-core
+            jmh: '1.37', // org.openjdk.jmh:jmh-core
+            assertj: '3.24.2' // org.assertj:assertj-core
     ]
 }
 

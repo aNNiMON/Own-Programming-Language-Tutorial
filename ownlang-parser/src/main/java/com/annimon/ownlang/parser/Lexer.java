@@ -133,21 +133,20 @@ public final class Lexer {
         while (pos < length) {
             // Fast path for skipping whitespaces
             while (Character.isWhitespace(peek(0))) {
-                next();
+                skip();
             }
 
             final char current = peek(0);
-            if (Character.isDigit(current)) tokenizeNumber();
+            if (isNumber(current)) tokenizeNumber();
             else if (isOwnLangIdentifierStart(current)) tokenizeWord();
-            else if (current == '`') tokenizeExtendedWord();
             else if (current == '"') tokenizeText();
+            else if (OPERATOR_CHARS.indexOf(current) != -1) tokenizeOperator();
+            else if (Character.isWhitespace(current)) skip();
+            else if (current == '`') tokenizeExtendedWord();
             else if (current == '#') tokenizeHexNumber(1);
-            else if (OPERATOR_CHARS.indexOf(current) != -1) {
-                tokenizeOperator();
-            } else {
-                // whitespaces
-                next();
-            }
+            else if (current == ';') skip(); // ignore semicolon
+            else if (current == '\0') break;
+            else throw error("Unknown token " + current);
         }
         return tokens;
     }
@@ -163,7 +162,7 @@ public final class Lexer {
         boolean hasDot = false;
         while (true) {
             if (current == '.') {
-                if (hasDot) throw error("Invalid float number");
+                if (hasDot) throw error("Invalid float number " + buffer);
                 hasDot = true;
             } else if (!Character.isDigit(current)) {
                 break;
@@ -178,7 +177,7 @@ public final class Lexer {
         clearBuffer();
         final Pos startPos = markPos();
         // Skip HEX prefix 0x or #
-        for (int i = 0; i < skipChars; i++) next();
+        for (int i = 0; i < skipChars; i++) skip();
 
         char current = peek(0);
         while (isHexNumber(current) || (current == '_')) {
@@ -188,13 +187,18 @@ public final class Lexer {
             }
             current = next();
         }
-        if (!buffer.isEmpty()) {
-            addToken(TokenType.HEX_NUMBER, buffer.toString(), startPos);
-        }
+
+        if (buffer.isEmpty()) throw error("Empty HEX value");
+        if (peek(-1) == '_') throw error("HEX value cannot end with _");
+        addToken(TokenType.HEX_NUMBER, buffer.toString(), startPos);
+    }
+
+    private static boolean isNumber(char current) {
+        return ('0' <= current && current <= '9');
     }
 
     private static boolean isHexNumber(char current) {
-        return Character.isDigit(current)
+        return ('0' <= current && current <= '9')
                 || ('a' <= current && current <= 'f')
                 || ('A' <= current && current <= 'F');
     }
@@ -203,13 +207,9 @@ public final class Lexer {
         char current = peek(0);
         if (current == '/') {
             if (peek(1) == '/') {
-                next();
-                next();
                 tokenizeComment();
                 return;
             } else if (peek(1) == '*') {
-                next();
-                next();
                 tokenizeMultilineComment();
                 return;
             }
@@ -247,7 +247,7 @@ public final class Lexer {
 
     private void tokenizeExtendedWord() {
         final Pos startPos = markPos();
-        next();// skip `
+        skip();// skip `
         clearBuffer();
         char current = peek(0);
         while (current != '`') {
@@ -256,19 +256,20 @@ public final class Lexer {
             buffer.append(current);
             current = next();
         }
-        next(); // skip closing `
+        skip(); // skip closing `
         addToken(TokenType.WORD, buffer.toString(), startPos);
     }
     
     private void tokenizeText() {
         final Pos startPos = markPos();
-        next();// skip "
+        skip();// skip "
         clearBuffer();
         char current = peek(0);
         while (true) {
             if (current == '\\') {
                 current = next();
                 switch (current) {
+                    case '\\': current = next(); buffer.append('\\'); continue;
                     case '"': current = next(); buffer.append('"'); continue;
                     case '0': current = next(); buffer.append('\0'); continue;
                     case 'b': current = next(); buffer.append('\b'); continue;
@@ -305,12 +306,14 @@ public final class Lexer {
             buffer.append(current);
             current = next();
         }
-        next(); // skip closing "
+        skip(); // skip closing "
         
         addToken(TokenType.TEXT, buffer.toString(), startPos);
     }
     
     private void tokenizeComment() {
+        skip(); // /
+        skip(); // /
         char current = peek(0);
         while ("\r\n\0".indexOf(current) == -1) {
             current = next();
@@ -318,13 +321,15 @@ public final class Lexer {
      }
     
     private void tokenizeMultilineComment() {
+        skip(); // /
+        skip(); // *
         char current = peek(0);
         while (current != '*' || peek(1) != '/') {
             if (current == '\0') throw error("Reached end of file while parsing multiline comment");
             current = next();
         }
-        next(); // *
-        next(); // /
+        skip(); // *
+        skip(); // /
     }
 
     private boolean isOwnLangIdentifierStart(char current) {
@@ -332,7 +337,7 @@ public final class Lexer {
     }
 
     private boolean isOwnLangIdentifierPart(char current) {
-        return (Character.isLetterOrDigit(current) || (current == '_') || (current == '$'));
+        return isOwnLangIdentifierStart(current) || isNumber(current);
     }
     
     private void clearBuffer() {
@@ -342,18 +347,22 @@ public final class Lexer {
     private Pos markPos() {
         return new Pos(row, col);
     }
-    
-    private char next() {
-        final char result = peek(0);
+
+    private void skip() {
+        if (pos >= length) return;
+        final char result = input.charAt(pos);
         if (result == '\n') {
             row++;
             col = 1;
         } else col++;
-
         pos++;
-        return peek(0);
     }
     
+    private char next() {
+        skip();
+        return peek(0);
+    }
+
     private char peek(int relativePosition) {
         final int position = pos + relativePosition;
         if (position >= length) return '\0';

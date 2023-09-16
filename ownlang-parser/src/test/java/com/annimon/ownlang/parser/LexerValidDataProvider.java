@@ -25,6 +25,9 @@ public class LexerValidDataProvider {
                 Arguments.of("Numbers",
                         "12 7.8 90000000 10.03",
                         List.of(NUMBER, NUMBER, NUMBER, NUMBER)),
+                Arguments.of("Float notation",
+                        "7e8",
+                        List.of(NUMBER)),
                 Arguments.of("Hex numbers",
                         "#FF 0xCA 0x12fb 0xFF",
                         List.of(HEX_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER))
@@ -80,9 +83,6 @@ public class LexerValidDataProvider {
 
     private static List<Arguments> notSupported() {
         return List.of(
-                Arguments.of("Float notation",
-                        "7e8",
-                        List.of(NUMBER, WORD)),
                 Arguments.of("Float hex numbers",
                         "0Xf7p6",
                         List.of(HEX_NUMBER, WORD))

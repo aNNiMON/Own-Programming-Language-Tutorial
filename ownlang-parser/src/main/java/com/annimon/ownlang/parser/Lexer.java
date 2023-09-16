@@ -164,6 +164,10 @@ public final class Lexer {
             if (current == '.') {
                 if (hasDot) throw error("Invalid float number " + buffer);
                 hasDot = true;
+            } else if (current == 'e' || current == 'E') {
+                int exp = subTokenizeScientificNumber();
+                buffer.append(current).append(exp);
+                break;
             } else if (!Character.isDigit(current)) {
                 break;
             }
@@ -171,6 +175,34 @@ public final class Lexer {
             current = next();
         }
         addToken(TokenType.NUMBER, buffer.toString(), startPos);
+    }
+
+    private int subTokenizeScientificNumber() {
+        int sign = 1;
+        switch (next()) {
+            case '-': sign = -1;
+            case '+': skip(); break;
+        }
+
+        boolean hasValue = false;
+        char current = peek(0);
+        while (current == '0') {
+            hasValue = true;
+            current = next();
+        }
+        int result = 0;
+        int position = 0;
+        while (Character.isDigit(current)) {
+            result = result * 10 + (current - '0');
+            current = next();
+            position++;
+        }
+        if (position == 0 && !hasValue) throw error("Empty floating point exponent");
+        if (position >= 4) {
+            if (sign > 0) throw error("Float number too large");
+            else throw error("Float number too small");
+        }
+        return sign * result;
     }
     
     private void tokenizeHexNumber(int skipChars) {

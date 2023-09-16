@@ -26,6 +26,9 @@ public class LexerTest {
     public static Stream<Arguments> invalidData() {
         return Stream.<Arguments>builder()
                 .add(Arguments.of("Wrong float point", "3.14.15"))
+                .add(Arguments.of("Empty float exponent", "3e"))
+                .add(Arguments.of("Float number too small", "3e-00009000"))
+                .add(Arguments.of("Float number too large", "3e+00009000"))
                 .add(Arguments.of("Wrong HEX number", "0Xf7_p6_s5"))
                 .add(Arguments.of("HEX number ends with _", "0Xf7_"))
                 .add(Arguments.of("Empty rest of HEX number", "#"))
@@ -45,6 +48,16 @@ public class LexerTest {
         assertThat(result)
                 .extracting(Token::text)
                 .containsExactly("0", "3.1415", "CAFEBABE", "f7d6c5", "FFFF");
+    }
+
+    @Test
+    public void testFloatNumbersExponent() {
+        String input = "4e+7 0.3E-19 2e0 5e0000000000000200 5E-000000089";
+        List<Token> result = Lexer.tokenize(input);
+        assertThat(result)
+                .allMatch(t -> t.type().equals(NUMBER))
+                .extracting(Token::text)
+                .containsExactly("4e7", "0.3E-19", "2e0", "5e200", "5E-89");
     }
     
     @Test

@@ -6,6 +6,8 @@ import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -70,8 +72,11 @@ public final class Parser {
         while (!match(TokenType.EOF)) {
             try {
                 result.add(statement());
+            } catch (ParseException parseException) {
+                parseErrors.add(parseException, parseException.getStart());
+                recover();
             } catch (Exception ex) {
-                parseErrors.add(ex, getErrorPos());
+                parseErrors.add(ex, getPos());
                 recover();
             }
         }
@@ -79,7 +84,7 @@ public final class Parser {
         return result;
     }
 
-    private Pos getErrorPos() {
+    private Pos getPos() {
         if (size == 0) return new Pos(0, 0);
         if (pos >= size) return tokens.get(size - 1).pos();
         return tokens.get(pos).pos();
@@ -166,7 +171,8 @@ public final class Parser {
     private UseStatement useStatement() {
         final var modules = new HashSet<String>();
         do {
-            modules.add(consume(TokenType.WORD).text());
+            modules.add(consumeOrExplainError(TokenType.WORD,
+                    Parser::explainUseStatementError).text());
         } while (match(TokenType.COMMA));
         return new UseStatement(modules);
     }
@@ -179,20 +185,25 @@ public final class Parser {
         if (expression instanceof Statement statement) {
             return statement;
         }
-        throw new ParseException("Unknown statement: " + get(0));
+        throw error("Unknown statement: " + get(0));
     }
 
     private DestructuringAssignmentStatement destructuringAssignment() {
         // extract(var1, var2, ...) = ...
+        final var startPos = getPos();
         consume(TokenType.LPAREN);
         final List<String> variables = new ArrayList<>();
         while (!match(TokenType.RPAREN)) {
-            if (lookMatch(0, TokenType.WORD)) {
-                variables.add(consume(TokenType.WORD).text());
-            } else {
-                variables.add(null);
-            }
+            final Token current = get(0);
+            variables.add(switch (current.type()) {
+                case WORD -> consume(TokenType.WORD).text();
+                case COMMA -> null;
+                default -> throw error(errorUnexpectedTokens(current, TokenType.WORD, TokenType.COMMA));
+            });
             match(TokenType.COMMA);
+        }
+        if (variables.isEmpty() || variables.stream().allMatch(Objects::isNull)) {
+            throw error(errorDestructuringAssignmentEmpty(), startPos, getPos());
         }
         consume(TokenType.EQ);
         return new DestructuringAssignmentStatement(variables, expression());
@@ -299,7 +310,7 @@ public final class Parser {
             } else if (!startsOptionalArgs) {
                 arguments.addRequired(name);
             } else {
-                throw new ParseException("Required argument cannot be after optional");
+                throw error(errorRequiredArgumentAfterOptional());
             }
             match(TokenType.COMMA);
         }
@@ -374,7 +385,7 @@ public final class Parser {
     private MatchExpression match() {
         // match expression {
         //  case pattern1: result1
-        //  case pattern2 if extr: result2
+        //  case pattern2 if expr: result2
         // }
         final Expression expression = expression();
         consume(TokenType.LBRACE);
@@ -425,7 +436,7 @@ public final class Parser {
             }
 
             if (pattern == null) {
-                throw new ParseException("Wrong pattern in match expression: " + current);
+                throw error("Wrong pattern in match expression: " + current);
             }
             if (match(TokenType.IF)) {
                 // case e if e > 0:
@@ -461,7 +472,7 @@ public final class Parser {
                 if (fieldDeclaration != null) {
                     classDeclaration.addField(fieldDeclaration);
                 } else {
-                    throw new ParseException("Class can contain only assignments and function declarations");
+                    throw error("Class can contain only assignments and function declarations");
                 }
             }
         } while (!match(TokenType.RBRACE));
@@ -873,12 +884,12 @@ public final class Parser {
             }
             return strExpr;
         }
-        throw new ParseException("Unknown expression: " + current);
+        throw error("Unknown expression: " + current);
     }
 
     private Number createNumber(String text, int radix) {
         // Double
-        if (text.contains(".")) {
+        if (text.contains(".") || text.contains("e") || text.contains("E")) {
             return Double.parseDouble(text);
         }
         // Integer
@@ -889,13 +900,23 @@ public final class Parser {
         }
     }
 
-    private Token consume(TokenType type) {
-        final Token current = get(0);
-        if (type != current.type()) {
-            throw new ParseException("Token " + current + " doesn't match " + type);
+    private Token consume(TokenType expectedType) {
+        final Token actual = get(0);
+        if (expectedType != actual.type()) {
+            throw error(errorUnexpectedToken(actual, expectedType));
         }
         pos++;
-        return current;
+        return actual;
+    }
+
+    private Token consumeOrExplainError(TokenType expectedType, Function<Token, String> errorMessageFunction) {
+        final Token actual = get(0);
+        if (expectedType != actual.type()) {
+            throw error(errorUnexpectedToken(actual, expectedType)
+                    + errorMessageFunction.apply(actual));
+        }
+        pos++;
+        return actual;
     }
 
     private boolean match(TokenType type) {
@@ -915,5 +936,39 @@ public final class Parser {
         final int position = pos + relativePosition;
         if (position >= size) return EOF;
         return tokens.get(position);
+    }
+
+    private ParseException error(String message) {
+        return new ParseException(message, getPos());
+    }
+
+    private static ParseException error(String message, Pos start, Pos end) {
+        return new ParseException(message, start, end);
+    }
+
+    private static String errorUnexpectedToken(Token actual, TokenType expectedType) {
+        return "Expected token with type " + expectedType + ", but found " + actual.shortDescription();
+    }
+
+    private static String errorUnexpectedTokens(Token actual, TokenType... expectedTypes) {
+        String tokenTypes = Arrays.stream(expectedTypes).map(Enum::toString).collect(Collectors.joining(", "));
+        return "Expected tokens with types one of " + tokenTypes + ", but found " + actual.shortDescription();
+    }
+
+    private static String errorDestructuringAssignmentEmpty() {
+        return "Destructuring assignment should contain at least one variable name to assign." +
+                "\nCorrect syntax: extract(v1, , , v4) = ";
+    }
+
+    private static String errorRequiredArgumentAfterOptional() {
+        return "Required argument cannot be placed after optional.";
+    }
+
+    private static String explainUseStatementError(Token current) {
+        String example = current.type().equals(TokenType.TEXT)
+                ? "use " + current.text()
+                : "use std, math";
+        return "\nNote: as of OwnLang 2.0.0 use statement simplifies modules list syntax. " +
+                "Correct syntax: " + example;
     }
 }

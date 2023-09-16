@@ -31,6 +31,26 @@ class LexerPositionsTest {
                 text = "line1
                   line2
                   line3"
+                a = 3
+                """.stripIndent();
+        List<Token> result = Lexer.tokenize(input);
+
+        assertThat(result)
+                .hasSize(6)
+                .extracting(s -> s.pos().row(), s -> s.pos().col(), Token::type)
+                .containsExactly(
+                        tuple(1, 1, WORD), tuple(1, 6, EQ), tuple(1, 8, TEXT),
+                        tuple(4, 1, WORD), tuple(4, 3, EQ), tuple(4, 5, NUMBER)
+                );
+    }
+
+    @Test
+    void testMultilineComment() {
+        String input = """
+                /*
+                  line2
+                  line*/a =/*
+                */3
                 """.stripIndent();
         List<Token> result = Lexer.tokenize(input);
 
@@ -38,7 +58,7 @@ class LexerPositionsTest {
                 .hasSize(3)
                 .extracting(s -> s.pos().row(), s -> s.pos().col(), Token::type)
                 .containsExactly(
-                        tuple(1, 1, WORD), tuple(1, 6, EQ), tuple(1, 8, TEXT)
+                        tuple(3, 9, WORD), tuple(3, 11, EQ), tuple(4, 3, NUMBER)
                 );
     }
 }

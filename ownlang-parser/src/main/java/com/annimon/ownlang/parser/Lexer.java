@@ -116,7 +116,7 @@ public final class Lexer {
     
     private final List<Token> tokens;
     private final StringBuilder buffer;
-    
+
     private int pos;
     private int row, col;
 
@@ -125,7 +125,7 @@ public final class Lexer {
         length = input.length();
         
         tokens = new ArrayList<>();
-        buffer = new StringBuilder();
+        buffer = new StringBuilder(40);
         row = col = 1;
     }
     
@@ -152,7 +152,7 @@ public final class Lexer {
     }
     
     private void tokenizeNumber() {
-        clearBuffer();
+        final var buffer = createBuffer();
         final Pos startPos = markPos();
         char current = peek(0);
         if (current == '0' && (peek(1) == 'x' || (peek(1) == 'X'))) {
@@ -206,7 +206,7 @@ public final class Lexer {
     }
     
     private void tokenizeHexNumber(int skipChars) {
-        clearBuffer();
+        final var buffer = createBuffer();
         final Pos startPos = markPos();
         // Skip HEX prefix 0x or #
         for (int i = 0; i < skipChars; i++) skip();
@@ -248,7 +248,7 @@ public final class Lexer {
         }
 
         final Pos startPos = markPos();
-        clearBuffer();
+        final var buffer = createBuffer();
         while (true) {
             if (!buffer.isEmpty() && !OPERATORS.containsKey(buffer.toString() + current)) {
                 addToken(OPERATORS.get(buffer.toString()), startPos);
@@ -260,7 +260,7 @@ public final class Lexer {
     }
     
     private void tokenizeWord() {
-        clearBuffer();
+        final var buffer = createBuffer();
         final Pos startPos = markPos();
         buffer.append(peek(0));
         char current = next();
@@ -280,7 +280,7 @@ public final class Lexer {
     private void tokenizeExtendedWord() {
         final Pos startPos = markPos();
         skip();// skip `
-        clearBuffer();
+        final var buffer = createBuffer();
         char current = peek(0);
         while (current != '`') {
             if (current == '\0') throw error("Reached end of file while parsing extended word.");
@@ -295,7 +295,7 @@ public final class Lexer {
     private void tokenizeText() {
         final Pos startPos = markPos();
         skip();// skip "
-        clearBuffer();
+        final var buffer = createBuffer();
         char current = peek(0);
         while (true) {
             if (current == '\\') {
@@ -372,8 +372,9 @@ public final class Lexer {
         return isOwnLangIdentifierStart(current) || isNumber(current);
     }
     
-    private void clearBuffer() {
+    private StringBuilder createBuffer() {
         buffer.setLength(0);
+        return buffer;
     }
 
     private Pos markPos() {

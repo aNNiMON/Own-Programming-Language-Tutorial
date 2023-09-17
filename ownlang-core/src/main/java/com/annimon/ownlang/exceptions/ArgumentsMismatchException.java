@@ -1,6 +1,6 @@
 package com.annimon.ownlang.exceptions;
 
-public final class ArgumentsMismatchException extends RuntimeException {
+public final class ArgumentsMismatchException extends OwnLangRuntimeException {
 
     public ArgumentsMismatchException() {
     }

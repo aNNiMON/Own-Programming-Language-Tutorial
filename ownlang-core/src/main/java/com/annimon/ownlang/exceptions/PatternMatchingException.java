@@ -1,6 +1,6 @@
 package com.annimon.ownlang.exceptions;
 
-public final class PatternMatchingException extends RuntimeException {
+public final class PatternMatchingException extends OwnLangRuntimeException {
 
     public PatternMatchingException() {
     }

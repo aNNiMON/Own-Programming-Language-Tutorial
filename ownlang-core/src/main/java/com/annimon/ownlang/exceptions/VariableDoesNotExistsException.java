@@ -1,6 +1,6 @@
 package com.annimon.ownlang.exceptions;
 
-public final class VariableDoesNotExistsException extends RuntimeException {
+public final class VariableDoesNotExistsException extends OwnLangRuntimeException {
     
     private final String variable;
 

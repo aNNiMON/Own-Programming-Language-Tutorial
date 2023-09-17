@@ -411,6 +411,6 @@ public final class Lexer {
     }
 
     private LexerException error(String text) {
-        return new LexerException(markPos(), text);
+        return new LexerException(text, markPos());
     }
 }

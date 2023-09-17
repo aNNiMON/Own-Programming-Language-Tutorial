@@ -12,7 +12,7 @@ public final class LexerException extends RuntimeException {
         super(message);
     }
 
-    public LexerException(Pos pos, String message) {
+    public LexerException(String message, Pos pos) {
         super(pos.format() + " " + message);
     }
 }

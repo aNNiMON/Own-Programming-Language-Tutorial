@@ -6,7 +6,7 @@ import com.annimon.ownlang.parser.Pos;
  *
  * @author aNNiMON
  */
-public final class LexerException extends RuntimeException {
+public final class LexerException extends OwnLangParserException {
 
     public LexerException(String message) {
         super(message);

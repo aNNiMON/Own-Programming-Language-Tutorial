@@ -1,6 +1,6 @@
 package com.annimon.ownlang.exceptions;
 
-public final class OperationIsNotSupportedException extends RuntimeException {
+public final class OperationIsNotSupportedException extends OwnLangRuntimeException {
 
     public OperationIsNotSupportedException(Object operation) {
         super("Operation " + operation + " is not supported");

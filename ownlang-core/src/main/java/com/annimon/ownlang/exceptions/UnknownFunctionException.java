@@ -1,6 +1,6 @@
 package com.annimon.ownlang.exceptions;
 
-public final class UnknownFunctionException extends RuntimeException {
+public final class UnknownFunctionException extends OwnLangRuntimeException {
     
     private final String functionName;
 

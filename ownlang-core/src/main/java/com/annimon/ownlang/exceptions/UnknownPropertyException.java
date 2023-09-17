@@ -1,6 +1,6 @@
 package com.annimon.ownlang.exceptions;
 
-public final class UnknownPropertyException extends RuntimeException {
+public final class UnknownPropertyException extends OwnLangRuntimeException {
 
     private final String propertyName;
 

@@ -7,7 +7,7 @@ import com.annimon.ownlang.parser.Range;
  *
  * @author aNNiMON
  */
-public final class ParseException extends RuntimeException {
+public final class ParseException extends OwnLangParserException {
 
     private final Range range;
 

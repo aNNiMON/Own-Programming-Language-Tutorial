@@ -1,6 +1,7 @@
 package com.annimon.ownlang.exceptions;
 
 import com.annimon.ownlang.parser.Pos;
+import com.annimon.ownlang.parser.Range;
 
 /**
  *
@@ -8,11 +9,10 @@ import com.annimon.ownlang.parser.Pos;
  */
 public final class ParseException extends RuntimeException {
 
-    private final Pos start;
-    private final Pos end;
+    private final Range range;
 
     public ParseException(String message) {
-        this(message, Pos.ZERO, Pos.ZERO);
+        this(message, Range.ZERO);
     }
 
     public ParseException(String message, Pos pos) {
@@ -20,16 +20,15 @@ public final class ParseException extends RuntimeException {
     }
 
     public ParseException(String message, Pos start, Pos end) {
+        this(message, new Range(start, end));
+    }
+
+    public ParseException(String message, Range range) {
         super(message);
-        this.start = start;
-        this.end = end;
+        this.range = range;
     }
 
-    public Pos getStart() {
-        return start;
-    }
-
-    public Pos getEnd() {
-        return end;
+    public Range getRange() {
+        return range;
     }
 }

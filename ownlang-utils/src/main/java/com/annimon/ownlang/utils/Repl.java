@@ -33,7 +33,7 @@ public final class Repl {
             RESET = ":reset",
             EXIT = ":exit";
 
-    private static final Token PRINTLN_TOKEN = new Token(TokenType.PRINTLN, "", new Pos(0, 0));
+    private static final Token PRINTLN_TOKEN = new Token(TokenType.PRINTLN, "", Pos.ZERO);
 
     public static void main(String[] args) {
         System.out.println("Welcome to OwnLang " + Version.VERSION + " REPL");

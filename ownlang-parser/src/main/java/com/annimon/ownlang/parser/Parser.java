@@ -24,7 +24,7 @@ public final class Parser {
         return program;
     }
 
-    private static final Token EOF = new Token(TokenType.EOF, "", new Pos(-1, -1));
+    private static final Token EOF = new Token(TokenType.EOF, "", Pos.UNKNOWN);
 
     private static final EnumMap<TokenType, BinaryExpression.Operator> ASSIGN_OPERATORS;
     static {
@@ -50,7 +50,7 @@ public final class Parser {
     private final ParseErrors parseErrors;
     private Statement parsedStatement;
 
-    private int pos;
+    private int index;
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
@@ -72,11 +72,11 @@ public final class Parser {
         while (!match(TokenType.EOF)) {
             try {
                 result.add(statement());
-            } catch (ParseException parseException) {
-                parseErrors.add(parseException, parseException.getStart());
+            } catch (ParseException ex) {
+                parseErrors.add(new ParseError(ex.getMessage(), ex.getRange()));
                 recover();
             } catch (Exception ex) {
-                parseErrors.add(ex, getPos());
+                parseErrors.add(new ParseError(ex.getMessage(), getRange(), List.of(ex.getStackTrace())));
                 recover();
             }
         }
@@ -84,20 +84,14 @@ public final class Parser {
         return result;
     }
 
-    private Pos getPos() {
-        if (size == 0) return new Pos(0, 0);
-        if (pos >= size) return tokens.get(size - 1).pos();
-        return tokens.get(pos).pos();
-    }
-
     private void recover() {
-        int preRecoverPosition = pos;
-        for (int i = preRecoverPosition; i <= size; i++) {
-            pos = i;
+        int preRecoverIndex = index;
+        for (int i = preRecoverIndex; i <= size; i++) {
+            index = i;
             try {
                 statement();
                 // successfully parsed,
-                pos = i; // restore position
+                index = i; // restore position
                 return;
             } catch (Exception ex) {
                 // fail
@@ -190,7 +184,7 @@ public final class Parser {
 
     private DestructuringAssignmentStatement destructuringAssignment() {
         // extract(var1, var2, ...) = ...
-        final var startPos = getPos();
+        final var startTokenIndex = index;
         consume(TokenType.LPAREN);
         final List<String> variables = new ArrayList<>();
         while (!match(TokenType.RPAREN)) {
@@ -203,7 +197,7 @@ public final class Parser {
             match(TokenType.COMMA);
         }
         if (variables.isEmpty() || variables.stream().allMatch(Objects::isNull)) {
-            throw error(errorDestructuringAssignmentEmpty(), startPos, getPos());
+            throw error(errorDestructuringAssignmentEmpty(), startTokenIndex, index);
         }
         consume(TokenType.EQ);
         return new DestructuringAssignmentStatement(variables, expression());
@@ -493,16 +487,16 @@ public final class Parser {
 
     private AssignmentExpression assignmentStrict() {
         // x[0].prop += ...
-        final int position = pos;
+        final int position = index;
         final Expression targetExpr = qualifiedName();
         if (!(targetExpr instanceof Accessible)) {
-            pos = position;
+            index = position;
             return null;
         }
 
         final TokenType currentType = get(0).type();
         if (!ASSIGN_OPERATORS.containsKey(currentType)) {
-            pos = position;
+            index = position;
             return null;
         }
         match(currentType);
@@ -905,7 +899,7 @@ public final class Parser {
         if (expectedType != actual.type()) {
             throw error(errorUnexpectedToken(actual, expectedType));
         }
-        pos++;
+        index++;
         return actual;
     }
 
@@ -915,7 +909,7 @@ public final class Parser {
             throw error(errorUnexpectedToken(actual, expectedType)
                     + errorMessageFunction.apply(actual));
         }
-        pos++;
+        index++;
         return actual;
     }
 
@@ -924,7 +918,7 @@ public final class Parser {
         if (type != current.type()) {
             return false;
         }
-        pos++;
+        index++;
         return true;
     }
 
@@ -933,17 +927,33 @@ public final class Parser {
     }
 
     private Token get(int relativePosition) {
-        final int position = pos + relativePosition;
+        final int position = index + relativePosition;
         if (position >= size) return EOF;
         return tokens.get(position);
     }
 
-    private ParseException error(String message) {
-        return new ParseException(message, getPos());
+    private Range getRange() {
+        return getRange(index, index);
     }
 
-    private static ParseException error(String message, Pos start, Pos end) {
-        return new ParseException(message, start, end);
+    private Range getRange(int startIndex, int endIndex) {
+        if (size == 0) return Range.ZERO;
+        final int last = size - 1;
+        Pos start = tokens.get(Math.min(startIndex, last)).pos();
+        if (startIndex == endIndex) {
+            return new Range(start, start);
+        } else {
+            Pos end = tokens.get(Math.min(endIndex, last)).pos();
+            return new Range(start, end);
+        }
+    }
+
+    private ParseException error(String message) {
+        return new ParseException(message, getRange());
+    }
+
+    private ParseException error(String message, int startIndex, int endIndex) {
+        return new ParseException(message, getRange(startIndex, endIndex));
     }
 
     private static String errorUnexpectedToken(Token actual, TokenType expectedType) {

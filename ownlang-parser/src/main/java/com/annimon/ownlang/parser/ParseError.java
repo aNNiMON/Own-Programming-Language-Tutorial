@@ -1,9 +1,19 @@
 package com.annimon.ownlang.parser;
 
-public record ParseError(Exception exception, Pos pos) {
+import java.util.Collections;
+import java.util.List;
+
+public record ParseError(String message, Range range, List<StackTraceElement> stackTraceElements) {
+    public ParseError(String message, Range range) {
+        this(message, range, Collections.emptyList());
+    }
+
+    public boolean hasStackTrace() {
+        return !stackTraceElements.isEmpty();
+    }
 
     @Override
     public String toString() {
-        return "Error on line " + pos.row() + ": " + exception;
+        return "Error on line " + range().start().row() + ": " + message;
     }
 }

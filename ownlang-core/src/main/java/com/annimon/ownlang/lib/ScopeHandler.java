@@ -76,12 +76,19 @@ public final class ScopeHandler {
 
 
     public static boolean isVariableOrConstantExists(String name) {
+        if (rootScope().containsConstant(name)) {
+            return true;
+        }
         synchronized (lock) {
             return findScope(name).isFound;
         }
     }
 
     public static Value getVariableOrConstant(String name) {
+        Value constant = rootScope().getConstant(name);
+        if (constant != null) {
+            return constant;
+        }
         synchronized (lock) {
             final ScopeFindData scopeData = findScope(name);
             if (scopeData.isFound) {

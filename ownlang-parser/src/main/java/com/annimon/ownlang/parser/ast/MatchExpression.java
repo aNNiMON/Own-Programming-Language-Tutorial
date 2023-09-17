@@ -44,13 +44,12 @@ public final class MatchExpression extends InterruptableNode implements Expressi
                         return evalResult(p.result);
                     }
                 } else {
-                    ScopeHandler.defineVariableInCurrentScope(pattern.variable, value);
-                    if (optMatches(p)) {
-                        final Value result = evalResult(p.result);
-                        ScopeHandler.removeVariable(pattern.variable);
-                        return result;
+                    try (final var ignored = ScopeHandler.closeableScope()) {
+                        ScopeHandler.defineVariableInCurrentScope(pattern.variable, value);
+                        if (optMatches(p)) {
+                            return evalResult(p.result);
+                        }
                     }
-                    ScopeHandler.removeVariable(pattern.variable);
                 }
             }
             if ((value.type() == Types.ARRAY) && (p instanceof ListPattern pattern)) {

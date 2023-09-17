@@ -44,18 +44,18 @@ public class LexerTest {
     public void testNumbers() {
         String input = "0 3.1415 0xCAFEBABE 0Xf7_d6_c5 #FFFF";
         List<Token> result = Lexer.tokenize(input);
-        assertTokens(result, NUMBER, NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER);
+        assertTokens(result, NUMBER, DECIMAL_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER);
         assertThat(result)
                 .extracting(Token::text)
                 .containsExactly("0", "3.1415", "CAFEBABE", "f7d6c5", "FFFF");
     }
 
     @Test
-    public void testFloatNumbersExponent() {
+    public void testDecimalNumbersExponent() {
         String input = "4e+7 0.3E-19 2e0 5e0000000000000200 5E-000000089";
         List<Token> result = Lexer.tokenize(input);
         assertThat(result)
-                .allMatch(t -> t.type().equals(NUMBER))
+                .allMatch(t -> t.type().equals(DECIMAL_NUMBER))
                 .extracting(Token::text)
                 .containsExactly("4e7", "0.3E-19", "2e0", "5e200", "5E-89");
     }

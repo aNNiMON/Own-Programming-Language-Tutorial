@@ -23,11 +23,14 @@ public class LexerValidDataProvider {
     private static List<Arguments> numbers() {
         return List.of(
                 Arguments.of("Numbers",
-                        "12 7.8 90000000 10.03",
-                        List.of(NUMBER, NUMBER, NUMBER, NUMBER)),
+                        "12 90000000",
+                        List.of(NUMBER, NUMBER)),
+                Arguments.of("Decimal numbers",
+                        "7.8 10.03",
+                        List.of(DECIMAL_NUMBER, DECIMAL_NUMBER)),
                 Arguments.of("Float notation",
                         "7e8",
-                        List.of(NUMBER)),
+                        List.of(DECIMAL_NUMBER)),
                 Arguments.of("Hex numbers",
                         "#FF 0xCA 0x12fb 0xFF",
                         List.of(HEX_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER))

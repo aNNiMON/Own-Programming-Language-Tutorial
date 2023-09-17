@@ -389,9 +389,14 @@ public final class Parser {
             MatchExpression.Pattern pattern = null;
             final Token current = get(0);
             if (match(TokenType.NUMBER)) {
-                // case 0.5:
+                // case 20:
                 pattern = new MatchExpression.ConstantPattern(
                         NumberValue.of(createNumber(current.text(), 10))
+                );
+            } else if (match(TokenType.DECIMAL_NUMBER)) {
+                // case 0.5:
+                pattern = new MatchExpression.ConstantPattern(
+                        NumberValue.of(createDecimalNumber(current.text()))
                 );
             } else if (match(TokenType.HEX_NUMBER)) {
                 // case #FF:
@@ -856,6 +861,9 @@ public final class Parser {
         if (match(TokenType.NUMBER)) {
             return new ValueExpression(createNumber(current.text(), 10));
         }
+        if (match(TokenType.DECIMAL_NUMBER)) {
+            return new ValueExpression(createDecimalNumber(current.text()));
+        }
         if (match(TokenType.HEX_NUMBER)) {
             return new ValueExpression(createNumber(current.text(), 16));
         }
@@ -882,16 +890,17 @@ public final class Parser {
     }
 
     private Number createNumber(String text, int radix) {
-        // Double
-        if (text.contains(".") || text.contains("e") || text.contains("E")) {
-            return Double.parseDouble(text);
-        }
         // Integer
         try {
             return Integer.parseInt(text, radix);
         } catch (NumberFormatException nfe) {
             return Long.parseLong(text, radix);
         }
+    }
+
+    private Number createDecimalNumber(String text) {
+        // Double
+        return Double.parseDouble(text);
     }
 
     private Token consume(TokenType expectedType) {

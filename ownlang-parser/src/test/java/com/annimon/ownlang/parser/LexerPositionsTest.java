@@ -50,7 +50,7 @@ class LexerPositionsTest {
                 /*
                   line2
                   line*/a =/*
-                */3
+                */3.1
                 """.stripIndent();
         List<Token> result = Lexer.tokenize(input);
 
@@ -58,7 +58,7 @@ class LexerPositionsTest {
                 .hasSize(3)
                 .extracting(s -> s.pos().row(), s -> s.pos().col(), Token::type)
                 .containsExactly(
-                        tuple(3, 9, WORD), tuple(3, 11, EQ), tuple(4, 3, NUMBER)
+                        tuple(3, 9, WORD), tuple(3, 11, EQ), tuple(4, 3, DECIMAL_NUMBER)
                 );
     }
 }

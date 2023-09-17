@@ -7,6 +7,7 @@ package com.annimon.ownlang.parser;
 public enum TokenType {
 
     NUMBER,
+    DECIMAL_NUMBER,
     HEX_NUMBER,
     WORD,
     TEXT,

@@ -159,12 +159,15 @@ public final class Lexer {
             tokenizeHexNumber(2);
             return;
         }
+        boolean decimal = false;
         boolean hasDot = false;
         while (true) {
             if (current == '.') {
+                decimal = true;
                 if (hasDot) throw error("Invalid float number " + buffer);
                 hasDot = true;
             } else if (current == 'e' || current == 'E') {
+                decimal = true;
                 int exp = subTokenizeScientificNumber();
                 buffer.append(current).append(exp);
                 break;
@@ -174,7 +177,11 @@ public final class Lexer {
             buffer.append(current);
             current = next();
         }
-        addToken(TokenType.NUMBER, buffer.toString(), startPos);
+        if (decimal) {
+            addToken(TokenType.DECIMAL_NUMBER, buffer.toString(), startPos);
+        } else {
+            addToken(TokenType.NUMBER, buffer.toString(), startPos);
+        }
     }
 
     private int subTokenizeScientificNumber() {

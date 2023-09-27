@@ -1,6 +1,5 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.exceptions.ParseException;
 import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
@@ -38,12 +37,7 @@ public final class IncludeStatement extends InterruptableNode implements Stateme
     public Statement loadProgram(String path) throws IOException {
         final String input = SourceLoader.readSource(path);
         final List<Token> tokens = Lexer.tokenize(input);
-        final Parser parser = new Parser(tokens);
-        final Statement program = parser.parse();
-        if (parser.getParseErrors().hasErrors()) {
-            throw new ParseException(parser.getParseErrors().toString());
-        }
-        return program;
+        return Parser.parse(tokens);
     }
     
     @Override

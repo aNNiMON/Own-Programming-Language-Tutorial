@@ -2,7 +2,7 @@ package com.annimon.ownlang.utils;
 
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.Version;
-import com.annimon.ownlang.exceptions.LexerException;
+import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.lib.Functions;
 import com.annimon.ownlang.lib.UserDefinedFunction;
@@ -84,7 +84,7 @@ public final class Repl {
                     }
                 }
                 program.execute();
-            } catch (LexerException lex) {
+            } catch (OwnLangParserException lex) {
                 continue;
             } catch (StoppedException ex) {
                 // skip

@@ -1,6 +1,7 @@
 package com.annimon.ownlang.parser;
 
-import com.annimon.ownlang.exceptions.LexerException;
+import com.annimon.ownlang.exceptions.OwnLangParserException;
+import com.annimon.ownlang.parser.error.ParseError;
 import java.util.*;
 
 /**
@@ -146,7 +147,7 @@ public final class Lexer {
             else if (current == '#') tokenizeHexNumber(1);
             else if (current == ';') skip(); // ignore semicolon
             else if (current == '\0') break;
-            else throw error("Unknown token " + current);
+            else throw error("Unknown token " + current, markPos());
         }
         return tokens;
     }
@@ -164,11 +165,11 @@ public final class Lexer {
         while (true) {
             if (current == '.') {
                 decimal = true;
-                if (hasDot) throw error("Invalid float number " + buffer);
+                if (hasDot) throw error("Invalid float number " + buffer, startPos);
                 hasDot = true;
             } else if (current == 'e' || current == 'E') {
                 decimal = true;
-                int exp = subTokenizeScientificNumber();
+                int exp = subTokenizeScientificNumber(startPos);
                 buffer.append(current).append(exp);
                 break;
             } else if (!Character.isDigit(current)) {
@@ -184,7 +185,7 @@ public final class Lexer {
         }
     }
 
-    private int subTokenizeScientificNumber() {
+    private int subTokenizeScientificNumber(Pos startPos) {
         int sign = 1;
         switch (next()) {
             case '-': sign = -1;
@@ -204,10 +205,10 @@ public final class Lexer {
             current = next();
             position++;
         }
-        if (position == 0 && !hasValue) throw error("Empty floating point exponent");
+        if (position == 0 && !hasValue) throw error("Empty floating point exponent", startPos, markEndPos());
         if (position >= 4) {
-            if (sign > 0) throw error("Float number too large");
-            else throw error("Float number too small");
+            if (sign > 0) throw error("Float number too large", startPos, markEndPos());
+            else throw error("Float number too small", startPos, markEndPos());
         }
         return sign * result;
     }
@@ -227,8 +228,8 @@ public final class Lexer {
             current = next();
         }
 
-        if (buffer.isEmpty()) throw error("Empty HEX value");
-        if (peek(-1) == '_') throw error("HEX value cannot end with _");
+        if (buffer.isEmpty()) throw error("Empty HEX value", startPos);
+        if (peek(-1) == '_') throw error("HEX value cannot end with _", startPos, markEndPos());
         addToken(TokenType.HEX_NUMBER, buffer.toString(), startPos);
     }
 
@@ -290,8 +291,9 @@ public final class Lexer {
         final var buffer = createBuffer();
         char current = peek(0);
         while (current != '`') {
-            if (current == '\0') throw error("Reached end of file while parsing extended word.");
-            if (current == '\n' || current == '\r') throw error("Reached end of line while parsing extended word.");
+            if ("\r\n\0".indexOf(current) != -1) {
+                throw error("Reached end of line while parsing extended word.", startPos, markEndPos());
+            }
             buffer.append(current);
             current = next();
         }
@@ -341,7 +343,7 @@ public final class Lexer {
                 continue;
             }
             if (current == '"') break;
-            if (current == '\0') throw error("Reached end of file while parsing text string.");
+            if (current == '\0') throw error("Reached end of file while parsing text string.", startPos, markEndPos());
             buffer.append(current);
             current = next();
         }
@@ -360,11 +362,14 @@ public final class Lexer {
      }
     
     private void tokenizeMultilineComment() {
+        final Pos startPos = markPos();
         skip(); // /
         skip(); // *
         char current = peek(0);
         while (current != '*' || peek(1) != '/') {
-            if (current == '\0') throw error("Reached end of file while parsing multiline comment");
+            if (current == '\0') {
+                throw error("Reached end of file while parsing multiline comment", startPos, markEndPos());
+            }
             current = next();
         }
         skip(); // *
@@ -386,6 +391,10 @@ public final class Lexer {
 
     private Pos markPos() {
         return new Pos(row, col);
+    }
+
+    private Pos markEndPos() {
+        return new Pos(row, Math.max(0, col - 1));
     }
 
     private void skip() {
@@ -417,7 +426,11 @@ public final class Lexer {
         tokens.add(new Token(type, text, startRow));
     }
 
-    private LexerException error(String text) {
-        return new LexerException(text, markPos());
+    private OwnLangParserException error(String text, Pos position) {
+        return error(text, position, position);
+    }
+
+    private OwnLangParserException error(String text, Pos startPos, Pos endPos) {
+        return new OwnLangParserException(new ParseError(text, new Range(startPos, endPos)));
     }
 }

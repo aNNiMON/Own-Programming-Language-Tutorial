@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser;
+package com.annimon.ownlang.parser.error;
 
 import com.annimon.ownlang.Console;
 import java.util.ArrayList;

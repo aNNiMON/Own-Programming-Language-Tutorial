@@ -1,10 +1,13 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.ParseException;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
+import com.annimon.ownlang.parser.error.ParseError;
+import com.annimon.ownlang.parser.error.ParseErrors;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,7 +22,7 @@ public final class Parser {
         final Parser parser = new Parser(tokens);
         final Statement program = parser.parse();
         if (parser.getParseErrors().hasErrors()) {
-            throw new ParseException(parser.getParseErrors().toString());
+            throw new OwnLangParserException(parser.getParseErrors());
         }
         return program;
     }

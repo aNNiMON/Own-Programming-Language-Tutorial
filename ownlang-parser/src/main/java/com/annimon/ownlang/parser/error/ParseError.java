@@ -1,5 +1,6 @@
-package com.annimon.ownlang.parser;
+package com.annimon.ownlang.parser.error;
 
+import com.annimon.ownlang.parser.Range;
 import java.util.Collections;
 import java.util.List;
 

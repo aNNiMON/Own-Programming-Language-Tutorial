@@ -1,15 +1,27 @@
 package com.annimon.ownlang.exceptions;
 
-/**
- * Base type for all lexer and parser exceptions
- */
-public abstract class OwnLangParserException extends RuntimeException {
+import com.annimon.ownlang.parser.error.ParseError;
+import com.annimon.ownlang.parser.error.ParseErrors;
 
-    public OwnLangParserException() {
-        super();
+/**
+ * Single Exception for Lexer and Parser errors
+ */
+public class OwnLangParserException extends RuntimeException {
+
+    private final ParseErrors parseErrors;
+
+    public OwnLangParserException(ParseError parseError) {
+        super(parseError.toString());
+        this.parseErrors = new ParseErrors();
+        parseErrors.add(parseError);;
     }
 
-    public OwnLangParserException(String message) {
-        super(message);
+    public OwnLangParserException(ParseErrors parseErrors) {
+        super(parseErrors.toString());
+        this.parseErrors = parseErrors;
+    }
+
+    public ParseErrors getParseErrors() {
+        return parseErrors;
     }
 }

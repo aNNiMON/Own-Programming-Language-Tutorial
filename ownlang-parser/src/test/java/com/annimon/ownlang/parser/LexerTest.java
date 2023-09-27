@@ -1,6 +1,6 @@
 package com.annimon.ownlang.parser;
 
-import com.annimon.ownlang.exceptions.LexerException;
+import com.annimon.ownlang.exceptions.OwnLangParserException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -108,7 +108,7 @@ public class LexerTest {
     @MethodSource("invalidData")
     public void testInvalidInput(String name, String input) throws IOException {
         assertThatThrownBy(() -> Lexer.tokenize(input))
-                .isInstanceOf(LexerException.class);
+                .isInstanceOf(OwnLangParserException.class);
     }
     
     private static void assertTokens(List<Token> result, TokenType... tokenTypes) {

@@ -154,7 +154,9 @@ public final class Main {
                     .then(scopedStages.create("Execution", new ExecutionStage()))
                     .perform(stagesData, input);
         } catch (OwnLangParserException ex) {
-            System.err.println(ex.getParseErrors());
+            final var error = new ParseErrorsFormatterStage()
+                    .perform(stagesData, ex.getParseErrors());
+            System.err.println(error);
         } catch (StoppedException ex) {
             // skip
         } catch (Exception ex) {

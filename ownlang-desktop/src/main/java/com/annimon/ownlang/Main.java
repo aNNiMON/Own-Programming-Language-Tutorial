@@ -1,15 +1,10 @@
 package com.annimon.ownlang;
 
+import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
-import com.annimon.ownlang.parser.Beautifier;
-import com.annimon.ownlang.parser.Lexer;
-import com.annimon.ownlang.parser.Linter;
-import com.annimon.ownlang.parser.Optimizer;
-import com.annimon.ownlang.parser.Parser;
-import com.annimon.ownlang.parser.SourceLoader;
-import com.annimon.ownlang.parser.Token;
+import com.annimon.ownlang.parser.*;
 import com.annimon.ownlang.parser.ast.Statement;
-import com.annimon.ownlang.parser.visitors.FunctionAdder;
+import com.annimon.ownlang.stages.*;
 import com.annimon.ownlang.utils.Repl;
 import com.annimon.ownlang.utils.Sandbox;
 import com.annimon.ownlang.utils.TimeMeasurement;
@@ -140,57 +135,43 @@ public final class Main {
         System.arraycopy(javaArgs, index, ownlangArgs, 0, ownlangArgs.length);
         Shared.setOwnlangArgs(ownlangArgs);
     }
-        
+
     private static void run(String input, RunOptions options) {
-        options.validate();
-        final TimeMeasurement measurement = new TimeMeasurement();
-        measurement.start("Tokenize time");
-        final List<Token> tokens = Lexer.tokenize(input);
-        measurement.stop("Tokenize time");
-        if (options.showTokens) {
-            final int tokensCount = tokens.size();
-            for (int i = 0; i < tokensCount; i++) {
-                System.out.println(i + " " + tokens.get(i));
-            }
-        }
-        
-        measurement.start("Parse time");
-        final Parser parser = new Parser(tokens);
-        final Statement parsedProgram = parser.parse();
-        measurement.stop("Parse time");
-        if (options.showAst) {
-            System.out.println(parsedProgram);
-        }
-        if (parser.getParseErrors().hasErrors()) {
-            System.out.println(parser.getParseErrors());
-            return;
-        }
-        if (options.lintMode) {
-            Linter.lint(parsedProgram);
-            return;
-        }
-        final Statement program;
-        if (options.optimizationLevel > 0) {
-            measurement.start("Optimization time");
-            program = Optimizer.optimize(parsedProgram, options.optimizationLevel, options.showAst);
-            measurement.stop("Optimization time");
-            if (options.showAst) {
-                System.out.println(program.toString());
-            }
-        } else {
-            program = parsedProgram;
-        }
-        program.accept(new FunctionAdder());
+        final var measurement = new TimeMeasurement();
+        final var scopedStages = new ScopedStageFactory(measurement::start, measurement::stop);
+
+        final var stagesData = new StagesDataMap();
+        stagesData.put(OptimizationStage.TAG_OPTIMIZATION_SUMMARY, options.showAst);
+        stagesData.put(SourceLoaderStage.TAG_SOURCE, input);
         try {
-            measurement.start("Execution time");
-            program.execute();
+            scopedStages.create("Lexer", new LexerStage())
+                    .then(scopedStages.create("Parser", new ParserStage()))
+                    .thenConditional(options.optimizationLevel > 0,
+                            scopedStages.create("Optimization", new OptimizationStage(options.optimizationLevel)))
+                    .thenConditional(options.lintMode,
+                            scopedStages.create("Linter", new LinterStage()))
+                    .then(scopedStages.create("Function adding", new FunctionAddingStage()))
+                    .then(scopedStages.create("Execution", new ExecutionStage()))
+                    .perform(stagesData, input);
+        } catch (OwnLangParserException ex) {
+            System.err.println(ex.getParseErrors());
         } catch (StoppedException ex) {
             // skip
         } catch (Exception ex) {
             Console.handleException(Thread.currentThread(), ex);
         } finally {
-            if (options.showMeasurements) {
-                measurement.stop("Execution time");
+            if (options.showTokens) {
+                final List<Token> tokens = stagesData.get(LexerStage.TAG_TOKENS);
+                int i = 0;
+                for (Token token : tokens) {
+                    System.out.println(i++ + " " + token);
+                }
+            }
+            if (options.showAst) {
+                Statement program = stagesData.get(ParserStage.TAG_PROGRAM);
+                System.out.println(program);
+            }
+            if (!options.showMeasurements) {
                 System.out.println("======================");
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }
@@ -210,15 +191,6 @@ public final class Main {
             lintMode = false;
             beautifyMode = false;
             optimizationLevel = 0;
-        }
-
-        void validate() {
-            if (lintMode) {
-                showTokens = false;
-                showAst = false;
-                showMeasurements = false;
-                optimizationLevel = 0;
-            }
         }
     }
 }

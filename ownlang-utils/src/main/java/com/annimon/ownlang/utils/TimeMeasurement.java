@@ -1,7 +1,7 @@
 package com.annimon.ownlang.utils;
 
 import com.annimon.ownlang.Console;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -10,8 +10,8 @@ public final class TimeMeasurement {
     private final Map<String, Long> finished, running;
     
     public TimeMeasurement() {
-        finished = new HashMap<>();
-        running = new HashMap<>();
+        finished = new LinkedHashMap<>();
+        running = new LinkedHashMap<>();
     }
     
     public void clear() {
@@ -19,29 +19,20 @@ public final class TimeMeasurement {
         running.clear();
     }
     
-    public void start(String... names) {
-        final long time = System.nanoTime();
-        for (String name : names) {
-            running.put(name, time);
+    public void start(String name) {
+        running.put(name, System.nanoTime());
+    }
+    
+    public void pause(String name) {
+        if (running.containsKey(name)) {
+            addTime(name, System.nanoTime() - running.get(name));
+            running.remove(name);
         }
     }
     
-    public void pause(String... names) {
-        final long time = System.nanoTime();
-        for (String name : names) {
-            if (running.containsKey(name)) {
-                addTime(name, time - running.get(name));
-                running.remove(name);
-            }
-        }
-    }
-    
-    public void stop(String... names) {
-        final long time = System.nanoTime();
-        for (String name : names) {
-            if (running.containsKey(name)) {
-                addTime(name, time - running.get(name));
-            }
+    public void stop(String name) {
+        if (running.containsKey(name)) {
+            addTime(name, System.nanoTime() - running.get(name));
         }
     }
     

@@ -1,17 +1,24 @@
 package com.annimon.ownlang.parser.linters;
 
-import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-public final class DefaultFunctionsOverrideValidator extends LintVisitor {
+final class DefaultFunctionsOverrideValidator extends LintVisitor {
+
+    private final Set<String> moduleFunctions = new HashSet<>();
+
+    DefaultFunctionsOverrideValidator(Collection<LinterResult> results) {
+        super(results);
+    }
 
     @Override
     public void visit(FunctionDefineStatement s) {
         super.visit(s);
-        if (ScopeHandler.isFunctionExists(s.name)) {
-            Console.error(String.format(
-                    "Warning: function \"%s\" overrides default module function", s.name));
+        if (moduleFunctions.contains(s.name)) {
+            results.add(new LinterResult(LinterResult.Severity.WARNING,
+                    String.format("Function \"%s\" overrides default module function", s.name)));
         }
     }
 
@@ -24,6 +31,6 @@ public final class DefaultFunctionsOverrideValidator extends LintVisitor {
     @Override
     public void visit(UseStatement st) {
         super.visit(st);
-        st.execute();
+        moduleFunctions.addAll(st.loadFunctions().keySet());
     }
 }

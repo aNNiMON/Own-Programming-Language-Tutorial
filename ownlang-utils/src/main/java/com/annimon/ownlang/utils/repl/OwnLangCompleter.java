@@ -1,7 +1,6 @@
 package com.annimon.ownlang.utils.repl;
 
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.Lexer;
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,7 +27,8 @@ public final class OwnLangCompleter extends StringsCompleter {
         getStrings().clear();
         getStrings().addAll(Lexer.getKeywords());
         getStrings().addAll(staticCandidates);
-        getStrings().addAll(Variables.variables().keySet());
-        getStrings().addAll(Functions.getFunctions().keySet());
+        getStrings().addAll(ScopeHandler.constants().keySet());
+        getStrings().addAll(ScopeHandler.variables().keySet());
+        getStrings().addAll(ScopeHandler.functions().keySet());
     }
 }

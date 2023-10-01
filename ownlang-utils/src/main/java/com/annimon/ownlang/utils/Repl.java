@@ -4,9 +4,7 @@ import com.annimon.ownlang.Console;
 import com.annimon.ownlang.Version;
 import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
-import com.annimon.ownlang.lib.Functions;
-import com.annimon.ownlang.lib.UserDefinedFunction;
-import com.annimon.ownlang.lib.Variables;
+import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.parser.*;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.Statement;
@@ -116,9 +114,9 @@ public final class Repl {
         System.out.println("Type in expressions to have them evaluated.");
         final List<String> commands = new ArrayList<>();
         if (full) {
-            commands.add(VARS + " - listing variables");
-            commands.add(FUNCS + " - listing functions");
-            commands.add(SOURCE + " - listing source");
+            commands.add(VARS + " - list variables/constants");
+            commands.add(FUNCS + " - list functions");
+            commands.add(SOURCE + " - show source");
         }
         commands.add(HELP + " - show help");
         commands.add(RESET + " - clear buffer");
@@ -143,24 +141,45 @@ public final class Repl {
     }
 
     private static void printVariables() {
-        Variables.variables().entrySet().stream()
+        System.out.println("Variables:");
+        ScopeHandler.variables().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
-                .forEach(e -> System.out.printf("\t%s = %s%n",
+                .forEach(e -> System.out.printf("  %s = %s%n",
+                        e.getKey(), e.getValue().toString()));
+
+        System.out.println("Constants:");
+        ScopeHandler.constants().entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(e -> System.out.printf("  %s = %s%n",
                         e.getKey(), e.getValue().toString()));
     }
 
     private static void printFunctions() {
-        System.out.println("User functions:");
-        Functions.getFunctions().entrySet().stream()
-                .filter(p -> p.getValue() instanceof UserDefinedFunction)
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(e -> System.out.printf("\t%s%s%n",
-                        e.getKey(), ((UserDefinedFunction)e.getValue()).arguments));
+        if (ScopeHandler.functions().isEmpty()) {
+            System.out.println("No functions declared yet!");
+            return;
+        }
 
-        System.out.println("Library functions:");
-        Functions.getFunctions().entrySet().stream()
-                .filter(p -> !(p.getValue() instanceof UserDefinedFunction))
+        final var functions = ScopeHandler.functions().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
-                .forEach(e -> System.out.printf("\t%s%n", e.getKey()));
+                .collect(Collectors.partitioningBy(p -> p.getValue() instanceof UserDefinedFunction));
+
+        final var userFunctions = functions.get(true);
+        if (!userFunctions.isEmpty()) {
+            System.out.println("User functions:");
+            for (Map.Entry<String, Function> e : userFunctions) {
+                System.out.printf("  %s%s%n",
+                        e.getKey(), ((UserDefinedFunction) e.getValue()).arguments);
+            }
+        }
+
+        final var libraryFunctions = functions.get(false);
+        if (!libraryFunctions.isEmpty()) {
+            System.out.printf("Library functions:%n  ");
+            final var libraryFunctionNames = libraryFunctions.stream()
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.joining(", "));
+            System.out.println(libraryFunctionNames);
+        }
     }
 }

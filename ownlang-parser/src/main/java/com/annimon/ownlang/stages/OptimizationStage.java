@@ -10,7 +10,7 @@ public record OptimizationStage(int level)
 
     @Override
     public Statement perform(StagesData stagesData, Statement input) {
-        boolean showSummary = stagesData.get(TAG_OPTIMIZATION_SUMMARY);
+        boolean showSummary = stagesData.getOrDefault(TAG_OPTIMIZATION_SUMMARY, false);
         return Optimizer.optimize(input, level, showSummary);
     }
 }

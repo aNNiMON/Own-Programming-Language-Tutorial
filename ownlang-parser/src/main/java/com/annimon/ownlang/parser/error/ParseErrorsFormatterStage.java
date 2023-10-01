@@ -1,10 +1,11 @@
-package com.annimon.ownlang.stages;
+package com.annimon.ownlang.parser.error;
 
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.parser.Pos;
 import com.annimon.ownlang.parser.Range;
-import com.annimon.ownlang.parser.error.ParseError;
-import com.annimon.ownlang.parser.error.ParseErrors;
+import com.annimon.ownlang.stages.SourceLoaderStage;
+import com.annimon.ownlang.stages.Stage;
+import com.annimon.ownlang.stages.StagesData;
 
 public class ParseErrorsFormatterStage implements Stage<ParseErrors, String> {
 

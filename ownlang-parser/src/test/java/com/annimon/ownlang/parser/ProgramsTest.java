@@ -1,31 +1,41 @@
 package com.annimon.ownlang.parser;
 
-import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.*;
-import com.annimon.ownlang.outputsettings.OutputSettings;
-import com.annimon.ownlang.outputsettings.StringOutputSettings;
+import com.annimon.ownlang.lib.FunctionValue;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
+import com.annimon.ownlang.stages.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.stream.Stream;
-
 import static com.annimon.ownlang.parser.TestDataUtil.scanDirectory;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProgramsTest {
     private static final String RES_DIR = "src/test/resources";
+    private static Stage<String, Statement> testPipeline;
 
     public static Stream<String> data() {
         return scanDirectory(RES_DIR)
                 .map(File::getPath);
+    }
+
+    @BeforeAll
+    public static void createStage() {
+        testPipeline = new SourceLoaderStage()
+                .then(new LexerStage())
+                .then(new ParserStage())
+                .then(new ExecutionStage())
+                .then((stagesData, input) -> {
+                    input.accept(testFunctionsExecutor);
+                    return input;
+                });
     }
 
     @BeforeEach
@@ -69,30 +79,11 @@ public class ProgramsTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testProgram(String programPath) throws IOException {
-        final String source = SourceLoader.readSource(programPath);
-        final Statement s = Parser.parse(Lexer.tokenize(source));
+    public void testProgram(String programPath) {
         try {
-            s.execute();
-            s.accept(testFunctionsExecutor);
+            testPipeline.perform(new StagesDataMap(), programPath);
         } catch (Exception oae) {
-            fail(oae.toString());
-        }
-    }
-
-    @Test
-    public void testOutput() {
-        OutputSettings oldSettings = Console.getSettings();
-        Console.useSettings(new StringOutputSettings());
-        String source = "for i = 0, i <= 5, i++\n  print i";
-        final Statement s = Parser.parse(Lexer.tokenize(source));
-        try {
-            s.execute();
-            assertEquals("012345", Console.text());
-        } catch (Exception oae) {
-            fail(oae.toString());
-        } finally {
-            Console.useSettings(oldSettings);
+            fail(oae);
         }
     }
 

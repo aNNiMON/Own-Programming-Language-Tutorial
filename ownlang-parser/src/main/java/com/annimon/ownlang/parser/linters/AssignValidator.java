@@ -1,23 +1,31 @@
 package com.annimon.ownlang.parser.linters;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author aNNiMON
  */
-public final class AssignValidator extends LintVisitor {
+final class AssignValidator extends LintVisitor {
+
+    private final Set<String> moduleConstants = new HashSet<>();
+
+    AssignValidator(Collection<LinterResult> results) {
+        super(results);
+    }
 
     @Override
     public void visit(AssignmentExpression s) {
         super.visit(s);
         if (s.target instanceof VariableExpression varExpr) {
             final String variable = varExpr.name;
-            if (ScopeHandler.isConstantExists(variable)) {
-                Console.error(String.format(
-                    "Warning: variable \"%s\" overrides constant", variable));
+            if (moduleConstants.contains(variable)) {
+                results.add(new LinterResult(LinterResult.Severity.WARNING,
+                        String.format("Variable \"%s\" overrides constant", variable)));
             }
         }
     }
@@ -31,6 +39,6 @@ public final class AssignValidator extends LintVisitor {
     @Override
     public void visit(UseStatement st) {
         super.visit(st);
-        st.execute();
+        moduleConstants.addAll(st.loadConstants().keySet());
     }
 }

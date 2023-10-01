@@ -1,5 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.ModuleLoader;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.modules.Module;
@@ -31,6 +32,15 @@ public final class UseStatement extends InterruptableNode implements Statement {
         for (String moduleName : modules) {
             final Module module = ModuleLoader.load(moduleName);
             result.putAll(module.constants());
+        }
+        return result;
+    }
+
+    public Map<String, Function> loadFunctions() {
+        final var result = new LinkedHashMap<String, Function>();
+        for (String moduleName : modules) {
+            final Module module = ModuleLoader.load(moduleName);
+            result.putAll(module.functions());
         }
         return result;
     }

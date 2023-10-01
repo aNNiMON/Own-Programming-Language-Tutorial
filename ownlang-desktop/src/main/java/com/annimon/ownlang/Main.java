@@ -4,6 +4,7 @@ import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.parser.*;
 import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.parser.linters.LinterStage;
 import com.annimon.ownlang.stages.*;
 import com.annimon.ownlang.utils.Repl;
 import com.annimon.ownlang.utils.Sandbox;

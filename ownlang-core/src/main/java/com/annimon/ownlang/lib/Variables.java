@@ -1,17 +1,11 @@
 package com.annimon.ownlang.lib;
 
-import java.util.Map;
-
 /**
  *
  * @author aNNiMON
  */
 public final class Variables {
     private Variables() { }
-
-    public static Map<String, Value> variables() {
-        return ScopeHandler.variables();
-    }
 
     /**
      * @deprecated This function remains for backward compatibility with old separate modules

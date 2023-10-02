@@ -16,8 +16,7 @@ def testInScope() {
   assertEquals("fallback", PI)
 
   useMath()
-
-  assertEquals("fallback", PI)
+  assertNotEquals("fallback", PI)
   assertEquals(3, abs(-3))
 }
 

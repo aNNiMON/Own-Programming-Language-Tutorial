@@ -6,6 +6,7 @@ import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.Visitor;
+import com.annimon.ownlang.parser.optimization.OptimizationStage;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
 import com.annimon.ownlang.stages.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,6 +32,7 @@ public class ProgramsTest {
         testPipeline = new SourceLoaderStage()
                 .then(new LexerStage())
                 .then(new ParserStage())
+                .thenConditional(true, new OptimizationStage(9))
                 .then(new ExecutionStage())
                 .then((stagesData, input) -> {
                     input.accept(testFunctionsExecutor);

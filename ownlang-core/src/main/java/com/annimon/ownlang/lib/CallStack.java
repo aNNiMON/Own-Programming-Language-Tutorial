@@ -14,7 +14,7 @@ public final class CallStack {
     }
     
     public static synchronized void enter(String name, Function function) {
-        calls.push(new CallInfo(name, function));
+        calls.push(new CallInfo(name, function.toString()));
     }
     
     public static synchronized void exit() {
@@ -25,10 +25,10 @@ public final class CallStack {
         return calls;
     }
     
-    public record CallInfo(String name, Function function) {
+    public record CallInfo(String name, String function) {
         @Override
         public String toString() {
-            return String.format("%s: %s", name, function.toString().trim());
+            return String.format("%s: %s", name, function);
         }
     }
 }

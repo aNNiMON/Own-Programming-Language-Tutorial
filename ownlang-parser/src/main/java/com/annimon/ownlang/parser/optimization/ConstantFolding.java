@@ -100,11 +100,6 @@ public class ConstantFolding extends OptimizationVisitor<Void> implements Optimi
     }
 
     @Override
-    public Node visit(UseStatement s, Void unused) {
-        return null;
-    }
-
-    @Override
     public Node visit(FunctionDefineStatement s, Void t) {
         if (OPERATORS.contains(s.name)) {
             overloadedOperators.add(s.name);

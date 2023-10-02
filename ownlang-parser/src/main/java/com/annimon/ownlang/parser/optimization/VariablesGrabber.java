@@ -36,12 +36,11 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
         }
 
         final String variableName = ((VariableExpression) s.target).name;
-        final VariableInfo var = variableInfo(t, variableName);
+        final VariableInfo var = grabVariableInfo(t, variableName);
 
         if (s.operation == null && isValue(s.expression)) {
             var.value = ((ValueExpression) s.expression).value;
         }
-        t.put(variableName, var);
         return super.visit(s, t);
     }
 
@@ -49,21 +48,21 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
     public Node visit(DestructuringAssignmentStatement s, Map<String, VariableInfo> t) {
         for (String variableName : s.variables) {
             if (variableName == null) continue;
-            t.put(variableName, variableInfo(t, variableName));
+            grabVariableInfo(t, variableName);
         }
         return super.visit(s, t);
     }
 
     @Override
     public Node visit(ForeachArrayStatement s, Map<String, VariableInfo> t) {
-        t.put(s.variable, variableInfo(t, s.variable));
+        grabVariableInfo(t, s.variable);
         return super.visit(s, t);
     }
 
     @Override
     public Node visit(ForeachMapStatement s, Map<String, VariableInfo> t) {
-        t.put(s.key, variableInfo(t, s.key));
-        t.put(s.value, variableInfo(t, s.value));
+        grabVariableInfo(t, s.key);
+        grabVariableInfo(t, s.value);
         return super.visit(s, t);
     }
 
@@ -72,7 +71,7 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
         for (MatchExpression.Pattern pattern : s.patterns) {
             if (pattern instanceof MatchExpression.VariablePattern varPattern) {
                 final String variableName = varPattern.variable;
-                t.put(variableName, variableInfo(t, variableName));
+                grabVariableInfo(t, variableName);
             }
         }
         return super.visit(s, t);
@@ -82,13 +81,12 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
     public Node visit(UnaryExpression s, Map<String, VariableInfo> t) {
         if (s.expr1 instanceof Accessible) {
             if (s.expr1 instanceof VariableExpression varExpr) {
-                final String variableName = varExpr.name;
-                t.put(variableName, variableInfo(t, variableName));
+                grabVariableInfo(t, varExpr.name);
             }
             if (s.expr1 instanceof ContainerAccessExpression conExpr) {
                 if (conExpr.rootIsVariable()) {
                     final String variableName = ((VariableExpression) conExpr.root).name;
-                    t.put(variableName, variableInfo(t, variableName));
+                    grabVariableInfo(t, variableName);
                 }
             }
         }
@@ -99,9 +97,8 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
     public Node visit(UseStatement s, Map<String, VariableInfo> t) {
         if (grabModuleConstants) {
             for (Map.Entry<String, Value> entry : s.loadConstants().entrySet()) {
-                final VariableInfo var = variableInfo(t, entry.getKey());
+                final VariableInfo var = grabVariableInfo(t, entry.getKey());
                 var.value = entry.getValue();
-                t.put(entry.getKey(), var);
             }
         }
         return super.visit(s, t);
@@ -111,20 +108,19 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
     protected boolean visit(Arguments in, Arguments out, Map<String, VariableInfo> t) {
         for (Argument argument : in) {
             final String variableName = argument.name();
-            final VariableInfo var = variableInfo(t, variableName);
+            grabVariableInfo(t, variableName);
             /* No need to add value - it is optional arguments
             final Expression expr = argument.getValueExpr();
             if (expr != null && isValue(expr)) {
                 var.value = ((ValueExpression) expr).value;
             }*/
-            t.put(variableName, var);
         }
         return super.visit(in, out, t);
     }
 
 
 
-    private VariableInfo variableInfo(Map<String, VariableInfo> t, final String variableName) {
+    private VariableInfo grabVariableInfo(Map<String, VariableInfo> t, final String variableName) {
         final VariableInfo var;
         if (t.containsKey(variableName)) {
             var = t.get(variableName);
@@ -132,6 +128,7 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
         } else {
             var = new VariableInfo();
             var.modifications = 1;
+            t.put(variableName, var);
         }
         return var;
     }

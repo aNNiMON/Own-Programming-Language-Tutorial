@@ -4,7 +4,9 @@ import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.parser.*;
 import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.parser.linters.LinterStage;
+import com.annimon.ownlang.parser.optimization.OptimizationStage;
 import com.annimon.ownlang.stages.*;
 import com.annimon.ownlang.utils.Repl;
 import com.annimon.ownlang.utils.Sandbox;
@@ -142,13 +144,13 @@ public final class Main {
         final var scopedStages = new ScopedStageFactory(measurement::start, measurement::stop);
 
         final var stagesData = new StagesDataMap();
-        stagesData.put(OptimizationStage.TAG_OPTIMIZATION_SUMMARY, options.showAst);
         stagesData.put(SourceLoaderStage.TAG_SOURCE, input);
         try {
             scopedStages.create("Lexer", new LexerStage())
                     .then(scopedStages.create("Parser", new ParserStage()))
                     .thenConditional(options.optimizationLevel > 0,
-                            scopedStages.create("Optimization", new OptimizationStage(options.optimizationLevel)))
+                            scopedStages.create("Optimization",
+                                    new OptimizationStage(options.optimizationLevel, options.showAst)))
                     .thenConditional(options.lintMode,
                             scopedStages.create("Linter", new LinterStage()))
                     .then(scopedStages.create("Function adding", new FunctionAddingStage()))
@@ -173,8 +175,9 @@ public final class Main {
             if (options.showAst) {
                 Statement program = stagesData.get(ParserStage.TAG_PROGRAM);
                 System.out.println(program);
+                System.out.println(stagesData.getOrDefault(OptimizationStage.TAG_OPTIMIZATION_SUMMARY, ""));
             }
-            if (!options.showMeasurements) {
+            if (options.showMeasurements) {
                 System.out.println("======================");
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }

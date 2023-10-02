@@ -47,3 +47,13 @@ tasks.register('runOptimizing', JavaExec) {
     ignoreExitValue true
     args '-o 9 -m -a -f ../program.own'.split(' ')
 }
+
+tasks.register('runOptimizationDumper', JavaExec) {
+    group = "application"
+    description = "Run optmizer and dump results"
+    dependsOn classes
+    mainClass = 'com.annimon.ownlang.utils.OptimizationDumper'
+    classpath = sourceSets.main.runtimeClasspath
+    args '../program.own'
+}
+//

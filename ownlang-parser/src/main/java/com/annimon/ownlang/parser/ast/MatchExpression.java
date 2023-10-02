@@ -74,7 +74,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         final int size = array.size();
         for (int i = 0; i < size; i++) {
             final Expression expr = p.values.get(i);
-            if ( (expr != TuplePattern.ANY) && (expr.eval().compareTo(array.get(i)) != 0) ) {
+            if ( (expr != ANY) && (expr.eval().compareTo(array.get(i)) != 0) ) {
                 return false;
             }
         }
@@ -279,26 +279,26 @@ public final class MatchExpression extends InterruptableNode implements Expressi
             }
             return "()".concat(super.toString());
         }
-
-        private static final Expression ANY = new Expression() {
-            @Override
-            public Value eval() {
-                return NumberValue.ONE;
-            }
-
-            @Override
-            public void accept(Visitor visitor) {
-            }
-
-            @Override
-            public <R, T> R accept(ResultVisitor<R, T> visitor, T input) {
-                return null;
-            }
-
-            @Override
-            public String toString() {
-                return "_".concat(super.toString());
-            }
-        };
     }
+
+    public static final Expression ANY = new Expression() {
+        @Override
+        public Value eval() {
+            return NumberValue.ONE;
+        }
+
+        @Override
+        public void accept(Visitor visitor) {
+        }
+
+        @Override
+        public <R, T> R accept(ResultVisitor<R, T> visitor, T input) {
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return "_";
+        }
+    };
 }

@@ -280,10 +280,12 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
                 final List<Expression> newValues = new ArrayList<>(tuple.values.size());
                 boolean valuesChanged = false;
                 for (Expression value : tuple.values) {
-                    final Node node = value.accept(this, t);
-                    if (node != value) {
-                        valuesChanged = true;
-                        value = (Expression) node;
+                    if (value != MatchExpression.ANY) {
+                        final Node node = value.accept(this, t);
+                        if (node != value) {
+                            valuesChanged = true;
+                            value = (Expression) node;
+                        }
                     }
                     newValues.add(value);
                 }

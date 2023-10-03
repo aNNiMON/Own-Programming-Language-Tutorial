@@ -124,16 +124,18 @@ public final class files implements Module {
 
         @Override
         public Value execute(Value[] args) {
-            Arguments.checkAtLeast(1, args.length);
+            Arguments.checkOrOr(1, 2, args.length);
             
             final File file = Console.fileInstance(args[0].asString());
             try {
-                if (args.length > 1) {
-                    return process(file, args[1].asString().toLowerCase());
-                }
-                return process(file, "r");
+                final String mode = (args.length == 2)
+                        ? args[1].asString().toLowerCase()
+                        : "r";
+                return process(file, mode);
             } catch (IOException ioe) {
-                return NumberValue.MINUS_ONE;
+                final int key = -files.size() - 1;
+                files.put(key, new FileInfo(ioe.getMessage()));
+                return NumberValue.of(key);
             }
         }
         
@@ -167,8 +169,10 @@ public final class files implements Module {
         public Value execute(Value[] args) {
             if (args.length < 1) throw new ArgumentsMismatchException("File descriptor expected");
             final int key = args[0].asInt();
+            final FileInfo fileInfo = files.get(key);
+            if (key < 0) throw new ArgumentsMismatchException(fileInfo.error);
             try {
-                return execute(files.get(key), args);
+                return execute(fileInfo, args);
             } catch (IOException ioe) {
                 return NumberValue.MINUS_ONE;
             }
@@ -578,12 +582,17 @@ public final class files implements Module {
     
     private static class FileInfo {
         File file;
+        String error;
         DataInputStream dis;
         DataOutputStream dos;
         BufferedReader reader;
         BufferedWriter writer;
 
-        public FileInfo(File file, DataInputStream dis, DataOutputStream dos, BufferedReader reader, BufferedWriter writer) {
+        FileInfo(String errorMessage) {
+            this.error = errorMessage;
+        }
+
+        FileInfo(File file, DataInputStream dis, DataOutputStream dos, BufferedReader reader, BufferedWriter writer) {
             this.file = file;
             this.dis = dis;
             this.dos = dos;

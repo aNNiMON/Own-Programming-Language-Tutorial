@@ -160,7 +160,7 @@ public final class Parser {
             return classDeclaration();
         }
         if (lookMatch(0, TokenType.WORD) && lookMatch(1, TokenType.LPAREN)) {
-            return new ExprStatement(functionChain(qualifiedName()));
+            return functionCallStatement();
         }
         return assignmentStatement();
     }
@@ -319,6 +319,12 @@ public final class Parser {
             return new ReturnStatement(expression());
         }
         return statementOrBlock();
+    }
+
+    private ExprStatement functionCallStatement() {
+        return new ExprStatement(
+                functionChain(new ValueExpression(consume(TokenType.WORD).text()))
+        );
     }
 
     private Expression functionChain(Expression qualifiedNameExpr) {

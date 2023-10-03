@@ -45,15 +45,11 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
     }
     
     private Function consumeFunction(Expression expr) {
-        try {
-            final Value value = expr.eval();
-            if (value.type() == Types.FUNCTION) {
-                return ((FunctionValue) value).getValue();
-            }
-            return getFunction(value.asString());
-        } catch (VariableDoesNotExistsException ex) {
-            return getFunction(ex.getVariable());
+        final Value value = expr.eval();
+        if (value.type() == Types.FUNCTION) {
+            return ((FunctionValue) value).getValue();
         }
+        return getFunction(value.asString());
     }
     
     private Function getFunction(String key) {

@@ -129,12 +129,6 @@ public final class ScopeHandler {
         }
     }
 
-    public static void removeVariable(String name) {
-        synchronized (lock) {
-            findScope(name).scope.removeVariable(name);
-        }
-    }
-
     private static ScopeFindData findScope(String name) {
         Scope current = scope;
         do {

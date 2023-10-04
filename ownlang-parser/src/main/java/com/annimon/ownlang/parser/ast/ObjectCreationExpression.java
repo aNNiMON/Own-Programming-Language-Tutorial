@@ -2,17 +2,29 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.exceptions.UnknownClassException;
 import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.util.Range;
+import com.annimon.ownlang.util.SourceLocation;
 import java.util.Iterator;
 import java.util.List;
 
-public final class ObjectCreationExpression implements Expression {
+public final class ObjectCreationExpression implements Expression, SourceLocation {
     
     public final String className;
     public final List<Expression> constructorArguments;
+    private Range range;
 
     public ObjectCreationExpression(String className, List<Expression> constructorArguments) {
         this.className = className;
         this.constructorArguments = constructorArguments;
+    }
+
+    public void setRange(Range range) {
+        this.range = range;
+    }
+
+    @Override
+    public Range getRange() {
+        return range;
     }
     
     @Override
@@ -26,7 +38,7 @@ public final class ObjectCreationExpression implements Expression {
                     return instantiable.newInstance(ctorArgs());
                 }
             }
-            throw new UnknownClassException(className);
+            throw new UnknownClassException(className, getRange());
         }
         
         // Create an instance and put evaluated fields with method declarations

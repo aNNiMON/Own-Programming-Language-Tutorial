@@ -75,7 +75,7 @@ public final class FunctionalExpression extends InterruptableNode
                 return ((FunctionValue)variable).getValue();
             }
         }
-        throw new UnknownFunctionException(key);
+        throw new UnknownFunctionException(key, getRange());
     }
     
     @Override

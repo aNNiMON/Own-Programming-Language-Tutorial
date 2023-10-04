@@ -8,6 +8,7 @@ import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.parser.*;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.util.Pos;
 import com.annimon.ownlang.parser.visitors.PrintVisitor;
 import com.annimon.ownlang.utils.repl.JLineConsole;
 import com.annimon.ownlang.utils.repl.OwnLangCompleter;

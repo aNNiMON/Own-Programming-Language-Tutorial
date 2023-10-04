@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.util.Pos;
+
 /**
  * @author aNNiMON
  */

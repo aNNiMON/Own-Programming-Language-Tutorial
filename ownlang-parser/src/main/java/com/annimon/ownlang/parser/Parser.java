@@ -8,6 +8,8 @@ import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 import com.annimon.ownlang.parser.error.ParseError;
 import com.annimon.ownlang.parser.error.ParseErrors;
+import com.annimon.ownlang.util.Pos;
+import com.annimon.ownlang.util.Range;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -351,12 +353,14 @@ public final class Parser {
 
     private FunctionalExpression function(Expression qualifiedNameExpr) {
         // function(arg1, arg2, ...)
+        final var startTokenIndex = index - 1;
         consume(TokenType.LPAREN);
         final FunctionalExpression function = new FunctionalExpression(qualifiedNameExpr);
         while (!match(TokenType.RPAREN)) {
             function.addArgument(expression());
             match(TokenType.COMMA);
         }
+        function.setRange(getRange(startTokenIndex, index - 1));
         return function;
     }
 

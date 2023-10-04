@@ -2,6 +2,8 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.exceptions.*;
 import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.util.Range;
+import com.annimon.ownlang.util.SourceLocation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,10 +12,12 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class FunctionalExpression extends InterruptableNode implements Expression, Statement {
+public final class FunctionalExpression extends InterruptableNode
+        implements Expression, Statement, SourceLocation {
     
     public final Expression functionExpr;
     public final List<Expression> arguments;
+    private Range range;
     
     public FunctionalExpression(Expression functionExpr) {
         this.functionExpr = functionExpr;
@@ -23,7 +27,16 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
     public void addArgument(Expression arg) {
         arguments.add(arg);
     }
-    
+
+    public void setRange(Range range) {
+        this.range = range;
+    }
+
+    @Override
+    public Range getRange() {
+        return range;
+    }
+
     @Override
     public void execute() {
         eval();
@@ -38,7 +51,7 @@ public final class FunctionalExpression extends InterruptableNode implements Exp
             values[i] = arguments.get(i).eval();
         }
         final Function f = consumeFunction(functionExpr);
-        CallStack.enter(functionExpr.toString(), f);
+        CallStack.enter(functionExpr.toString(), f, formatRange());
         final Value result = f.execute(values);
         CallStack.exit();
         return result;

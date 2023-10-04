@@ -1,11 +1,14 @@
 package com.annimon.ownlang.parser;
 
+import com.annimon.ownlang.Console;
+import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.Visitor;
+import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.parser.optimization.OptimizationStage;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
 import com.annimon.ownlang.stages.*;
@@ -83,10 +86,16 @@ public class ProgramsTest {
     @ParameterizedTest
     @MethodSource("data")
     public void testProgram(String programPath) {
+        final StagesDataMap stagesData = new StagesDataMap();
         try {
-            testPipeline.perform(new StagesDataMap(), programPath);
+            testPipeline.perform(stagesData, programPath);
+        } catch (OwnLangParserException ex) {
+            final var error = new ParseErrorsFormatterStage()
+                    .perform(stagesData, ex.getParseErrors());
+            fail(programPath + "\n" + error, ex);
         } catch (Exception oae) {
-            fail(oae);
+            fail(programPath, oae);
+            Console.handleException(stagesData, Thread.currentThread(), oae);
         }
     }
 

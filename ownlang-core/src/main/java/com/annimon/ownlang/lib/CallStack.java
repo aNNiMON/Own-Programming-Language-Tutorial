@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 public final class CallStack {
-    
+
+    private static final int MAX_FUNCTION_LENGTH = 62;
     private static final Deque<CallInfo> calls = new ConcurrentLinkedDeque<>();
 
     private CallStack() { }
@@ -23,6 +24,9 @@ public final class CallStack {
         }
         if (func.contains("\n")) {
             func = func.substring(0, func.indexOf("\n")).trim();
+        }
+        if (func.length() > MAX_FUNCTION_LENGTH) {
+            func = func.substring(0, MAX_FUNCTION_LENGTH) + "...";
         }
         calls.push(new CallInfo(name, func, range));
     }

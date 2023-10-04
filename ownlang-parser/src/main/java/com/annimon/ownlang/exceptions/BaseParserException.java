@@ -1,6 +1,6 @@
 package com.annimon.ownlang.exceptions;
 
-import com.annimon.ownlang.parser.Range;
+import com.annimon.ownlang.util.Range;
 
 /**
  * Base type for all lexer and parser exceptions

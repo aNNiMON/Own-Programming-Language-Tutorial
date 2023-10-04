@@ -1,4 +1,4 @@
-package com.annimon.ownlang.parser;
+package com.annimon.ownlang.util;
 
 public record Pos(int row, int col) {
     public static final Pos UNKNOWN = new Pos(-1, -1);

@@ -2,6 +2,8 @@ package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.parser.error.ParseError;
+import com.annimon.ownlang.util.Pos;
+import com.annimon.ownlang.util.Range;
 import java.util.*;
 
 /**

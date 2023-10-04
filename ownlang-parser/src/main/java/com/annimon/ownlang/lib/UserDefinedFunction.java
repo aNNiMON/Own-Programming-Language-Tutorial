@@ -31,7 +31,7 @@ public class UserDefinedFunction implements Function {
     }
 
     @Override
-    public Value execute(Value... values) {
+    public Value execute(Value[] values) {
         final int size = values.length;
         final int requiredArgsCount = arguments.getRequiredArgumentsCount();
         if (size < requiredArgsCount) {

@@ -1,8 +1,8 @@
 package com.annimon.ownlang.parser.error;
 
 import com.annimon.ownlang.Console;
-import com.annimon.ownlang.parser.Pos;
-import com.annimon.ownlang.parser.Range;
+import com.annimon.ownlang.util.Pos;
+import com.annimon.ownlang.util.Range;
 import com.annimon.ownlang.stages.SourceLoaderStage;
 import com.annimon.ownlang.stages.Stage;
 import com.annimon.ownlang.stages.StagesData;

@@ -2,7 +2,9 @@ package com.annimon.ownlang;
 
 import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
-import com.annimon.ownlang.parser.*;
+import com.annimon.ownlang.parser.Beautifier;
+import com.annimon.ownlang.parser.SourceLoader;
+import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.parser.linters.LinterStage;
@@ -163,7 +165,7 @@ public final class Main {
         } catch (StoppedException ex) {
             // skip
         } catch (Exception ex) {
-            Console.handleException(Thread.currentThread(), ex);
+            Console.handleException(stagesData, Thread.currentThread(), ex);
         } finally {
             if (options.showTokens) {
                 final List<Token> tokens = stagesData.get(LexerStage.TAG_TOKENS);

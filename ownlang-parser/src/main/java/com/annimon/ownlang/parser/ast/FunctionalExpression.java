@@ -51,7 +51,7 @@ public final class FunctionalExpression extends InterruptableNode
             values[i] = arguments.get(i).eval();
         }
         final Function f = consumeFunction(functionExpr);
-        CallStack.enter(functionExpr.toString(), f, formatRange());
+        CallStack.enter(functionExpr.toString(), f, range);
         final Value result = f.execute(values);
         CallStack.exit();
         return result;

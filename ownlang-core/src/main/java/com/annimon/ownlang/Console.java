@@ -3,10 +3,15 @@ package com.annimon.ownlang;
 import com.annimon.ownlang.lib.CallStack;
 import com.annimon.ownlang.outputsettings.ConsoleOutputSettings;
 import com.annimon.ownlang.outputsettings.OutputSettings;
+import com.annimon.ownlang.stages.StagesData;
+import com.annimon.ownlang.util.ErrorsLocationFormatterStage;
+import com.annimon.ownlang.util.ExceptionConverterStage;
+import com.annimon.ownlang.util.ExceptionStackTraceToStringStage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class Console {
 
@@ -56,6 +61,17 @@ public class Console {
 
     public static void error(CharSequence value) {
         outputSettings.error(value);
+    }
+
+    public static void handleException(StagesData stagesData, Thread thread, Exception exception) {
+        String mainError = new ExceptionConverterStage()
+                .then((data, error) -> List.of(error))
+                .then(new ErrorsLocationFormatterStage())
+                .perform(stagesData, exception);
+        String callStack = CallStack.getFormattedCalls();
+        String stackTrace = new ExceptionStackTraceToStringStage()
+                .perform(stagesData, exception);
+        error(String.join("\n", mainError, "Thread: " + thread.getName(), callStack, stackTrace));
     }
 
     public static void handleException(Thread thread, Throwable throwable) {

@@ -1,16 +1,31 @@
 package com.annimon.ownlang.parser.error;
 
 import com.annimon.ownlang.util.Range;
-import java.util.Collections;
-import java.util.List;
+import com.annimon.ownlang.util.SourceLocatedError;
 
-public record ParseError(String message, Range range, List<StackTraceElement> stackTraceElements) {
+public record ParseError(
+        String message,
+        Range range,
+        StackTraceElement[] stackTraceElements
+) implements SourceLocatedError {
+
     public ParseError(String message, Range range) {
-        this(message, range, Collections.emptyList());
+        this(message, range, new StackTraceElement[0]);
     }
 
-    public boolean hasStackTrace() {
-        return !stackTraceElements.isEmpty();
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public Range getRange() {
+        return range;
+    }
+
+    @Override
+    public StackTraceElement[] getStackTrace() {
+        return stackTraceElements;
     }
 
     @Override

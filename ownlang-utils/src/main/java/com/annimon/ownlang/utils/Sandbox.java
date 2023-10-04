@@ -46,7 +46,7 @@ public final class Sandbox {
         } catch (Exception ex) {
             // ownlang call stack to stdout
             System.out.format("%s in %s%n", ex.getMessage(), Thread.currentThread().getName());
-            CallStack.getCalls().forEach(call -> System.out.format("\tat %s%n", call));
+            System.out.println(CallStack.getFormattedCalls());
             // java stack trace to stderr
             Console.handleException(Thread.currentThread(), ex);
         }

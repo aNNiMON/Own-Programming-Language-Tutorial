@@ -1,7 +1,9 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.util.Range;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.stream.Collectors;
 
 public final class CallStack {
     
@@ -13,7 +15,7 @@ public final class CallStack {
         calls.clear();
     }
     
-    public static synchronized void enter(String name, Function function, String position) {
+    public static synchronized void enter(String name, Function function, Range range) {
         String func = function.toString();
         if (func.contains("com.annimon.ownlang.modules")) {
             func = func.replaceAll(
@@ -22,7 +24,7 @@ public final class CallStack {
         if (func.contains("\n")) {
             func = func.substring(0, func.indexOf("\n")).trim();
         }
-        calls.push(new CallInfo(name, func, position));
+        calls.push(new CallInfo(name, func, range));
     }
     
     public static synchronized void exit() {
@@ -32,14 +34,24 @@ public final class CallStack {
     public static synchronized Deque<CallInfo> getCalls() {
         return calls;
     }
+
+    public static String getFormattedCalls() {
+        return calls.stream()
+                .map(CallInfo::format)
+                .collect(Collectors.joining("\n"));
+    }
     
-    public record CallInfo(String name, String function, String position) {
+    public record CallInfo(String name, String function, Range range) {
+        String format() {
+            return "\tat " + this;
+        }
+
         @Override
         public String toString() {
-            if (position == null) {
+            if (range == null) {
                 return String.format("%s: %s", name, function);
             } else {
-                return String.format("%s: %s %s", name, function, position);
+                return String.format("%s: %s %s", name, function, range.format());
             }
         }
     }

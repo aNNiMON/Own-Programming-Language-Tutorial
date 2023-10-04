@@ -81,7 +81,7 @@ public final class Parser {
                 parseErrors.add(new ParseError(ex.getMessage(), ex.getRange()));
                 recover();
             } catch (Exception ex) {
-                parseErrors.add(new ParseError(ex.getMessage(), getRange(), List.of(ex.getStackTrace())));
+                parseErrors.add(new ParseError(ex.getMessage(), getRange(), ex.getStackTrace()));
                 recover();
             }
         }

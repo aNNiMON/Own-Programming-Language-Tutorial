@@ -9,6 +9,7 @@ import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.parser.optimization.OptimizationStage;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
 import com.annimon.ownlang.stages.*;
+import com.annimon.ownlang.util.SourceLoaderStage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -2,7 +2,7 @@ package com.annimon.ownlang;
 
 import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
-import com.annimon.ownlang.parser.Beautifier;
+import com.annimon.ownlang.parser.BeautifierStage;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
@@ -97,9 +97,10 @@ public final class Main {
             }
         }
         if (options.beautifyMode) {
-            String input = new SourceLoaderStage()
+            String result = new SourceLoaderStage()
+                    .then(new BeautifierStage())
                     .perform(new StagesDataMap(), options.toInputSource());
-            System.out.println(Beautifier.beautify(input));
+            System.out.println(result);
             return;
         }
         run(options);

@@ -9,20 +9,24 @@ import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.ValueUtils;
 
-public final class functional_dropwhile implements Function {
+public final class functional_dropWhile implements Function {
 
     @Override
     public Value execute(Value[] args) {
         Arguments.check(2, args.length);
-        if (args[0].type() != Types.ARRAY) {
-            throw new TypeException("Array expected in first argument");
-        }
         final Value container = args[0];
         final Function predicate = ValueUtils.consumeFunction(args[1], 1);
-        return dropWhileArray((ArrayValue) container, predicate);
+        return dropWhile(container, predicate);
     }
     
-    private Value dropWhileArray(ArrayValue array, Function predicate) {
+    static ArrayValue dropWhile(Value container, Function predicate) {
+        if (container.type() != Types.ARRAY) {
+            throw new TypeException("Array expected in first argument");
+        }
+        return dropWhileArray((ArrayValue) container, predicate);
+    }
+
+    static ArrayValue dropWhileArray(ArrayValue array, Function predicate) {
         int skipCount = 0;
         for (Value value : array) {
             if (predicate.execute(value) != NumberValue.ZERO)

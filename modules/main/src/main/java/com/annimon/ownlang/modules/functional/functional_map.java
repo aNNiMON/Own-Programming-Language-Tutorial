@@ -31,7 +31,7 @@ public final class functional_map implements Function {
         throw new TypeException("Invalid first argument. Array or map expected");
     }
     
-    private Value mapArray(ArrayValue array, Function mapper) {
+    static ArrayValue mapArray(ArrayValue array, Function mapper) {
         final int size = array.size();
         final ArrayValue result = new ArrayValue(size);
         for (int i = 0; i < size; i++) {
@@ -40,7 +40,7 @@ public final class functional_map implements Function {
         return result;
     }
     
-    private Value mapMap(MapValue map, Function keyMapper, Function valueMapper) {
+    static MapValue mapMap(MapValue map, Function keyMapper, Function valueMapper) {
         final MapValue result = new MapValue(map.size());
         for (Map.Entry<Value, Value> element : map) {
             final Value newKey = keyMapper.execute(element.getKey());

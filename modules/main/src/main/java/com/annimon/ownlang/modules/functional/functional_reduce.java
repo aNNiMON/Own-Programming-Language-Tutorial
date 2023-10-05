@@ -19,22 +19,32 @@ public final class functional_reduce implements Function {
         final Value container = args[0];
         final Value identity = args[1];
         final Function accumulator = ValueUtils.consumeFunction(args[2], 2);
+        return reduce(container, identity, accumulator);
+    }
+
+    static Value reduce(Value container, Value identity, Function accumulator) {
         if (container.type() == Types.ARRAY) {
-            Value result = identity;
-            final ArrayValue array = (ArrayValue) container;
-            for (Value element : array) {
-                result = accumulator.execute(result, element);
-            }
-            return result;
+            return reduceArray(identity, (ArrayValue) container, accumulator);
         }
         if (container.type() == Types.MAP) {
-            Value result = identity;
-            final MapValue map = (MapValue) container;
-            for (Map.Entry<Value, Value> element : map) {
-                result = accumulator.execute(result, element.getKey(), element.getValue());
-            }
-            return result;
+            return reduceMap(identity, (MapValue) container, accumulator);
         }
         throw new TypeException("Invalid first argument. Array or map expected");
+    }
+
+    static Value reduceArray(Value identity, ArrayValue array, Function accumulator) {
+        Value result = identity;
+        for (Value element : array) {
+            result = accumulator.execute(result, element);
+        }
+        return result;
+    }
+
+    static Value reduceMap(Value identity, MapValue map, Function accumulator) {
+        Value result = identity;
+        for (Map.Entry<Value, Value> element : map) {
+            result = accumulator.execute(result, element.getKey(), element.getValue());
+        }
+        return result;
     }
 }

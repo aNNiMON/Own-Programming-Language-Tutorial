@@ -20,16 +20,16 @@ class StreamValue extends MapValue {
         set("map", wrapIntermediate(new functional_map()));
         set("flatMap", wrapIntermediate(new functional_flatmap()));
         set("sorted", this::sorted);
-        set("sortBy", wrapIntermediate(new functional_sortby()));
+        set("sortBy", wrapIntermediate(new functional_sortBy()));
         set("takeWhile", wrapIntermediate(new functional_takeWhile()));
-        set("dropWhile", wrapIntermediate(new functional_dropwhile()));
-        set("peek", wrapIntermediate(new functional_foreach()));
+        set("dropWhile", wrapIntermediate(new functional_dropWhile()));
+        set("peek", wrapIntermediate(new functional_forEach()));
         set("skip", this::skip);
         set("limit", this::limit);
         set("custom", this::custom);
 
         set("reduce", wrapTerminal(new functional_reduce()));
-        set("forEach", wrapTerminal(new functional_foreach()));
+        set("forEach", wrapTerminal(new functional_forEach()));
         set("toArray", args -> container);
         set("joining", container::joinToString);
         set("count", args -> NumberValue.of(container.size()));

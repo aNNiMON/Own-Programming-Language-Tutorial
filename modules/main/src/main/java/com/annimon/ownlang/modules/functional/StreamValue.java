@@ -30,6 +30,7 @@ class StreamValue extends MapValue {
 
         set("reduce", wrapTerminal(new functional_reduce()));
         set("forEach", wrapTerminal(new functional_forEach()));
+        set("forEachIndexed", wrapTerminal(new functional_forEachIndexed()));
         set("toArray", args -> container);
         set("joining", container::joinToString);
         set("count", args -> NumberValue.of(container.size()));

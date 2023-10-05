@@ -15,17 +15,16 @@ public final class functional_forEach implements Function {
     }
 
     static Value forEach(Value container, Function consumer) {
-        final int argsCount = consumer.getArgsCount();
         return switch (container.type()) {
-            case Types.STRING -> forEachString((StringValue) container, argsCount, consumer);
-            case Types.ARRAY -> forEachArray((ArrayValue) container, argsCount, consumer);
+            case Types.STRING -> forEachString((StringValue) container, consumer);
+            case Types.ARRAY -> forEachArray((ArrayValue) container, consumer);
             case Types.MAP -> forEachMap((MapValue) container, consumer);
             default -> throw new TypeException("Cannot iterate " + Types.typeToString(container.type()));
         };
     }
 
-    static StringValue forEachString(StringValue string, int argsCount, Function consumer) {
-        if (argsCount == 2) {
+    static StringValue forEachString(StringValue string, Function consumer) {
+        if (consumer.getArgsCount() == 2) {
             for (char ch : string.asString().toCharArray()) {
                 consumer.execute(new StringValue(String.valueOf(ch)), NumberValue.of(ch));
             }
@@ -37,16 +36,9 @@ public final class functional_forEach implements Function {
         return string;
     }
 
-    static ArrayValue forEachArray(ArrayValue array, int argsCount, Function consumer) {
-        if (argsCount == 2) {
-            int index = 0;
-            for (Value element : array) {
-                consumer.execute(element, NumberValue.of(index++));
-            }
-        } else {
-            for (Value element : array) {
-                consumer.execute(element);
-            }
+    static ArrayValue forEachArray(ArrayValue array, Function consumer) {
+        for (Value element : array) {
+            consumer.execute(element);
         }
         return array;
     }

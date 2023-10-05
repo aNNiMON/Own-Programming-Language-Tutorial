@@ -1,6 +1,8 @@
 package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.Console;
+import com.annimon.ownlang.stages.Stage;
+import com.annimon.ownlang.stages.StagesData;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,11 +10,7 @@ import java.util.Map;
  *
  * @author aNNiMON
  */
-public final class Beautifier {
-    
-    public static String beautify(String input) {
-        return new Beautifier(input).beautify();
-    }
+public final class BeautifierStage implements Stage<String, String> {
 
     private enum OperatorMode {
         SPACES, RSPACES, TRIM, RTRIM, AS_SOURCE,
@@ -77,21 +75,20 @@ public final class Beautifier {
         OPERATORS.put(">>>", OperatorMode.SPACES);
     }
     
-    private final String input;
-    private final int length;
-    
-    private final StringBuilder beautifiedCode, buffer;
-    
+    private String input;
+    private int length;
+    private StringBuilder beautifiedCode, buffer;
     private int pos;
     private int indentLevel;
 
-    public Beautifier(String input) {
+    @Override
+    public String perform(StagesData stagesData, String input) {
         this.input = input;
         length = input.length();
         beautifiedCode = new StringBuilder();
         buffer = new StringBuilder();
-
         indentLevel = 0;
+        return beautify();
     }
     
     public String beautify() {

@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.yaml;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.*;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ public final class yaml_decode implements Function {
             final Object root = new Yaml(options).load(yamlRaw);
             return process(root);
         } catch (Exception ex) {
-            throw new RuntimeException("Error while parsing yaml", ex);
+            throw new OwnLangRuntimeException("Error while parsing yaml", ex);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.gzip;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
@@ -45,7 +46,7 @@ public class gzip implements Module {
             gzos.finish();
             return NumberValue.ONE;
         } catch (IOException ex) {
-            throw new RuntimeException("gzipFile", ex);
+            throw new OwnLangRuntimeException("gzipFile", ex);
         }
     }
     
@@ -63,7 +64,7 @@ public class gzip implements Module {
             gzos.finish();
             return ArrayValue.of(baos.toByteArray());
         } catch (IOException ex) {
-            throw new RuntimeException("gzipBytes", ex);
+            throw new OwnLangRuntimeException("gzipBytes", ex);
         }
     }
     
@@ -85,7 +86,7 @@ public class gzip implements Module {
             copy(gzis, os);
             return NumberValue.ONE;
         } catch (IOException ex) {
-            throw new RuntimeException("ungzipFile", ex);
+            throw new OwnLangRuntimeException("ungzipFile", ex);
         }
     }
     
@@ -102,7 +103,7 @@ public class gzip implements Module {
             copy(gzis, baos);
             return ArrayValue.of(baos.toByteArray());
         } catch (IOException ex) {
-            throw new RuntimeException("ungzipBytes", ex);
+            throw new OwnLangRuntimeException("ungzipBytes", ex);
         }
     }
     

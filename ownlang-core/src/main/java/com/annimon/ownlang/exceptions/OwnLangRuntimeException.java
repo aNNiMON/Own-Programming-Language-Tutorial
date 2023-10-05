@@ -15,6 +15,11 @@ public class OwnLangRuntimeException extends RuntimeException implements SourceL
         this.range = null;
     }
 
+    public OwnLangRuntimeException(Exception ex) {
+        super(ex);
+        this.range = null;
+    }
+
     public OwnLangRuntimeException(String message) {
         this(message, (Range) null);
     }

@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.yaml;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -22,7 +23,7 @@ public final class yaml_encode implements Function {
             final String yamlRaw = new Yaml(options).dump(root);
             return new StringValue(yamlRaw);
         } catch (Exception ex) {
-            throw new RuntimeException("Error while creating yaml", ex);
+            throw new OwnLangRuntimeException("Error while creating yaml", ex);
         }
     }
 

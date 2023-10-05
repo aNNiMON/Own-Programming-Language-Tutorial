@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.json;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Function;
@@ -36,7 +37,7 @@ public final class json_encode implements Function {
             return new StringValue(jsonRaw);
 
         } catch (JSONException ex) {
-            throw new RuntimeException("Error while creating json", ex);
+            throw new OwnLangRuntimeException("Error while creating json", ex);
         }
     }
 

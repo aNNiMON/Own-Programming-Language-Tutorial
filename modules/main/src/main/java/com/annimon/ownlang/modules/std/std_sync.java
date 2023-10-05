@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.std;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.FunctionValue;
@@ -31,7 +32,7 @@ public final class std_sync implements Function {
             return queue.take();
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException(ex);
+            throw new OwnLangRuntimeException(ex);
         }
     }
     

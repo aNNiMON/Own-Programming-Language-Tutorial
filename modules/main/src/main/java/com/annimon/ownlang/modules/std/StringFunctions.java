@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.std;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.NumberValue;
@@ -17,7 +18,7 @@ public final class StringFunctions {
         try {
             return ArrayValue.of(args[0].asString().getBytes(charset));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException(uee);
+            throw new OwnLangRuntimeException(uee);
         }
     }
     

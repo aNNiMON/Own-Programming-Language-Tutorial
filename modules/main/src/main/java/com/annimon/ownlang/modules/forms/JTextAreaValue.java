@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.forms;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.Arguments;
 import static com.annimon.ownlang.lib.Converters.*;
 import com.annimon.ownlang.lib.FunctionValue;
@@ -55,7 +56,7 @@ public class JTextAreaValue extends JTextComponentValue {
                 int result = f.accept(args[0].asInt());
                 return NumberValue.of(result);
             } catch (BadLocationException ex) {
-                throw new RuntimeException(ex);
+                throw new OwnLangRuntimeException(ex);
             }
         });
     }

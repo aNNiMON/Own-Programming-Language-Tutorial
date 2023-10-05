@@ -1,6 +1,7 @@
 package com.annimon.ownlang.modules.jdbc;
 
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.io.IOException;
@@ -99,7 +100,7 @@ public final class jdbc implements Module {
                         throw new ArgumentsMismatchException("Wrong number of arguments");
                 }
             } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                throw new OwnLangRuntimeException(ex);
             }
         };
     }
@@ -161,7 +162,7 @@ public final class jdbc implements Module {
                         throw new ArgumentsMismatchException("Wrong number of arguments");
                 }
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
 
@@ -186,7 +187,7 @@ public final class jdbc implements Module {
                         throw new ArgumentsMismatchException("Wrong number of arguments");
                 }
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
 
@@ -284,7 +285,7 @@ public final class jdbc implements Module {
                     try {
                         return new URL(args[1].asString());
                     } catch (IOException ioe) {
-                        throw new RuntimeException(ioe);
+                        throw new OwnLangRuntimeException(ioe);
                     }
                 }));
             }
@@ -298,7 +299,7 @@ public final class jdbc implements Module {
                 else statement.addBatch(args[0].asString());
                 return NumberValue.ONE;
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
 
@@ -316,7 +317,7 @@ public final class jdbc implements Module {
                         (String[] columnNames) -> statement.execute(sql, columnNames));
                 return NumberValue.fromBoolean(result);
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
 
@@ -345,7 +346,7 @@ public final class jdbc implements Module {
                         (String[] columnNames) -> statement.executeUpdate(sql, columnNames));
                 return NumberValue.of(rowCount);
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
 
@@ -363,7 +364,7 @@ public final class jdbc implements Module {
                         (String[] columnNames) -> statement.executeLargeUpdate(sql, columnNames));
                 return NumberValue.of(rowCount);
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
     }
@@ -463,7 +464,7 @@ public final class jdbc implements Module {
             try {
                 return NumberValue.of(rs.findColumn(args[0].asString()));
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
 
@@ -476,7 +477,7 @@ public final class jdbc implements Module {
                 rs.updateNull(args[0].asString());
                 return NumberValue.ONE;
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         }
     }
@@ -514,7 +515,7 @@ public final class jdbc implements Module {
             return columnNamesFunction.apply(columnNames);
 
         } catch (SQLException sqlex) {
-            throw new RuntimeException(sqlex);
+            throw new OwnLangRuntimeException(sqlex);
         }
     }
 
@@ -539,7 +540,7 @@ public final class jdbc implements Module {
                 result.execute();
                 return NumberValue.ONE;
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -551,7 +552,7 @@ public final class jdbc implements Module {
                 result.execute(args[0].asInt());
                 return NumberValue.ONE;
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -561,7 +562,7 @@ public final class jdbc implements Module {
             try {
                 return NumberValue.fromBoolean(result.get());
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -571,7 +572,7 @@ public final class jdbc implements Module {
             try {
                 return NumberValue.of(numberResult.get());
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -581,7 +582,7 @@ public final class jdbc implements Module {
             try {
                 return new StringValue(stringResult.get());
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -591,7 +592,7 @@ public final class jdbc implements Module {
             try {
                 return converter.apply(objectResult.get());
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -606,7 +607,7 @@ public final class jdbc implements Module {
                 }
                 return NumberValue.fromBoolean(stringResult.get(args[0].asString()));
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -620,7 +621,7 @@ public final class jdbc implements Module {
                 }
                 return NumberValue.of(stringResult.get(args[0].asString()));
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -634,7 +635,7 @@ public final class jdbc implements Module {
                 }
                 return new StringValue(stringResult.get(args[0].asString()));
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -649,7 +650,7 @@ public final class jdbc implements Module {
                 }
                 return converter.apply(stringResult.get(args[0].asString()));
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -664,7 +665,7 @@ public final class jdbc implements Module {
                 }
                 return converter.apply(stringResult.get(args[0].asString()), args);
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -676,7 +677,7 @@ public final class jdbc implements Module {
                 result.execute(converter.apply(args));
                 return NumberValue.ONE;
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -688,7 +689,7 @@ public final class jdbc implements Module {
                 numberResult.execute(args[0].asInt(), converter.apply(args));
                 return NumberValue.ONE;
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -705,7 +706,7 @@ public final class jdbc implements Module {
                 }
                 return NumberValue.ONE;
             } catch (SQLException sqlex) {
-                throw new RuntimeException(sqlex);
+                throw new OwnLangRuntimeException(sqlex);
             }
         });
     }
@@ -728,7 +729,7 @@ public final class jdbc implements Module {
             }
             return new ResultSetValue(result);
         } catch (SQLException sqlex) {
-            throw new RuntimeException(sqlex);
+            throw new OwnLangRuntimeException(sqlex);
         }
     }
 

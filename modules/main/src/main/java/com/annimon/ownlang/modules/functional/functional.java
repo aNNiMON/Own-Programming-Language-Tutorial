@@ -19,14 +19,14 @@ public final class functional implements Module {
     @Override
     public Map<String, Function> functions() {
         final var result = new HashMap<String, Function>(15);
-        result.put("foreach", new functional_foreach());
+        result.put("foreach", new functional_forEach());
         result.put("map", new functional_map());
         result.put("flatmap", new functional_flatmap());
         result.put("reduce", new functional_reduce());
         result.put("filter", new functional_filter());
-        result.put("sortby", new functional_sortby());
+        result.put("sortby", new functional_sortBy());
         result.put("takewhile", new functional_takeWhile());
-        result.put("dropwhile", new functional_dropwhile());
+        result.put("dropwhile", new functional_dropWhile());
 
         result.put("chain", new functional_chain());
         result.put("stream", new functional_stream());

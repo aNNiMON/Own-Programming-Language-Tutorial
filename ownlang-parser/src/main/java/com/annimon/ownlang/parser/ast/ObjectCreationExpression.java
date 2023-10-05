@@ -38,7 +38,7 @@ public final class ObjectCreationExpression implements Expression, SourceLocatio
                     return instantiable.newInstance(ctorArgs());
                 }
             }
-            throw new UnknownClassException(className, getRange());
+            throw new UnknownClassException(className, range);
         }
         
         // Create an instance and put evaluated fields with method declarations
@@ -49,7 +49,7 @@ public final class ObjectCreationExpression implements Expression, SourceLocatio
             instance.addField(fieldName, f.eval());
         }
         for (FunctionDefineStatement m : cd.methods) {
-            instance.addMethod(m.name, new ClassMethod(m.arguments, m.body, instance));
+            instance.addMethod(m.name, new ClassMethod(m.arguments, m.body, instance, m.getRange()));
         }
         
         // Call a constructor

@@ -5,21 +5,30 @@ import com.annimon.ownlang.parser.ast.Argument;
 import com.annimon.ownlang.parser.ast.Arguments;
 import com.annimon.ownlang.parser.ast.ReturnStatement;
 import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.util.Range;
+import com.annimon.ownlang.util.SourceLocation;
 
 /**
  *
  * @author aNNiMON
  */
-public class UserDefinedFunction implements Function {
+public class UserDefinedFunction implements Function, SourceLocation {
     
     public final Arguments arguments;
     public final Statement body;
-    
-    public UserDefinedFunction(Arguments arguments, Statement body) {
+    private final Range range;
+
+    public UserDefinedFunction(Arguments arguments, Statement body, Range range) {
         this.arguments = arguments;
         this.body = body;
+        this.range = range;
     }
-    
+
+    @Override
+    public Range getRange() {
+        return range;
+    }
+
     @Override
     public int getArgsCount() {
         return arguments.size();
@@ -35,13 +44,15 @@ public class UserDefinedFunction implements Function {
         final int size = values.length;
         final int requiredArgsCount = arguments.getRequiredArgumentsCount();
         if (size < requiredArgsCount) {
-            throw new ArgumentsMismatchException(String.format(
-                    "Arguments count mismatch. Required %d, got %d", requiredArgsCount, size));
+            String error = String.format(
+                    "Arguments count mismatch. Required %d, got %d", requiredArgsCount, size);
+            throw new ArgumentsMismatchException(error, arguments.getRange());
         }
         final int totalArgsCount = getArgsCount();
         if (size > totalArgsCount) {
-            throw new ArgumentsMismatchException(String.format(
-                    "Arguments count mismatch. Total %d, got %d", totalArgsCount, size));
+            String error = String.format(
+                    "Arguments count mismatch. Total %d, got %d", totalArgsCount, size);
+            throw new ArgumentsMismatchException(error, arguments.getRange());
         }
 
         try {

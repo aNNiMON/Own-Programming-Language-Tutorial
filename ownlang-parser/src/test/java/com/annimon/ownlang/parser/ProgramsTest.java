@@ -97,8 +97,8 @@ public class ProgramsTest {
                     .perform(stagesData, ex.getParseErrors());
             fail(inputSource + "\n" + error, ex);
         } catch (Exception oae) {
-            fail(inputSource.toString(), oae);
             Console.handleException(stagesData, Thread.currentThread(), oae);
+            fail(inputSource.toString(), oae);
         }
     }
 

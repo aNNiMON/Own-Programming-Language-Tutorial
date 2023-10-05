@@ -290,16 +290,18 @@ public final class Parser {
 
     private FunctionDefineStatement functionDefine() {
         // def name(arg1, arg2 = value) { ... }  ||  def name(args) = expr
+        final var startTokenIndex = index - 1;
         final String name = consume(TokenType.WORD).text();
         final Arguments arguments = arguments();
         final Statement body = statementBody();
-        return new FunctionDefineStatement(name, arguments, body);
+        return new FunctionDefineStatement(name, arguments, body, getRange(startTokenIndex, index - 1));
     }
 
     private Arguments arguments() {
         // (arg1, arg2, arg3 = expr1, arg4 = expr2)
         final Arguments arguments = new Arguments();
         boolean startsOptionalArgs = false;
+        final var startTokenIndex = index;
         consume(TokenType.LPAREN);
         while (!match(TokenType.RPAREN)) {
             final String name = consume(TokenType.WORD).text();
@@ -313,6 +315,7 @@ public final class Parser {
             }
             match(TokenType.COMMA);
         }
+        arguments.setRange(getRange(startTokenIndex, index - 1));
         return arguments;
     }
 
@@ -802,9 +805,10 @@ public final class Parser {
         }
         if (match(TokenType.DEF)) {
             // anonymous function def(args) ...
+            final var startTokenIndex = index - 1;
             final Arguments arguments = arguments();
             final Statement statement = statementBody();
-            return new ValueExpression(new UserDefinedFunction(arguments, statement));
+            return new ValueExpression(new UserDefinedFunction(arguments, statement, getRange(startTokenIndex, index - 1)));
         }
         return variable();
     }

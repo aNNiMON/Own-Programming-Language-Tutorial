@@ -174,7 +174,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
         final Node body = s.body.accept(this, t);
         if (changed || body != s.body) {
-            return new FunctionDefineStatement(s.name, newArgs, consumeStatement(body));
+            return new FunctionDefineStatement(s.name, newArgs, consumeStatement(body), s.getRange());
         }
         return s;
     }
@@ -423,7 +423,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
         final Node body = s.body.accept(this, t);
         if (changed || body != s.body) {
-            return new UserDefinedFunction(newArgs, consumeStatement(body));
+            return new UserDefinedFunction(newArgs, consumeStatement(body), s.getRange());
         }
         return s;
     }
@@ -432,6 +432,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     protected boolean visit(final Arguments in, final Arguments out, T t) {
         boolean changed = false;
+        out.setRange(in.getRange());
         for (Argument argument : in) {
             final Expression valueExpr = argument.valueExpr();
             if (valueExpr == null) {

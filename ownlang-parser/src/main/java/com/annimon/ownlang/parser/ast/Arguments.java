@@ -1,19 +1,22 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.util.Range;
+import com.annimon.ownlang.util.SourceLocation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public final class Arguments implements Iterable<Argument> {
+public final class Arguments implements Iterable<Argument>, SourceLocation {
     
     private final List<Argument> arguments;
+    private Range range;
     private int requiredArgumentsCount;
 
     public Arguments() {
         arguments = new ArrayList<>();
         requiredArgumentsCount = 0;
     }
-    
+
     public void addRequired(String name) {
         arguments.add(new Argument(name));
         requiredArgumentsCount++;
@@ -33,6 +36,15 @@ public final class Arguments implements Iterable<Argument> {
 
     public int size() {
         return arguments.size();
+    }
+
+    public void setRange(Range range) {
+        this.range = range;
+    }
+
+    @Override
+    public Range getRange() {
+        return range;
     }
 
     @Override

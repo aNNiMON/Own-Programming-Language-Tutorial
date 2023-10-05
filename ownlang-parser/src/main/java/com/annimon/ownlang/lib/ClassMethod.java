@@ -2,13 +2,14 @@ package com.annimon.ownlang.lib;
 
 import com.annimon.ownlang.parser.ast.Arguments;
 import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.util.Range;
 
 public class ClassMethod extends UserDefinedFunction {
     
     public final ClassInstanceValue classInstance;
     
-    public ClassMethod(Arguments arguments, Statement body, ClassInstanceValue classInstance) {
-        super(arguments, body);
+    public ClassMethod(Arguments arguments, Statement body, ClassInstanceValue classInstance, Range range) {
+        super(arguments, body, range);
         this.classInstance = classInstance;
     }
     

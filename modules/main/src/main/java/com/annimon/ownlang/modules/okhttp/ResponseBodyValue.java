@@ -1,6 +1,7 @@
 package com.annimon.ownlang.modules.okhttp;
 
 import com.annimon.ownlang.Console;
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
 import com.annimon.ownlang.lib.Converters;
@@ -27,7 +28,7 @@ public class ResponseBodyValue extends MapValue {
             try {
                 return ArrayValue.of(responseBody.bytes());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new OwnLangRuntimeException(e);
             }
         });
         set("close", Converters.voidToVoid(responseBody::close));
@@ -37,7 +38,7 @@ public class ResponseBodyValue extends MapValue {
             try {
                 return new StringValue(responseBody.string());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new OwnLangRuntimeException(e);
             }
         });
         set("file", args -> {
@@ -48,7 +49,7 @@ public class ResponseBodyValue extends MapValue {
                 sink.close();
                 return NumberValue.ONE;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new OwnLangRuntimeException(e);
             }
         });
     }

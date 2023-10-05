@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.date;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
@@ -274,7 +275,7 @@ public final class date implements Module {
             try {
                 return DateValue.from(format.parse(args[0].asString()));
             } catch (ParseException ex) {
-                throw new RuntimeException(ex);
+                throw new OwnLangRuntimeException(ex);
             }
         }
     }

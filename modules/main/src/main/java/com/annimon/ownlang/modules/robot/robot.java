@@ -72,7 +72,7 @@ public final class robot implements Module {
             awtRobot = new Robot();
             return true;
         } catch (AWTException awte) {
-            //throw new RuntimeException("Unable to create robot instance", awte);
+            //throw new OwnLangRuntimeException("Unable to create robot instance", awte);
             return false;
         }
     }

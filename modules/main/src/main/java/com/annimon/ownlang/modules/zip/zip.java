@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.zip;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
@@ -98,7 +99,7 @@ public class zip implements Module {
                 }
             }
         } catch (IOException ex) {
-            throw new RuntimeException("zip files", ex);
+            throw new OwnLangRuntimeException("zip files", ex);
         }
         return NumberValue.of(count);
     }
@@ -193,7 +194,7 @@ public class zip implements Module {
             }
             zis.closeEntry();
         } catch (IOException ex) {
-            throw new RuntimeException("unzip files", ex);
+            throw new OwnLangRuntimeException("unzip files", ex);
         }
         return NumberValue.of(count);
     }
@@ -261,7 +262,7 @@ public class zip implements Module {
             }
             zis.closeEntry();
         } catch (IOException ex) {
-            throw new RuntimeException("list zip entries", ex);
+            throw new OwnLangRuntimeException("list zip entries", ex);
         }
         return entries.toArray(new String[0]);
     }

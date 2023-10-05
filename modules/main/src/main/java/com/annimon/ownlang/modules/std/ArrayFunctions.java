@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.std;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.ArrayValue;
@@ -23,7 +24,7 @@ public final class ArrayFunctions {
         try {
             return new StringValue(new String(bytes, charset));
         } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException(uee);
+            throw new OwnLangRuntimeException(uee);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.json;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.Value;
@@ -17,7 +18,7 @@ public final class json_decode implements Function {
             final Object root = new JSONTokener(jsonRaw).nextValue();
             return ValueUtils.toValue(root);
         } catch (JSONException ex) {
-            throw new RuntimeException("Error while parsing json", ex);
+            throw new OwnLangRuntimeException("Error while parsing json", ex);
         }
     }
 }

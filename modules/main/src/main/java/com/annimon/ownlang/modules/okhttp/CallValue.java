@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.okhttp;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.Arguments;
 import com.annimon.ownlang.lib.Converters;
 import com.annimon.ownlang.lib.Function;
@@ -56,7 +57,7 @@ public class CallValue extends MapValue {
         try {
             return new ResponseValue(call.execute());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new OwnLangRuntimeException(e);
         }
     }
 }

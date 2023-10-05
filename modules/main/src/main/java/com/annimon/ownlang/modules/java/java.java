@@ -1,5 +1,6 @@
 package com.annimon.ownlang.modules.java;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import java.lang.reflect.Array;
@@ -245,7 +246,7 @@ public final class java implements Module {
         try {
             return new ClassValue(Class.forName(className));
         } catch (ClassNotFoundException ce) {
-            throw new RuntimeException("Class " + className + " not found.", ce);
+            throw new OwnLangRuntimeException("Class " + className + " not found.", ce);
         }
     }
 
@@ -307,7 +308,7 @@ public final class java implements Module {
                 // skip
             }
         }
-        throw new RuntimeException("Constructor for " + args.length + " arguments"
+        throw new OwnLangRuntimeException("Constructor for " + args.length + " arguments"
                 + " not found or non accessible");
     }
 
@@ -327,7 +328,7 @@ public final class java implements Module {
                 }
             }
             final String className = (object == null ? "null" : object.getClass().getName());
-            throw new RuntimeException("Method for " + args.length + " arguments"
+            throw new OwnLangRuntimeException("Method for " + args.length + " arguments"
                 + " not found or non accessible in " + className);
         };
     }

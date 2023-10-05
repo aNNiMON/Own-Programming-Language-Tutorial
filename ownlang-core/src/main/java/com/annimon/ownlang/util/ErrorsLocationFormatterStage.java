@@ -3,20 +3,21 @@ package com.annimon.ownlang.util;
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.stages.Stage;
 import com.annimon.ownlang.stages.StagesData;
+import com.annimon.ownlang.util.input.SourceLoaderStage;
 
 public class ErrorsLocationFormatterStage implements Stage<Iterable<? extends SourceLocatedError>, String> {
 
     @Override
     public String perform(StagesData stagesData, Iterable<? extends SourceLocatedError> input) {
         final var sb = new StringBuilder();
-        final String source = stagesData.get(SourceLoaderStage.TAG_SOURCE);
+        final String source = stagesData.getOrDefault(SourceLoaderStage.TAG_SOURCE, "");
         final var lines = source.split("\r?\n");
         for (SourceLocatedError error : input) {
             sb.append(Console.newline());
             sb.append(error);
             sb.append(Console.newline());
             final Range range = error.getRange();
-            if (range != null) {
+            if (range != null && lines.length > 0) {
                 printPosition(sb, range.normalize(), lines);
             }
         }

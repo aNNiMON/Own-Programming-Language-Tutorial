@@ -3,13 +3,13 @@ package com.annimon.ownlang;
 import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.parser.Beautifier;
-import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.parser.linters.LinterStage;
 import com.annimon.ownlang.parser.optimization.OptimizationStage;
 import com.annimon.ownlang.stages.*;
+import com.annimon.ownlang.util.input.SourceLoaderStage;
 import com.annimon.ownlang.utils.Repl;
 import com.annimon.ownlang.utils.Sandbox;
 import com.annimon.ownlang.utils.TimeMeasurement;
@@ -23,17 +23,12 @@ import java.util.concurrent.TimeUnit;
 public final class Main {
 
     public static void main(String[] args) throws IOException {
-        if (args.length == 0) {
-            try {
-                runDefault();
-            } catch (IOException ioe) {
-                printUsage();
-            }
+        final RunOptions options = new RunOptions();
+        if (args.length == 0 && (options.detectDefaultProgramPath() == null)) {
+            printUsage();
             return;
         }
 
-        final RunOptions options = new RunOptions();
-        String input = null;
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-a":
@@ -82,73 +77,69 @@ public final class Main {
 
                 case "-f":
                 case "--file":
-                    if (i + 1 < args.length)  {
-                        input = SourceLoader.readSource(args[i + 1]);
+                    if (i + 1 < args.length) {
+                        options.programPath = args[i + 1];
                         createOwnLangArgs(args, i + 2);
                         i++;
                     }
                     break;
 
                 case "--sandbox":
-                    createOwnLangArgs(args, i + 1);
-                    final String[] ownlangArgs = Shared.getOwnlangArgs();
-                    String[] newArgs = new String[ownlangArgs.length];
-                    System.arraycopy(ownlangArgs, 0, newArgs, 0, ownlangArgs.length);
-                    Sandbox.main(newArgs);
+                    Sandbox.main(createOwnLangArgs(args, i + 1));
                     return;
 
                 default:
-                    if (input == null) {
-                        input = args[i];
+                    if (options.programSource == null) {
+                        options.programSource = args[i];
                         createOwnLangArgs(args, i + 1);
                     }
                     break;
             }
         }
-        if (input == null) {
-            throw new IllegalArgumentException("Empty input");
-        }
         if (options.beautifyMode) {
+            String input = new SourceLoaderStage()
+                    .perform(new StagesDataMap(), options.toInputSource());
             System.out.println(Beautifier.beautify(input));
             return;
         }
-        run(input, options);
-    }
-
-    private static void runDefault() throws IOException {
-        final RunOptions options = new RunOptions();
-        run(SourceLoader.readSource("program.own"), options);
+        run(options);
     }
 
     private static void printUsage() {
-        System.out.println("OwnLang version " + Version.VERSION + "\n\n" +
-                "Usage: ownlang [options]\n" +
-                "  options:\n" +
-                "      -f, --file [input]  Run program file. Required.\n" +
-                "      -r, --repl          Enter to a REPL mode\n" +
-                "      -l, --lint          Find bugs in code\n" +
-                "      -o N, --optimize N  Perform optimization with N passes\n" +
-                "      -b, --beautify      Beautify source code\n" +
-                "      -a, --showast       Show AST of program\n" +
-                "      -t, --showtokens    Show lexical tokens\n" +
-                "      -m, --showtime      Show elapsed time of parsing and execution");
+        System.out.println("OwnLang version %s\n\n".formatted(Version.VERSION) + """
+                Usage: ownlang [options]
+                  options:
+                      -f, --file [input]  Run program file. Required.
+                      -r, --repl          Enter to a REPL mode
+                      -l, --lint          Find bugs in code
+                      -o N, --optimize N  Perform optimization with N (0...9) passes
+                      -b, --beautify      Beautify source code
+                      -a, --showast       Show AST of program
+                      -t, --showtokens    Show lexical tokens
+                      -m, --showtime      Show elapsed time of parsing and execution
+                """);
     }
 
-    private static void createOwnLangArgs(String[] javaArgs, int index) {
-        if (index >= javaArgs.length) return;
-        final String[] ownlangArgs = new String[javaArgs.length - index];
-        System.arraycopy(javaArgs, index, ownlangArgs, 0, ownlangArgs.length);
+    private static String[] createOwnLangArgs(String[] javaArgs, int index) {
+        final String[] ownlangArgs;
+        if (index >= javaArgs.length) {
+            ownlangArgs = new String[0];
+        } else {
+            ownlangArgs = new String[javaArgs.length - index];
+            System.arraycopy(javaArgs, index, ownlangArgs, 0, ownlangArgs.length);
+        }
         Shared.setOwnlangArgs(ownlangArgs);
+        return ownlangArgs;
     }
 
-    private static void run(String input, RunOptions options) {
+    private static void run(RunOptions options) {
         final var measurement = new TimeMeasurement();
         final var scopedStages = new ScopedStageFactory(measurement::start, measurement::stop);
 
         final var stagesData = new StagesDataMap();
-        stagesData.put(SourceLoaderStage.TAG_SOURCE, input);
         try {
-            scopedStages.create("Lexer", new LexerStage())
+            scopedStages.create("Source loader", new SourceLoaderStage())
+                    .then(scopedStages.create("Lexer", new LexerStage()))
                     .then(scopedStages.create("Parser", new ParserStage()))
                     .thenConditional(options.optimizationLevel > 0,
                             scopedStages.create("Optimization",
@@ -157,7 +148,7 @@ public final class Main {
                             scopedStages.create("Linter", new LinterStage()))
                     .then(scopedStages.create("Function adding", new FunctionAddingStage()))
                     .then(scopedStages.create("Execution", new ExecutionStage()))
-                    .perform(stagesData, input);
+                    .perform(stagesData, options.toInputSource());
         } catch (OwnLangParserException ex) {
             final var error = new ParseErrorsFormatterStage()
                     .perform(stagesData, ex.getParseErrors());
@@ -183,22 +174,6 @@ public final class Main {
                 System.out.println("======================");
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }
-        }
-    }
-
-    private static class RunOptions {
-        boolean showTokens, showAst, showMeasurements;
-        boolean lintMode;
-        boolean beautifyMode;
-        int optimizationLevel;
-
-        RunOptions() {
-            showTokens = false;
-            showAst = false;
-            showMeasurements = false;
-            lintMode = false;
-            beautifyMode = false;
-            optimizationLevel = 0;
         }
     }
 }

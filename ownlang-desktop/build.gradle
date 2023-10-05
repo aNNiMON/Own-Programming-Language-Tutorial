@@ -56,4 +56,3 @@ tasks.register('runOptimizationDumper', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     args '../program.own'
 }
-//

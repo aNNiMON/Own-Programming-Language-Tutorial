@@ -12,7 +12,9 @@ import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.parser.optimization.OptimizationStage;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
 import com.annimon.ownlang.stages.*;
-import com.annimon.ownlang.util.SourceLoaderStage;
+import com.annimon.ownlang.util.input.InputSource;
+import com.annimon.ownlang.util.input.InputSourceFile;
+import com.annimon.ownlang.util.input.SourceLoaderStage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,11 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ProgramsTest {
     private static final String RES_DIR = "src/test/resources";
-    private static Stage<String, Statement> testPipeline;
+    private static Stage<InputSource, Statement> testPipeline;
 
-    public static Stream<String> data() {
+    public static Stream<InputSource> data() {
         return scanDirectory(RES_DIR)
-                .map(File::getPath);
+                .map(File::getPath)
+                .map(InputSourceFile::new);
     }
 
     @BeforeAll
@@ -85,16 +88,16 @@ public class ProgramsTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testProgram(String programPath) {
+    public void testProgram(InputSource inputSource) {
         final StagesDataMap stagesData = new StagesDataMap();
         try {
-            testPipeline.perform(stagesData, programPath);
+            testPipeline.perform(stagesData, inputSource);
         } catch (OwnLangParserException ex) {
             final var error = new ParseErrorsFormatterStage()
                     .perform(stagesData, ex.getParseErrors());
-            fail(programPath + "\n" + error, ex);
+            fail(inputSource + "\n" + error, ex);
         } catch (Exception oae) {
-            fail(programPath, oae);
+            fail(inputSource.toString(), oae);
             Console.handleException(stagesData, Thread.currentThread(), oae);
         }
     }

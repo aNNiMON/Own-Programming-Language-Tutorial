@@ -1,37 +1,25 @@
-package com.annimon.ownlang.util;
+package com.annimon.ownlang.util.input;
 
 import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.stages.Stage;
 import com.annimon.ownlang.stages.StagesData;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class SourceLoaderStage implements Stage<String, String> {
+public class SourceLoaderStage implements Stage<InputSource, String> {
 
     public static final String TAG_SOURCE = "source";
 
     @Override
-    public String perform(StagesData stagesData, String name) {
+    public String perform(StagesData stagesData, InputSource inputSource) {
         try {
-            String result = readSource(name);
+            String result = inputSource.load();
             stagesData.put(TAG_SOURCE, result);
             return result;
         } catch (IOException e) {
-            throw new OwnLangRuntimeException("Unable to read input " + name, e);
-        }
-    }
-
-    private String readSource(String name) throws IOException {
-        try (InputStream is = getClass().getResourceAsStream("/" + name)) {
-            if (is != null) {
-                return readStream(is);
-            }
-        }
-        try (InputStream is = new FileInputStream(name)) {
-            return readStream(is);
+            throw new OwnLangRuntimeException("Unable to read input " + inputSource, e);
         }
     }
 

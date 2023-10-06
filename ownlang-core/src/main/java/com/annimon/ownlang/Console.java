@@ -4,14 +4,16 @@ import com.annimon.ownlang.lib.CallStack;
 import com.annimon.ownlang.outputsettings.ConsoleOutputSettings;
 import com.annimon.ownlang.outputsettings.OutputSettings;
 import com.annimon.ownlang.stages.StagesData;
-import com.annimon.ownlang.util.ErrorsLocationFormatterStage;
-import com.annimon.ownlang.util.ExceptionConverterStage;
-import com.annimon.ownlang.util.ExceptionStackTraceToStringStage;
+import com.annimon.ownlang.util.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
+import static com.annimon.ownlang.util.ErrorsLocationFormatterStage.*;
 
 public class Console {
 
@@ -64,14 +66,29 @@ public class Console {
     }
 
     public static void handleException(StagesData stagesData, Thread thread, Exception exception) {
-        String mainError = new ExceptionConverterStage()
+        final var joiner = new StringJoiner("\n");
+        joiner.add(new ExceptionConverterStage()
                 .then((data, error) -> List.of(error))
                 .then(new ErrorsLocationFormatterStage())
-                .perform(stagesData, exception);
-        String callStack = CallStack.getFormattedCalls();
-        String stackTrace = new ExceptionStackTraceToStringStage()
-                .perform(stagesData, exception);
-        error(String.join("\n", mainError, "Thread: " + thread.getName(), callStack, stackTrace));
+                .perform(stagesData, exception));
+        final var processedPositions = stagesData.getOrDefault(TAG_POSITIONS, HashSet::new);
+        if (processedPositions.isEmpty()) {
+            // In case no source located errors were printed
+            // Find closest SourceLocated call stack frame
+            CallStack.getCalls().stream()
+                    .limit(4)
+                    .map(CallStack.CallInfo::range)
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .map(range -> new SourceLocationFormatterStage()
+                            .perform(stagesData, range))
+                    .ifPresent(joiner::add);
+        }
+        joiner.add("Thread: " + thread.getName());
+        joiner.add(CallStack.getFormattedCalls());
+        joiner.add(new ExceptionStackTraceToStringStage()
+                .perform(stagesData, exception));
+        error(joiner.toString());
     }
 
     public static void handleException(Thread thread, Throwable throwable) {

@@ -1,6 +1,10 @@
 package com.annimon.ownlang.util;
 
-public record SimpleError(String message) implements SourceLocatedError {
+public record SimpleError(String message, Range range) implements SourceLocatedError {
+    public SimpleError(String message) {
+        this(message, null);
+    }
+
     @Override
     public String getMessage() {
         return message;
@@ -9,5 +13,10 @@ public record SimpleError(String message) implements SourceLocatedError {
     @Override
     public String toString() {
         return message;
+    }
+
+    @Override
+    public Range getRange() {
+        return range;
     }
 }

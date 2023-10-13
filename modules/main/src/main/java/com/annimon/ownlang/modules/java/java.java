@@ -24,6 +24,8 @@ public final class java implements Module {
     public Map<String, Value> constants() {
         final var result = new LinkedHashMap<String, Value>(16);
         result.put("null", NULL);
+        result.put("TRUE", new ObjectValue(Boolean.TRUE));
+        result.put("FALSE", new ObjectValue(Boolean.FALSE));
         result.put("boolean.class", new ClassValue(boolean.class));
         result.put("boolean[].class", new ClassValue(boolean[].class));
         result.put("boolean[][].class", new ClassValue(boolean[][].class));
@@ -258,8 +260,11 @@ public final class java implements Module {
 
     private Value toValue(Value[] args) {
         Arguments.check(1, args.length);
-        if (args[0] instanceof ObjectValue) {
-            return objectToValue( ((ObjectValue) args[0]).object );
+        if (args[0] instanceof ObjectValue obj) {
+            if (obj.object != null && Boolean.class.isAssignableFrom(obj.object.getClass())) {
+                return NumberValue.fromBoolean((Boolean) obj.object);
+            }
+            return objectToValue(obj.object);
         }
         return NULL;
     }

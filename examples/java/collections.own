@@ -1,0 +1,44 @@
+use java
+
+println "OwnLang array to Java array"
+arr = toObject([1, 2, 4, 2, 0, 4, 3])
+println arr
+
+println "\nArrays.asList"
+Arrays = newClass("java.util.Arrays")
+list1 = Arrays.asList(arr)
+println list1
+
+println "\nStack"
+Stack = newClass("java.util.Stack")
+stack = new Stack()
+stack.push(1)
+stack.push(2)
+stack.push(3)
+println stack.pop()
+println stack.pop()
+
+
+println "\nArrayList from Stack"
+ArrayList = newClass("java.util.ArrayList")
+list2 = new ArrayList(stack)
+list2.add(4)
+for element : list2.toArray() {
+  println element
+}
+
+
+println "\nHashSet"
+HashSet = newClass("java.util.HashSet")
+set = new HashSet(list1)
+println set
+containsFour = set.contains(4)
+// NOTE: containsFour is java.lang.Boolean
+println containsFour.getClass()
+isContainsFour = toValue(containsFour)
+if (isContainsFour) {
+  println "Set contains 4"
+}
+for element : set.toArray() {
+  println element
+}

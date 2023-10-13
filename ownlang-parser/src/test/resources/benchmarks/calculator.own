@@ -1,0 +1,45 @@
+// Simple parser example
+use std, types
+
+operations = {
+  "+" : def(a,b) = a+b,
+  "-" : def(a,b) = a-b,
+  "*" : def(a,b) = a*b,
+  "/" : def(a,b) = a/b,
+  "%" : def(a,b) = a%b,
+  ">" : def(a,b) = a>b,
+  "<" : def(a,b) = a<b
+}
+
+def calculate(expression) {
+  pos = 0
+  len = length(expression)
+
+  def isDigit(c) = 48 <= c && c <= 57
+
+  def parseNumber() {
+    buffer = ""
+    while (pos < len && isDigit(expression.charAt(pos))) {
+      buffer += toChar(expression.charAt(pos))
+      pos++
+    }
+    return number(buffer)
+  }
+
+  def parseOperation() {
+    while (pos < len && !arrayKeyExists(toChar(expression.charAt(pos)), operations)) {
+      pos++
+    }
+    return operations[toChar(expression.charAt(pos++))]
+  }
+
+  num1 = parseNumber()
+  op = parseOperation()
+  num2 = parseNumber()
+  return op(num1, num2)
+}
+
+x = calculate("2+2")
+ + calculate("400*16")
+ + calculate("400/160")
+ + calculate("3>4")

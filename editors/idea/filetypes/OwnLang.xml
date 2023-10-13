@@ -1,0 +1,22 @@
+<filetype binary="false" default_extension="own" description="OwnLang files" name="OwnLang">
+  <highlighting>
+    <options>
+      <option name="LINE_COMMENT" value="//" />
+      <option name="COMMENT_START" value="/*" />
+      <option name="COMMENT_END" value="*/" />
+      <option name="HEX_PREFIX" value="0x" />
+      <option name="NUM_POSTFIXES" value="" />
+      <option name="HAS_BRACES" value="true" />
+      <option name="HAS_BRACKETS" value="true" />
+      <option name="HAS_PARENS" value="true" />
+      <option name="HAS_STRING_ESCAPES" value="true" />
+    </options>
+    <keywords keywords="break;case;class;continue;def;do;else;extract;for;if;match;new;print;println;return;while" ignore_case="false" />
+    <keywords2 keywords="echo;newarray;try" />
+    <keywords3 keywords="false;this;true" />
+    <keywords4 keywords="include;use" />
+  </highlighting>
+  <extensionMap>
+    <mapping ext="own" />
+  </extensionMap>
+</filetype>

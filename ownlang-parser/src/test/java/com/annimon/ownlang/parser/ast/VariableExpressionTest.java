@@ -21,8 +21,8 @@ public class VariableExpressionTest {
     
     @Test
     public void testVariable() {
-        assign("a", value(4)).execute();
-        assign("b", value("ABCD")).execute();
+        assign("a", value(4)).eval();
+        assign("b", value("ABCD")).eval();
         
         assertValue(number(4), var("a").eval());
         assertValue(string("ABCD"), var("b").eval());
@@ -30,8 +30,8 @@ public class VariableExpressionTest {
     
     @Test
     public void testVariableReplace() {
-        assign("a", value(4)).execute();
-        assign("a", value(8)).execute();
+        assign("a", value(4)).eval();
+        assign("a", value(8)).eval();
         
         assertValue(number(8), var("a").eval());
     }

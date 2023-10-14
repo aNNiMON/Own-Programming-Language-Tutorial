@@ -11,7 +11,6 @@ import com.annimon.ownlang.parser.ast.BinaryExpression;
 import com.annimon.ownlang.parser.ast.ConditionalExpression;
 import com.annimon.ownlang.parser.ast.IncludeStatement;
 import com.annimon.ownlang.parser.ast.Node;
-import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.UnaryExpression;
 import com.annimon.ownlang.parser.ast.ValueExpression;
 import com.annimon.ownlang.parser.ast.VariableExpression;
@@ -32,7 +31,7 @@ public final class VisitorUtils {
         return (node instanceof VariableExpression);
     }
 
-    public static Statement includeProgram(IncludeStatement s) {
+    public static Node includeProgram(IncludeStatement s) {
         if (!isValue(s.expression)) return null;
         try {
             final String path = s.expression.eval().asString();

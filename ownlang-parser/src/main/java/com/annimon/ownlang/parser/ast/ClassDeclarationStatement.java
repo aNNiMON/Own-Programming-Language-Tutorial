@@ -1,6 +1,8 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.ClassDeclarations;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +27,9 @@ public final class ClassDeclarationStatement implements Statement {
     }
 
     @Override
-    public void execute() {
+    public Value eval() {
         ClassDeclarations.set(name, this);
+        return NumberValue.ZERO;
     }
     
     @Override

@@ -13,21 +13,22 @@ import java.util.Map;
 public final class DestructuringAssignmentStatement extends InterruptableNode implements Statement {
     
     public final List<String> variables;
-    public final Expression containerExpression;
+    public final Node containerExpression;
 
-    public DestructuringAssignmentStatement(List<String> arguments, Expression container) {
+    public DestructuringAssignmentStatement(List<String> arguments, Node container) {
         this.variables = arguments;
         this.containerExpression = container;
     }
     
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
         final Value container = containerExpression.eval();
         switch (container.type()) {
             case Types.ARRAY -> execute((ArrayValue) container);
             case Types.MAP -> execute((MapValue) container);
         }
+        return NumberValue.ZERO;
     }
     
     private void execute(ArrayValue array) {

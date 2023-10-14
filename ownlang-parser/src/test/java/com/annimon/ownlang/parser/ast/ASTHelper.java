@@ -35,19 +35,19 @@ public final class ASTHelper {
         return result;
     }
     
-    public static AssignmentExpression assign(String variable, Expression expr) {
+    public static AssignmentExpression assign(String variable, Node expr) {
         return assign(var(variable), expr);
     }
     
-    public static AssignmentExpression assign(Accessible accessible, Expression expr) {
+    public static AssignmentExpression assign(Accessible accessible, Node expr) {
         return assign(null, accessible, expr);
     }
     
-    public static AssignmentExpression assign(BinaryExpression.Operator op, Accessible accessible, Expression expr) {
+    public static AssignmentExpression assign(BinaryExpression.Operator op, Accessible accessible, Node expr) {
         return new AssignmentExpression(op, accessible, expr);
     }
     
-    public static BinaryExpression operator(BinaryExpression.Operator op, Expression left, Expression right) {
+    public static BinaryExpression operator(BinaryExpression.Operator op, Node left, Node right) {
         return new BinaryExpression(op, left, right);
     }
     

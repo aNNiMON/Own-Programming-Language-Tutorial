@@ -7,13 +7,13 @@ import com.annimon.ownlang.util.SourceLocation;
 import java.util.Iterator;
 import java.util.List;
 
-public final class ObjectCreationExpression implements Expression, SourceLocation {
+public final class ObjectCreationExpression implements Node, SourceLocation {
     
     public final String className;
-    public final List<Expression> constructorArguments;
+    public final List<Node> constructorArguments;
     private Range range;
 
-    public ObjectCreationExpression(String className, List<Expression> constructorArguments) {
+    public ObjectCreationExpression(String className, List<Node> constructorArguments) {
         this.className = className;
         this.constructorArguments = constructorArguments;
     }
@@ -80,7 +80,7 @@ public final class ObjectCreationExpression implements Expression, SourceLocatio
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("new ").append(className).append(' ');
-        final Iterator<Expression> it = constructorArguments.iterator();
+        final Iterator<Node> it = constructorArguments.iterator();
         if (it.hasNext()) {
             sb.append(it.next());
             while (it.hasNext()) {

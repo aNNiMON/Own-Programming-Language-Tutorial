@@ -11,19 +11,14 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class MatchExpression extends InterruptableNode implements Expression, Statement {
+public final class MatchExpression extends InterruptableNode implements Statement {
 
-    public final Expression expression;
+    public final Node expression;
     public final List<Pattern> patterns;
 
-    public MatchExpression(Expression expression, List<Pattern> patterns) {
+    public MatchExpression(Node expression, List<Pattern> patterns) {
         this.expression = expression;
         this.patterns = patterns;
-    }
-
-    @Override
-    public void execute() {
-        eval();
     }
 
     @Override
@@ -73,7 +68,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
 
         final int size = array.size();
         for (int i = 0; i < size; i++) {
-            final Expression expr = p.values.get(i);
+            final Node expr = p.values.get(i);
             if ( (expr != ANY) && (expr.eval().compareTo(array.get(i)) != 0) ) {
                 return false;
             }
@@ -146,7 +141,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
 
     private Value evalResult(Statement s) {
         try {
-            s.execute();
+            s.eval();
         } catch (ReturnStatement ret) {
             return ret.getResult();
         }
@@ -176,7 +171,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
 
     public abstract static sealed class Pattern {
         public Statement result;
-        public Expression optCondition;
+        public Node optCondition;
 
         @Override
         public String toString() {
@@ -247,13 +242,13 @@ public final class MatchExpression extends InterruptableNode implements Expressi
     }
 
     public static final class TuplePattern extends Pattern {
-        public final List<Expression> values;
+        public final List<Node> values;
 
         public TuplePattern() {
             this(new ArrayList<>());
         }
 
-        public TuplePattern(List<Expression> parts) {
+        public TuplePattern(List<Node> parts) {
             this.values = parts;
         }
 
@@ -261,13 +256,13 @@ public final class MatchExpression extends InterruptableNode implements Expressi
             values.add(ANY);
         }
 
-        public void add(Expression value) {
+        public void add(Node value) {
             values.add(value);
         }
 
         @Override
         public String toString() {
-            final Iterator<Expression> it = values.iterator();
+            final Iterator<Node> it = values.iterator();
             if (it.hasNext()) {
                 final StringBuilder sb = new StringBuilder();
                 sb.append('(').append(it.next());
@@ -281,7 +276,7 @@ public final class MatchExpression extends InterruptableNode implements Expressi
         }
     }
 
-    public static final Expression ANY = new Expression() {
+    public static final Node ANY = new Node() {
         @Override
         public Value eval() {
             return NumberValue.ONE;

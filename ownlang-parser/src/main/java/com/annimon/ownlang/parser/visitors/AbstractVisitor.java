@@ -12,7 +12,7 @@ public abstract class AbstractVisitor implements Visitor {
 
     @Override
     public void visit(ArrayExpression s) {
-        for (Expression index : s.elements) {
+        for (Node index : s.elements) {
             index.accept(this);
         }
     }
@@ -30,7 +30,7 @@ public abstract class AbstractVisitor implements Visitor {
 
     @Override
     public void visit(BlockStatement s) {
-        for (Statement statement : s.statements) {
+        for (Node statement : s.statements) {
             statement.accept(this);
         }
     }
@@ -53,7 +53,7 @@ public abstract class AbstractVisitor implements Visitor {
     @Override
     public void visit(ContainerAccessExpression s) {
         s.root.accept(this);
-        for (Expression index : s.indices) {
+        for (Node index : s.indices) {
             index.accept(this);
         }
     }
@@ -110,7 +110,7 @@ public abstract class AbstractVisitor implements Visitor {
     @Override
     public void visit(FunctionalExpression s) {
         s.functionExpr.accept(this);
-        for (Expression argument : s.arguments) {
+        for (Node argument : s.arguments) {
             argument.accept(this);
         }
     }
@@ -131,7 +131,7 @@ public abstract class AbstractVisitor implements Visitor {
     
     @Override
     public void visit(MapExpression s) {
-        for (Map.Entry<Expression, Expression> entry : s.elements.entrySet()) {
+        for (Map.Entry<Node, Node> entry : s.elements.entrySet()) {
             entry.getKey().accept(this);
             entry.getValue().accept(this);
         }
@@ -144,7 +144,7 @@ public abstract class AbstractVisitor implements Visitor {
     
     @Override
     public void visit(ObjectCreationExpression s) {
-        for (Expression argument : s.constructorArguments) {
+        for (Node argument : s.constructorArguments) {
             argument.accept(this);
         }
     }

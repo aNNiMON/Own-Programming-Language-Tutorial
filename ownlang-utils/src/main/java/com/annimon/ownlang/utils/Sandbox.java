@@ -8,6 +8,7 @@ import com.annimon.ownlang.parser.Lexer;
 import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
+import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
 import java.io.File;
@@ -31,7 +32,7 @@ public final class Sandbox {
         
         final List<Token> tokens = Lexer.tokenize(input);
         final Parser parser = new Parser(tokens);
-        final Statement program = parser.parse();
+        final Node program = parser.parse();
         if (parser.getParseErrors().hasErrors()) {
             System.out.print(parser.getParseErrors());
             return;
@@ -40,7 +41,7 @@ public final class Sandbox {
         program.accept(new FunctionAdder());
         
         try {
-            program.execute();
+            program.eval();
         } catch (StoppedException ex) {
             // skip
         } catch (Exception ex) {

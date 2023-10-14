@@ -1,31 +1,35 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
+
 /**
  *
  * @author aNNiMON
  */
 public final class WhileStatement extends InterruptableNode implements Statement {
     
-    public final Expression condition;
+    public final Node condition;
     public final Statement statement;
 
-    public WhileStatement(Expression condition, Statement statement) {
+    public WhileStatement(Node condition, Statement statement) {
         this.condition = condition;
         this.statement = statement;
     }
     
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
         while (condition.eval().asInt() != 0) {
             try {
-                statement.execute();
+                statement.eval();
             } catch (BreakStatement bs) {
                 break;
             } catch (ContinueStatement cs) {
                 // continue;
             }
         }
+        return NumberValue.ZERO;
     }
     
     @Override

@@ -7,22 +7,17 @@ import com.annimon.ownlang.lib.Value;
  * 
  * @author aNNiMON
  */
-public final class ExprStatement extends InterruptableNode implements Expression, Statement {
+public final class ExprStatement extends InterruptableNode implements Statement {
     
-    public final Expression expr;
+    public final Node expr;
     
-    public ExprStatement(Expression function) {
+    public ExprStatement(Node function) {
         this.expr = function;
     }
 
     @Override
-    public void execute() {
-        super.interruptionCheck();
-        expr.eval();
-    }
-    
-    @Override
     public Value eval() {
+        super.interruptionCheck();
         return expr.eval();
     }
 

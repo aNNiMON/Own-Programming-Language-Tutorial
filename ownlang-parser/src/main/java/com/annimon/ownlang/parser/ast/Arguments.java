@@ -22,7 +22,7 @@ public final class Arguments implements Iterable<Argument>, SourceLocation {
         requiredArgumentsCount++;
     }
     
-    public void addOptional(String name, Expression expr) {
+    public void addOptional(String name, Node expr) {
         arguments.add(new Argument(name, expr));
     }
 

@@ -1,25 +1,28 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
+
 /**
  *
  * @author aNNiMON
  */
 public final class DoWhileStatement extends InterruptableNode implements Statement {
     
-    public final Expression condition;
+    public final Node condition;
     public final Statement statement;
 
-    public DoWhileStatement(Expression condition, Statement statement) {
+    public DoWhileStatement(Node condition, Statement statement) {
         this.condition = condition;
         this.statement = statement;
     }
     
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
         do {
             try {
-                statement.execute();
+                statement.eval();
             } catch (BreakStatement bs) {
                 break;
             } catch (ContinueStatement cs) {
@@ -27,6 +30,7 @@ public final class DoWhileStatement extends InterruptableNode implements Stateme
             }
         }
         while (condition.eval().asInt() != 0);
+        return NumberValue.ZERO;
     }
     
     @Override

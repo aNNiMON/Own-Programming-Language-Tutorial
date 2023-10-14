@@ -1,6 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
-public record Argument(String name, Expression valueExpr) {
+public record Argument(String name, Node valueExpr) {
 
     public Argument(String name) {
         this(name, null);

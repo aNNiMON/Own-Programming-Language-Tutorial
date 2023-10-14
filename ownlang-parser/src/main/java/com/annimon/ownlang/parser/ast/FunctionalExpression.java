@@ -13,18 +13,18 @@ import java.util.List;
  * @author aNNiMON
  */
 public final class FunctionalExpression extends InterruptableNode
-        implements Expression, Statement, SourceLocation {
+        implements Statement, SourceLocation {
     
-    public final Expression functionExpr;
-    public final List<Expression> arguments;
+    public final Node functionExpr;
+    public final List<Node> arguments;
     private Range range;
     
-    public FunctionalExpression(Expression functionExpr) {
+    public FunctionalExpression(Node functionExpr) {
         this.functionExpr = functionExpr;
         arguments = new ArrayList<>();
     }
     
-    public void addArgument(Expression arg) {
+    public void addArgument(Node arg) {
         arguments.add(arg);
     }
 
@@ -35,11 +35,6 @@ public final class FunctionalExpression extends InterruptableNode
     @Override
     public Range getRange() {
         return range;
-    }
-
-    @Override
-    public void execute() {
-        eval();
     }
     
     @Override
@@ -57,7 +52,7 @@ public final class FunctionalExpression extends InterruptableNode
         return result;
     }
     
-    private Function consumeFunction(Expression expr) {
+    private Function consumeFunction(Node expr) {
         final Value value = expr.eval();
         if (value.type() == Types.FUNCTION) {
             return ((FunctionValue) value).getValue();
@@ -96,7 +91,7 @@ public final class FunctionalExpression extends InterruptableNode
         } else {
             sb.append(functionExpr).append('(');
         }
-        final Iterator<Expression> it = arguments.iterator();
+        final Iterator<Node> it = arguments.iterator();
         if (it.hasNext()) {
             sb.append(it.next());
             while (it.hasNext()) {

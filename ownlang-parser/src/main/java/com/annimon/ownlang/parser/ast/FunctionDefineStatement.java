@@ -1,7 +1,9 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.lib.UserDefinedFunction;
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.util.Range;
 import com.annimon.ownlang.util.SourceLocation;
 
@@ -29,8 +31,9 @@ public final class FunctionDefineStatement implements Statement, SourceLocation 
     }
 
     @Override
-    public void execute() {
+    public Value eval() {
         ScopeHandler.setFunction(name, new UserDefinedFunction(arguments, body, range));
+        return NumberValue.ZERO;
     }
     
     @Override

@@ -2,6 +2,8 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.stages.*;
 import com.annimon.ownlang.util.input.InputSourceFile;
@@ -13,14 +15,14 @@ import com.annimon.ownlang.util.input.SourceLoaderStage;
  */
 public final class IncludeStatement extends InterruptableNode implements Statement {
 
-    public final Expression expression;
+    public final Node expression;
     
-    public IncludeStatement(Expression expression) {
+    public IncludeStatement(Node expression) {
         this.expression = expression;
     }
 
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
 
         final var stagesData = new StagesDataMap();
@@ -37,6 +39,7 @@ public final class IncludeStatement extends InterruptableNode implements Stateme
                     .perform(stagesData, ex.getParseErrors());
             throw new OwnLangRuntimeException(error, ex);
         }
+        return NumberValue.ZERO;
     }
     
     @Override

@@ -53,27 +53,27 @@ public final class UnaryExpression implements Expression, Statement {
         final Value value = expr1.eval();
         switch (operation) {
             case INCREMENT_PREFIX: {
-                if (expr1 instanceof Accessible) {
-                    return ((Accessible) expr1).set(increment(value));
+                if (expr1 instanceof Accessible accessible) {
+                    return accessible.set(increment(value));
                 }
                 return increment(value);
             }
             case DECREMENT_PREFIX: {
-                if (expr1 instanceof Accessible) {
-                    return ((Accessible) expr1).set(decrement(value));
+                if (expr1 instanceof Accessible accessible) {
+                    return accessible.set(decrement(value));
                 }
                 return decrement(value);
             }
             case INCREMENT_POSTFIX: {
-                if (expr1 instanceof Accessible) {
-                    ((Accessible) expr1).set(increment(value));
+                if (expr1 instanceof Accessible accessible) {
+                    accessible.set(increment(value));
                     return value;
                 }
                 return increment(value);
             }
             case DECREMENT_POSTFIX: {
-                if (expr1 instanceof Accessible) {
-                    ((Accessible) expr1).set(decrement(value));
+                if (expr1 instanceof Accessible accessible) {
+                    accessible.set(decrement(value));
                     return value;
                 }
                 return decrement(value);

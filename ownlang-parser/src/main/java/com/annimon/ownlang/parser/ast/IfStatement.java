@@ -1,29 +1,33 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
+
 /**
  *
  * @author aNNiMON
  */
 public final class IfStatement extends InterruptableNode implements Statement {
     
-    public final Expression expression;
+    public final Node expression;
     public final Statement ifStatement, elseStatement;
 
-    public IfStatement(Expression expression, Statement ifStatement, Statement elseStatement) {
+    public IfStatement(Node expression, Statement ifStatement, Statement elseStatement) {
         this.expression = expression;
         this.ifStatement = ifStatement;
         this.elseStatement = elseStatement;
     }
     
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
         final int result = expression.eval().asInt();
         if (result != 0) {
-            ifStatement.execute();
+            ifStatement.eval();
         } else if (elseStatement != null) {
-            elseStatement.execute();
+            elseStatement.eval();
         }
+        return NumberValue.ZERO;
     }
     
     @Override

@@ -2,6 +2,7 @@ package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.ModuleLoader;
+import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.modules.Module;
 import java.util.Collection;
@@ -20,11 +21,12 @@ public final class UseStatement extends InterruptableNode implements Statement {
     }
     
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
         for (String module : modules) {
             ModuleLoader.loadAndUse(module);
         }
+        return NumberValue.ZERO;
     }
 
     public Map<String, Value> loadConstants() {

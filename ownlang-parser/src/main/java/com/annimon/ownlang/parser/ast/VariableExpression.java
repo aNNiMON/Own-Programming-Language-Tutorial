@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.Value;
  *
  * @author aNNiMON
  */
-public final class VariableExpression extends InterruptableNode implements Expression, Accessible {
+public final class VariableExpression extends InterruptableNode implements Accessible {
     
     public final String name;
     
@@ -24,7 +24,9 @@ public final class VariableExpression extends InterruptableNode implements Expre
     
     @Override
     public Value get() {
-        if (!ScopeHandler.isVariableOrConstantExists(name)) throw new VariableDoesNotExistsException(name);
+        if (!ScopeHandler.isVariableOrConstantExists(name)) {
+            throw new VariableDoesNotExistsException(name);
+        }
         return ScopeHandler.getVariableOrConstant(name);
     }
 

@@ -4,7 +4,6 @@ import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.parser.ast.AssignmentExpression;
 import com.annimon.ownlang.parser.ast.BlockStatement;
 import com.annimon.ownlang.parser.ast.ExprStatement;
-import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.IfStatement;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Statement;
@@ -123,7 +122,7 @@ public class DeadCodeElimination extends OptimizationVisitor<Map<String, Variabl
     public Node visit(BlockStatement s, Map<String, VariableInfo> t) {
         final BlockStatement result = new BlockStatement();
         boolean changed = false;
-        for (Statement statement : s.statements) {
+        for (Node statement : s.statements) {
             final Node node = statement.accept(this, t);
             if (node != statement) {
                 changed = true;
@@ -135,8 +134,8 @@ public class DeadCodeElimination extends OptimizationVisitor<Map<String, Variabl
 
             if (node instanceof Statement stmt) {
                 result.add(stmt);
-            } else if (node instanceof Expression expr) {
-                result.add(new ExprStatement(expr));
+            } else if (node != null) {
+                result.add(new ExprStatement(node));
             }
         }
         if (changed) {

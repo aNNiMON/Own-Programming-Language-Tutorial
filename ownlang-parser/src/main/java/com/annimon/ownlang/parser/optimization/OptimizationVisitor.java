@@ -14,14 +14,14 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(ArrayExpression s, T t) {
-        final List<Expression> elements = new ArrayList<>(s.elements.size());
+        final List<Node> elements = new ArrayList<>(s.elements.size());
         boolean changed = false;
-        for (Expression expression : s.elements) {
+        for (Node expression : s.elements) {
             final Node node = expression.accept(this, t);
             if (node != expression) {
                 changed = true;
             }
-            elements.add((Expression) node);
+            elements.add(node);
         }
         if (changed) {
             return new ArrayExpression(elements);
@@ -34,7 +34,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node exprNode = s.expression.accept(this, t);
         final Node targetNode = s.target.accept(this, t);
         if ( (exprNode != s.expression || targetNode != s.target) && (targetNode instanceof Accessible) ) {
-            return new AssignmentExpression(s.operation, (Accessible) targetNode, (Expression) exprNode);
+            return new AssignmentExpression(s.operation, (Accessible) targetNode, exprNode);
         }
         return s;
     }
@@ -44,7 +44,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node expr1 = s.expr1.accept(this, t);
         final Node expr2 = s.expr2.accept(this, t);
         if (expr1 != s.expr1 || expr2 != s.expr2) {
-            return new BinaryExpression(s.operation, (Expression) expr1, (Expression) expr2);
+            return new BinaryExpression(s.operation, expr1, expr2);
         }
         return s;
     }
@@ -53,15 +53,13 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(BlockStatement s, T t) {
         boolean changed = false;
         final BlockStatement result = new BlockStatement();
-        for (Statement statement : s.statements) {
+        for (Node statement : s.statements) {
             final Node node = statement.accept(this, t);
             if (node != statement) {
                 changed = true;
             }
-            if (node instanceof Statement) {
-                result.add((Statement) node);
-            } else if (node instanceof Expression) {
-                result.add(new ExprStatement((Expression) node));
+            if (node != null) {
+                result.add(consumeStatement(node));
             }
         }
         if (changed) {
@@ -85,7 +83,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node expr1 = s.expr1.accept(this, t);
         final Node expr2 = s.expr2.accept(this, t);
         if (expr1 != s.expr1 || expr2 != s.expr2) {
-            return new ConditionalExpression(s.operation, (Expression) expr1, (Expression) expr2);
+            return new ConditionalExpression(s.operation, expr1, expr2);
         }
         return s;
     }
@@ -95,16 +93,16 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node root = s.root.accept(this, t);
         boolean changed = (root != s.root);
 
-        final List<Expression> indices = new ArrayList<>(s.indices.size());
-        for (Expression expression : s.indices) {
+        final List<Node> indices = new ArrayList<>(s.indices.size());
+        for (Node expression : s.indices) {
             final Node node = expression.accept(this, t);
             if (node != expression) {
                 changed = true;
             }
-            indices.add((Expression) node);
+            indices.add(node);
         }
         if (changed) {
-            return new ContainerAccessExpression((Expression) root, indices);
+            return new ContainerAccessExpression(root, indices);
         }
         return s;
     }
@@ -119,7 +117,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node condition = s.condition.accept(this, t);
         final Node statement = s.statement.accept(this, t);
         if (condition != s.condition || statement != s.statement) {
-            return new DoWhileStatement((Expression) condition, consumeStatement(statement));
+            return new DoWhileStatement(condition, consumeStatement(statement));
         }
         return s;
     }
@@ -128,7 +126,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(DestructuringAssignmentStatement s, T t) {
         final Node expr = s.containerExpression.accept(this, t);
         if (expr != s.containerExpression) {
-            return new DestructuringAssignmentStatement(s.variables, (Expression) expr);
+            return new DestructuringAssignmentStatement(s.variables, expr);
         }
         return s;
     }
@@ -142,7 +140,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         if (initialization != s.initialization || termination != s.termination
                 || increment != s.increment || statement != s.statement) {
             return new ForStatement(consumeStatement(initialization),
-                    (Expression) termination, consumeStatement(increment), consumeStatement(statement));
+                    termination, consumeStatement(increment), consumeStatement(statement));
         }
         return s;
     }
@@ -152,7 +150,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node container = s.container.accept(this, t);
         final Node body = s.body.accept(this, t);
         if (container != s.container || body != s.body) {
-            return new ForeachArrayStatement(s.variable, (Expression) container, consumeStatement(body));
+            return new ForeachArrayStatement(s.variable, container, consumeStatement(body));
         }
         return s;
     }
@@ -162,7 +160,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node container = s.container.accept(this, t);
         final Node body = s.body.accept(this, t);
         if (container != s.container || body != s.body) {
-            return new ForeachMapStatement(s.key, s.value, (Expression) container, consumeStatement(body));
+            return new ForeachMapStatement(s.key, s.value, container, consumeStatement(body));
         }
         return s;
     }
@@ -188,7 +186,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(ExprStatement s, T t) {
         final Node expr = s.expr.accept(this, t);
         if (expr != s.expr) {
-            return new ExprStatement((Expression) expr);
+            return new ExprStatement(expr);
         }
         return s;
     }
@@ -196,14 +194,14 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     @Override
     public Node visit(FunctionalExpression s, T t) {
         final Node functionExpr = s.functionExpr.accept(this, t);
-        final FunctionalExpression result = new FunctionalExpression((Expression) functionExpr);
+        final FunctionalExpression result = new FunctionalExpression(functionExpr);
         boolean changed = functionExpr != s.functionExpr;
-        for (Expression argument : s.arguments) {
+        for (Node argument : s.arguments) {
             final Node expr = argument.accept(this, t);
             if (expr != argument) {
                 changed = true;
             }
-            result.addArgument((Expression) expr);
+            result.addArgument(expr);
         }
         if (changed) {
             return result;
@@ -222,7 +220,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
             elseStatement = null;
         }
         if (expression != s.expression || ifStatement != s.ifStatement || elseStatement != s.elseStatement) {
-            return new IfStatement((Expression) expression, consumeStatement(ifStatement),
+            return new IfStatement(expression, consumeStatement(ifStatement),
                     (elseStatement == null ? null : consumeStatement(elseStatement)) );
         }
         return s;
@@ -232,22 +230,22 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(IncludeStatement s, T t) {
         final Node expression = s.expression.accept(this, t);
         if (expression != s.expression) {
-            return new IncludeStatement((Expression) expression);
+            return new IncludeStatement(expression);
         }
         return s;
     }
 
     @Override
     public Node visit(MapExpression s, T t) {
-        final Map<Expression, Expression> elements = new HashMap<>(s.elements.size());
+        final Map<Node, Node> elements = new HashMap<>(s.elements.size());
         boolean changed = false;
-        for (Map.Entry<Expression, Expression> entry : s.elements.entrySet()) {
+        for (Map.Entry<Node, Node> entry : s.elements.entrySet()) {
             final Node key = entry.getKey().accept(this, t);
             final Node value = entry.getValue().accept(this, t);
             if (key != entry.getKey() || value != entry.getValue()) {
                 changed = true;
             }
-            elements.put((Expression) key, (Expression) value);
+            elements.put(key, value);
         }
         if (changed) {
             return new MapExpression(elements);
@@ -268,7 +266,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
                 if ((node != expr) && isValue(node)) {
                     changed = true;
                     final Value value = ((ValueExpression) node).value;
-                    final Expression optCondition = pattern.optCondition;
+                    final Node optCondition = pattern.optCondition;
                     final Statement result = pattern.result;
                     pattern = new MatchExpression.ConstantPattern(value);
                     pattern.optCondition = optCondition;
@@ -277,21 +275,21 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
             }
             
             if (pattern instanceof MatchExpression.TuplePattern tuple) {
-                final List<Expression> newValues = new ArrayList<>(tuple.values.size());
+                final List<Node> newValues = new ArrayList<>(tuple.values.size());
                 boolean valuesChanged = false;
-                for (Expression value : tuple.values) {
+                for (Node value : tuple.values) {
                     if (value != MatchExpression.ANY) {
                         final Node node = value.accept(this, t);
                         if (node != value) {
                             valuesChanged = true;
-                            value = (Expression) node;
+                            value = node;
                         }
                     }
                     newValues.add(value);
                 }
                 if (valuesChanged) {
                     changed = true;
-                    final Expression optCondition = pattern.optCondition;
+                    final Node optCondition = pattern.optCondition;
                     final Statement result = pattern.result;
                     pattern = new MatchExpression.TuplePattern(newValues);
                     pattern.optCondition = optCondition;
@@ -309,28 +307,28 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
                 Node optCond = pattern.optCondition.accept(this, t);
                 if (optCond != pattern.optCondition) {
                     changed = true;
-                    pattern.optCondition = (Expression) optCond;
+                    pattern.optCondition = optCond;
                 }
             }
 
             patterns.add(pattern);
         }
         if (changed) {
-            return new MatchExpression((Expression) expression, patterns);
+            return new MatchExpression(expression, patterns);
         }
         return s;
     }
     
     @Override
     public Node visit(ObjectCreationExpression s, T t) {
-        final List<Expression> args = new ArrayList<>();
+        final List<Node> args = new ArrayList<>();
         boolean changed = false;
-        for (Expression argument : s.constructorArguments) {
+        for (Node argument : s.constructorArguments) {
             final Node expr = argument.accept(this, t);
             if (expr != argument) {
                 changed = true;
             }
-            args.add((Expression) expr);
+            args.add(expr);
         }
         
         if (changed) {
@@ -343,7 +341,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(PrintStatement s, T t) {
         final Node expression = s.expression.accept(this, t);
         if (expression != s.expression) {
-            return new PrintStatement((Expression) expression);
+            return new PrintStatement(expression);
         }
         return s;
     }
@@ -352,7 +350,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(PrintlnStatement s, T t) {
         final Node expression = s.expression.accept(this, t);
         if (expression != s.expression) {
-            return new PrintlnStatement((Expression) expression);
+            return new PrintlnStatement(expression);
         }
         return s;
     }
@@ -361,7 +359,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(ReturnStatement s, T t) {
         final Node expression = s.expression.accept(this, t);
         if (expression != s.expression) {
-            return new ReturnStatement((Expression) expression);
+            return new ReturnStatement(expression);
         }
         return s;
     }
@@ -372,7 +370,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node trueExpr = s.trueExpr.accept(this, t);
         final Node falseExpr = s.falseExpr.accept(this, t);
         if (condition != s.condition || trueExpr != s.trueExpr || falseExpr != s.falseExpr) {
-            return new TernaryExpression((Expression) condition, (Expression) trueExpr, (Expression) falseExpr);
+            return new TernaryExpression(condition, trueExpr, falseExpr);
         }
         return s;
     }
@@ -381,7 +379,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(UnaryExpression s, T t) {
         final Node expr1 = s.expr1.accept(this, t);
         if (expr1 != s.expr1) {
-            return new UnaryExpression(s.operation, (Expression) expr1);
+            return new UnaryExpression(s.operation, expr1);
         }
         return s;
     }
@@ -407,7 +405,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node condition = s.condition.accept(this, t);
         final Node statement = s.statement.accept(this, t);
         if (condition != s.condition || statement != s.statement) {
-            return new WhileStatement((Expression) condition, consumeStatement(statement));
+            return new WhileStatement(condition, consumeStatement(statement));
         }
         return s;
     }
@@ -434,7 +432,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         boolean changed = false;
         out.setRange(in.getRange());
         for (Argument argument : in) {
-            final Expression valueExpr = argument.valueExpr();
+            final Node valueExpr = argument.valueExpr();
             if (valueExpr == null) {
                 out.addRequired(argument.name());
             } else {
@@ -442,7 +440,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
                 if (expr != valueExpr) {
                     changed = true;
                 }
-                out.addOptional(argument.name(), (Expression) expr);
+                out.addOptional(argument.name(), expr);
             }
         }
         return changed;
@@ -452,6 +450,6 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         if (node instanceof Statement statement) {
             return statement;
         }
-        return new ExprStatement((Expression) node);
+        return new ExprStatement(node);
     }
 }

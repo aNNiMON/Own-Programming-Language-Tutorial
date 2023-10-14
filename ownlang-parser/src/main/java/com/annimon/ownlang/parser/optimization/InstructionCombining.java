@@ -2,11 +2,9 @@ package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.parser.ast.BlockStatement;
-import com.annimon.ownlang.parser.ast.Expression;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.PrintStatement;
 import com.annimon.ownlang.parser.ast.PrintlnStatement;
-import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.ast.ValueExpression;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isConstantValue;
 
@@ -48,8 +46,8 @@ public class InstructionCombining extends OptimizationVisitor<Void> implements O
         final BlockStatement result = new BlockStatement();
         int i;
         for (i = 1; i < size; i++) {
-            Statement s1 = s.statements.get(i - 1);
-            Statement s2 = s.statements.get(i);
+            Node s1 = s.statements.get(i - 1);
+            Node s2 = s.statements.get(i);
             Node n1 = s1.accept(this, t);
             Node n2 = s2.accept(this, t);
             if (n1 != s1 || n2 != s2) {
@@ -57,7 +55,7 @@ public class InstructionCombining extends OptimizationVisitor<Void> implements O
             }
             final Node combined = tryCombine(n1, n2);
             if (combined == null) {
-                result.add((Statement) n1);
+                result.add(n1);
             } else {
                 changed = true;
                 result.add(consumeStatement(combined));
@@ -66,12 +64,12 @@ public class InstructionCombining extends OptimizationVisitor<Void> implements O
         }
         if (i == size) {
             // Last node
-            Statement s2 = s.statements.get(size - 1);
+            Node s2 = s.statements.get(size - 1);
             Node n2 = s2.accept(this, t);
             if (n2 != s2) {
                 changed = true;
             }
-            result.add((Statement) n2);
+            result.add(n2);
         }
         if (changed) {
             return result;
@@ -91,10 +89,10 @@ public class InstructionCombining extends OptimizationVisitor<Void> implements O
         else n2Type = 0;
 
         if (n1Type != 0 && n2Type != 0) {
-            final Expression e1 = (n1Type == 1)
+            final Node e1 = (n1Type == 1)
                     ? ((PrintStatement) n1).expression
                     : ((PrintlnStatement) n1).expression;
-            final Expression e2 = (n2Type == 1)
+            final Node e2 = (n2Type == 1)
                     ? ((PrintStatement) n2).expression
                     : ((PrintlnStatement) n2).expression;
             if (isConstantValue(e1) && isConstantValue(e2)) {

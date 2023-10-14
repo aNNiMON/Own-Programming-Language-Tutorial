@@ -2,7 +2,7 @@ package com.annimon.ownlang.parser.linters;
 
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.ScopeHandler;
-import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.stages.Stage;
 import com.annimon.ownlang.stages.StagesData;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class LinterStage implements Stage<Statement, Statement> {
+public class LinterStage implements Stage<Node, Node> {
 
     @Override
-    public Statement perform(StagesData stagesData, Statement input) {
+    public Node perform(StagesData stagesData, Node input) {
         final List<LinterResult> results = new ArrayList<>();
         final Visitor[] validators = new Visitor[] {
                 new AssignValidator(results),

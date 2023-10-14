@@ -6,21 +6,16 @@ import com.annimon.ownlang.lib.Value;
  *
  * @author aNNiMON
  */
-public final class AssignmentExpression extends InterruptableNode implements Expression, Statement {
+public final class AssignmentExpression extends InterruptableNode implements Statement {
 
     public final Accessible target;
     public final BinaryExpression.Operator operation;
-    public final Expression expression;
+    public final Node expression;
     
-    public AssignmentExpression(BinaryExpression.Operator operation, Accessible target, Expression expr) {
+    public AssignmentExpression(BinaryExpression.Operator operation, Accessible target, Node expr) {
         this.operation = operation;
         this.target = target;
         this.expression = expr;
-    }
-    
-    @Override
-    public void execute() {
-        eval();
     }
 
     @Override
@@ -30,8 +25,8 @@ public final class AssignmentExpression extends InterruptableNode implements Exp
             // Simple assignment
             return target.set(expression.eval());
         }
-        final Expression expr1 = new ValueExpression(target.get());
-        final Expression expr2 = new ValueExpression(expression.eval());
+        final Node expr1 = new ValueExpression(target.get());
+        final Node expr2 = new ValueExpression(expression.eval());
         return target.set(new BinaryExpression(operation, expr1, expr2).eval());
     }
     

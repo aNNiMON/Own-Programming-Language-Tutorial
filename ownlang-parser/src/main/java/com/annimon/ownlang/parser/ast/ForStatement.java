@@ -1,5 +1,8 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
+
 /**
  *
  * @author aNNiMON
@@ -7,11 +10,11 @@ package com.annimon.ownlang.parser.ast;
 public final class ForStatement extends InterruptableNode implements Statement {
     
     public final Statement initialization;
-    public final Expression termination;
+    public final Node termination;
     public final Statement increment;
     public final Statement statement;
 
-    public ForStatement(Statement initialization, Expression termination, Statement increment, Statement block) {
+    public ForStatement(Statement initialization, Node termination, Statement increment, Statement block) {
         this.initialization = initialization;
         this.termination = termination;
         this.increment = increment;
@@ -19,17 +22,18 @@ public final class ForStatement extends InterruptableNode implements Statement {
     }
 
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
-        for (initialization.execute(); termination.eval().asInt() != 0; increment.execute()) {
+        for (initialization.eval(); termination.eval().asInt() != 0; increment.eval()) {
             try {
-                statement.execute();
+                statement.eval();
             } catch (BreakStatement bs) {
                 break;
             } catch (ContinueStatement cs) {
                 // continue;
             }
         }
+        return NumberValue.ZERO;
     }
     
     @Override

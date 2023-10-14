@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.Value;
  *
  * @author aNNiMON
  */
-public final class UnaryExpression implements Expression, Statement {
+public final class UnaryExpression implements Statement {
 
     public enum Operator {
         INCREMENT_PREFIX("++"),
@@ -35,17 +35,12 @@ public final class UnaryExpression implements Expression, Statement {
         }
     }
     
-    public final Expression expr1;
+    public final Node expr1;
     public final Operator operation;
 
-    public UnaryExpression(Operator operation, Expression expr1) {
+    public UnaryExpression(Operator operation, Node expr1) {
         this.operation = operation;
         this.expr1 = expr1;
-    }
-    
-    @Override
-    public void execute() {
-        eval();
     }
     
     @Override

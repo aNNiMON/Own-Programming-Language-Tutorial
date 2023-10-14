@@ -11,7 +11,7 @@ import com.annimon.ownlang.lib.Value;
  *
  * @author aNNiMON
  */
-public final class ValueExpression extends InterruptableNode implements Expression {
+public final class ValueExpression extends InterruptableNode {
     
     public final Value value;
     

@@ -8,11 +8,11 @@ import java.util.List;
  *
  * @author aNNiMON
  */
-public final class ArrayExpression implements Expression {
+public final class ArrayExpression implements Node {
     
-    public final List<Expression> elements;
+    public final List<Node> elements;
 
-    public ArrayExpression(List<Expression> arguments) {
+    public ArrayExpression(List<Node> arguments) {
         this.elements = arguments;
     }
     

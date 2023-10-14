@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
-import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.parser.optimization.OptimizationStage;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ProgramsTest {
     private static final String RES_DIR = "src/test/resources";
-    private static Stage<InputSource, Statement> testPipeline;
+    private static Stage<InputSource, Node> testPipeline;
 
     public static Stream<InputSource> data() {
         return scanDirectory(RES_DIR)

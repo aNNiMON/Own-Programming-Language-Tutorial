@@ -1,6 +1,8 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.Console;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
 
 /**
  *
@@ -8,16 +10,17 @@ import com.annimon.ownlang.Console;
  */
 public final class PrintStatement extends InterruptableNode implements Statement {
     
-    public final Expression expression;
+    public final Node expression;
 
-    public PrintStatement(Expression expression) {
+    public PrintStatement(Node expression) {
         this.expression = expression;
     }
 
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
         Console.print(expression.eval().asString());
+        return NumberValue.ZERO;
     }
     
     @Override

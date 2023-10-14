@@ -110,7 +110,7 @@ public class VariablesGrabber extends OptimizationVisitor<Map<String, VariableIn
             final String variableName = argument.name();
             grabVariableInfo(t, variableName);
             /* No need to add value - it is optional arguments
-            final Expression expr = argument.getValueExpr();
+            final Node expr = argument.getValueExpr();
             if (expr != null && isValue(expr)) {
                 var.value = ((ValueExpression) expr).value;
             }*/

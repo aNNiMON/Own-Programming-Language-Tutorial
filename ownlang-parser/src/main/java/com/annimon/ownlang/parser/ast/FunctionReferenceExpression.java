@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.*;
  *
  * @author aNNiMON
  */
-public final class FunctionReferenceExpression extends InterruptableNode implements Expression {
+public final class FunctionReferenceExpression extends InterruptableNode {
 
     public final String name;
 

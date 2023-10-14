@@ -1,6 +1,6 @@
 package com.annimon.ownlang.parser;
 
-import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.parser.ast.Node;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
@@ -28,7 +28,7 @@ public class ProgramsBenchmarkTest {
     @Param({"-"})
     private String path;
 
-    private Statement program;
+    private Node program;
 
     @Setup(Level.Trial)
     public void initializeTrial() throws IOException {
@@ -41,7 +41,7 @@ public class ProgramsBenchmarkTest {
     @Benchmark
     public void programBenchmark() {
         for (int i = 0; i < iterations; i++) {
-            program.execute();
+            program.eval();
         }
     }
 

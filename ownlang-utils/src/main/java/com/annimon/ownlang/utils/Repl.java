@@ -7,7 +7,7 @@ import com.annimon.ownlang.exceptions.StoppedException;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.parser.*;
 import com.annimon.ownlang.parser.ast.BlockStatement;
-import com.annimon.ownlang.parser.ast.Statement;
+import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.util.Pos;
 import com.annimon.ownlang.parser.visitors.PrintVisitor;
 import com.annimon.ownlang.utils.repl.JLineConsole;
@@ -66,7 +66,7 @@ public final class Repl {
             }
 
             buffer.append(line).append(Console.newline());
-            Statement program = null;
+            Node program = null;
             try {
                 final List<Token> tokens = Lexer.tokenize(buffer.toString());
                 final Parser parser = new Parser(tokens);
@@ -82,7 +82,7 @@ public final class Repl {
                         continue;
                     }
                 }
-                program.execute();
+                program.eval();
             } catch (OwnLangParserException lex) {
                 continue;
             } catch (StoppedException ex) {

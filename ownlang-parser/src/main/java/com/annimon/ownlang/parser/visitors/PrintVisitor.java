@@ -21,7 +21,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
     @Override
     public StringBuilder visit(ArrayExpression s, StringBuilder t) {
         t.append('[');
-        final Iterator<Expression> it = s.elements.iterator();
+        final Iterator<Node> it = s.elements.iterator();
         if (it.hasNext()) {
             it.next().accept(this, t);
             while (it.hasNext()) {
@@ -58,7 +58,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
         }
         increaseIndent();
 
-        for (Statement statement : s.statements) {
+        for (Node statement : s.statements) {
             newLine(t);
             printIndent(t);
             statement.accept(this, t);
@@ -108,7 +108,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
     @Override
     public StringBuilder visit(ContainerAccessExpression s, StringBuilder t) {
         s.root.accept(this, t);
-        for (Expression index : s.indices) {
+        for (Node index : s.indices) {
             t.append('[');
             index.accept(this, t);
             t.append(']');
@@ -266,7 +266,7 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
         t.append('{');
         increaseIndent();
         boolean firstElement = true;
-        for (Map.Entry<Expression, Expression> entry : s.elements.entrySet()) {
+        for (Map.Entry<Node, Node> entry : s.elements.entrySet()) {
             if (firstElement) firstElement = false;
             else t.append(",");
             newLine(t);
@@ -440,10 +440,10 @@ public class PrintVisitor implements ResultVisitor<StringBuilder, StringBuilder>
         return t;
     }
     
-    private void printArgs(StringBuilder t, List<Expression> args) {
+    private void printArgs(StringBuilder t, List<Node> args) {
         t.append("(");
         boolean firstElement = true;
-        for (Expression expr : args) {
+        for (Node expr : args) {
             if (firstElement) firstElement = false;
             else t.append(", ");
             expr.accept(this, t);

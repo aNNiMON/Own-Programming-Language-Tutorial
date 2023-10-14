@@ -9,20 +9,20 @@ import java.util.regex.Pattern;
  *
  * @author aNNiMON
  */
-public final class ContainerAccessExpression implements Expression, Accessible {
+public final class ContainerAccessExpression implements Node, Accessible {
 
     private static final Pattern PATTERN_SIMPLE_INDEX = Pattern.compile("^\"[a-zA-Z$_]\\w*\"");
 
-    public final Expression root;
-    public final List<Expression> indices;
+    public final Node root;
+    public final List<Node> indices;
     private final boolean[] simpleIndices;
     private final boolean rootIsVariable;
 
-    public ContainerAccessExpression(String variable, List<Expression> indices) {
+    public ContainerAccessExpression(String variable, List<Node> indices) {
         this(new VariableExpression(variable), indices);
     }
 
-    public ContainerAccessExpression(Expression root, List<Expression> indices) {
+    public ContainerAccessExpression(Node root, List<Node> indices) {
         rootIsVariable = root instanceof VariableExpression;
         this.root = root;
         this.indices = indices;
@@ -33,7 +33,7 @@ public final class ContainerAccessExpression implements Expression, Accessible {
         return rootIsVariable;
     }
 
-    public Expression getRoot() {
+    public Node getRoot() {
         return root;
     }
 
@@ -110,7 +110,7 @@ public final class ContainerAccessExpression implements Expression, Accessible {
     private boolean[] precomputeSimpleIndices() {
         final boolean[] result = new boolean[indices.size()];
         int i = 0;
-        for (Expression index : indices) {
+        for (Node index : indices) {
             String indexStr = index.toString();
             result[i] = PATTERN_SIMPLE_INDEX.matcher(indexStr).matches();
             i++;
@@ -122,7 +122,7 @@ public final class ContainerAccessExpression implements Expression, Accessible {
     public String toString() {
         final var sb = new StringBuilder(root.toString());
         int i = 0;
-        for (Expression index : indices) {
+        for (Node index : indices) {
             String indexStr = index.toString();
             if (simpleIndices[i]) {
                 sb.append('.').append(indexStr, 1, indexStr.length() - 1);

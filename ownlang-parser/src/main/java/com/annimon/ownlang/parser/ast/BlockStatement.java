@@ -1,6 +1,8 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.Console;
+import com.annimon.ownlang.lib.NumberValue;
+import com.annimon.ownlang.lib.Value;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,22 +12,23 @@ import java.util.List;
  */
 public final class BlockStatement extends InterruptableNode implements Statement {
     
-    public final List<Statement> statements;
+    public final List<Node> statements;
 
     public BlockStatement() {
         statements = new ArrayList<>();
     }
     
-    public void add(Statement statement) {
+    public void add(Node statement) {
         statements.add(statement);
     }
 
     @Override
-    public void execute() {
+    public Value eval() {
         super.interruptionCheck();
-        for (Statement statement : statements) {
-            statement.execute();
+        for (Node statement : statements) {
+            statement.eval();
         }
+        return NumberValue.ZERO;
     }
     
     @Override
@@ -41,7 +44,7 @@ public final class BlockStatement extends InterruptableNode implements Statement
     @Override
     public String toString() {
         final StringBuilder result = new StringBuilder();
-        for (Statement statement : statements) {
+        for (Node statement : statements) {
             result.append(statement.toString()).append(Console.newline());
         }
         return result.toString();

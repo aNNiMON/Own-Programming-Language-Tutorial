@@ -1,11 +1,10 @@
 package com.annimon.ownlang.parser.optimization;
 
 import com.annimon.ownlang.parser.ast.Node;
-import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.stages.Stage;
 import com.annimon.ownlang.stages.StagesData;
 
-public class OptimizationStage implements Stage<Statement, Statement> {
+public class OptimizationStage implements Stage<Node, Node> {
 
     public static final String TAG_OPTIMIZATION_SUMMARY = "optimizationSummary";
 
@@ -30,7 +29,7 @@ public class OptimizationStage implements Stage<Statement, Statement> {
     }
 
     @Override
-    public Statement perform(StagesData stagesData, Statement input) {
+    public Node perform(StagesData stagesData, Node input) {
         if (level == 0) return input;
 
         Node result = input;
@@ -51,6 +50,6 @@ public class OptimizationStage implements Stage<Statement, Statement> {
             );
         }
 
-        return (Statement) result;
+        return result;
     }
 }

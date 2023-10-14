@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.Value;
+
 /**
  *
  * @author aNNiMON
@@ -7,7 +9,7 @@ package com.annimon.ownlang.parser.ast;
 public final class ContinueStatement extends RuntimeException implements Statement {
 
     @Override
-    public void execute() {
+    public Value eval() {
         throw this;
     }
     

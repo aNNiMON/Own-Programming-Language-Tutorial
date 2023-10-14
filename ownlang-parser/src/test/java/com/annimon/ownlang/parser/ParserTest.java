@@ -32,9 +32,9 @@ public class ParserTest {
         assertEval( number(2), "12 % 5", operator(BinaryExpression.Operator.REMAINDER, value(12), value(5)) );
     }
     
-    private static void assertEval(Value expectedValue, String input, Expression expected) {
+    private static void assertEval(Value expectedValue, String input, Node expected) {
         BlockStatement program = assertExpression(input, expected);
-        program.execute();
+        program.eval();
         final Value actual = ScopeHandler.getVariable("a");
         try {
             assertEquals(expectedValue.asNumber(), actual.asNumber(), 0.001);
@@ -43,7 +43,7 @@ public class ParserTest {
         }
     }
     
-    private static BlockStatement assertExpression(String input, Expression expected) {
+    private static BlockStatement assertExpression(String input, Node expected) {
         return assertProgram("a = " + input, block(assign("a", expected)));
     }
     
@@ -60,7 +60,7 @@ public class ParserTest {
         }
     }
 
-    private static Statement parse(String input) {
+    private static Node parse(String input) {
         return Parser.parse(Lexer.tokenize(input));
     }
 }

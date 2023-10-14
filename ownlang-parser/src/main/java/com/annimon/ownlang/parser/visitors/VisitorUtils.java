@@ -3,6 +3,10 @@ package com.annimon.ownlang.parser.visitors;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.parser.Lexer;
+import com.annimon.ownlang.parser.Parser;
+import com.annimon.ownlang.parser.SourceLoader;
+import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.BinaryExpression;
 import com.annimon.ownlang.parser.ast.ConditionalExpression;
 import com.annimon.ownlang.parser.ast.IncludeStatement;
@@ -13,6 +17,7 @@ import com.annimon.ownlang.parser.ast.ValueExpression;
 import com.annimon.ownlang.parser.ast.VariableExpression;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class VisitorUtils {
@@ -28,9 +33,12 @@ public final class VisitorUtils {
     }
 
     public static Statement includeProgram(IncludeStatement s) {
-        if (!isValue(s)) return null;
+        if (!isValue(s.expression)) return null;
         try {
-            return s.loadProgram(s.expression.eval().asString());
+            final String path = s.expression.eval().asString();
+            final String input = SourceLoader.readSource(path);
+            final List<Token> tokens = Lexer.tokenize(input);
+            return Parser.parse(tokens);
         } catch (IOException ex) {
             return null;
         }

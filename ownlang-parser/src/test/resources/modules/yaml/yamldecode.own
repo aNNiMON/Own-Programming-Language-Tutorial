@@ -1,4 +1,4 @@
-use std, yaml, ounit
+use std, yaml
 
 x = yamldecode("
   name: \"std\"
@@ -23,9 +23,9 @@ x = yamldecode("
         print typeof([]) // 3 (ARRAY)
 ")
 
-assertEquals("std", x.name)
-assertEquals("both", x.scope)
-assertEquals(0, length(x.constants))
-assertEquals(2, length(x.functions))
-assertEquals("arrayCombine", x.functions[0].name)
-assertEquals("возвращает тип переданного значения", x.functions[1].desc_ru)
+  assertEquals("std", x.name)
+  assertEquals("both", x.scope)
+  assertEquals(0, x.constants.length)
+  assertEquals(2, x.functions.length)
+  assertEquals("arrayCombine", x.functions[0].name)
+  assertEquals("возвращает тип переданного значения", x.functions[1].desc_ru)

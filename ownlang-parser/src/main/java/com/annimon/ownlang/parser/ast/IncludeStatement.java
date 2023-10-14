@@ -1,12 +1,11 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.parser.Lexer;
-import com.annimon.ownlang.parser.Parser;
-import com.annimon.ownlang.parser.SourceLoader;
-import com.annimon.ownlang.parser.Token;
-import com.annimon.ownlang.parser.visitors.FunctionAdder;
-import java.io.IOException;
-import java.util.List;
+import com.annimon.ownlang.exceptions.OwnLangParserException;
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
+import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
+import com.annimon.ownlang.stages.*;
+import com.annimon.ownlang.util.input.InputSourceFile;
+import com.annimon.ownlang.util.input.SourceLoaderStage;
 
 /**
  *
@@ -23,21 +22,21 @@ public final class IncludeStatement extends InterruptableNode implements Stateme
     @Override
     public void execute() {
         super.interruptionCheck();
-        try {
-            final Statement program = loadProgram(expression.eval().asString());
-            if (program != null) {
-                program.accept(new FunctionAdder());
-                program.execute();
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 
-    public Statement loadProgram(String path) throws IOException {
-        final String input = SourceLoader.readSource(path);
-        final List<Token> tokens = Lexer.tokenize(input);
-        return Parser.parse(tokens);
+        final var stagesData = new StagesDataMap();
+        try {
+            final String path = expression.eval().asString();
+            new SourceLoaderStage()
+                    .then(new LexerStage())
+                    .then(new ParserStage())
+                    .then(new FunctionAddingStage())
+                    .then(new ExecutionStage())
+                    .perform(stagesData, new InputSourceFile(path));
+        } catch (OwnLangParserException ex) {
+            final var error = new ParseErrorsFormatterStage()
+                    .perform(stagesData, ex.getParseErrors());
+            throw new OwnLangRuntimeException(error, ex);
+        }
     }
     
     @Override

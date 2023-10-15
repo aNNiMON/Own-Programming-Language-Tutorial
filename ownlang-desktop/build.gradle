@@ -17,7 +17,6 @@ dependencies {
     implementation project(":ownlang-parser")
     implementation project(":ownlang-utils")
     implementation project(":modules:main")
-    implementation project(":modules:canvasfx")
 
     testImplementation platform("org.junit:junit-bom:${versions.junit}")
     testImplementation 'org.junit.jupiter:junit-jupiter'

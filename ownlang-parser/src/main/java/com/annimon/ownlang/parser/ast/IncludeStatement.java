@@ -6,6 +6,8 @@ import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
 import com.annimon.ownlang.stages.*;
+import com.annimon.ownlang.util.Range;
+import com.annimon.ownlang.util.SourceLocation;
 import com.annimon.ownlang.util.input.InputSourceFile;
 import com.annimon.ownlang.util.input.SourceLoaderStage;
 
@@ -13,12 +15,22 @@ import com.annimon.ownlang.util.input.SourceLoaderStage;
  *
  * @author aNNiMON
  */
-public final class IncludeStatement extends InterruptableNode implements Statement {
+public final class IncludeStatement extends InterruptableNode implements Statement, SourceLocation {
 
     public final Node expression;
+    private Range range;
     
     public IncludeStatement(Node expression) {
         this.expression = expression;
+    }
+
+    public void setRange(Range range) {
+        this.range = range;
+    }
+
+    @Override
+    public Range getRange() {
+        return range;
     }
 
     @Override
@@ -31,6 +43,7 @@ public final class IncludeStatement extends InterruptableNode implements Stateme
             new SourceLoaderStage()
                     .then(new LexerStage())
                     .then(new ParserStage())
+                    // TODO LinterStage based on main context
                     .then(new FunctionAddingStage())
                     .then(new ExecutionStage())
                     .perform(stagesData, new InputSourceFile(path));

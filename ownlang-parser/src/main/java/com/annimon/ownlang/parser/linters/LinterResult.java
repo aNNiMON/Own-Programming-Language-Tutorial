@@ -11,8 +11,16 @@ record LinterResult(Severity severity, String message, Range range) implements S
         return new LinterResult(Severity.WARNING, message);
     }
 
+    static LinterResult warning(String message, Range range) {
+        return new LinterResult(Severity.WARNING, message, range);
+    }
+
     static LinterResult error(String message) {
         return new LinterResult(Severity.ERROR, message);
+    }
+
+    static LinterResult error(String message, Range range) {
+        return new LinterResult(Severity.ERROR, message, range);
     }
 
     LinterResult(Severity severity, String message) {

@@ -23,11 +23,13 @@ final class IncludeSourceValidator extends LintVisitor {
             final String path = expr.eval().asString();
             if (!detector.isReadable(path)) {
                 results.add(LinterResult.error(
-                        "Include statement path \"%s\" is not readable".formatted(path)));
+                        "Include statement path \"%s\" is not readable".formatted(path),
+                        s.getRange()));
             }
         } else {
             results.add(LinterResult.warning(
-                    "Include statement path \"%s\" is not a constant string".formatted(s.expression)));
+                    "Include statement path \"%s\" is not a constant string".formatted(s.expression),
+                    s.getRange()));
         }
     }
 }

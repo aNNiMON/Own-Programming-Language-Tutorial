@@ -147,7 +147,7 @@ public final class Parser {
             return useStatement();
         }
         if (match(TokenType.INCLUDE)) {
-            return new IncludeStatement(expression());
+            return includeStatement();
         }
         if (match(TokenType.FOR)) {
             return forStatement();
@@ -165,6 +165,13 @@ public final class Parser {
             return functionCallStatement();
         }
         return assignmentStatement();
+    }
+
+    private IncludeStatement includeStatement() {
+        final var startTokenIndex = index - 1;
+        final var include = new IncludeStatement(expression());
+        include.setRange(getRange(startTokenIndex, index));
+        return include;
     }
 
     private UseStatement useStatement() {

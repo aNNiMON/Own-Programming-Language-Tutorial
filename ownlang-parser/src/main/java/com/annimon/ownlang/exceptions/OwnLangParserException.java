@@ -1,27 +1,27 @@
 package com.annimon.ownlang.exceptions;
 
-import com.annimon.ownlang.parser.error.ParseError;
-import com.annimon.ownlang.parser.error.ParseErrors;
+import com.annimon.ownlang.util.SourceLocatedError;
+import java.util.Collection;
+import java.util.List;
 
 /**
- * Single Exception for Lexer and Parser errors
+ * Single Exception for Lexer, Parser and Linter errors
  */
 public class OwnLangParserException extends RuntimeException {
 
-    private final ParseErrors parseErrors;
+    private final Collection<? extends SourceLocatedError> errors;
 
-    public OwnLangParserException(ParseError parseError) {
-        super(parseError.toString());
-        this.parseErrors = new ParseErrors();
-        parseErrors.add(parseError);;
+    public OwnLangParserException(SourceLocatedError error) {
+        super(error.toString());
+        errors = List.of(error);;
     }
 
-    public OwnLangParserException(ParseErrors parseErrors) {
-        super(parseErrors.toString());
-        this.parseErrors = parseErrors;
+    public OwnLangParserException(Collection<? extends SourceLocatedError> errors) {
+        super(errors.toString());
+        this.errors = errors;
     }
 
-    public ParseErrors getParseErrors() {
-        return parseErrors;
+    public Collection<? extends SourceLocatedError> getParseErrors() {
+        return errors;
     }
 }

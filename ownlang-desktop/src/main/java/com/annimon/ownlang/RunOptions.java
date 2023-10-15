@@ -1,21 +1,17 @@
 package com.annimon.ownlang;
 
-import com.annimon.ownlang.util.input.InputSource;
-import com.annimon.ownlang.util.input.InputSourceFile;
-import com.annimon.ownlang.util.input.InputSourceProgram;
-import com.annimon.ownlang.util.input.InputSourceResource;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import com.annimon.ownlang.parser.linters.LinterStage;
+import com.annimon.ownlang.util.input.*;
+import static com.annimon.ownlang.util.input.InputSourceDetector.RESOURCE_PREFIX;
 
 public class RunOptions {
-    private static final String RESOURCE_PREFIX = "resource:";
     private static final String DEFAULT_PROGRAM = "program.own";
 
     // input
     String programPath;
     String programSource;
     // modes
-    boolean lintMode;
+    LinterStage.Mode lintMode = LinterStage.Mode.SEMANTIC;
     boolean beautifyMode;
     int optimizationLevel;
     // flags
@@ -23,11 +19,18 @@ public class RunOptions {
     boolean showAst;
     boolean showMeasurements;
 
+    private final InputSourceDetector inputSourceDetector = new InputSourceDetector();
+
+    boolean linterEnabled() {
+        return lintMode != null && lintMode != LinterStage.Mode.NONE;
+    }
+
     String detectDefaultProgramPath() {
-        if (getClass().getResource("/" + DEFAULT_PROGRAM) != null) {
-            return RESOURCE_PREFIX + "/" + DEFAULT_PROGRAM;
+        final String resourcePath = RESOURCE_PREFIX + "/" + DEFAULT_PROGRAM;
+        if (inputSourceDetector.isReadable(resourcePath)) {
+            return resourcePath;
         }
-        if (Files.isReadable(Path.of(DEFAULT_PROGRAM))) {
+        if (inputSourceDetector.isReadable(DEFAULT_PROGRAM)) {
             return DEFAULT_PROGRAM;
         }
         return null;
@@ -44,12 +47,6 @@ public class RunOptions {
                 throw new IllegalArgumentException("Empty input");
             }
         }
-
-        if (programPath.startsWith(RESOURCE_PREFIX)) {
-            String path = programPath.substring(RESOURCE_PREFIX.length());
-            return new InputSourceResource(path);
-        } else {
-            return new InputSourceFile(programPath);
-        }
+        return inputSourceDetector.toInputSource(programPath);
     }
 }

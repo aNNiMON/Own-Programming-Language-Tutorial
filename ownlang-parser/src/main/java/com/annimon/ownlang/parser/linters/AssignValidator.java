@@ -1,8 +1,6 @@
 package com.annimon.ownlang.parser.linters;
 
-import com.annimon.ownlang.Console;
 import com.annimon.ownlang.parser.ast.*;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +12,7 @@ final class AssignValidator extends LintVisitor {
 
     private final Set<String> moduleConstants = new HashSet<>();
 
-    AssignValidator(Collection<LinterResult> results) {
+    AssignValidator(LinterResults results) {
         super(results);
     }
 
@@ -24,8 +22,8 @@ final class AssignValidator extends LintVisitor {
         if (s.target instanceof VariableExpression varExpr) {
             final String variable = varExpr.name;
             if (moduleConstants.contains(variable)) {
-                results.add(new LinterResult(LinterResult.Severity.WARNING,
-                        String.format("Variable \"%s\" overrides constant", variable)));
+                results.add(LinterResult.warning(
+                        "Variable \"%s\" overrides constant".formatted(variable)));
             }
         }
     }

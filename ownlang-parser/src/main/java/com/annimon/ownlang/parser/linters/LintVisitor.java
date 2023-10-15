@@ -5,12 +5,11 @@ import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
 import com.annimon.ownlang.parser.visitors.VisitorUtils;
-import java.util.Collection;
 
 abstract class LintVisitor extends AbstractVisitor {
-    protected final Collection<LinterResult> results;
+    protected final LinterResults results;
 
-    LintVisitor(Collection<LinterResult> results) {
+    LintVisitor(LinterResults results) {
         this.results = results;
     }
 

@@ -6,13 +6,16 @@ import com.annimon.ownlang.util.Range;
  *
  * @author aNNiMON
  */
-public final class ParseException extends BaseParserException {
+public final class ParseException extends RuntimeException {
 
-    public ParseException(String message) {
-        super(message, Range.ZERO);
-    }
+    private final Range range;
 
     public ParseException(String message, Range range) {
-        super(message, range);
+        super(message);
+        this.range = range;
+    }
+
+    public Range getRange() {
+        return range;
     }
 }

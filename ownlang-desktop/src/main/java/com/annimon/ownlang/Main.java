@@ -15,6 +15,7 @@ import com.annimon.ownlang.utils.Sandbox;
 import com.annimon.ownlang.utils.TimeMeasurement;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,8 +73,13 @@ public final class Main {
 
                 case "-l":
                 case "--lint":
-                    options.lintMode = true;
-                    return;
+                    final String lintMode = i + 1 < args.length ? args[++i] : LinterStage.Mode.SEMANTIC.name();
+                    options.lintMode = switch (lintMode.toLowerCase(Locale.ROOT)) {
+                        case "none" -> LinterStage.Mode.NONE;
+                        case "full" -> LinterStage.Mode.FULL;
+                        default -> LinterStage.Mode.SEMANTIC;
+                    };
+                    break;
 
                 case "-f":
                 case "--file":
@@ -112,8 +118,8 @@ public final class Main {
                   options:
                       -f, --file [input]  Run program file. Required.
                       -r, --repl          Enter to a REPL mode
-                      -l, --lint          Find bugs in code
-                      -o N, --optimize N  Perform optimization with N (0...9) passes
+                      -l, --lint <mode>   Find bugs in code. Mode: none, semantic, full
+                      -o, --optimize N    Perform optimization with N (0...9) passes
                       -b, --beautify      Beautify source code
                       -a, --showast       Show AST of program
                       -t, --showtokens    Show lexical tokens
@@ -145,8 +151,8 @@ public final class Main {
                     .thenConditional(options.optimizationLevel > 0,
                             scopedStages.create("Optimization",
                                     new OptimizationStage(options.optimizationLevel, options.showAst)))
-                    .thenConditional(options.lintMode,
-                            scopedStages.create("Linter", new LinterStage()))
+                    .thenConditional(options.linterEnabled(),
+                            scopedStages.create("Linter", new LinterStage(options.lintMode)))
                     .then(scopedStages.create("Function adding", new FunctionAddingStage()))
                     .then(scopedStages.create("Execution", new ExecutionStage()))
                     .perform(stagesData, options.toInputSource());

@@ -9,6 +9,7 @@ import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.parser.error.ParseErrorsFormatterStage;
+import com.annimon.ownlang.parser.linters.LinterStage;
 import com.annimon.ownlang.parser.optimization.OptimizationStage;
 import com.annimon.ownlang.parser.visitors.AbstractVisitor;
 import com.annimon.ownlang.stages.*;
@@ -16,7 +17,6 @@ import com.annimon.ownlang.util.input.InputSource;
 import com.annimon.ownlang.util.input.InputSourceFile;
 import com.annimon.ownlang.util.input.SourceLoaderStage;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.io.File;
@@ -39,7 +39,9 @@ public class ProgramsTest {
         testPipeline = new SourceLoaderStage()
                 .then(new LexerStage())
                 .then(new ParserStage())
+                .then(new LinterStage(LinterStage.Mode.SEMANTIC))
                 .thenConditional(true, new OptimizationStage(9))
+                .then(ProgramsTest::mockOUnit)
                 .then(new ExecutionStage())
                 .then((stagesData, input) -> {
                     input.accept(testFunctionsExecutor);
@@ -47,8 +49,7 @@ public class ProgramsTest {
                 });
     }
 
-    @BeforeEach
-    public void initialize() {
+    private static Node mockOUnit(StagesData stagesData, Node input) {
         ScopeHandler.resetScope();
         // Let's mock junit methods as ounit functions
         ScopeHandler.setFunction("assertEquals", (args) -> {
@@ -84,6 +85,7 @@ public class ProgramsTest {
             }
             return NumberValue.ONE;
         });
+        return input;
     }
 
     @ParameterizedTest

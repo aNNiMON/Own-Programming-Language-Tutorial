@@ -28,6 +28,11 @@ public final class ScopeHandler {
         return rootScope.getFunctions();
     }
 
+    public static Map<String, ClassDeclaration> classDeclarations() {
+        return rootScope.getClassDeclarations();
+    }
+
+
     static RootScope rootScope() {
         return rootScope;
     }
@@ -72,6 +77,15 @@ public final class ScopeHandler {
 
     public static void setFunction(String name, Function function) {
         rootScope.setFunction(name, function);
+    }
+
+
+    public static ClassDeclaration getClassDeclaration(String name) {
+        return rootScope.getClassDeclaration(name);
+    }
+
+    public static void setClassDeclaration(ClassDeclaration classDeclaration) {
+        rootScope.setClassDeclaration(classDeclaration);
     }
 
 

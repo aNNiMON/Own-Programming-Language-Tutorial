@@ -1,8 +1,6 @@
 package com.annimon.ownlang.parser.ast;
 
-import com.annimon.ownlang.lib.ClassDeclarations;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +26,26 @@ public final class ClassDeclarationStatement implements Statement {
 
     @Override
     public Value eval() {
-        ClassDeclarations.set(name, this);
+        final var classFields = fields.stream()
+                .map(this::toClassField)
+                .toList();
+        final var classMethods = methods.stream()
+                .map(this::toClassMethod)
+                .toList();
+        final var declaration = new ClassDeclaration(name, classFields, classMethods);
+        ScopeHandler.setClassDeclaration(declaration);
         return NumberValue.ZERO;
+    }
+
+    private ClassField toClassField(AssignmentExpression f) {
+        // TODO check only variable assignments
+        final String fieldName = ((VariableExpression) f.target).name;
+        return new ClassField(fieldName, f);
+    }
+
+    private ClassMethod toClassMethod(FunctionDefineStatement m) {
+        final var function = new UserDefinedFunction(m.arguments, m.body, m.getRange());
+        return new ClassMethod(m.name, function);
     }
     
     @Override

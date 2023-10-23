@@ -8,11 +8,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 final class RootScope extends Scope {
     private final Map<String, Value> constants;
     private final Map<String, Function> functions;
+    private final Map<String, ClassDeclaration> classDeclarations;
     private final Set<String> loadedModules;
 
     RootScope() {
         functions = new ConcurrentHashMap<>();
         constants = new ConcurrentHashMap<>();
+        classDeclarations = new ConcurrentHashMap<>();
         constants.put("true", NumberValue.ONE);
         constants.put("false", NumberValue.ZERO);
         loadedModules = new CopyOnWriteArraySet<>();
@@ -70,6 +72,18 @@ final class RootScope extends Scope {
         return functions;
     }
 
+
+    public ClassDeclaration getClassDeclaration(String name) {
+        return classDeclarations.get(name);
+    }
+
+    public void setClassDeclaration(ClassDeclaration classDeclaration) {
+        classDeclarations.put(classDeclaration.name(), classDeclaration);
+    }
+
+    public Map<String, ClassDeclaration> getClassDeclarations() {
+        return classDeclarations;
+    }
 
     public Set<String> getLoadedModules() {
         return loadedModules;

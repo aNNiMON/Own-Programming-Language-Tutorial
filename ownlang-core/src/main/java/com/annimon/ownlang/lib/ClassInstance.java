@@ -1,16 +1,18 @@
 package com.annimon.ownlang.lib;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.exceptions.TypeException;
 import java.util.Objects;
 
-public class ClassInstanceValue implements Value {
-    
+public class ClassInstance implements Value {
+
     private final String className;
     private final MapValue thisMap;
     private ClassMethod constructor;
-    private UserDefinedFunction toString;
+    private ClassMethod toString;
+    private boolean isInstantiated;
 
-    public ClassInstanceValue(String name) {
+    public ClassInstance(String name) {
         this.className = name;
         thisMap = new MapValue(10);
     }
@@ -19,31 +21,33 @@ public class ClassInstanceValue implements Value {
         return thisMap;
     }
 
-    public String getClassName() {
-        return className;
+    public void addField(ClassField f) {
+        thisMap.set(f.name(), f.evaluableValue().eval());
     }
 
-    public void addField(String name, Value value) {
-        thisMap.set(name, value);
-    }
-
-    public void addMethod(String name, ClassMethod method) {
-        if (name.equals("toString")) {
-            toString = method;
-        }
+    public void addMethod(ClassMethod method) {
+        method.setClassInstance(this);
+        final String name = method.getName();
         thisMap.set(name, method);
         if (name.equals(className)) {
             constructor = method;
+        } else if (name.equals("toString")) {
+            toString = method;
         }
     }
 
-
-    public void callConstructor(Value[] args) {
+    public ClassInstance callConstructor(Value[] args) {
+        if (isInstantiated) {
+            throw new OwnLangRuntimeException(
+                    "Class %s was already instantiated".formatted(className));
+        }
         if (constructor != null) {
             CallStack.enter("class " + className, constructor, null);
             constructor.execute(args);
             CallStack.exit();
         }
+        isInstantiated = true;
+        return this;
     }
 
     public Value access(Value value) {
@@ -53,15 +57,16 @@ public class ClassInstanceValue implements Value {
     public void set(Value key, Value value) {
         final Value v = thisMap.get(key);
         if (v == null) {
-            throw new RuntimeException("Unable to add new field "
-                    + key.asString() + " to class " + className);
+            throw new OwnLangRuntimeException(
+                    "Unable to add new field %s to class %s"
+                            .formatted(key.asString(), className));
         }
         thisMap.set(key, value);
     }
 
     @Override
     public Object raw() {
-        return null;
+        return thisMap;
     }
 
     @Override
@@ -77,9 +82,9 @@ public class ClassInstanceValue implements Value {
     @Override
     public String asString() {
         if (toString != null) {
-            return toString.execute(new Value[0]).asString();
+            return toString.execute().asString();
         }
-        return className + "@" + thisMap;
+        return className + "@" + thisMap.asString();
     }
 
     @Override
@@ -100,7 +105,7 @@ public class ClassInstanceValue implements Value {
         if (obj == null) return false;
         if (getClass() != obj.getClass())
             return false;
-        final ClassInstanceValue other = (ClassInstanceValue) obj;
+        final ClassInstance other = (ClassInstance) obj;
         return Objects.equals(this.className, other.className)
                 && Objects.equals(this.thisMap, other.thisMap);
     }

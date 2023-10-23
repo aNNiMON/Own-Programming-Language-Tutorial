@@ -29,41 +29,29 @@ public final class ObjectCreationExpression implements Node, SourceLocation {
     
     @Override
     public Value eval() {
-        final ClassDeclarationStatement cd = ClassDeclarations.get(className);
-        if (cd == null) {
-            // Is Instantiable?
-            if (ScopeHandler.isVariableOrConstantExists(className)) {
-                final Value variable = ScopeHandler.getVariableOrConstant(className);
-                if (variable instanceof Instantiable instantiable) {
-                    return instantiable.newInstance(ctorArgs());
-                }
+        final ClassDeclaration cd = ScopeHandler.getClassDeclaration(className);
+        if (cd != null) {
+            return cd.newInstance(constructorArgs());
+        }
+
+        // Is Instantiable?
+        if (ScopeHandler.isVariableOrConstantExists(className)) {
+            final Value variable = ScopeHandler.getVariableOrConstant(className);
+            if (variable instanceof Instantiable instantiable) {
+                return instantiable.newInstance(constructorArgs());
             }
-            throw new UnknownClassException(className, range);
         }
-        
-        // Create an instance and put evaluated fields with method declarations
-        final ClassInstanceValue instance = new ClassInstanceValue(className);
-        for (AssignmentExpression f : cd.fields) {
-            // TODO check only variable assignments
-            final String fieldName = ((VariableExpression) f.target).name;
-            instance.addField(fieldName, f.eval());
-        }
-        for (FunctionDefineStatement m : cd.methods) {
-            instance.addMethod(m.name, new ClassMethod(m.arguments, m.body, instance, m.getRange()));
-        }
-        
-        // Call a constructor
-        instance.callConstructor(ctorArgs());
-        return instance;
+        throw new UnknownClassException(className, range);
     }
-    
-    private Value[] ctorArgs() {
+
+    private Value[] constructorArgs() {
         final int argsSize = constructorArguments.size();
-        final Value[] ctorArgs = new Value[argsSize];
-        for (int i = 0; i < argsSize; i++) {
-            ctorArgs[i] = constructorArguments.get(i).eval();
+        final Value[] args = new Value[argsSize];
+        int i = 0;
+        for (Node argument : constructorArguments) {
+            args[i++] = argument.eval();
         }
-        return ctorArgs;
+        return args;
     }
     
     @Override

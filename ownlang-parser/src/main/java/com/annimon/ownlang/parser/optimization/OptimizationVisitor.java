@@ -75,6 +75,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(ClassDeclarationStatement s, T t) {
+        // TODO fields and methods
         return s;
     }
     

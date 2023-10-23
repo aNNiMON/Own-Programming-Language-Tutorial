@@ -50,7 +50,7 @@ public final class ContainerAccessExpression implements Node, Accessible {
             case Types.ARRAY -> ((ArrayValue) container).get(lastIndex);
             case Types.MAP -> ((MapValue) container).get(lastIndex);
             case Types.STRING -> ((StringValue) container).access(lastIndex);
-            case Types.CLASS -> ((ClassInstanceValue) container).access(lastIndex);
+            case Types.CLASS -> ((ClassInstance) container).access(lastIndex);
             default -> throw new TypeException("Array or map expected. Got " + Types.typeToString(container.type()));
         };
     }
@@ -62,7 +62,7 @@ public final class ContainerAccessExpression implements Node, Accessible {
         switch (container.type()) {
             case Types.ARRAY -> ((ArrayValue) container).set(lastIndex.asInt(), value);
             case Types.MAP -> ((MapValue) container).set(lastIndex, value);
-            case Types.CLASS -> ((ClassInstanceValue) container).set(lastIndex, value);
+            case Types.CLASS -> ((ClassInstance) container).set(lastIndex, value);
             default -> throw new TypeException("Array or map expected. Got " + container.type());
         }
         return value;

@@ -1,12 +1,13 @@
 package com.annimon.ownlang.parser.ast;
 
+import com.annimon.ownlang.lib.EvaluableValue;
 import com.annimon.ownlang.lib.Value;
 
 /**
  *
  * @author aNNiMON
  */
-public final class AssignmentExpression extends InterruptableNode implements Statement {
+public final class AssignmentExpression extends InterruptableNode implements Statement, EvaluableValue {
 
     public final Accessible target;
     public final BinaryExpression.Operator operation;

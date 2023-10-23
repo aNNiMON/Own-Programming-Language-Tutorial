@@ -48,8 +48,8 @@ public final class FunctionDefineStatement implements Statement, SourceLocation 
 
     @Override
     public String toString() {
-        if (body instanceof ReturnStatement) {
-            return String.format("def %s%s = %s", name, arguments, ((ReturnStatement)body).expression);
+        if (body instanceof ReturnStatement rs) {
+            return String.format("def %s%s = %s", name, arguments, rs.expression);
         }
         return String.format("def %s%s %s", name, arguments, body);
     }

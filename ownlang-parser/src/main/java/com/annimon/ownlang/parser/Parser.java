@@ -815,7 +815,8 @@ public final class Parser {
             final var startTokenIndex = index - 1;
             final Arguments arguments = arguments();
             final Statement statement = statementBody();
-            return new ValueExpression(new UserDefinedFunction(arguments, statement, getRange(startTokenIndex, index - 1)));
+            final Range range = getRange(startTokenIndex, index - 1);
+            return new ValueExpression(new UserDefinedFunction(arguments, statement, range));
         }
         return variable();
     }

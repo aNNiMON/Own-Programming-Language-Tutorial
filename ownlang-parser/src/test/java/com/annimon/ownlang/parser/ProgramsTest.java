@@ -5,6 +5,7 @@ import com.annimon.ownlang.exceptions.OwnLangParserException;
 import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.ScopeHandler;
+import com.annimon.ownlang.parser.ast.ClassDeclarationStatement;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
 import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Visitor;
@@ -114,6 +115,11 @@ public class ProgramsTest {
                     throw new AssertionError(s.name + ": " + err.getMessage(), err);
                 }
             }
+        }
+
+        @Override
+        public void visit(ClassDeclarationStatement s) {
+
         }
     };
 }

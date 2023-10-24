@@ -75,7 +75,33 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(ClassDeclarationStatement s, T t) {
-        // TODO fields and methods
+        final var newClassDeclaration = new ClassDeclarationStatement(s.name);
+        boolean changed = false;
+        for (AssignmentExpression field : s.fields) {
+            final Node fieldExpr = field.expression.accept(this, t);
+            final AssignmentExpression newField;
+            if (fieldExpr != field.expression) {
+                changed = true;
+                newField = new AssignmentExpression(field.operation, field.target, fieldExpr);
+            } else {
+                newField = field;
+            }
+            newClassDeclaration.addField(newField);
+        }
+
+        for (FunctionDefineStatement method : s.methods) {
+            final var newMethod = method.accept(this, t);
+            if (newMethod != method) {
+                changed = true;
+                newClassDeclaration.addMethod((FunctionDefineStatement) newMethod);
+            } else {
+                newClassDeclaration.addMethod(method);
+            }
+        }
+
+        if (changed) {
+            return newClassDeclaration;
+        }
         return s;
     }
     

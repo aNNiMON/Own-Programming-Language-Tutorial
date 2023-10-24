@@ -13,4 +13,9 @@ public final class FunctionAdder extends AbstractVisitor {
         super.visit(s);
         s.eval();
     }
+
+    @Override
+    public void visit(ClassDeclarationStatement s) {
+        // skip, otherwise class methods will be visible outside of class
+    }
 }

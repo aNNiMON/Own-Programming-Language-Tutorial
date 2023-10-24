@@ -35,8 +35,8 @@ final class AssignValidator extends LintVisitor {
     }
 
     @Override
-    public void visit(UseStatement st) {
-        super.visit(st);
-        moduleConstants.addAll(st.loadConstants().keySet());
+    public void visit(UseStatement s) {
+        super.visit(s);
+        moduleConstants.addAll(s.loadConstants().keySet());
     }
 }

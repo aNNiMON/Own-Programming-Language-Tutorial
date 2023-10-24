@@ -185,13 +185,13 @@ public abstract class AbstractVisitor implements Visitor {
     }
 
     @Override
-    public void visit(WhileStatement st) {
-        st.condition.accept(this);
-        st.statement.accept(this);
+    public void visit(WhileStatement s) {
+        s.condition.accept(this);
+        s.statement.accept(this);
     }
 
     @Override
-    public void visit(UseStatement st) {
+    public void visit(UseStatement s) {
 
     }
 }

@@ -1,12 +1,24 @@
 package com.annimon.ownlang.parser.ast;
 
 import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.util.Range;
+import com.annimon.ownlang.util.SourceLocation;
 
 /**
  *
  * @author aNNiMON
  */
-public final class ContinueStatement extends RuntimeException implements Statement {
+public final class ContinueStatement extends RuntimeException implements Statement, SourceLocation {
+    private final Range range;
+
+    public ContinueStatement(Range range) {
+        this.range = range;
+    }
+
+    @Override
+    public Range getRange() {
+        return range;
+    }
 
     @Override
     public Value eval() {

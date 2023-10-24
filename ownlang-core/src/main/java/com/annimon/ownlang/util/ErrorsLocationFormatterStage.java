@@ -17,8 +17,11 @@ public class ErrorsLocationFormatterStage implements Stage<Iterable<? extends So
         for (SourceLocatedError error : input) {
             sb.append(Console.newline());
             sb.append(error);
-            sb.append(Console.newline());
             final Range range = error.getRange();
+            if (range != null) {
+                sb.append(' ').append(range.format());
+            }
+            sb.append(Console.newline());
             if (range != null && lines.length > 0) {
                 var positions = stagesData.getOrDefault(TAG_POSITIONS, HashSet::new);
                 positions.add(range);

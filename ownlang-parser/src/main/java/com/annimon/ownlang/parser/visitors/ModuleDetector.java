@@ -19,8 +19,8 @@ public class ModuleDetector extends AbstractVisitor {
     }
 
     @Override
-    public void visit(UseStatement st) {
-        modules.addAll(st.modules);
-        super.visit(st);
+    public void visit(UseStatement s) {
+        modules.addAll(s.modules);
+        super.visit(s);
     }
 }

@@ -22,14 +22,14 @@ final class DefaultFunctionsOverrideValidator extends LintVisitor {
     }
 
     @Override
-    public void visit(IncludeStatement st) {
-        super.visit(st);
-        applyVisitor(st, this);
+    public void visit(IncludeStatement s) {
+        super.visit(s);
+        applyVisitor(s, this);
     }
 
     @Override
-    public void visit(UseStatement st) {
-        super.visit(st);
-        moduleFunctions.addAll(st.loadFunctions().keySet());
+    public void visit(UseStatement s) {
+        super.visit(s);
+        moduleFunctions.addAll(s.loadFunctions().keySet());
     }
 }

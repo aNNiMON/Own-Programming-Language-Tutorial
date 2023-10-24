@@ -27,6 +27,7 @@ public class LinterStage implements Stage<Node, Node> {
         final LinterResults results = new LinterResults();
         final List<Visitor> validators = new ArrayList<>();
         validators.add(new IncludeSourceValidator(results));
+        validators.add(new LoopStatementsValidator(results));
 
         if (mode == Mode.SEMANTIC) {
             validators.forEach(input::accept);

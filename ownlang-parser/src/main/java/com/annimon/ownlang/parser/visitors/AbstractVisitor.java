@@ -41,7 +41,12 @@ public abstract class AbstractVisitor implements Visitor {
 
     @Override
     public void visit(ClassDeclarationStatement s) {
-        
+        for (Node field : s.fields) {
+            field.accept(this);
+        }
+        for (Node method : s.methods) {
+            method.accept(this);
+        }
     }
 
     @Override

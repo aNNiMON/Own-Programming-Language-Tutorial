@@ -53,6 +53,15 @@ def testCustom() {
   assertEquals([5,6,4,2], stream(data).custom(::reverse).toArray())
 }
 
+def reverse(container) {
+  size = length(container)
+  result = newarray(size)
+  for i : range(size) {
+    result[size - i - 1] = container[i]
+  }
+  return result
+}
+
 def testJoining() {
   data = [1,2,3,4]
   assertEquals("1234", stream(data).joining())
@@ -101,11 +110,18 @@ def testForEachMapIndexed() {
   assertEquals("a10b21", result)
 }
 
-def reverse(container) {
-  size = length(container)
-  result = newarray(size)
-  for i : range(size) {
-    result[size - i - 1] = container[i]
-  }
-  return result
+def testArraysGroupBy() {
+  data = [1, 2, 3, 4, 1, 2, 3, 1, 2, 3]
+  result = stream(data)
+    .groupBy(def(v) = v % 2 == 0)
+  assertEquals([2, 4, 2, 2], result[true])
+  assertEquals([1, 3, 1, 3, 1, 3], result[false])
+}
+
+def testMapsGroupBy() {
+  data = {"abc": 123, "test1": 234, "test2": 345, "test3": 456, "def": 567}
+  result = stream(data)
+      .groupBy(def(entry) = entry[0].startsWith("test"))
+  assertEquals([["test1", 234], ["test2", 345], ["test3", 456]], sort(result[true]))
+  assertEquals([["abc", 123], ["def", 567]], sort(result[false]))
 }

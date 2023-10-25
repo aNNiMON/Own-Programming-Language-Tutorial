@@ -1,0 +1,15 @@
+use std, functional
+
+def testArraysGroupBy() {
+  arr = [1, 2, 3, 4, 1, 2, 3, 1, 2, 3]
+  result = groupby(arr, def(v) = v % 2 == 0)
+  assertEquals([2, 4, 2, 2], result[true])
+  assertEquals([1, 3, 1, 3, 1, 3], result[false])
+}
+
+def testMapsGroupBy() {
+  map = {"abc": 123, "test1": 234, "test2": 345, "test3": 456, "def": 567}
+  result = groupby(map, def(k, v) = k.startsWith("test"))
+  assertEquals({"test1": 234, "test2": 345, "test3": 456}, result[true])
+  assertEquals({"abc": 123, "def": 567}, result[false])
+}

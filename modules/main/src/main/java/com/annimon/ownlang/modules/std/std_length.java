@@ -2,32 +2,24 @@ package com.annimon.ownlang.modules.std;
 
 import com.annimon.ownlang.lib.*;
 
-public final class std_length implements Function {
+final class std_length implements Function {
 
     @Override
     public Value execute(Value[] args) {
         Arguments.check(1, args.length);
 
-        final Value val = args[0];
-        final int length;
-        switch (val.type()) {
-            case Types.ARRAY:
-                length = ((ArrayValue) val).size();
-                break;
-            case Types.MAP:
-                length = ((MapValue) val).size();
-                break;
-            case Types.STRING:
-                length = ((StringValue) val).length();
-                break;
-            case Types.FUNCTION:
-                final Function func = ((FunctionValue) val).getValue();
-                length = func.getArgsCount();
-                break;
-            default:
-                length = 0;
-                
-        }
+        final Value value = args[0];
+        final int length = switch (value.type()) {
+            case Types.ARRAY -> ((ArrayValue) value).size();
+            case Types.MAP -> ((MapValue) value).size();
+            case Types.CLASS -> ((ClassInstance) value).getThisMap().size();
+            case Types.STRING -> ((StringValue) value).length();
+            case Types.FUNCTION -> {
+                final Function func = ((FunctionValue) value).getValue();
+                yield func.getArgsCount();
+            }
+            default -> 0;
+        };
         return NumberValue.of(length);
     }
 }

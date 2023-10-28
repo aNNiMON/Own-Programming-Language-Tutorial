@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
-public final class NumberFunctions {
+final class NumberFunctions {
 
     private NumberFunctions() { }
 

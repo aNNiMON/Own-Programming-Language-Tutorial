@@ -3,7 +3,7 @@ package com.annimon.ownlang.modules.std;
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.lib.*;
 
-public final class std_thread implements Function {
+final class std_thread implements Function {
 
     @Override
     public Value execute(Value[] args) {

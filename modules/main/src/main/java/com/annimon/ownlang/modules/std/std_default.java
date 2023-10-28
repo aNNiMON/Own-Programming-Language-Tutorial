@@ -1,13 +1,8 @@
 package com.annimon.ownlang.modules.std;
 
-import com.annimon.ownlang.lib.Arguments;
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.Function;
-import com.annimon.ownlang.lib.MapValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.*;
 
-public final class std_default implements Function {
+final class std_default implements Function {
 
     @Override
     public Value execute(Value[] args) {
@@ -22,17 +17,13 @@ public final class std_default implements Function {
         if (value == null || value.raw() == null) {
             return true;
         }
-        switch (value.type()) {
-            case Types.NUMBER:
-                return (value.asInt() == 0);
-            case Types.STRING:
-                return (value.asString().isEmpty());
-            case Types.ARRAY:
-                return ((ArrayValue) value).size() == 0;
-            case Types.MAP:
-                return ((MapValue) value).size() == 0;
-            default:
-                return false;
-        }
+        return switch (value.type()) {
+            case Types.NUMBER -> (value.asInt() == 0);
+            case Types.STRING -> (value.asString().isEmpty());
+            case Types.ARRAY -> ((ArrayValue) value).size() == 0;
+            case Types.MAP -> ((MapValue) value).size() == 0;
+            case Types.CLASS -> ((ClassInstance) value).getThisMap().size() == 0;
+            default -> false;
+        };
     }
 }

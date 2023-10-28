@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.ValueUtils;
 import java.util.Arrays;
 
-public final class std_sort implements Function {
+final class std_sort implements Function {
 
     @Override
     public Value execute(Value[] args) {
@@ -19,17 +19,14 @@ public final class std_sort implements Function {
             throw new TypeException("Array expected in first argument");
         }
         final Value[] elements = ((ArrayValue) args[0]).getCopyElements();
-        
+
         switch (args.length) {
-            case 1:
-                Arrays.sort(elements);
-                break;
-            case 2:
+            case 1 -> Arrays.sort(elements);
+            case 2 -> {
                 final Function comparator = ValueUtils.consumeFunction(args[1], 1);
                 Arrays.sort(elements, (o1, o2) -> comparator.execute(o1, o2).asInt());
-                break;
-            default:
-                throw new ArgumentsMismatchException("Wrong number of arguments");
+            }
+            default -> throw new ArgumentsMismatchException("Wrong number of arguments");
         }
         
         return new ArrayValue(elements);

@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
-public final class std_arrayKeyExists implements Function {
+final class std_arrayKeyExists implements Function {
 
     @Override
     public Value execute(Value[] args) {

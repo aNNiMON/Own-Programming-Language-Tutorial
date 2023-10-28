@@ -7,7 +7,7 @@ import com.annimon.ownlang.lib.Function;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
-public final class std_arraySplice implements Function {
+final class std_arraySplice implements Function {
 
     @Override
     public Value execute(Value[] args) {

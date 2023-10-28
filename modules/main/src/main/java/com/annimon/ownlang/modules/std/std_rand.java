@@ -6,7 +6,7 @@ import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.Value;
 import java.util.Random;
 
-public final class std_rand implements Function {
+final class std_rand implements Function {
 
     private static final Random RND = new Random();
 

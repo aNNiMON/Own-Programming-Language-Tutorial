@@ -3,32 +3,16 @@ package com.annimon.ownlang.modules.std;
 import com.annimon.ownlang.lib.*;
 import java.util.Iterator;
 
-public final class std_range implements Function {
+final class std_range implements Function {
 
     @Override
     public Value execute(Value[] args) {
         Arguments.checkRange(1, 3, args.length);
-
-        final long from, to, step;
-        switch (args.length) {
-            default:
-            case 1:
-                from = 0;
-                to = getLong(args[0]);
-                step = 1;
-                break;
-            case 2:
-                from = getLong(args[0]);
-                to = getLong(args[1]);
-                step = 1;
-                break;
-            case 3:
-                from = getLong(args[0]);
-                to = getLong(args[1]);
-                step = getLong(args[2]);
-                break;
-        }
-        return RangeValue.of(from, to, step);
+        return switch (args.length) {
+            default -> RangeValue.of(0, getLong(args[0]), 1);
+            case 2 -> RangeValue.of(getLong(args[0]), getLong(args[1]), 1);
+            case 3 -> RangeValue.of(getLong(args[0]), getLong(args[1]), getLong(args[2]));
+        };
     }
 
     private static long getLong(Value v) {

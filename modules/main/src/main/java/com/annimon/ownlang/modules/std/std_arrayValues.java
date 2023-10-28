@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public final class std_arrayValues implements Function {
+final class std_arrayValues implements Function {
 
     @Override
     public Value execute(Value[] args) {

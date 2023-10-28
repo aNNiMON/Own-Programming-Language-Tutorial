@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.ValueUtils;
 import java.io.UnsupportedEncodingException;
 
-public final class ArrayFunctions {
+final class ArrayFunctions {
     
     private ArrayFunctions() { }
     

@@ -19,7 +19,8 @@ public final class types implements Module {
                 entry("STRING", NumberValue.of(Types.STRING)),
                 entry("ARRAY", NumberValue.of(Types.ARRAY)),
                 entry("MAP", NumberValue.of(Types.MAP)),
-                entry("FUNCTION", NumberValue.of(Types.FUNCTION))
+                entry("FUNCTION", NumberValue.of(Types.FUNCTION)),
+                entry("CLASS", NumberValue.of(Types.CLASS))
         );
     }
 

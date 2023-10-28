@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.ValueUtils;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public final class std_sync implements Function {
+final class std_sync implements Function {
 
     @Override
     public Value execute(Value[] args) {

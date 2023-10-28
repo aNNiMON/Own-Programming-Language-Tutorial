@@ -8,7 +8,7 @@ import com.annimon.ownlang.lib.StringValue;
 import com.annimon.ownlang.lib.Value;
 import java.io.UnsupportedEncodingException;
 
-public final class StringFunctions {
+final class StringFunctions {
 
     private StringFunctions() { }
 
@@ -20,6 +20,11 @@ public final class StringFunctions {
         } catch (UnsupportedEncodingException uee) {
             throw new OwnLangRuntimeException(uee);
         }
+    }
+
+    static Value parseDouble(Value[] args) {
+        Arguments.check(1, args.length);
+        return NumberValue.of(Double.parseDouble(args[0].asString()));
     }
     
     static Value parseInt(Value[] args) {
@@ -45,7 +50,7 @@ public final class StringFunctions {
 
         // First blank line is omitted
         final StringBuilder sb = new StringBuilder();
-        final int firstLineIndex = (isBlank(lines[0])) ? 1 : 0;
+        final int firstLineIndex = (lines[0].isBlank()) ? 1 : 0;
         final int lastLineIndex = lines.length - 1;
         int index = firstLineIndex;
         while (true) {
@@ -54,7 +59,7 @@ public final class StringFunctions {
             sb.append('\n');
         }
         // Process last line
-        if (lastLineIndex >= (firstLineIndex + 1) && !isBlank(lines[lastLineIndex])) {
+        if (lastLineIndex >= (firstLineIndex + 1) && !lines[lastLineIndex].isBlank()) {
             sb.append('\n').append(strip(lines[lastLineIndex], marginPrefix));
         }
         return new StringValue(sb.toString());
@@ -67,10 +72,6 @@ public final class StringFunctions {
         } else {
             return str;
         }
-    }
-
-    private static boolean isBlank(String str) {
-        return firstNonBlankIndex(str) == str.length();
     }
     
     private static int firstNonBlankIndex(String str) {

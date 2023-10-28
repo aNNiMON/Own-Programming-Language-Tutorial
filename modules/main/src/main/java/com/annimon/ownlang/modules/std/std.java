@@ -4,6 +4,7 @@ import com.annimon.ownlang.Shared;
 import com.annimon.ownlang.Version;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
+import java.util.HashMap;
 import java.util.Map;
 import static java.util.Map.entry;
 
@@ -30,22 +31,31 @@ public final class std implements Module {
 
     @Override
     public Map<String, Function> functions() {
-        return Map.ofEntries(
+        // std, System
+        final var result = new HashMap<>(Map.ofEntries(
                 entry("echo", new std_echo()),
                 entry("readln", new std_readln()),
                 entry("length", new std_length()),
                 entry("rand", new std_rand()),
-                entry("time", new std_time()),
+                entry("time", SystemFunctions::time),
+                entry("nanotime", SystemFunctions::nanotime),
                 entry("sleep", new std_sleep()),
                 entry("thread", new std_thread()),
                 entry("sync", new std_sync()),
                 entry("try", new std_try()),
                 entry("default", new std_default()),
+                entry("exit", SystemFunctions::exit),
+                entry("getenv", SystemFunctions::getenv),
+                entry("getprop", SystemFunctions::getprop)
+        ));
 
-                // Numbers
-                entry("toHexString", NumberFunctions::toHexString),
+        // Numbers
+        result.putAll(Map.ofEntries(
+                entry("toHexString", NumberFunctions::toHexString)
+        ));
 
-                // String
+        // String
+        result.putAll(Map.ofEntries(
                 entry("getBytes", StringFunctions::getBytes),
                 entry("sprintf", new std_sprintf()),
                 entry("split", new std_split()),
@@ -62,9 +72,12 @@ public final class std implements Module {
                 entry("replaceFirst", new std_replacefirst()),
                 entry("parseInt", StringFunctions::parseInt),
                 entry("parseLong", StringFunctions::parseLong),
-                entry("stripMargin", StringFunctions::stripMargin),
+                entry("parseDouble", StringFunctions::parseDouble),
+                entry("stripMargin", StringFunctions::stripMargin)
+        ));
 
-                // Arrays and map,
+        // Arrays and map
+        result.putAll(Map.ofEntries(
                 entry("newarray", new std_newarray()),
                 entry("join", new std_join()),
                 entry("sort", new std_sort()),
@@ -75,6 +88,7 @@ public final class std implements Module {
                 entry("arraySplice", new std_arraySplice()),
                 entry("range", new std_range()),
                 entry("stringFromBytes", ArrayFunctions::stringFromBytes)
-        );
+        ));
+        return Map.copyOf(result);
     }
 }

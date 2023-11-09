@@ -70,6 +70,11 @@ public class ClassInstance implements Value {
     }
 
     @Override
+    public Object asJavaObject() {
+        return thisMap.asJavaObject();
+    }
+
+    @Override
     public int asInt() {
         throw new TypeException("Cannot cast class " + className + " to integer");
     }

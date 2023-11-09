@@ -2,9 +2,7 @@ package com.annimon.ownlang.lib;
 
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.exceptions.TypeException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents array type.
@@ -129,6 +127,11 @@ public class ArrayValue implements Value, Iterable<Value> {
     @Override
     public Object raw() {
         return elements;
+    }
+
+    @Override
+    public Object asJavaObject() {
+        return Arrays.stream(elements).map(Value::asJavaObject).toArray(Object[]::new);
     }
 
     @Override

@@ -6,6 +6,10 @@ ext {
             socket: '1.0.2', // io.socket:socket.io-client
             jline: '2.14.5', // jline:jline
 
+            javalin: '5.6.3', // io.javalin:javalin
+            slf4j: '2.0.9', // org.slf4j:slf4j-simple
+            jackson: '2.15.3', // com.fasterxml.jackson.core:jackson-databind
+
             junit: '5.9.2', // org.junit:junit-bom
             jmh: '1.37', // org.openjdk.jmh:jmh-core
             assertj: '3.24.2' // org.assertj:assertj-core

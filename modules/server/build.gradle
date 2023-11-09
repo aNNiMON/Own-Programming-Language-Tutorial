@@ -1,0 +1,21 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.annimon.module'
+version = '2.0-SNAPSHOT'
+
+dependencies {
+    compileOnlyApi project(":ownlang-core")
+    implementation "io.javalin:javalin:${versions.javalin}"
+    implementation "org.slf4j:slf4j-simple:${versions.slf4j}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+
+    testImplementation platform("org.junit:junit-bom:")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

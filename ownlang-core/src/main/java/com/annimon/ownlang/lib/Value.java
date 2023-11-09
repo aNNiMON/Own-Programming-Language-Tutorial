@@ -15,4 +15,8 @@ public interface Value extends Comparable<Value> {
     String asString();
     
     int type();
+
+    default Object asJavaObject() {
+        return raw();
+    }
 }

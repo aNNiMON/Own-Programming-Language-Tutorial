@@ -5,7 +5,9 @@ include 'ownlang-parser'
 include 'ownlang-desktop'
 include 'ownlang-utils'
 
-include 'modules:main'
-findProject(':modules:main')?.name = 'main'
-include 'modules:canvasfx'
-findProject(':modules:canvasfx')?.name = 'canvasfx'
+final def modules = ['main', 'canvasfx', 'server']
+
+for (final def module in modules) {
+    include "modules:$module"
+    findProject(":modules:$module")?.name = module
+}

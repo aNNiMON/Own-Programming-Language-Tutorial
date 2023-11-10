@@ -101,6 +101,15 @@ public final class ValueUtils {
         return result;
     }
 
+    public static MapValue consumeMap(Value value, int argumentNumber) {
+        final int type = value.type();
+        if (type != Types.MAP) {
+            throw new TypeException("Map expected at argument " + (argumentNumber + 1)
+                    + ", but found " + Types.typeToString(type));
+        }
+        return (MapValue) value;
+    }
+
     public static Function consumeFunction(Value value, int argumentNumber) {
         return consumeFunction(value, " at argument " + (argumentNumber + 1));
     }

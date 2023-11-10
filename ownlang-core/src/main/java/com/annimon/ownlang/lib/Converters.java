@@ -1,6 +1,7 @@
 package com.annimon.ownlang.lib;
 
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import static com.annimon.ownlang.lib.ValueUtils.getFloatNumber;
 
 /**
@@ -271,6 +272,13 @@ public final class Converters {
         return new FunctionValue(args -> {
             Arguments.check(1, args.length);
             return NumberValue.fromBoolean(f.test(args[0].asString()));
+        });
+    }
+
+    public static FunctionValue stringToString(UnaryOperator<String> f) {
+        return new FunctionValue(args -> {
+            Arguments.check(1, args.length);
+            return new StringValue(f.apply(args[0].asString()));
         });
     }
 }

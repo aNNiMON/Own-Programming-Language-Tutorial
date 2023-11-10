@@ -85,6 +85,17 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
     public Map<Value, Value> getMap() {
         return map;
     }
+
+    public Map<String, Value> getMapStringKeys() {
+        return convertMap(Value::asString, java.util.function.Function.identity());
+    }
+
+    public <K, V> Map<K, V> convertMap(java.util.function.Function<? super Value, ? extends K> keyMapper,
+                                       java.util.function.Function<? super Value, ? extends V> valueMapper) {
+        final Map<K, V> result = new LinkedHashMap<>(map.size());
+        map.forEach((key, value) -> result.put(keyMapper.apply(key), valueMapper.apply(value)));
+        return result;
+    }
     
     @Override
     public Object raw() {

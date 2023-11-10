@@ -1,17 +1,18 @@
 package com.annimon.ownlang.modules.server;
 
+import com.annimon.ownlang.exceptions.OwnLangRuntimeException;
 import com.annimon.ownlang.lib.*;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.security.RouteRole;
 import java.util.Arrays;
 
-public class ServerValue extends MapValue {
+class ServerValue extends MapValue {
 
     private final Javalin server;
 
     public ServerValue(Javalin server) {
-        super(10);
+        super(12);
         this.server = server;
         init();
     }
@@ -25,7 +26,9 @@ public class ServerValue extends MapValue {
         set("delete", httpMethod(server::delete));
         set("options", httpMethod(server::options));
         set("error", this::error);
+        set("exception", this::exception);
         set("start", this::start);
+        set("stop", this::stop);
     }
 
     private Value error(Value[] args) {
@@ -45,6 +48,23 @@ public class ServerValue extends MapValue {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
+    private Value exception(Value[] args) {
+        Arguments.check(2, args.length);
+        try {
+            String className = args[0].asString();
+            final Class<?> clazz = Class.forName(className);
+            final Function handler = ValueUtils.consumeFunction(args[1], 1);
+            server.exception((Class<? extends Exception>) clazz, (exc, ctx) -> {
+                Value exceptionType = new StringValue(exc.getClass().getName());
+                handler.execute(exceptionType, new ContextValue(ctx));
+            });
+        } catch (ClassNotFoundException e) {
+            throw new OwnLangRuntimeException(e);
+        }
+        return this;
+    }
+
     private Value start(Value[] args) {
         Arguments.checkRange(0, 2, args.length);
         switch (args.length) {
@@ -52,6 +72,12 @@ public class ServerValue extends MapValue {
             case 1 -> server.start(args[0].asInt());
             case 2 -> server.start(args[0].asString(), args[1].asInt());
         }
+        return this;
+    }
+
+    private Value stop(Value[] args) {
+        Arguments.check(0, args.length);
+        server.stop();
         return this;
     }
 

@@ -1,0 +1,16 @@
+def factorial(n) = match n {
+  case 0: 1
+  case n if n < 0: 0
+  case _: n * factorial(n - 1)
+}
+
+def fizzbuzz(limit = 100) {
+  for i = 1, i <= limit, i++ {
+    println match [i % 3 == 0, i % 5 == 0] {
+      case (true, false): "Fizz"
+      case (false, true): "Buzz"
+      case (true, true): "FizzBuzz"
+      case _: i
+    }
+  }
+}

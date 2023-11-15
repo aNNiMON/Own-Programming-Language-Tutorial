@@ -1,0 +1,7 @@
+x = 2
+print match x {
+  case 1: "One"
+  case 2: "Two"
+  case "str": "String"
+  case _: "Unknown"
+}

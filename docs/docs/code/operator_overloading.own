@@ -1,0 +1,7 @@
+use std, types, math
+
+def `..`(a, b) = range(a, b - 1)
+def `**`(a, b) = int(pow(a, b))
+for y : 1 .. 10 {
+  println sprintf("2 ^ %d = %d", y, 2 ** y)
+}

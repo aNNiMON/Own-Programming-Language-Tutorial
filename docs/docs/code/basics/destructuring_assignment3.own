@@ -1,0 +1,4 @@
+map = {"key1": 1, "test", "text"}
+extract(var1, var2) = map
+println var1 // [key1, 1]
+println var2 // [test, text]

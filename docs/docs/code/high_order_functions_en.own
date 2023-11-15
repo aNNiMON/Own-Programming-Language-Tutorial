@@ -1,0 +1,14 @@
+operations = {
+  "+" : def(a,b) = a+b,
+  "-" : def(a,b) = a-b,
+  "*" : def(a,b) = a*b,
+  "/" : ::division
+}
+def division(v1, v2) {
+  if (v2 == 0) return "error: division by zero"
+  return v1 / v2
+}
+
+for operation : operations {
+  println operation(2, 3)
+}

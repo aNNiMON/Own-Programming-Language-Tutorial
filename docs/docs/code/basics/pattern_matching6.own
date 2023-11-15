@@ -1,0 +1,8 @@
+for i = 1, i <= 100, i++ {
+  println match [i % 3 == 0, i % 5 == 0] {
+    case (true, false): "Fizz"
+    case (false, true): "Buzz"
+    case (true, true): "FizzBuzz"
+    case _: i
+  }
+}

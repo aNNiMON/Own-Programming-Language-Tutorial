@@ -1,0 +1,9 @@
+x = "str"
+match x {
+  case "": {
+    println "Empty string"
+  }
+  case "str": {
+    println "String!"
+  }
+}

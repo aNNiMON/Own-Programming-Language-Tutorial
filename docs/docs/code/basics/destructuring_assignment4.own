@@ -1,0 +1,3 @@
+extract(x, , z) = [93, 58, 90]
+println x // 93
+println z // 90

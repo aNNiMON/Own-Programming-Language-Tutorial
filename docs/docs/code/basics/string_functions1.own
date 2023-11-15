@@ -1,0 +1,7 @@
+str = " ababcaab   "
+println indexOf(str, "abc")
+println str.indexOf("abc")
+
+def isBlank(s) = s.trim().isEmpty()
+println isBlank(str)
+println str.isBlank()

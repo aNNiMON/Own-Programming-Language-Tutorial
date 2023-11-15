@@ -1,0 +1,20 @@
+use std, http, functional
+
+// GET-запрос
+http("https://api.github.com/events", def(r) {
+  use json
+  events = jsondecode(r)
+})
+
+// POST-запрос
+http("http://jsonplaceholder.typicode.com/users", "POST", {
+  "name": "OwnLang",
+  "versionCode": 10
+}, ::echo)
+
+// PATCH-запрос
+http("http://jsonplaceholder.typicode.com/users/2", "PATCH", {"name": "Патч"}, ::patch_callback)
+
+def patch_callback(v) {
+  println v
+}

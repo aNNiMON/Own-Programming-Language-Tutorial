@@ -13,7 +13,7 @@
     </options>
     <keywords keywords="break;case;class;continue;def;do;else;extract;for;if;match;new;print;println;return;while" ignore_case="false" />
     <keywords2 keywords="echo;newarray;try" />
-    <keywords3 keywords="false;this;true" />
+    <keywords3 keywords="false;null;this;true" />
     <keywords4 keywords="include;use" />
   </highlighting>
   <extensionMap>

@@ -1,0 +1,98 @@
+name: zip
+since: 1.5.0
+scope: both
+desc: "Contains functions for working with zip archives"
+desc_ru: "Содержит функции для работы с zip архивами"
+constants: []
+functions:
+  -
+    name: zip
+    args: "inputPath, outputFile, mapper = def(entryPath) = entryPath"
+    desc: |-
+      creates a zip archive with the contents of `inputPath` and saves to `outputFile`.  
+      `mapper` is used to set the name of the final file inside the archive and for filtering. If the mapper returns an empty string, the file will be skipped.  
+      Returns the number of archived files, or -1 if the archive could not be created.
+    desc_ru: |-
+      создаёт zip архив с содержимым `inputPath` и сохраняет в `outputFile`.  
+      `mapper` используется для задания имени конечного файла внутри архива, а также для фильтрации. Если в mapper вернуть пустую строку, то файл будет пропущен.  
+      Возвращает количество заархивированных файлов, либо -1, если создать архив не удалось.
+    example: |-
+      use zip
+      // Zip all files in directory
+      zip("/tmp/dir", "/tmp/1.zip")
+      // Zip .txt files
+      zip("/tmp/dir", "/tmp/2.zip", def(p) = p.endsWith(".txt") ? p : "")
+    example_ru: |-
+      use zip
+      // Архивировать все файлы в директории
+      zip("/tmp/dir", "/tmp/1.zip")
+      // Архивировать .txt файлы
+      zip("/tmp/dir", "/tmp/2.zip", def(p) = p.endsWith(".txt") ? p : "")
+  -
+    name: zipFiles
+    args: "input, outputFile"
+    desc: |-
+      creates a zip archive with the contents of `inputPath` and saves to `outputFile`.  
+      If `input` is a string, then a single file or the contents of a folder is archived.  
+      If `input` is an array, then the files and folders listed in it are archived.  
+      If `input` is an associative array, then the files and folders listed in the keys are archived and the names inside the archive will be the values of an array.  
+      Returns the number of archived files, or -1 if the archive could not be created.
+    desc_ru: |-
+      создаёт zip архив с содержимым `input` и сохраняет в `outputFile`.  
+      Если `input` — строка, то архивируется один файл или содержимое папки.  
+      Если `input` — массив, то архивируются файлы и папки, перечисленные в нём.  
+      Если `input` — ассоциативный массив, то архивируются файлы и папки перечисленные в ключах, а именами внутри архива будут служить значения.  
+      Возвращает количество заархивированных файлов, либо -1, если создать архив не удалось.
+    example: |-
+      use zip
+      zipFiles("/tmp/dir/file.txt", "/tmp/1.zip")
+      zipFiles(["/tmp/dir/file.txt", "/tmp/dir/readme.md"], "/tmp/2.zip")
+      zipFiles({"/tmp/dir/file.txt" : "docs/1.md", "/tmp/dir/readme.md" : "docs/2.md"}, "/tmp/3.zip")
+  -
+    name: unzip
+    args: "input, output, mapper = def(entryName) = entryPath"
+    desc: |-
+      unpacks a zip archive to `output` directory.  
+      `mapper` is used to set the name of the final file and for filtering. If the mapper returns an empty string, the file will be skipped.  
+      Returns the number of unzipped files, or -1 if unzipping the archive was failed.
+    desc_ru: |-
+      распаковывает zip архив `input` в папку `output`.  
+      `mapper` используется для задания имени конечного файла, а также для фильтрации. Если в mapper вернуть пустую строку, то файл будет пропущен.  
+      Возвращает количество разархивированных файлов, либо -1, если разархивировать архив не удалось.
+    example: |-
+      use zip
+      // Unzip all files in directory
+      unzip("/tmp/1.zip", "/tmp/dir")
+      // Unzip .txt files
+      unzip("/tmp/2.zip", "/tmp/dir", def(p) = p.endsWith(".txt") ? p : "")
+    example_ru: |-
+      use zip
+      // Распаковать все файлы в директории
+      unzip("/tmp/1.zip", "/tmp/dir")
+      // Распаковать .txt файлы
+      unzip("/tmp/2.zip", "/tmp/dir", def(p) = p.endsWith(".txt") ? p : "")
+  -
+    name: unzipFiles
+    args: "input, output"
+    desc: |-
+      unpacks a `output` files from zip archive .  
+      If `output` is a string, then a single file is unzipped.  
+      If `output` is an array, then the files listed in it are unzipped.  
+      If `output` is an associative array, the files listed in the keys are unzipped and the values will be file names.  
+      Returns the number of unzipped files, or -1 if unzipping the archive was failed.
+    desc_ru: |-
+      распаковывает `output` файлы из zip архива.  
+      Если `output` — строка, то разархивируется один файл.  
+      Если `output` — массив, то разархивируются файлы, перечисленные в нём.  
+      Если `output` — ассоциативный массив, то разархивируются файлы перечисленные в ключах, а именами файлов будут служить значения.  
+      Возвращает количество разархивированных файлов, либо -1, если разархивировать архив не удалось.
+    example: |-
+      use zip
+      unzipFiles("/tmp/1.zip", "file.txt")
+      unzipFiles("/tmp/2.zip", ["file.txt", "readme.md"])
+      unzipFiles("/tmp/3.zip", {"docs/1.md" : "/tmp/dir/file.txt", "docs/2.md" : "/tmp/dir/readme.md"})
+  -
+    name: listZipEntries
+    args: "input"
+    desc: returns an array of zip archive filenames
+    desc_ru: возвращает массив с именами файлов zip архива

@@ -1,0 +1,109 @@
+name: imageprocessing
+scope: "android"
+desc: |-
+  Contains functions for image processing.
+  
+  You can apply effect in two ways:
+  
+  1. Pass BitmapValue and parameters array. The result will be a BitmapValue. `bitmap = boxBlur(bitmap, [20, 40])`
+  2. Pass width, height, pixels array and parameters array. The result will be an array [width, height, pixels]. `extract(width, height, pixels) = boxBlur(w, h, pixels, [20, 40])`
+desc_ru: |-
+  Содержит функции для обработки изображений.
+  
+  Применить эффект можно двумя способами:
+  
+  1. Передать BitmapValue и массив параметров. Результатом будет BitmapValue. `bitmap = boxBlur(bitmap, [20, 40])`
+  2. Передать ширину, высоту, массив пикселей и массив параметров. Результатом будет массив [ширина, высота, пиксели]. `extract(width, height, pixels) = boxBlur(w, h, pixels, [20, 40])`
+functions:
+  - name: "boxBlur"
+    args: "horizontalBlur = 10 (min 1, max 100), verticalBlur = 10 (min 1, max 100)"
+    desc: "applies quick blur effect"
+    desc_ru: "применяет быстрый эффект размытия"
+  - name: "contrast"
+    args: "level = 40 (min -100, max 100)"
+    desc: "changes contrast of the image"
+    desc_ru: "изменяет контрастность изображения"
+  - name: "decolour"
+    args: ""
+    desc: "converts color image to grayscale"
+    desc_ru: "преобразует цветное изображение в оттенки серого"
+  - name: "edgeDetection"
+    args: "operator = 1, mode = 0"
+    desc: |-
+      applies edge detection effect.
+      
+      `operator` 0 - Roberts, 1 - Prewitt, 2 - Sobel, 3 - Scharr  
+      `mode` 0 - color edges, 1 - gray edges, 2 - subtract edges
+    desc_ru: |-
+      применяет эффект выделения границ.
+      
+      `operator` 0 - оператор Робертса, 1 - Прюитт, 2 - Собеля, 3 - Шарра
+      `mode` 0 - цветные грани, 1 - чёрно-белые грани, 2 - вычитание границ
+  - name: "emboss"
+    args: "azimuth = 45 (min 0, max 360), elevation = 45 (min 0, max 90), edgeHeight = 140 (min 0, max 256), edgeThickness = 80 (min 2, max 100), emboss = 0 (min 0, max 1)"
+    desc: "applies emboss effect"
+    desc_ru: "применяет эффект выдавливания"
+  - name: "extractChannel"
+    args: "channel = 0, monochrome = 0"
+    desc: |-
+      extracts given channel from image.
+      
+      `channel` 0 - red, 1 - green, 2 - blue  
+      `monochrome` 0 - off, 1 - on
+    desc_ru: |-
+      извлекает заданный канал из изображения.
+      
+      `channel` 0 - красный, 1 - зелёный, 2 - синий  
+      `monochrome` конвертировать полученную маску в чёрно-белый, 0 - нет, 1 - да
+  - name: "gamma"
+    args: "level = 20 (min -50, max 50)"
+    desc: "changes gamma of the image"
+    desc_ru: "изменяет гамму изображения"
+  - name: "hsbCorrection"
+    args: "hue = 45 (min 0, max 360), saturation = 0 (min -100, max 100), brightness = 0 (min -100, max 100), tone = 0 (min 0, max 1)"
+    desc: "changes hue, saturation and brightness of the image"
+    desc_ru: "изменяет оттенок, насыщенность и яркость изображения, тонирует при `tone` = 1"
+  - name: "invert"
+    args: "invertAlpha = 0, invertRed = 1, invertGreen = 2, invertBlue = 3"
+    desc: "inverts channels of the image"
+    desc_ru: "инвертирует заданные каналы изображения"
+  - name: "monochrome"
+    args: "level = 128 (min 0, max 255)"
+    desc: "converts color image to monochrome"
+    desc_ru: "преобразует цветное изображение в монохромное"
+  - name: "mosaic"
+    args: "size = 4 (min 1, max 50)"
+    desc: "applies mosaic effect"
+    desc_ru: "применяет эффект мозайки"
+  - name: "noiseGeneration"
+    args: "amount = 50 (min 0, max 255), monochrome = 0"
+    desc: "adds noise to images"
+    desc_ru: "добавляет шум к изображению"
+  - name: "posterization"
+    args: "level = 64 (min 1, max 255)"
+    desc: "applies posterization effect"
+    desc_ru: "применяет эффект постеризации"
+  - name: "rgbCorrection"
+    args: "alpha = 0 (min -255, max 255), red = 0 (min -255, max 255), green = 0 (min -255, max 255), blue = 0 (min -255, max 255)"
+    desc: "changes alpha, red, green and blue channels of the image"
+    desc_ru: "изменяет прозрачность, красный, зелёный, синий каналы изображения"
+  - name: "rotate"
+    args: "angle = 45 (min 0, max 360)"
+    desc: "rotates image"
+    desc_ru: "поворачивает изображение"
+  - name: "saturation"
+    args: "level = 64 (min -255, max 255)"
+    desc: "changes saturation of the image"
+    desc_ru: "изменяет насыщенность изображения"
+  - name: "scatter"
+    args: "horizontalScatter = 10 (min 1, max 100), verticalScatter = 10 (min 1, max 100)"
+    desc: "applies pixel scatter effect"
+    desc_ru: "применяет эффект рассеивания пикселей"
+  - name: "smooth"
+    args: "level = 3 (min 1, max 25)"
+    desc: "applies smooth effect"
+    desc_ru: "применяет эффект сглаживания"
+  - name: "xor"
+    args: "level = 64 (min 0, max 255)"
+    desc: "applies xor operation for each pixel of the image"
+    desc_ru: "применяет операцию ИСКЛЮЧАЮЩЕЕ ИЛИ для каждого пикселя изображения"

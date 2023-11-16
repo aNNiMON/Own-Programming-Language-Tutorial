@@ -1,0 +1,24 @@
+name: downloader
+scope: both
+desc: "Contains functions for downloading large files"
+desc_ru: "Содержит функции для скачивания больших файлов"
+functions:
+  - name: getContentLength
+    args: 'url'
+    desc: 'gets content length by sending HEAD request to the given url'
+    desc_ru: 'получает значение заголовка Content-Length путём отправки HEAD-запроса на указанный url'
+  - name: downloader
+    args: 'downloadUrl, filePath, progressCallback = def() {}, bufferSize = 16384'
+    desc: 'downloads file from `downloadUrl` to `filePath`'
+    desc_ru: 'скачивает файл по адресу `downloadUrl` и сохраняет в `filePath`'
+    example: |-
+      use downloader, std
+      
+      MBYTES = 1048576.0 // 1024*1024
+      url = "http://www.ovh.net/files/10Mb.dat"
+      file = "10Mb.dat"
+      
+      downloader(url, file, def(progress, bytesDownloaded, bytesMax) {
+        bar = "#" * (progress / 2)
+        print sprintf("%-50s %d%% %.2f / %.2f MiB\\r", bar, progress, bytesDownloaded / MBYTES, bytesMax / MBYTES)
+      })

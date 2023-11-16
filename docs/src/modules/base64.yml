@@ -1,0 +1,24 @@
+name: base64
+scope: both
+desc: "Contains base64 encoding and decoding functions"
+desc_ru: "Содержит функции кодирования данных в base64 и наоборот"
+constants:
+  - name: BASE64_URL_SAFE
+    type: 1
+    typeName: number
+    value: '8'
+    desc: 'Url safe encoding output'
+    desc_ru: 'Вывод данных в безопасном для ссылок формате'
+functions:
+  - name: base64decode
+    args: 'data, type = 0'
+    desc: 'decodes base64-encoded byte array or string into byte array'
+    desc_ru: 'декодирует массив байт или строку, закодированную в base64, в массив байт'
+  - name: base64encode
+    args: 'data, type = 0'
+    desc: 'encodes byte array or string into base64-encoded byte array'
+    desc_ru: 'кодирует массив байт или строку в закодированный base64 массив байт'
+  - name: base64encodeToString
+    args: 'data, type = 0'
+    desc: 'encodes byte array or string into base64-encoded string'
+    desc_ru: 'кодирует массив байт или строку в закодированную base64 строку'

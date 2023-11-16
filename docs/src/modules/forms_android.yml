@@ -1,0 +1,2015 @@
+name: forms
+scope: android
+desc: "Contains functions for working with forms"
+desc_ru: "Содержит функции для работы с формами"
+constants:
+  - name: Gravity
+    type: 4
+    typeName: map
+    value: '{NONE=0, NO_GRAVITY=0, CENTER_HORIZONTAL=1, LEFT=3, RIGHT=5, FILL_HORIZONTAL=7, CLIP_HORIZONTAL=8, CENTER_VERTICAL=16, CENTER=17, TOP=48, BOTTOM=80, FILL_VERTICAL=112, FILL=119, CLIP_VERTICAL=128}'
+  - name: InputType
+    type: 4
+    typeName: map
+    value: '{TYPE_CLASS_DATETIME=4, TYPE_CLASS_NUMBER=2, TYPE_CLASS_PHONE=3, TYPE_CLASS_TEXT=1, TYPE_DATETIME_VARIATION_DATE=16, TYPE_DATETIME_VARIATION_NORMAL=0, TYPE_DATETIME_VARIATION_TIME=32, TYPE_MASK_CLASS=15, TYPE_MASK_FLAGS=16773120, TYPE_MASK_VARIATION=4080, TYPE_NULL=0, TYPE_NUMBER_FLAG_DECIMAL=8192, TYPE_NUMBER_FLAG_SIGNED=4096, TYPE_NUMBER_VARIATION_NORMAL=0, TYPE_NUMBER_VARIATION_PASSWORD=16, TYPE_TEXT_FLAG_AUTO_COMPLETE=65536, TYPE_TEXT_FLAG_AUTO_CORRECT=32768, TYPE_TEXT_FLAG_CAP_CHARACTERS=4096, TYPE_TEXT_FLAG_CAP_SENTENCES=16384, TYPE_TEXT_FLAG_CAP_WORDS=8192, TYPE_TEXT_FLAG_IME_MULTI_LINE=262144, TYPE_TEXT_FLAG_MULTI_LINE=131072, TYPE_TEXT_FLAG_NO_SUGGESTIONS=524288, TYPE_TEXT_VARIATION_EMAIL_ADDRESS=32, TYPE_TEXT_VARIATION_EMAIL_SUBJECT=48, TYPE_TEXT_VARIATION_FILTER=176, TYPE_TEXT_VARIATION_LONG_MESSAGE=80, TYPE_TEXT_VARIATION_NORMAL=0, TYPE_TEXT_VARIATION_PASSWORD=128, TYPE_TEXT_VARIATION_PERSON_NAME=96, TYPE_TEXT_VARIATION_PHONETIC=192, TYPE_TEXT_VARIATION_POSTAL_ADDRESS=112, TYPE_TEXT_VARIATION_SHORT_MESSAGE=64, TYPE_TEXT_VARIATION_URI=16, TYPE_TEXT_VARIATION_VISIBLE_PASSWORD=144, TYPE_TEXT_VARIATION_WEB_EDIT_TEXT=160, TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS=208, TYPE_TEXT_VARIATION_WEB_PASSWORD=224}'
+  - name: LinearLayout
+    type: 4
+    typeName: map
+    value: '{HORIZONTAL=0, VERTICAL=1}'
+  - name: MATCH_PARENT
+    type: 1
+    typeName: number
+    value: '-1'
+  - name: PorterDuff
+    type: 4
+    typeName: map
+    value: '{ADD=16, CLEAR=0, DARKEN=12, DST=2, DST_ATOP=10, DST_IN=6, DST_OUT=8, DST_OVER=4, LIGHTEN=13, MULTIPLY=14, OVERLAY=17, SCREEN=15, SRC=1, SRC_ATOP=9, SRC_IN=5, SRC_OUT=7, SRC_OVER=3, XOR=11}'
+  - name: ScaleType
+    type: 4
+    typeName: map
+    value: '{MATRIX=0, FIT_XY=1, FIT_START=2, FIT_CENTER=3, FIT_END=4, CENTER=5, CENTER_CROP=6, CENTER_INSIDE=7}'
+  - name: WRAP_CONTENT
+    type: 1
+    typeName: number
+    value: '-2'
+functions:
+  - name: showForm
+    args: 'view, layoutParams = {}'
+    desc: 'shows view'
+    desc_ru: 'показывает форму'
+  - name: inflate
+    args: 'resourceId, rootView = null, attachToRoot = false'
+    desc: 'Inflates view from resource xml'
+    desc_ru: 'Создаёт view из xml-ресурса'
+  - name: newArrayAdapter
+    args: 'resourceId = R.layout.simple_list_item_1, elements = []'
+    desc: 'Creates ArrayAdapter to use in ListView'
+    desc_ru: 'Создаёт ArrayAdapter для использования в ListView'
+  - name: newBaseAdapter
+    args: 'mapWithFunctions'
+    desc: ''
+    desc_ru: ''
+    example: |-
+      use std, android, forms
+      
+      img1 = assetBitmap("ownlang.png")
+      img2 = img1
+      
+      items = [
+        {"img" : img1, "text" : "Item 1"},
+        {"img" : img2, "text" : "Item 2"}
+      ]
+      adapter = newBaseAdapter({
+        "getCount": def() = length(items)
+        "getItem": def(pos) = items[pos]
+        "getItemId": def(pos) = pos
+        "getView": def(pos, view, parent) {
+           if (view == 0) {
+              view = newLinearLayout()
+              view.setOrientation(LinearLayout.HORIZONTAL)
+              imageView = newImageView()
+              view.addView(imageView)
+              textView = newTextView()
+              view.addView(textView)
+              view.setTag([imageView, textView])
+           } else {
+              extract(imageView, textView) = view.getTag()
+           }
+      
+           imageView.setImageBitmap(items[pos].img);
+           textView.setText(items[pos].text);
+           return view
+        }
+      });
+      
+      listView = newListView()
+      listView.setAdapter(adapter)
+      listView.onItemClick(def(v, pos, id) {
+        toast(adapter.getItem(pos).text + " selected")
+      })
+      
+      panel = newLinearLayout()
+      panel.addView(newTextView("ListView with BaseAdapter demo"))
+      panel.addView(listView)
+      
+      showForm(panel)
+  - name: newButton
+    args: 'text = ""'
+    desc: 'creates Button'
+    desc_ru: 'создаёт Button'
+  - name: newCheckBox
+    args: ''
+    desc: 'creates CheckBox'
+    desc_ru: 'создаёт CheckBox'
+  - name: newEditText
+    args: ''
+    desc: 'creates EditText'
+    desc_ru: 'создаёт EditText'
+  - name: newFrameLayout
+    args: ''
+    desc: 'creates FrameLayout container'
+    desc_ru: 'создаёт контейнер FrameLayout'
+  - name: newImageButton
+    args: ''
+    desc: 'creates ImageButton'
+    desc_ru: 'создаёт ImageButton'
+  - name: newImageView
+    args: ''
+    desc: 'creates ImageView'
+    desc_ru: 'создаёт ImageView'
+  - name: newLinearLayout
+    args: ''
+    desc: 'creates LinearLayout container'
+    desc_ru: 'создаёт контейнер LinearLayout'
+  - name: newListView
+    args: ''
+    desc: 'creates ListView'
+    desc_ru: 'создаёт ListView'
+  - name: newProgressBar
+    args: 'style = R.attr.progressBarStyle'
+    desc: 'creates ProgressBar'
+    desc_ru: 'создаёт ProgressBar'
+    example: |-
+      use android, forms
+      pb1 = newProgressBar(R.attr.progressBarStyleHorizontal)
+      pb1.setMax(100)
+      pb1.setProgress(10)
+      pb2 = newProgressBar()
+      pb2.setIndeterminate(true)
+      
+      panel = newLinearLayout()
+      panel.addView(pb1)
+      panel.addView(pb2)
+      showForm(panel)
+  - name: newRadioButton
+    args: ''
+    desc: 'creates RadioButton'
+    desc_ru: 'создаёт RadioButton'
+  - name: newRadioGroup
+    args: ''
+    desc: 'creates RadioGroup container'
+    desc_ru: 'создаёт контейнер RadioGroup'
+  - name: newRelativeLayout
+    args: ''
+    desc: 'creates RelativeLayout container'
+    desc_ru: 'создаёт контейнер RelativeLayout'
+  - name: newScrollView
+    args: ''
+    desc: 'creates ScrollView container'
+    desc_ru: 'создаёт контейнер ScrollView'
+  - name: newSeekBar
+    args: ''
+    desc: 'creates SeekBar'
+    desc_ru: 'создаёт SeekBar'
+  - name: newSwitch
+    args: ''
+    desc: 'creates Switch (available for SDK_INT >= 14)'
+    desc_ru: 'создаёт Switch (доступен для SDK_INT >= 14)'
+  - name: newTextView
+    args: 'text = ""'
+    desc: 'creates TextView'
+    desc_ru: 'создаёт TextView'
+  - name: newToggleButton
+    args: ''
+    desc: 'creates ToggleButton'
+    desc_ru: 'создаёт ToggleButton'
+types:
+  - name: ViewValue
+    functions:
+      - name: bringToFront
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: buildDrawingCache
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: callOnClick
+        args: ''
+        desc: 'available for SDK_INT >= 15'
+        desc_ru: 'доступно для SDK_INT >= 15'
+      - name: cancelLongPress
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: clearAnimation
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: clearFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: computeScroll
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: destroyDrawingCache
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: dispatchDisplayHint
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: findFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: findViewById
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: focusSearch
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: forceLayout
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getAlpha
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getBaseline
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getBottom
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getContentDescription
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getDrawingCacheBackgroundColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getDrawingCacheQuality
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getDrawingTime
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getHorizontalFadingEdgeLength
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getKeepScreenOn
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getLeft
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getMeasuredHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getMeasuredHeightAndState
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getMeasuredState
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getMeasuredWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getMeasuredWidthAndState
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getNextFocusDownId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getNextFocusForwardId
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getNextFocusLeftId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getNextFocusRightId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getNextFocusUpId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getOverScrollMode
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getPaddingBottom
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getPaddingEnd
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: getPaddingLeft
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getPaddingRight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getPaddingStart
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: getPaddingTop
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getPivotX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getPivotY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getRight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getRootView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getRotation
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getRotationX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getRotationY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getScaleX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getScaleY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getScrollBarFadeDuration
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: getScrollBarSize
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: getScrollBarStyle
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getScrollX
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getScrollY
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSolidColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSystemUiVisibility
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getTag
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTextAlignment
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: getTextDirection
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: getTop
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTranslationX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getTranslationY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getTranslationZ
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: getVerticalFadingEdgeLength
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getVerticalScrollbarPosition
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getVerticalScrollbarWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getVisibility
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getWindowSystemUiVisibility
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: getWindowVisibility
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: getZ
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: hasFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: hasFocusable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: hasNestedScrollingParent
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: hasOnClickListeners
+        args: ''
+        desc: 'available for SDK_INT >= 15'
+        desc_ru: 'доступно для SDK_INT >= 15'
+      - name: hasOverlappingRendering
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: hasTransientState
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: hasWindowFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: invalidate
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: invalidateDrawable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: invalidateOutline
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: isAccessibilityFocused
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: isActivated
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: isAttachedToWindow
+        args: ''
+        desc: 'available for SDK_INT >= 19'
+        desc_ru: 'доступно для SDK_INT >= 19'
+      - name: isClickable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isContextClickable
+        args: ''
+        desc: 'available for SDK_INT >= 23'
+        desc_ru: 'доступно для SDK_INT >= 23'
+      - name: isDirty
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: isDrawingCacheEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isDuplicateParentStateEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isFocusable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isFocusableInTouchMode
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isFocused
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isHapticFeedbackEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isHardwareAccelerated
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: isHorizontalFadingEdgeEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isHorizontalScrollBarEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isHovered
+        args: ''
+        desc: 'available for SDK_INT >= 14'
+        desc_ru: 'доступно для SDK_INT >= 14'
+      - name: isImportantForAccessibility
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: isInEditMode
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isInLayout
+        args: ''
+        desc: 'available for SDK_INT >= 18'
+        desc_ru: 'доступно для SDK_INT >= 18'
+      - name: isInTouchMode
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isLaidOut
+        args: ''
+        desc: 'available for SDK_INT >= 19'
+        desc_ru: 'доступно для SDK_INT >= 19'
+      - name: isLayoutDirectionResolved
+        args: ''
+        desc: 'available for SDK_INT >= 19'
+        desc_ru: 'доступно для SDK_INT >= 19'
+      - name: isLayoutRequested
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isLongClickable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isNestedScrollingEnabled
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: isOpaque
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isPaddingRelative
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: isPressed
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isSaveEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isSaveFromParentEnabled
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: isScrollContainer
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: isScrollbarFadingEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isSelected
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isShown
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isSoundEffectsEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isTextAlignmentResolved
+        args: ''
+        desc: 'available for SDK_INT >= 19'
+        desc_ru: 'доступно для SDK_INT >= 19'
+      - name: isTextDirectionResolved
+        args: ''
+        desc: 'available for SDK_INT >= 19'
+        desc_ru: 'доступно для SDK_INT >= 19'
+      - name: isVerticalFadingEdgeEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isVerticalScrollBarEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: jumpDrawablesToCurrentState
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: offsetLeftAndRight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: offsetTopAndBottom
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onClick
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onFocusChange
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onKey
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onLongClick
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: performClick
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: performHapticFeedback
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: performLongClick
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: playSoundEffect
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: post
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: postDelayed
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: postInvalidate
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: refreshDrawableState
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: requestFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: requestFocusFromTouch
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: requestLayout
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: scrollBy
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: scrollTo
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: sendAccessibilityEvent
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setActivated
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setAlpha
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setBackground
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setBackgroundColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setBackgroundDrawable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setBackgroundResource
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setBottom
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setCameraDistance
+        args: ''
+        desc: 'available for SDK_INT >= 12'
+        desc_ru: 'доступно для SDK_INT >= 12'
+      - name: setClickable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setClipToOutline
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: setContentDescription
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setContextClickable
+        args: ''
+        desc: 'available for SDK_INT >= 23'
+        desc_ru: 'доступно для SDK_INT >= 23'
+      - name: setDrawingCacheBackgroundColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setDrawingCacheEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setDrawingCacheQuality
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setDuplicateParentStateEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setFadingEdgeLength
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setFilterTouchesWhenObscured
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setFitsSystemWindows
+        args: ''
+        desc: 'available for SDK_INT >= 14'
+        desc_ru: 'доступно для SDK_INT >= 14'
+      - name: setFocusable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setFocusableInTouchMode
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setForeground
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHapticFeedbackEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHorizontalFadingEdgeEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHorizontalScrollBarEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHovered
+        args: ''
+        desc: 'available for SDK_INT >= 14'
+        desc_ru: 'доступно для SDK_INT >= 14'
+      - name: setId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImportantForAccessibility
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: setKeepScreenOn
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setLabelFor
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: setLayoutDirection
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: setLeft
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setLongClickable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMinimumHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMinimumWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setNestedScrollingEnabled
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: setNextFocusDownId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setNextFocusForwardId
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setNextFocusLeftId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setNextFocusRightId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setNextFocusUpId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOnClickListener
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOnFocusChangeListener
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOnKeyListener
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOnLongClickListener
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOverScrollMode
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setPadding
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setPaddingRelative
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: setPivotX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setPivotY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setPressed
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setRight
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setRotation
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setRotationX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setRotationY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setSaveEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSaveFromParentEnabled
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setScaleX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setScaleY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setScrollBarDefaultDelayBeforeFade
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: setScrollBarFadeDuration
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: setScrollBarSize
+        args: ''
+        desc: 'available for SDK_INT >= 16'
+        desc_ru: 'доступно для SDK_INT >= 16'
+      - name: setScrollBarStyle
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setScrollContainer
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setScrollX
+        args: ''
+        desc: 'available for SDK_INT >= 14'
+        desc_ru: 'доступно для SDK_INT >= 14'
+      - name: setScrollY
+        args: ''
+        desc: 'available for SDK_INT >= 14'
+        desc_ru: 'доступно для SDK_INT >= 14'
+      - name: setSelected
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSoundEffectsEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSystemUiVisibility
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setTag
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextAlignment
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: setTextDirection
+        args: ''
+        desc: 'available for SDK_INT >= 17'
+        desc_ru: 'доступно для SDK_INT >= 17'
+      - name: setTop
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setTranslationX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setTranslationY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setTranslationZ
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: setVerticalFadingEdgeEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setVerticalScrollbarPosition
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setVisibility
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setWillNotCacheDrawing
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setWillNotDraw
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setX
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setY
+        args: ''
+        desc: 'available for SDK_INT >= 11'
+        desc_ru: 'доступно для SDK_INT >= 11'
+      - name: setZ
+        args: ''
+        desc: 'available for SDK_INT >= 21'
+        desc_ru: 'доступно для SDK_INT >= 21'
+      - name: showContextMenu
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: willNotCacheDrawing
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: willNotDraw
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: TextViewValue
+    desc: 'Inheritance hierarchy: ViewValue'
+    desc_ru: 'Иерархия наследования: ViewValue'
+    functions:
+      - name: beginBatchEdit
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: endBatchEdit
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getAutoLinkMask
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCompoundDrawablePadding
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCompoundPaddingBottom
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCompoundPaddingLeft
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCompoundPaddingRight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCompoundPaddingTop
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCurrentHintTextColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCurrentTextColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getEditableText
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getEllipsize
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getError
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getExtendedPaddingBottom
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getExtendedPaddingTop
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getFreezesText
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getHighlightColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getHint
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getImeActionId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getImeActionLabel
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getImeOptions
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getInputType
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getLineCount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getLineHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getLinksClickable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSelectionEnd
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSelectionStart
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getText
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTextScaleX
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTextSize
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTotalPaddingBottom
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTotalPaddingLeft
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTotalPaddingRight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTotalPaddingTop
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: hasSelection
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isCursorVisible
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isInputMethodTarget
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isSuggestionsEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isTextSelectable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: length
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: moveCursorToVisibleOffset
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setAllCaps
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setAutoLinkMask
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setBreakStrategy
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setCompoundDrawablePadding
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setCompoundDrawables
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setCursorVisible
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setEllipsize
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setEms
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setError
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setFreezesText
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHighlightColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHint
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHintTextColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHorizontallyScrolling
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImeOptions
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setInputType
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setLines
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setLinkTextColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setLinksClickable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMaxEms
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMaxHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMaxLines
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMaxWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMinEms
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMinHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMinLines
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMinWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setPaintFlags
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setRawInputType
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSelectAllOnFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSingleLine
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setText
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextColor
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextIsSelectable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextScaleX
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextSize
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: EditTextValue
+    desc: 'Inheritance hierarchy: TextViewValue < ViewValue'
+    desc_ru: 'Иерархия наследования: TextViewValue < ViewValue'
+    functions:
+      - name: extendSelection
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: selectAll
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSelection
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: ButtonValue
+    desc: 'Inheritance hierarchy: TextViewValue < ViewValue'
+    desc_ru: 'Иерархия наследования: TextViewValue < ViewValue'
+    functions: []
+  - name: CompoundButtonValue
+    desc: 'Inheritance hierarchy: ButtonValue < TextViewValue < ViewValue'
+    desc_ru: 'Иерархия наследования: ButtonValue < TextViewValue < ViewValue'
+    functions:
+      - name: isChecked
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onCheck
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setButtonDrawable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setChecked
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: toggle
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: ToggleButtonValue
+    desc: 'Inheritance hierarchy: CompoundButtonValue < ButtonValue < TextViewValue < ViewValue'
+    desc_ru: 'Иерархия наследования: CompoundButtonValue < ButtonValue < TextViewValue < ViewValue'
+    functions:
+      - name: getTextOff
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTextOn
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextOff
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextOn
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: SwitchValue
+    desc: 'Inheritance hierarchy: CompoundButtonValue < ButtonValue < TextViewValue < ViewValue'
+    desc_ru: 'Иерархия наследования: CompoundButtonValue < ButtonValue < TextViewValue < ViewValue'
+    functions:
+      - name: getTextOff
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getTextOn
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextOff
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setTextOn
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: ImageViewValue
+    desc: 'Inheritance hierarchy: ViewValue'
+    desc_ru: 'Иерархия наследования: ViewValue'
+    functions:
+      - name: clearColorFilter
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getScaleType
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setAdjustViewBounds
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setColorFilter
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImageAlpha
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImageBitmap
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImageDrawable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImageLevel
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImageResource
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setImageURI
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMaxHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMaxWidth
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setScaleType
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: ImageButtonValue
+    desc: 'Inheritance hierarchy: ImageViewValue < ViewValue'
+    desc_ru: 'Иерархия наследования: ImageViewValue < ViewValue'
+    functions: []
+  - name: ViewGroupValue
+    desc: 'Inheritance hierarchy: ViewValue'
+    desc_ru: 'Иерархия наследования: ViewValue'
+    functions:
+      - name: addView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: bringChildToFront
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: clearChildFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getChildAt
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getChildCount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: indexOfChild
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: recomputeViewAttributes
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: removeAllViews
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: removeAllViewsInLayout
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: removeView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: removeViewAt
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: removeViewInLayout
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: LinearLayoutValue
+    desc: 'Inheritance hierarchy: ViewGroupValue < ViewValue'
+    desc_ru: 'Иерархия наследования: ViewGroupValue < ViewValue'
+    functions:
+      - name: getOrientation
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getWeightSum
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHorizontalGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOrientation
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setVerticalGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setWeightSum
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: RelativeLayoutValue
+    desc: 'Inheritance hierarchy: ViewGroupValue < ViewValue'
+    desc_ru: 'Иерархия наследования: ViewGroupValue < ViewValue'
+    functions:
+      - name: getGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHorizontalGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setIgnoreGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setVerticalGravity
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: FrameLayoutValue
+    desc: 'Inheritance hierarchy: ViewGroupValue < ViewValue'
+    desc_ru: 'Иерархия наследования: ViewGroupValue < ViewValue'
+    functions: []
+  - name: ScrollViewValue
+    desc: 'Inheritance hierarchy: FrameLayoutValue < ViewGroupValue < ViewValue'
+    desc_ru: 'Иерархия наследования: FrameLayoutValue < ViewGroupValue < ViewValue'
+    functions:
+      - name: isFillViewport
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isSmoothScrollingEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setFillViewport
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSmoothScrollingEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: AdapterViewValue
+    desc: 'Inheritance hierarchy: ViewGroupValue < ViewValue'
+    desc_ru: 'Иерархия наследования: ViewGroupValue < ViewValue'
+    functions:
+      - name: getAdapter
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getEmptyView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getFirstVisiblePosition
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getItemAtPosition
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getItemIdAtPosition
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getLastVisiblePosition
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getPositionForView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSelectedItem
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSelectedItemId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSelectedItemPosition
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSelectedView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onItemClick
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onItemLongClick
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onItemSelected
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: performItemClick
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setAdapter
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setEmptyView
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: ListViewValue
+    desc: 'Inheritance hierarchy: AdapterViewValue < ViewGroupValue < ViewValue'
+    desc_ru: 'Иерархия наследования: AdapterViewValue < ViewGroupValue < ViewValue'
+    functions:
+      - name: addFooterView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: addHeaderView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getDividerHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getFooterViewsCount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getHeaderViewsCount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getItemsCanFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getMaxScrollAmount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: removeFooterView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: removeHeaderView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setCacheColorHint
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setDividerHeight
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setFooterDividersEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setHeaderDividersEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setItemsCanFocus
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSelection
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSelectionAfterHeaderView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: smoothScrollToPosition
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: RadioGroupValue
+    desc: 'Inheritance hierarchy: LinearLayoutValue < ViewGroupValue < ViewValue'
+    desc_ru: 'Иерархия наследования: LinearLayoutValue < ViewGroupValue < ViewValue'
+    functions:
+      - name: check
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: clearCheck
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getCheckedRadioButtonId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onCheck
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOnCheckedChangeListener
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: ProgressBarValue
+    desc: 'Inheritance hierarchy: ViewValue'
+    desc_ru: 'Иерархия наследования: ViewValue'
+    functions:
+      - name: getMax
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getProgress
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getSecondaryProgress
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: incrementProgressBy
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: incrementSecondaryProgressBy
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setIndeterminate
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setIndeterminateDrawable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setMax
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setProgress
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setProgressDrawable
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setSecondaryProgress
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: SeekBarValue
+    desc: 'Inheritance hierarchy: ProgressBarValue < ViewValue'
+    desc_ru: 'Иерархия наследования: ProgressBarValue < ViewValue'
+    functions:
+      - name: getKeyProgressIncrement
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getThumbOffset
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: onSeekBarChange
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setKeyProgressIncrement
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setOnSeekBarChangeListener
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setThumb
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: setThumbOffset
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: AdapterValue
+    functions:
+      - name: getCount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getItem
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getItemId
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getItemViewType
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getView
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: getViewTypeCount
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: hasStableIds
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isEmpty
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: ListAdapterValue
+    desc: 'Inheritance hierarchy: AdapterValue'
+    desc_ru: 'Иерархия наследования: AdapterValue'
+    functions:
+      - name: areAllItemsEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isEnabled
+        args: ''
+        desc: ''
+        desc_ru: ''

@@ -1,0 +1,139 @@
+name: robot
+scope: "both"
+desc: "Contains functions for working with clipboard, processes, automation"
+desc_ru: "Содержит функции для работы с буфером обмена, процессами, автоматизацией"
+constants:
+  - name: "BUTTON1"
+    typeName: number
+    type: 1
+    value: "16"
+    desc: "left mouse button code"
+    desc_ru: "код левой кнопки мыши"
+  - name: "BUTTON2"
+    typeName: number
+    type: 1
+    value: "8"
+    desc: "middle mouse button code"
+    desc_ru: "код средней кнопки мыши"
+  - name: "BUTTON3"
+    typeName: number
+    type: 1
+    value: "4"
+    desc: "right mouse button code"
+    desc_ru: "код правой кнопки мыши"
+  - name: "VK_DOWN"
+    typeName: number
+    type: 1
+    value: "40"
+    desc: "key down code"
+    desc_ru: "код клавиши вниз"
+  - name: "VK_ESCAPE"
+    typeName: number
+    type: 1
+    value: "27"
+    desc: "Escape key code"
+    desc_ru: "код клавиши Escape"
+  - name: "VK_FIRE"
+    typeName: number
+    type: 1
+    value: "10"
+    desc: "Enter key code"
+    desc_ru: "код клавиши Enter"
+  - name: "VK_LEFT"
+    typeName: number
+    type: 1
+    value: "37"
+    desc: "key left code"
+    desc_ru: "код клавиши влево"
+  - name: "VK_RIGHT"
+    typeName: number
+    type: 1
+    value: "39"
+    desc: "key right code"
+    desc_ru: "код клавиши вправо"
+functions:
+  - name: "click"
+    args: "buttons"
+    scope: "desktop"
+    desc: "performs click with given mouse buttons"
+    desc_ru: "осуществляет клик мышью с заданными клавишами"
+    example: |-
+      use robot
+      
+      click(BUTTON3) // right mouse button click
+    example_ru: |-
+      use robot
+      
+      click(BUTTON3) // клик правой кнопкой мыши
+  - name: "delay"
+    args: "ms"
+    scope: "desktop"
+    desc: "delay by given milliseconds"
+    desc_ru: "задержка на заданной количество миллисекунд"
+  - name: "execProcess"
+    args: "args..."
+    desc: "executes the process with parameters"
+    desc_ru: "запускает процесс с параметрами\n\n  Если функции переданы несколько аргументов, то они все передаются как параметры.\n  Если функции передан только один параметр - массив, то его элементы передаются как параметры.\n  Если функции передан только один параметр, то он служит единственным параметром."
+    example: |-
+      use robot
+      
+      execProcess("mkdir", "Test")
+      execProcess("mkdir Test")
+      execProcess(["mkdir", "Test"])
+  - name: "execProcessAndWait"
+    args: "args..."
+    desc: "same as `execProcess`, but waits until process completes, returns it's exit code"
+    desc_ru: "аналогичен функции `execProcess`, но ожидает завершение порождаемого процесса и возвращает его статус"
+  - name: "fromClipboard"
+    args: ""
+    desc: "gets text from clipboard"
+    desc_ru: "получает строку из буфера обмена"
+  - name: "keyPress"
+    args: "key"
+    scope: "desktop"
+    desc: "performs pressing key"
+    desc_ru: "осуществляет зажатие клавиши с кодом key"
+  - name: "keyRelease"
+    args: "key"
+    scope: "desktop"
+    desc: "performs releasing key"
+    desc_ru: "осуществляет отпускание клавиши с кодом key"
+  - name: "mouseMove"
+    args: "x, y"
+    scope: "desktop"
+    desc: "moves mouse pointer to given point"
+    desc_ru: "перемещает указатель мыши в заданную координату"
+  - name: "mousePress"
+    args: "buttons"
+    scope: "desktop"
+    desc: "performs pressing the given mouse button"
+    desc_ru: "осуществляет зажатие заданной кнопки мыши"
+  - name: "mouseRelease"
+    args: "buttons"
+    scope: "desktop"
+    desc: "performs releasing the given mouse button"
+    desc_ru: "осуществляет отпускание заданной кнопки мыши"
+  - name: "mouseWheel"
+    args: "value"
+    scope: "desktop"
+    desc: "performs scrolling (< 0 - up, > 0 - down)"
+    desc_ru: "осуществляет прокрутку колеса мыши (отрицательное значение - вверх, положительное - вниз)"
+  - name: "setAutoDelay"
+    args: "ms"
+    scope: "desktop"
+    desc: "sets delay after each automation event"
+    desc_ru: "установка длительности автоматической задержки после каждого события автоматизации"
+  - name: "toClipboard"
+    args: "text"
+    desc: "adds text to clipboards"
+    desc_ru: "копирует строку в буфер обмена"
+  - name: "typeText"
+    args: "text"
+    scope: "desktop"
+    desc: "performs typing text by pressing keys for each character"
+    desc_ru: "осуществляет последовательное нажатие клавиш для набора заданного текста"
+  - name: "sudo"
+    args: "args..."
+    scope: "android"
+    desc: "same as `execProcess`, but executes command as root (requires rooted device)"
+    desc_ru: "аналогичен функции `execProcess`, но выполняет команду от имени администратора (нужен Root)"

@@ -1,0 +1,288 @@
+name: files
+scope: "both"
+desc: "Contains functions for working with files"
+desc_ru: "Содержит функции для работы с файлами"
+constants:
+  - name: "FILES_COMPARATOR"
+    typeName: "function"
+    scope: "both"
+    type: 5
+    value: "def(f1, f2) = compare(f1, f2)"
+    desc: "function which compares two file descriptors"
+    desc_ru: "функция, которая сравнивает два файловых дескриптора"
+  - name: "SDCARD"
+    typeName: string
+    scope: "android"
+    type: 2
+    value: "path to SDCARD"
+    desc: "path to SDCARD"
+    desc_ru: "путь к внешнему хранилищу"
+functions:
+  - name: "canExecute"
+    args: "f"
+    desc: "checks execute permission of the descriptor `f`"
+    desc_ru: "проверяет права на выполнение дескриптора `f`"
+  - name: "canRead"
+    args: "f"
+    desc: "checks read permission of the descriptor `f`"
+    desc_ru: "проверяет права на чтение дескриптора `f`"
+  - name: "canWrite"
+    args: "f"
+    desc: "checks write permission of the descriptor `f`"
+    desc_ru: "проверяет права на запись дескриптора `f`"
+  - name: copy
+    args: 'src, dst'
+    desc: 'copies file src to dst location'
+    desc_ru: 'копирует файл src в dst'
+  - name: "delete"
+    args: "f"
+    desc: "removes file or directory. Returns 1 if delete was successfull, 0 otherwise"
+    desc_ru: "удаляет файл или папку. Возвращает 1, если удаление прошло успешно, иначе - 0"
+  - name: "exists"
+    args: "f"
+    desc: "checks file or directory existing. Returns 1 if exists, 0 otherwise"
+    desc_ru: "проверяет, существует ли файл или папка. Возвращает 1, если существует, иначе - 0"
+  - name: "fclose"
+    args: "f"
+    desc: "closes file"
+    desc_ru: "закрывает файл"
+  - name: "fileSize"
+    args: "f"
+    desc: "returns file size in bytes"
+    desc_ru: "возвращает размер файла в байтах"
+  - name: "flush"
+    args: "f"
+    desc: "flushes write buffer into file"
+    desc_ru: "сбрасывает буфер записи в файл"
+  - name: "fopen"
+    args: "path, mode = \"r\""
+    desc: |-
+      opens file  файл with `path` in given `mode`:
+      
+        - "" - opens file or directory for getting info;
+        - "r" - opens file for read in text mode;
+        - "rb" - opens file for read in binary mode;
+        - "w" - opens file for write in text mode;
+        - "w+" - opens file for append in text mode;
+        - "wb" - opens file for write in binary mode;
+        - "wb+" - opens file for append in binary mode.
+      
+        Returns a file descriptor for using in other functions.
+    desc_ru: |-
+      открывает файл по пути `path` в заданном режиме `mode`:
+      
+        - "" - открывает файл или папку для получения информации;
+        - "r" - открывает файл для чтения в текстовом режиме;
+        - "rb" - открывает файл для чтения в бинарном режиме;
+        - "w" - открывает файл для записи в текстовом режиме;
+        - "w+" - открывает файл для дозаписи в текстовом режиме;
+        - "wb" - открывает файл для записи в бинарном режиме;
+        - "wb+" - открывает файл для дозаписи в бинарном режиме.
+      
+        Возвращает дескриптор файла, который необходим для остальных функций.
+    example: |-
+      use files
+      
+      f1 = fopen("text.txt") // opens file text.txt for read in text mode
+      f2 = fopen("E:/1.dat", "rbwb") // opens file 1.dat on drive E for binary read and write"
+    example_ru: |-
+      use files
+      
+      f1 = fopen("text.txt") // открывает файл text.txt для текстового чтения
+      f2 = fopen("E:/1.dat", "rbwb") // открывает файл 1.dat на диске E для бинарного чтения и записи"
+  - name: "getParent"
+    args: "f"
+    desc: "returns parent path of the given descriptor `f`"
+    desc_ru: "возвращает родительский путь для заданного дескриптора `f`"
+  - name: "isDirectory"
+    args: "f"
+    desc: "checks if descriptor `f` is directory"
+    desc_ru: "проверяет, является ли дескриптор `f` папкой. 1 - является, 0 - нет"
+  - name: "isFile"
+    args: "f"
+    desc: "checks if descriptor `f` is file"
+    desc_ru: "проверяет, является ли дескриптор f файлом. 1 - является, 0 - нет"
+  - name: "isHidden"
+    args: "f"
+    desc: "checks if descriptor `f` is hidden"
+    desc_ru: "проверяет, скрыт ли дескриптор f. 1 - скрыт, 0 - нет"
+  - name: "lastModified"
+    args: "f"
+    desc: "returns last modification time"
+    desc_ru: "возвращает время последнего изменения"
+  - name: "listFiles"
+    args: "f"
+    desc: "returns array with filenames in given directory.\n\n f - directory descriptor"
+    desc_ru: "возвращает массив с именами файлов в указанной директории.\n\n f - дескриптор папки"
+    example: |-
+      use files
+      
+      f1 = fopen("E:/examples", "") // opens directory examples for getting information
+      list = listFiles(f1) // gets array with filenames in directory
+    example_ru: |-
+      use files
+      
+      f1 = fopen("E:/examples", "") // открыть папку examples для получения информации
+      list = listFiles(f1) // получить массив с именами файлов в этой папке
+  - name: "mkdir"
+    args: "f"
+    desc: "creates the directory. Returns 1 if operation was successfull, 0 otherwise"
+    desc_ru: "создаёт папку. Возвращает 1, если создание прошло успешно, иначе - 0"
+  - name: "mkdirs"
+    args: "f"
+    desc: "creates the directories. Returns 1 if operation was successfull, 0 otherwise"
+    desc_ru: "создаёт папки. Возвращает 1, если создание прошло успешно, иначе - 0"
+  - name: "readAllBytes"
+    args: "f"
+    desc: "reads all bytes from file. Returns array with bytes"
+    desc_ru: "чтение всех байт файла. Возвращает массив байт файла"
+    example: |-
+      use std, files
+      
+      f1 = fopen("file.bin", "rb")
+      array = readAllBytes(f1)
+      println length(array)
+  - name: "readBoolean"
+    args: "f"
+    desc: "reads boolean (1 byte). Returns 0 if byte was 0, 1 otherwise"
+    desc_ru: "чтение boolean-значения (1 байт). Возвращает 0, если байт имеет значение 0, 1 - если значение не равно 0"
+  - name: "readByte"
+    args: "f"
+    desc: "reads one byte"
+    desc_ru: "чтение одного байта"
+  - name: "readBytes"
+    args: "f, array, offset = 0, length = length(array)"
+    desc: "reads `length` bytes of file `f` and stores to `array` starting from `offset+1` byte. Returns number of read bytes"
+    desc_ru: "чтение заданного количества байт в массив `array`. Возвращает число прочитанных байт.  \nЕсли offset и length не указаны, то читается количество байт равное длине массива.  \nЕсли offset и length указаны, то читается length байт в массив array, начиная с `offset+1` байта"
+    example: |-
+      use files
+      
+      f1 = fopen("file.bin", "rb") // file.bin must contain more than 5000 bytes
+      array = newarray(2048)
+      readCount = readBytes(f1, array) // reads 2048 bytes
+      readCount = readBytes(f1, array, 10) // reads 2048 bytes starting from 11 byte
+      readCount = readBytes(f1, array, 20, 10) // reads 10 bytes, starting from 21 byte
+    example_ru: |-
+      use files
+      
+      f1 = fopen("file.bin", "rb") // file.bin должен иметь больше 5000 байтов
+      array = newarray(2048)
+      readCount = readBytes(f1, array) // читает 2048 байт из файла
+      readCount = readBytes(f1, array, 10) // читает 2048 байт, начиная с 11 байта
+      readCount = readBytes(f1, array, 20, 10) // читает 10 байт, начиная с 21 байта
+  - name: "readChar"
+    args: "f"
+    desc: "reads one char (2 bytes). Returns number char's code"
+    desc_ru: "чтение одного символа (2 байта). Возвращает число - код символа"
+  - name: "readDouble"
+    args: "f"
+    desc: "reads 8 bytes double number"
+    desc_ru: "чтение 8 байт (вещественное число двойной точности)"
+  - name: "readFloat"
+    args: "f"
+    desc: "reads 4 bytes float number"
+    desc_ru: "чтение 4 байт (вещественное число)"
+  - name: "readInt"
+    args: "f"
+    desc: "reads 4 bytes integer number"
+    desc_ru: "чтение 4 байт (целое число)"
+  - name: "readLine"
+    args: "f"
+    desc: "reads line from file opened in text mode"
+    desc_ru: "чтение строки в текстовом режиме"
+  - name: "readLong"
+    args: "f"
+    desc: "reads 8 bytes long number"
+    desc_ru: "чтение 8 байт (длинное целое число)"
+  - name: "readShort"
+    args: "f"
+    desc: "reads 2 bytes short number"
+    desc_ru: "чтение 2 байт (короткое целое число)"
+  - name: "readText"
+    args: "f"
+    desc: "reads all file's content as string"
+    desc_ru: "чтение всего файла в текстовом режиме в строку"
+  - name: "readUTF"
+    args: "f"
+    desc: "reads string in binary mode"
+    desc_ru: "чтение строки в бинарном режиме"
+  - name: "rename"
+    args: "from, to"
+    desc: "renames (or moves) file"
+    desc_ru: "переименование (или перемещение) файла"
+    example: |-
+      use files
+      
+      f1 = fopen("C:/file1", "i")
+      f2 = fopen("E:/file2", "i")
+      rename(f1, f2)
+      fclose(f1)
+      fclose(f2)
+  - name: "setLastModified"
+    args: "f, time"
+    desc: "sets last modified time"
+    desc_ru: "устанавливает время изменения"
+  - name: "setReadOnly"
+    args: "f"
+    desc: "marks descriptor read only"
+    desc_ru: "помечает дескриптор только для чтения"
+  - name: "setExecutable"
+    args: "f, executable, ownerOnly = true"
+    desc: "sets execute permission"
+    desc_ru: "устанавливает права на выполнение"
+  - name: "setReadable"
+    args: "f, readable, ownerOnly = true"
+    desc: "sets read permission"
+    desc_ru: "устанавливает права на чтение"
+  - name: "setWritable"
+    args: "f, writable, ownerOnly = true"
+    desc: "sets write permission"
+    desc_ru: "устанавливает права на запись"
+  - name: "writeBoolean"
+    args: "f, v"
+    desc: "writes boolean (0 or 1) to file"
+    desc_ru: "запись одного байта boolean (0 или 1) в файл"
+  - name: "writeByte"
+    args: "f, v"
+    desc: "writes one byte to file"
+    desc_ru: "запись одного байта в файл"
+  - name: "writeBytes"
+    args: "f, array, offset = 0, length = length(array)"
+    desc: "writes `length` bytes to file `f` from byte `array` starting from `offset`"
+    desc_ru: "запись заданного количества байт в файл `f` из массива байт `array`.   \nЕсли offset и length не указаны, то записывается количество байт равное длине массива.  \nЕсли offset и length указаны, то пропускается offset байт и записывается length байт"
+  - name: "writeChar"
+    args: "f, v"
+    desc: "writes one char (2 bytes) to file. `v` can be number - writes number, or string - writes code of first symbol"
+    desc_ru: "запись одного символа (2 байта) в файл. `v` может быть как числом (пишется это число), так и строкой (пишется код первого символа)"
+  - name: "writeDouble"
+    args: "f, v"
+    desc: "writes 8 bytes double number to file"
+    desc_ru: "запись 8 байт (вещественное число двойной точности)"
+  - name: "writeFloat"
+    args: "f, v"
+    desc: "writes 4 bytes float number to file"
+    desc_ru: "запись 4 байт (вещественное число)"
+  - name: "writeInt"
+    args: "f, v"
+    desc: "writes 4 bytes integer number to file"
+    desc_ru: "запись 4 байт (целое число)"
+  - name: "writeLine"
+    args: "f, v"
+    desc: "writes string to file in text mode **adds line break at the end of the string**"
+    desc_ru: "запись строки в текстовом режиме **Добавляет в конец символ переноса строки**"
+  - name: "writeLong"
+    args: "f, v"
+    desc: "writes 8 bytes long number to file"
+    desc_ru: "запись 8 байт (длинное целое число)"
+  - name: "writeShort"
+    args: "f, v"
+    desc: "writes 2 bytes short number to file"
+    desc_ru: "запись двух байт (короткое целое число)"
+  - name: "writeText"
+    args: "f, v"
+    desc: "writes string to file in text mode. Unlike `writeLine` does not add line break"
+    desc_ru: "запись всего текста в текстовом режиме. В отличие от `writeLine`, не добавляет символ переноса строки"
+  - name: "writeUTF"
+    args: "f, v"
+    desc: "writes string to file in binary mode"
+    desc_ru: "запись строки в бинарном режиме"

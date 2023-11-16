@@ -1,0 +1,25 @@
+name: json
+scope: "both"
+desc: "Contains functions for working with the json format"
+desc_ru: "Содержит функции преобразования данных в формат json и наоборот"
+constants: []
+functions:
+  - name: "jsondecode"
+    args: "data"
+    desc: "converts data to json string"
+    desc_ru: "преобразует переданные данные в строку в формате json"
+    example: |-
+      use json
+      print jsondecode("{\"key1\":1,\"key2\":[1,2,3],\"key3\":\"text\"}") // {key2=[1, 2, 3], key3=text, key1=1}
+  - name: "jsonencode"
+    args: "jsonString, indent = 0"
+    desc: "converts string to data"
+    desc_ru: "преобразует строку в формате json в данные"
+    example: |-
+      use json
+      data = {
+        "key1": 1,
+        "key2": [1, 2, 3],
+        "key3": "text"
+      }
+      print jsonencode(data) // {"key1":1,"key2":[1,2,3],"key3":"text"}

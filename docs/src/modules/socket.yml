@@ -1,0 +1,161 @@
+name: socket
+scope: both
+constants:
+  - name: EVENT_CONNECT
+    type: 2
+    typeName: string
+    value: connect
+  - name: EVENT_CONNECTING
+    type: 2
+    typeName: string
+    value: connecting
+  - name: EVENT_CONNECT_ERROR
+    type: 2
+    typeName: string
+    value: connect_error
+  - name: EVENT_CONNECT_TIMEOUT
+    type: 2
+    typeName: string
+    value: connect_timeout
+  - name: EVENT_DISCONNECT
+    type: 2
+    typeName: string
+    value: disconnect
+  - name: EVENT_ERROR
+    type: 2
+    typeName: string
+    value: error
+  - name: EVENT_MESSAGE
+    type: 2
+    typeName: string
+    value: message
+  - name: EVENT_PING
+    type: 2
+    typeName: string
+    value: ping
+  - name: EVENT_PONG
+    type: 2
+    typeName: string
+    value: pong
+  - name: EVENT_RECONNECT
+    type: 2
+    typeName: string
+    value: reconnect
+  - name: EVENT_RECONNECTING
+    type: 2
+    typeName: string
+    value: reconnecting
+  - name: EVENT_RECONNECT_ATTEMPT
+    type: 2
+    typeName: string
+    value: reconnect_attempt
+  - name: EVENT_RECONNECT_ERROR
+    type: 2
+    typeName: string
+    value: reconnect_error
+  - name: EVENT_RECONNECT_FAILED
+    type: 2
+    typeName: string
+    value: reconnect_failed
+functions:
+  - name: newSocket
+    args: 'url, options = {}'
+    desc: |-
+      creates new SocketValue
+      
+      options (map with keys):
+        - forceNew (boolean)
+        - multiplex (boolean)
+        - reconnection (boolean)
+        - rememberUpgrade (boolean)
+        - secure (boolean)
+        - timestampRequests (boolean)
+        - upgrade (boolean)
+        - policyPort (integer)
+        - port (integer)
+        - reconnectionAttempts (integer)
+        - reconnectionDelay (timestamp - long)
+        - reconnectionDelayMax (timestamp - long)
+        - timeout (timestamp - long) - set -1 to disable
+        - randomizationFactor (double)
+        - host (string)
+        - hostname (string)
+        - path (string)
+        - query (string)
+        - timestampParam (string)
+        - transports (array of strings)
+    desc_ru: |-
+      создаёт новый SocketValue
+      
+      options (map с ключами):
+        - forceNew (boolean)
+        - multiplex (boolean)
+        - reconnection (boolean)
+        - rememberUpgrade (boolean)
+        - secure (boolean)
+        - timestampRequests (boolean)
+        - upgrade (boolean)
+        - policyPort (integer)
+        - port (integer)
+        - reconnectionAttempts (integer)
+        - reconnectionDelay (timestamp - long)
+        - reconnectionDelayMax (timestamp - long)
+        - timeout (timestamp - long) - -1 для отключения
+        - randomizationFactor (double)
+        - host (string)
+        - hostname (string)
+        - path (string)
+        - query (string)
+        - timestampParam (string)
+        - transports (array of strings)
+types:
+  - name: SocketValue
+    functions:
+      - name: "close"
+        args: ""
+        desc: "disconnects the socket"
+        desc_ru: "закрывает соединение сокета"
+      - name: "connect"
+        args: ""
+        desc: "connects the socket"
+        desc_ru: "подключает сокет"
+      - name: "connected"
+        args: ""
+        desc: "returns connected status (1 - connected, 0 - no)"
+        desc_ru: "возвращает состояние подключения (1 - подключен, 0 - нет)"
+      - name: "disconnect"
+        args: ""
+        desc: "disconnects the socket"
+        desc_ru: "закрывает соединение сокета"
+      - name: "emit"
+        args: "event, data"
+        desc: "emits an event"
+        desc_ru: "посылает событие"
+      - name: "hasListeners"
+        args: "event"
+        desc: "returns true if there is listeners for specified event"
+        desc_ru: "возвращает true, если для указанного события есть обработчики"
+      - name: "id"
+        args: ""
+        desc: "returns socket id"
+        desc_ru: "возвращает id сокета"
+      - name: "off"
+        args: "event = .."
+        desc: "removes specified event handler, or removes all if no arguments were passed"
+        desc_ru: "удаляет обработчик указанного события или удаляет все обработчики, если не было передано ни одного аргумента"
+      - name: "on"
+        args: "event, listener"
+        desc: "adds event listener"
+        desc_ru: "добавляет обработчик указанного события"
+      - name: "once"
+        args: "event, listener"
+        desc: "adds one time event listener"
+        desc_ru: "добавляет одноразовый обработчик указанного события"
+      - name: "open"
+        args: ""
+        desc: "connects the socket"
+        desc_ru: "подключает сокет"
+      - name: "send"
+        args: "data"
+        desc: "send messages"
+        desc_ru: "отправляет сообщения"

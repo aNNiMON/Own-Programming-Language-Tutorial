@@ -1,0 +1,62 @@
+name: android
+scope: "android"
+desc: "Contains common Android functions"
+desc_ru: "Содержит вспомогательные функции для Android"
+constants:
+  - name: "Intent"
+    typeName: map
+    type: 4
+    value: "{ACTION_BOOT_COMPLETED=android.intent.action.BOOT_COMPLETED, ACTION_DEFAULT=android.intent.action.VIEW, ACTION_DELETE=android.intent.action.DELETE, ACTION_EDIT=android.intent.action.EDIT, ACTION_INSTALL_PACKAGE=android.intent.action.INSTALL_PACKAGE, ACTION_LOCATION_SOURCE_SETTINGS=android.settings.LOCATION_SOURCE_SETTINGS, ACTION_MAIN=android.intent.action.MAIN, ACTION_MEDIA_MOUNTED=android.intent.action.MEDIA_MOUNTED, ACTION_REBOOT=android.intent.action.REBOOT, ACTION_RUN=android.intent.action.RUN, ACTION_SEARCH=android.intent.action.SEARCH, ACTION_SEND=android.intent.action.SEND, ACTION_VIEW=android.intent.action.VIEW, ACTION_WEB_SEARCH=android.intent.action.WEB_SEARCH}"
+  - name: R
+    type: 4
+    typeName: map
+    value: '{array={}, attr={}, color={}, drawable={}, id={}, integer={}, layout={}, string={}}'
+    desc: "Resource constants from android.R.xxx class"
+    desc_ru: "Константы ресурсов класса android.R.xxx"
+  - name: SDK_INT
+    type: 1
+    typeName: number
+    value: 'Android version SDK'
+    desc: "Android version SDK"
+    desc_ru: "Версия SDK Android"
+  - name: "Span"
+    typeName: map
+    type: 4
+    value: "{COLOR=0, ABSOLUTE_SIZE=1, RELATIVE_SIZE=2, URL=3, STYLE=4, CLICKABLE=5, TYPEFACE=6, HTML=7}"
+functions:
+  - name: "assetBitmap"
+    args: "path"
+    desc: "loads bitmap from the file in apk's assets folder"
+    desc_ru: "загружает изображение из файла в папке assets внутри apk"
+  - name: "assetBytes"
+    args: "path"
+    desc: "reads bytes of the file in apk's assets folder"
+    desc_ru: "читает массив байт из файла в папке assets внутри apk"
+  - name: "assetText"
+    args: "path"
+    desc: "reads text content of the file in apk's assets folder"
+    desc_ru: "читает текст файла в папке assets внутри apk"
+  - name: "chooser"
+    args: ""
+    desc: ""
+    desc_ru: ""
+  - name: "listAssets"
+    args: "path"
+    desc: "returns list of files in apk's assets folder"
+    desc_ru: "возвращает список файлов в папке assets внутри apk"
+  - name: "spannable"
+    args: "type, text, ..."
+    desc: ""
+    desc_ru: ""
+  - name: "startActivity"
+    args: "intent, uri = \"\", bundle = []"
+    desc: "starts an activity"
+    desc_ru: "запускает Activity"
+  - name: "toast"
+    args: "text, duration = 0"
+    desc: "shows toast notification"
+    desc_ru: "показывает всплывающее уведомление (toast)"
+  - name: "uithread"
+    args: "function, ..."
+    desc: "runs function in main UI-thread"
+    desc_ru: "выполняет функцию в главном UI-потоке"

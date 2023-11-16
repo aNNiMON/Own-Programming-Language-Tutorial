@@ -1,0 +1,107 @@
+name: date
+scope: "both"
+desc: "Contains functions for working with date and time"
+desc_ru: "Содержит функции для работы с датой и временем"
+constants:
+  - name: "STYLE_FULL"
+    typeName: number
+    type: 1
+    value: "0"
+  - name: "STYLE_LONG"
+    typeName: number
+    type: 1
+    value: "1"
+  - name: "STYLE_MEDIUM"
+    typeName: number
+    type: 1
+    value: "2"
+  - name: "STYLE_SHORT"
+    typeName: number
+    type: 1
+    value: "3"
+functions:
+  - name: "newDate"
+    args: "..."
+    desc: |-
+      `newDate()` - returns current date.
+      
+      `newDate(timestamp)` - returns date by given timestamp.
+      
+      `newDate(dateString)` - parses and returns date by given string.
+      
+      `newDate(pattern, dateString)` - parses and returns date by given string in `pattern` format.
+      
+      `newDate(year, month, day)` - returns date by year, month and day.
+      
+      `newDate(year, month, day, hour, minute)` - returns date by year, month, day, hour and minute.
+      
+      `newDate(year, month, day, hour, minute, second)` - returns date by year, month, day, hour, minute and second.
+      
+      Returns DateValue.
+    desc_ru: |-
+      `newDate()` - возвращает текущую дату.
+      
+      `newDate(timestamp)` - возвращает дату для указанной метки времени.
+      
+      `newDate(dateString)` - парсит и возвращает дату, записанную в виде строки.
+      
+      `newDate(pattern, dateString)` - парсит и возвращает дату, записанную в виде строки в формате `pattern`.
+      
+      `newDate(year, month, day)` - возвращает дату для указанных года, месяца и дня.
+      
+      `newDate(year, month, day, hour, minute)` - возвращает дату для указанных года, месяца, дня, часа и минуты.
+      
+      `newDate(year, month, day, hour, minute, second)` - возвращает дату для указанных года, месяца, дня, часа, минуты и секунды.
+      
+      Возвращает DateValue.
+  - name: "newFormat"
+    args: "..."
+    desc: |-
+      `newFormat()` - returns default date format.
+      
+      `newFormat(pattern)` - returns date format by given pattern.
+      
+      `newFormat(type)` - returns format: 0 - default, 1 - date, 2 - time, 3 - date and time.
+      
+      `newFormat(pattern, locale)` - returns date format by given pattern and locale.
+      
+      `newFormat(type, style)` - returns format: 0 - default, 1 - date, 2 - time, 3 - date and time. `style`: 0 - full, 1 - long, 2 - medium, 3 - short.
+      
+      Returns DateFormatValue.
+    desc_ru: |-
+      `newFormat()` - возвращает формат даты по умолчанию.
+      
+      `newFormat(pattern)` - возвращает формат с указанным шаблоном.
+      
+      `newFormat(type)` - возвращает формат: 0 - по умолчанию, 1 - для даты, 2 - для времени, 3 - для времени и даты.
+      
+      `newFormat(pattern, locale)` - возвращает формат для указанного шаблона в заданной локализации.
+      
+      `newFormat(type, style)` - возвращает формат: 0 - по умолчанию, 1 - для даты, 2 - для времени, 3 - для времени и даты. `style`: 0 - полный, 1 - длинный, 2 - средний, 3 - короткий.
+      
+      Возвращает DateFormatValue.
+  - name: "formatDate"
+    args: "date, format = default"
+    desc: formats date by given format and returns string
+    desc_ru: форматирует дату в указанном формате и возвращает строку
+    example: |-
+      use date
+      
+      d = newDate(2016, 4, 8)
+      println formatDate(d, newFormat("yyyy/MM/dd")) // "2016/05/08"
+  - name: "parseDate"
+    args: "dateString, format = default"
+    desc: parses date from string by given pattern. Returns DateValue
+    desc_ru: парсит дату из строки в указанном шаблоне. Возвращает DateValue
+    example: |-
+      use date
+      
+      println parseDate("2016/05/08", newFormat("yyyy/MM/dd"))
+  - name: "toTimestamp"
+    args: "date"
+    desc: returns timestamp in milliseconds
+    desc_ru: возвращает время в миллисекундах
+types:
+  - name: "DateValue"
+    value: "year, month, day, hour, minute, second, millisecond"
+  - name: "DateFormatValue"

@@ -1,0 +1,43 @@
+name: gzip
+since: 1.5.0
+scope: both
+desc: "Contains functions for working with gzip compression"
+desc_ru: "Содержит функции для работы с gzip компрессией"
+constants: []
+functions:
+  - name: gzip
+    args: "inputFile, outputFile"
+    desc: |-
+      creates a gzip archive with the `inputFile` file and saves to `outputFile`.  
+      Returns 1 if compression was successfull, -1 otherwise.
+    desc_ru: |-
+      создаёт gzip архив с файлом `inputFile` и сохраняет в `outputFile`.  
+      Возвращает 1 если компрессия завершилась успешно, и -1 в противном случае.
+    example: |-
+      use gzip
+      gzip("/tmp/readme.md", "/tmp/readme.md.gz")
+  - name: gzipBytes
+    args: "bytes"
+    desc: returns gzip-compressed input bytes.
+    desc_ru: возвращает сжатый в gzip массив байт.
+    example: |-
+      use gzip
+      bytes = gzipBytes([0, 119, 87, 80/* ... */])
+  - name: ungzip
+    args: "inputFile, outputFile"
+    desc: |-
+      unpacks a gzip archive to `outputFile` file.  
+      Returns 1 if operation was successfull, -1 otherwise.
+    desc_ru: |-
+      распаковывает gzip архив в файл `outputFile`.  
+      Возвращает 1 если операция завершилась успешно, и -1 в противном случае.
+    example: |-
+      use gzip
+      gzip("/tmp/readme.md.gz", "/tmp/readme.md")
+  - name: ungzipBytes
+    args: "bytes"
+    desc: returns uncompressed bytes.
+    desc_ru: возвращает распакованный gzip массив байт.
+    example: |-
+      use gzip
+      bytes = ungzipBytes([0, 119, 87, 80/* ... */])

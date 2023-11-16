@@ -1,0 +1,45 @@
+name: gps
+scope: "android"
+desc: |-
+  Contains functions for working with GPS.
+desc_ru: |-
+  Содержит функции для работы с GPS.
+constants:
+  - name: GPS_PROVIDER
+    type: 2
+    typeName: string
+    value: gps
+  - name: NETWORK_PROVIDER
+    type: 2
+    typeName: string
+    value: network
+functions:
+  - name: isEnabled
+    args: "provider"
+    desc: "checks if the given location service provider is enabled"
+    desc_ru: "проверяет доступность указанного провайдера местоположения"
+  - name: lastKnownLocation
+    args: "provider"
+    desc: "gets last known location with the given location provider, or zero if it is unable to get location"
+    desc_ru: "получает последнее сохранённое местоположение для указанного провайдера, либо 0, если получить местоположение не удалось"
+  - name: getProviders
+    args: "enabledOnly = false"
+    desc: "returns an array of location providers"
+    desc_ru: "возвращает массив провайдеров местоположения"
+  - name: "requestUpdates"
+    args: "provider, minTime, minDistance, callback"
+    desc: |-
+      subscribes to the location listener
+    desc_ru: |-
+      подписывается на обработчик получения местоположения
+    example: |-
+      use std, gps
+      
+      provider = "gps" // or passive, network if exists
+      // requestUpdates(provider, 0, 25, def(loc) = echo("location changed: ", loc))
+      requestUpdates(provider, 10 * 1000, 25, {
+        "onLocationChanged" : def(loc) = echo("location changed: ", loc)
+        "onStatusChanged" : def(p, status) = echo("status changed: ", p, " is ", getStatus(status))
+        "onProviderEnabled" : def(p) = echo("provider ", p, " is now enabled")
+        "onProviderDisabled" : def(p) = echo("provider ", p, " is now disabled")
+      })

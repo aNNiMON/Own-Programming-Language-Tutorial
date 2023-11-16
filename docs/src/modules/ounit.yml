@@ -1,0 +1,60 @@
+name: ounit
+scope: "both"
+desc: "Contains functions for testing. Invokes all functions with prefix `test` and checks expected and actual values, counts execution time"
+desc_ru: "Содержит функции для тестирования. Поочерёдно вызывает все функции программы, которые имеют приставку `test` и подсчитывает время выполнение и расхождения с ожидаемыми значениями"
+constants: []
+functions:
+  - name: "assertEquals"
+    args: "expected, actual"
+    desc: "checks that two values are equal"
+    desc_ru: "проверяет, равны ли два значения"
+  - name: "assertFalse"
+    args: "actual"
+    desc: "checks that value is false (equals 0)"
+    desc_ru: "проверяет, является ли значение ложным (равным нулю)"
+  - name: "assertNotEquals"
+    args: "expected, actual"
+    desc: "checks that two values are not equal"
+    desc_ru: "проверяет, отличаются ли два значения"
+  - name: "assertSameType"
+    args: "expected, actual"
+    desc: "checks that types of two values are equal"
+    desc_ru: "проверяет, одинаковы ли типы у двух значений"
+  - name: "assertTrue"
+    args: "actual"
+    desc: "checks that value is true (not equals 0)"
+    desc_ru: "проверяет, является ли значение истинным (не равным нулю)"
+  - name: "runTests"
+    args: ""
+    desc: "executes tests and returns information about it's results"
+    desc_ru: "запускает тесты и возвращает информацию о них по завершению работы в виде строки"
+    example: |-
+      use ounit
+      
+      def testAdditionOnNumbers() {
+        assertEquals(6, 0 + 1 + 2 + 3)
+      }
+      
+      def testTypes() {
+        assertSameType(0, 0.0)
+      }
+      
+      def testFail() {
+        assertTrue(false)
+      }
+      
+      println runTests()
+      
+      /*
+      testTypes [passed]
+      Elapsed: 0,0189 sec
+      
+      testAdditionOnNumbers [passed]
+      Elapsed: 0,0008 sec
+      
+      testFail [FAILED]
+      Expected true, but found false.
+      Elapsed: 0,0001 sec
+      
+      Tests run: 3, Failures: 1, Time elapsed: 0,0198 sec
+      */

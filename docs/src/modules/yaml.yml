@@ -1,0 +1,14 @@
+name: yaml
+scope: desktop
+desc: "Contains functions for working with the yaml format"
+desc_ru: "Содержит функции преобразования данных в формат yaml и наоборот"
+constants: []
+functions:
+  - name: yamldecode
+    args: "data"
+    desc: "converts data to yaml string"
+    desc_ru: "преобразует переданные данные в строку в формате yaml"
+  - name: yamlencode
+    args: "yamlString"
+    desc: "converts yaml string to data"
+    desc_ru: "преобразует строку в формате yaml в данные"

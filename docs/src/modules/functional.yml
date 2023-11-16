@@ -1,0 +1,161 @@
+name: functional
+scope: "both"
+desc: "Contains functions for operating data in functional style"
+desc_ru: "Содержит функции для работы с данными в функциональном стиле"
+constants:
+  - name: "IDENTITY"
+    typeName: "function"
+    type: 5
+    value: "def(x) = x"
+    desc: "function which returns passed argument"
+    desc_ru: "функция, которая возвращает переданный в неё аргумент"
+functions:
+  - name: "chain"
+    args: "data, functions..."
+    desc: ""
+    desc_ru: ""
+  - name: "combine"
+    args: "functions..."
+    desc: "combines functions"
+    desc_ru: "комбинирует функции (композиция)"
+    example: |-
+      use functional
+      
+      def f1() = 2
+      def f2(a) = a*2
+      def f3(a) = a/4
+      
+      f = combine(::f1, ::f2, ::f3)
+      println f() // 1
+      // same as
+      f = def() = f3(f2(f1()))
+      println f() // 1
+    example_ru: |-
+      use functional
+      
+      def f1() = 2
+      def f2(a) = a*2
+      def f3(a) = a/4
+      
+      f = combine(::f1, ::f2, ::f3)
+      println f() // 1
+      // равносильно
+      f = def() = f3(f2(f1()))
+      println f() // 1
+  - name: dropwhile
+    args: 'data, predicate'
+    desc: 'skips elements while predicate function returns true'
+    desc_ru: 'пропускает элементы пока функция-предикат возвращает true'
+  - name: "filter"
+    args: "data, predicate"
+    desc: "filters array or object.\n\n`predicate` is a function which takes one argument for arrays or two arguments for objects"
+    desc_ru: "фильтрует массив или объект и возвращает массив только с теми элементами, которые удовлетворяют предикату `predicate`.\n\n`predicate` - функция которая принимает один (для массивов) и два (для объектов) аргумента"
+    example: |-
+      use functional
+      
+      nums = [1,2,3,4,5]
+      print filter(nums, def(x) = x % 2 == 0) // [2, 4]
+  - name: "flatmap"
+    args: "array, mapper"
+    desc: "converts each element of an array to other array"
+    desc_ru: "преобразует каждый элемент массива в массив элементов"
+    example: |-
+      use functional
+      
+      nums = [1,2,3,4]
+      print flatmap(nums, def(x) {
+        arr = newarray(x)
+        for i = 0, i < x, i++
+          arr[i] = x
+        return arr
+      }) // [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+  - name: "foreach"
+    args: "data, consumer"
+    desc: "invokes function `consumer` for each element of array or map `data`\n\nIf `data` - массив, то в функции consumer необходим один параметр, если объект - два (ключ и значение)."
+    desc_ru: "для каждого элемента в массиве или объекте `data` вызывает функцию `consumer`\n\nЕсли `data` - массив, то в функции `consumer` необходим один параметр, если объект - два (ключ и значение)."
+    example: |-
+      use functional
+      
+      foreach([1, 2, 3], def(v) { print v })
+      foreach({"key": 1, "key2": "text"}, def(key, value) {
+        print key + ": " + value
+      })
+  - name: "map"
+    args: "data, mapper..."
+    desc: "converts elements of array or map. If `data` is array - `mapper` converts his elements, if `data` is object - you need to pass `keyMapper` - converts keys and `valueMapper` - converts values"
+    desc_ru: "преобразует элементы массива или объекта.\n\nЕсли `data` - массив, то функция `mapper` преобразует значения, если объект - необходимо передать две функции: `keyMapper` - преобразует ключи и `valueMapper` - преобразует значения"
+    example: |-
+      use functional
+      
+      nums = [3,4,5]
+      print map(nums, def(x) = x * x) // [9, 16, 25]
+  - name: "reduce"
+    args: "data, identity, accumulator"
+    desc: "converts elements of an array or a map to one value, e.g. sum of elements or concatenation string. `accumulator` takes one argument for array and two arguments for object (key and value)."
+    desc_ru: "преобразует элементы массива или объекта в одно значение, например сумма элементов или объединение в строку.\n\nЕсли `data` - массив, то в функции `accumulator` необходим один параметр, если объект - два (ключ и значение)"
+    example: |-
+      use functional
+      
+      nums = [1,2,3,4,5]
+      print reduce(nums, 0, def(x, y) = x + y) // 15
+  - name: "sortby"
+    args: "array, function"
+    desc: "sorts elements of an array or an object by `function` result"
+    desc_ru: "сортирует элементы массива по данным в функции `function`"
+    example: |-
+      use functional
+      
+      data = [
+        {"k1": 2, "k2": "x"},
+        {"k1": 7, "k2": "d"},
+        {"k1": 4, "k2": "z"},
+        {"k1": 5, "k2": "p"},
+      ]
+      print sortby(data, def(v) = v.k1) // [{k1=2, k2=x}, {k1=4, k2=z}, {k1=5, k2=p}, {k1=7, k2=d}]
+      print sortby(data, def(v) = v.k2) // [{k1=7, k2=d}, {k1=5, k2=p}, {k1=2, k2=x}, {k1=4, k2=z}]
+  - name: "stream"
+    args: "data"
+    desc: |-
+      creates stream from data and returns StreamValue
+      
+      StreamValue functions:
+        - `filter(func)` - filters elements
+        - `map(func)` - converts each element
+        - `flatMap(func)` - converts each element to array
+        - `sorted(func)` - sorts elements with comparator function
+        - `sortBy(func)` - applies function, then sorts elements
+        - `takeWhile(func)` - takes elements while predicate function returns true
+        - `dropWhile(func)` - skips elements while predicate function returns true
+        - `peek(func)` - executes function for each element and returns stream
+        - `skip(count)` - skips count elements
+        - `limit(count)` - limits elements size
+        - `custom(func)` - performs custom operation
+        - `reduce(func)` - converts elements to one value
+        - `forEach(func)` - executes function for each element
+        - `joining(delimiter = "", prefix = "", suffix = "")` - joins elements into a string
+        - `toArray()` - returns array of elements
+        - `count()` - returns count of elements
+    desc_ru: |-
+      создаёт stream из данных и возвращает StreamValue
+      
+      Функции StreamValue:
+        - `filter(func)` - фильтрует элементы
+        - `map(func)` - преобразует каждый элемент
+        - `flatMap(func)` - преобразует каждый элемент в массив
+        - `sorted(func)` - сортирует элементы в соответствии с функцией-компаратором
+        - `sortBy(func)` - применяет функцию, затем сортирует элементы
+        - `takeWhile(func)` - собирает элементы пока функция-предикат возвращает true
+        - `dropWhile(func)` - пропускает элементы пока функция-предикат возвращает true
+        - `peek(func)` - вызывает функцию для каждого элемента и возвращает stream
+        - `skip(count)` - пропускает указанное количество элементов
+        - `limit(count)` - ограничивает количество элементов
+        - `custom(func)` - выполняет пользовательскую операцию над данными
+        - `reduce(func)` - преобразует элементы в одно значение
+        - `forEach(func)` - вызывает функцию для каждого элемента
+        - `joining(delimiter = "", prefix = "", suffix = "")` - склеивает элементы в строку
+        - `toArray()` - возвращает массив элементов
+        - `count()` - возвращает количество элементов
+  - name: takewhile
+    args: 'data, predicate'
+    desc: 'takes elements while predicate function returns true'
+    desc_ru: 'собирает элементы пока функция-предикат возвращает true'

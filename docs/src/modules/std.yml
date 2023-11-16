@@ -1,0 +1,290 @@
+name: std
+scope: "both"
+desc: "Contains common functions"
+desc_ru: "Содержит вспомогательные функции общего назначения"
+constants:
+  - name: "ARGS"
+    typeName: string
+    scope: "desktop"
+    type: 2
+    value: "command-line arguments"
+  - name: OwnLang
+    typeName: map
+    type: 4
+    value: "{PLATFORM=android/desktop, VERSION=1.5.0_000000, VERSION_MAJOR=1, VERSION_MINOR=5, VERSION_PATCH=0}"
+    since: 1.4.0
+functions:
+  - name: arrayCombine
+    args: "keys, values"
+    desc: "creates map by combining two arrays"
+    desc_ru: "создаёт объект на основе двух массивов"
+  - name: arrayKeyExists
+    args: "key, map"
+    desc: "checks existing key in map. 1 - exists, 0 - no"
+    desc_ru: "проверяет, содержится ли ключ key в объекте map. 1 - содержится, 0 - нет"
+  - name: arrayKeys
+    args: "map"
+    desc: "returns array of map keys"
+    desc_ru: "возвращает массив ключей карты"
+  - name: arraySplice
+    args: "array, start, deleteCount = length(array) - start, additions = []"
+    desc: "returns new array with removed `deleteCount` elements starting from `start` and/or added new elements from `start` index"
+    desc_ru: "возвращает новый массив с удалёнными `deleteCount` элементами, начиная с позиции `start` и/или добавляет новые элементы с позиции `start`"
+  - name: arrayValues
+    args: "map"
+    desc: "returns array of map values"
+    desc_ru: "возвращает массив значений карты"
+  - name: charAt
+    args: "input, index"
+    desc: returns char code in position `index` of string `input`
+    desc_ru: возвращает код символа в позиции `index` строки `input`
+  - name: clearConsole
+    scope: "android"
+    args: ""
+    desc: "clears console"
+    desc_ru: "очищает консоль"
+  - name: default
+    args: a, b
+    desc: returns value `a` if it it non empty, returns `b` otherwise
+    desc_ru: возвращает значение `a`, если оно не пустое, иначе возвращается значение `b`
+    since: 1.4.0
+    example: |-
+      use std
+      
+      user = {"name": "", "lastname": "Doe"}
+      name = default(user.name, "Unknown")
+      lastname = default(user.lastname, "Unknown")
+      println name + " " + lastname  // Unknown Doe
+    example_ru: |-
+      use std
+      
+      user = {"name": "", "lastname": "Иванов"}
+      name = default(user.name, "Имя неизвестно")
+      lastname = default(user.lastname, "фамилия неизвестна")
+      println name + " " + lastname // Имя неизвестно Иванов
+  - name: echo
+    args: "arg..."
+    desc: "prints values to console, separate them by space and puts newline at the end. Takes variable number of arguments"
+    desc_ru: "выводит значения в консоль, разделяя их пробелом, а потом ставит перенос строки. Может принимать переменное значение аргументов"
+    example: |-
+      use std
+      
+      echo(1, "abc") // prints "1 abc" to console
+      echo(1, 2, 3, 4, 5, "a", "b") // prints "1 2 3 4 5 a b"
+    example_ru: |-
+      use std
+      
+      echo(1, "abc") // выведет строку "1 abc" в консоль
+      echo(1, 2, 3, 4, 5, "a", "b") // выведет строку "1 2 3 4 5 a b" в консоль"
+  - name: getBytes
+    args: input, charset = "UTF-8"
+    desc: returns byte array of the string in the given charset
+    desc_ru: возвращает массив байт строки в заданной кодировке
+    since: 1.5.0
+  - name: indexOf
+    args: "input, what, index = 0"
+    desc: "finds first occurrence of `what` in string `input`, starting at position `index`"
+    desc_ru: "поиск первого вхождения подстроки `what` в строке `input`, начиная с позиции `index`"
+  - name: join
+    args: "array, delimiter = \"\", prefix = \"\", suffix = \"\""
+    desc: "join array to string with `delimiter`, `prefix` and `suffix`"
+    desc_ru: "объединяет массив в строку с разделителем `delimiter`, префиксом `prefix` и суффиксом `suffix`"
+  - name: lastIndexOf
+    args: "input, what, index = 0"
+    desc: "finds last occurrence of `what` in string `input`, starting at position `index`"
+    desc_ru: "поиск последнего вхождения подстроки `what` в строке `input`, начиная с позиции `index`"
+  - name: length
+    args: "x"
+    desc: "returns length of string, array/map size or number of function arguments"
+    desc_ru: "возвращает длину строки, размер массива/объекта или количество аргументов функции в зависимости от типа аргумента x"
+  - name: newarray
+    args: "size..."
+    desc: "creates array with `size`.\n`newarray(x)` - creates 1D array, `newarray(x,y)` - creates 2D array"
+    desc_ru: "оздаёт массив с размером size. Если указать 1 аргумент - создаётся одномерный массив, если 2 аргумента - двухмерный и т.д"
+    example: |-
+      use std
+      
+      println newarray(4) // [0, 0, 0, 0]
+      println newarray(2, 3) // [[0, 0, 0], [0, 0, 0]]
+  - name: parseInt
+    args: "str, radix"
+    desc: parses string into integer in the `radix`
+    desc_ru: парсит строку в целое число с указанным основанием
+  - name: parseLong
+    args: "str, radix"
+    desc: parses string into long in the `radix`
+    desc_ru: парсит строку в длинное целое число с указанным основанием
+  - name: rand
+    args: "from = 0, to = .."
+    desc: |-
+      returns pseudo-random number.  
+      `rand()` - returns float number from 0 to 1  
+      `rand(max)` - returns random number from 0 to max  
+      `rand(from, to)` - return random number from `from` to `to`
+    desc_ru: "возвращает псевдослучайное число. Если вызвать функцию без аргументов, возвращается вещественное число от 0 до 1. Если указан один аргумент - возвращается целое число в диапазоне [0...значение). Если указаны два аргумента - возвращается псевдослучайное число в промежутке [from...to)"
+  - name: range
+    args: "from = 0, to, step = 1"
+    desc: |-
+      creates lazy array by number range.  
+      `range(to)` - creates range from 0 to `to` (exclusive) with step 1  
+      `range(from, to)` - creates range from `from` to `to` (exclusive) with step 1  
+      `range(from, to, step)` - creates range from `from` to `to` (exclusive) with step `step`
+    desc_ru: |-
+      создаёт массив с элементами числового промежутка. Элементы вычисляются по мере их использования, так что в цикле foreach можно использовать любые промежутки.
+      `range(to)` - создаёт промежуток от 0 до `to` (не включительно) с шагом 1
+      `range(from, to)` - создаёт промежуток от `from` до `to` (не включительно) с шагом 1
+      `range(from, to, step)` - создаёт промежуток от `from` до `to` (не включительно) с шагом `step`
+    example: |-
+      use std
+      
+      println range(3) // [0, 1, 2]
+      r = range(-5, 0) // [-5, -4, -3, -2, -1]
+      println r[0] // -5
+      println r[2] // -3
+      for x : range(20, 9, -5) {
+        println x
+      } // 20 15 10
+  - name: readln
+    scope: "desktop"
+    args: "x"
+    desc: "reads a line from console"
+    desc_ru: "чтение строки из консоли"
+  - name: replace
+    args: "str, target, replacement"
+    desc: "replaces all occurrences of string `target` with string `replacement`"
+    desc_ru: "заменяет все вхождения подстроки `target` на строку `replacement`"
+  - name: replaceAll
+    args: "str, regex, replacement"
+    desc: "replaces all occurrences of regular expression `regex` with string `replacement`"
+    desc_ru: "заменяет все вхождения регулярного выражения `regex` на строку `replacement`"
+  - name: replaceFirst
+    args: "str, regex, replacement"
+    desc: "replaces first occurrence of regular expression `regex` with string `replacement`"
+    desc_ru: "заменяет первое вхождение регулярного выражения `regex` на строку `replacement`"
+  - name: sleep
+    args: "time"
+    desc: "causes current thread to sleep for `time` milliseconds"
+    desc_ru: "приостановка текущего потока на time миллисекунд"
+  - name: sort
+    args: "array, comparator = .."
+    desc: "sorts array by natural order or by `comparator` function"
+    desc_ru: "сортирует массив. Если задана функция `comparator`, то сортировка будет производится на основе результата функции сравнения"
+  - name: split
+    args: "str, regex, limit = 0"
+    desc: "splits string `str` with regular expression `regex` into array. `limit` parameter affects the length of resulting array"
+    desc_ru: "разделяет строку `str` по шаблону `regex` и помещает элементы в массив. Если указан параметр `limit`, то будет произведено не более limit разбиений, соответственно размер результирующего массива будет ограничен этим значением limit"
+    example: |-
+      use std
+      
+      println split("a5b5c5d5e", "5") // ["a", "b", "c", "d", "e"]
+      println split("a5b5c5d5e", "5", 3) // ["a", "b", "c5d5e"]
+  - name: sprintf
+    args: "format, args..."
+    desc: "formats string by arguments"
+    desc_ru: "форматирует строку"
+  - name: stringFromBytes
+    args: input, charset = "UTF-8"
+    desc: returns a string from byte array in the given charset
+    desc_ru: возвращает строку из массива байт в заданной кодировке
+    since: 1.5.0
+  - name: stripMargin
+    args: input, marginPrefix = "|"
+    desc: trims leading whitespaces followed by `marginPrefix` on each line and removes the first and the last lines if they are blank
+    desc_ru: обрезает начальные пробелы, сопровождаемые `marginPrefix` в каждой строке, и удаляет первую и последнюю строки, если они пустые
+    since: 1.5.0
+    example: |-
+      use std
+      
+      println "
+              |123
+              |456
+              ".stripMargin() // "123\n456"
+  - name: substring
+    args: "str, startIndex, endIndex = .."
+    desc: "returns string from `startIndex` to `endIndex` or to end of string if `endIndex` is not set"
+    desc_ru: "обрезает строку `str`, начиная от символа после позиции `startIndex` и по `endIndex`. Если `endIndex` не указан, обрезается до конца строки"
+    example: |-
+      use std
+      
+      println substring("abcde", 1) // bcde
+      println substring("abcde", 2, 4) // cd
+  - name: sync
+    args: "callback"
+    desc: calls an asynchronous function synchronously
+    desc_ru: делает асинхронный вызов синхронным
+    example: |-
+      use std, http
+      
+      url = "https://whatthecommit.com/index.txt"
+      result = sync(def(ret) {
+         http(url, def(t) = ret(t))
+      })
+      println result
+  - name: thread
+    args: "func, args..."
+    desc: "creates new thread with parameters if passed"
+    desc_ru: |-
+      создаёт новый поток и передаёт параметры, если есть.
+      
+        `func` - функция, ссылка на функцию (`::function`) или имя функции (`"function"`)
+      
+        `args` - 0 или более аргументов, которые необходимо передать в функцию func
+    example: |-
+      use std
+      
+      thread(def() {
+        println "New Thread"
+      })
+      
+      thread(::newthread, 10)
+      thread("newthread", 20)
+      
+      def newthread(x) {
+        println "New Thread. x = " + x
+      }
+  - name: time
+    args: ""
+    desc: "returns current time in milliseconds from 01.01.1970"
+    desc_ru: "возвращает текущее время в миллисекундах начиная с 1970 года"
+  - name: toChar
+    args: "code"
+    desc: "converts char code to string"
+    desc_ru: "переводит код символа в строку"
+    example: |-
+      use std
+      
+      println toChar(48) // "0"
+  - name: toHexString
+    args: 'number'
+    desc: 'converts number into hex string'
+    desc_ru: 'конвертирует число в строку с шестнадцатиричным представлением'
+  - name: toLowerCase
+    args: "str"
+    desc: "converts all symbols to lower case"
+    desc_ru: "переводит все символы строки в нижний регистр"
+  - name: toUpperCase
+    args: "str"
+    desc: "converts all symbols to upper case"
+    desc_ru: "переводит все символы строки в верхний регистр"
+  - name: trim
+    args: "str"
+    desc: "removes any leading and trailing whitespaces in string"
+    desc_ru: "обрезает пробельные невидимые символы по обоим концам строки"
+  - name: try
+    args: "unsafeFunction, catchFunction = def(type, message) = -1"
+    desc: suppress any error in `unsafeFunction` and returns the result of the `catchFunction` if any error occurs
+    desc_ru: подавляет любые ошибки в `unsafeFunction` и возрвщает результат функции `catchFunction`, если была ошибка
+    example: |-
+      use std
+      
+      println try(def() = "success") // success
+      println try(def() = try + 2) // -1
+      println try(def() = try(), def(type, message) = sprintf("Error handled:\ntype: %s\nmessage: %s", type, message))
+      println try(def() = try(), 42) // 42
+    example_ru: |-
+      use std
+      
+      println try(def() = "успех") // успех
+      println try(def() = try + 2) // -1
+      println try(def() = try(), def(type, message) = sprintf("Обработана ошибка:\nтип: %s\nсообщение: %s", type, message))
+      println try(def() = try(), 42) // 42

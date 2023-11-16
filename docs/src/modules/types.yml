@@ -1,0 +1,80 @@
+name: types
+scope: "both"
+desc: "Contains functions for type checking and conversion"
+desc_ru: "Содержит функции для проверки и преобразования типов"
+constants:
+  - name: "OBJECT"
+    typeName: number
+    type: 1
+    value: "0"
+  - name: "NUMBER"
+    typeName: number
+    type: 1
+    value: "1"
+  - name: "STRING"
+    typeName: number
+    type: 1
+    value: "2"
+  - name: "ARRAY"
+    typeName: number
+    type: 1
+    value: "3"
+  - name: "MAP"
+    typeName: number
+    type: 1
+    value: "4"
+  - name: "FUNCTION"
+    typeName: number
+    type: 1
+    value: "5"
+functions:
+  - name: "byte"
+    args: "value"
+    desc: "converts value to byte"
+    desc_ru: "преобразует значение к типу byte"
+  - name: "double"
+    args: "value"
+    desc: "converts value to double"
+    desc_ru: "преобразует значение к типу double"
+  - name: "float"
+    args: "value"
+    desc: "converts value to float"
+    desc_ru: "преобразует значение к типу float"
+  - name: "int"
+    args: "value"
+    desc: "converts value to int"
+    desc_ru: "преобразует значение к типу int"
+  - name: "long"
+    args: "value"
+    desc: "converts value to long"
+    desc_ru: "преобразует значение к типу long"
+  - name: "number"
+    args: "value"
+    desc: "converts value to number if possible"
+    desc_ru: "преобразует значение к числу, если это возможно"
+    example: |-
+      use types
+      
+      println typeof(number("2.3")) // 1 (NUMBER)
+  - name: "short"
+    args: "value"
+    desc: "converts value to short"
+    desc_ru: "преобразует значение к типу short"
+  - name: "string"
+    args: "value"
+    desc: "converts value to string"
+    desc_ru: "преобразует значение в строку"
+    example: |-
+      use types
+      
+      println typeof(string(1)) // 2 (STRING)
+  - name: "typeof"
+    args: "value"
+    desc: "returns the type of value"
+    desc_ru: "возвращает тип переданного значения"
+    example: |-
+      use types
+      
+      println typeof(1) // 1 (NUMBER)
+      println typeof("text") // 2 (STRING)
+      println typeof([]) // 3 (ARRAY)

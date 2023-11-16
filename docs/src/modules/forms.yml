@@ -1,0 +1,89 @@
+name: forms
+scope: desktop
+desc: "Contains functions for working with forms"
+desc_ru: "Содержит функции для работы с формами"
+constants:
+  - name: BorderLayout
+    type: 4
+    typeName: map
+    value: '{AFTER_LINE_ENDS=After, LINE_END=After, LINE_START=Before, BEFORE_LINE_BEGINS=Before, CENTER=Center, EAST=East, BEFORE_FIRST_LINE=First, PAGE_START=First, AFTER_LAST_LINE=Last, PAGE_END=Last, NORTH=North, SOUTH=South, WEST=West}'
+  - name: BoxLayout
+    type: 4
+    typeName: map
+    value: '{X_AXIS=0, Y_AXIS=1, LINE_AXIS=2, PAGE_AXIS=3}'
+  - name: DISPOSE_ON_CLOSE
+    type: 1
+    typeName: number
+    value: '2'
+  - name: DO_NOTHING_ON_CLOSE
+    type: 1
+    typeName: number
+    value: '0'
+  - name: EXIT_ON_CLOSE
+    type: 1
+    typeName: number
+    value: '3'
+  - name: HIDE_ON_CLOSE
+    type: 1
+    typeName: number
+    value: '1'
+  - name: SwingConstants
+    type: 4
+    typeName: map
+    value: '{BOTTOM=3, CENTER=0, EAST=3, HORIZONTAL=0, LEADING=10, LEFT=2, NEXT=12, NORTH=1, NORTH_EAST=2, NORTH_WEST=8, PREVIOUS=13, RIGHT=4, SOUTH=5, SOUTH_EAST=4, SOUTH_WEST=6, TOP=1, TRAILING=11, VERTICAL=1, WEST=7}'
+functions:
+  - name: borderLayout
+    args: 'hgap = 0, vgap = 0'
+    desc: 'creates BorderLayout'
+    desc_ru: 'создаёт BorderLayout'
+  - name: boxLayout
+    args: 'panel, axis = BoxLayout.PAGE_AXIS'
+    desc: 'creates BoxLayout'
+    desc_ru: 'создаёт BoxLayout'
+  - name: cardLayout
+    args: 'hgap = 0, vgap = 0'
+    desc: 'creates CardLayout'
+    desc_ru: 'создаёт CardLayout'
+  - name: flowLayout
+    args: 'align = FlowLayout.CENTER, hgap = 5, vgap = 5'
+    desc: 'creates FlowLayout'
+    desc_ru: 'создаёт FlowLayout'
+  - name: gridLayout
+    args: 'rows = 1, cols = 0, hgap = 0, vgap = 0'
+    desc: 'creates GridLayout'
+    desc_ru: 'создаёт GridLayout'
+  - name: newButton
+    args: 'text = ""'
+    desc: 'creates new button'
+    desc_ru: 'создаёт новую кнопку'
+  - name: newLabel
+    args: 'text = "", align = SwingConstants.LEADING'
+    desc: 'creates new label'
+    desc_ru: 'создаёт новую текстовую метку'
+  - name: newPanel
+    args: 'layoutManager = ...'
+    desc: 'creates new panel with optional layout manager'
+    desc_ru: 'создаёт новую панель с опциональным LayoutManager'
+  - name: newProgressBar
+    args: 'isVertical = false, min = 0, max = 100'
+    desc: 'creates new progress bar'
+    desc_ru: 'создаёт новый прогрессбар'
+    since: 1.5.0
+  - name: newScrollPane
+    args: 'view, verticalPolicy = AS_NEEDED, horizontalPolicy = AS_NEEDED'
+    desc: 'creates new scroll pane'
+    desc_ru: 'создаёт новую область прокрутки'
+    since: 1.5.0
+  - name: newTextArea
+    args: 'text = ""'
+    desc: 'creates new text area'
+    desc_ru: 'создаёт новую область ввода'
+    since: 1.5.0
+  - name: newTextField
+    args: 'text = "", rows = 0, cols = 0'
+    desc: 'creates new text field'
+    desc_ru: 'создаёт новое поле ввода'
+  - name: newWindow
+    args: 'title = ""'
+    desc: 'creates new window and returns JFrameValue'
+    desc_ru: 'создаёт новое окно и возвращает JFrameValue'

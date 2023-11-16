@@ -1,0 +1,253 @@
+name: java
+scope: both
+constants:
+  - name: Object.class
+    type: 4
+    typeName: map
+    value: 'java.lang.Object'
+  - name: Object[].class
+    type: 4
+    typeName: map
+    value: 'java.lang.Object[]'
+  - name: Object[][].class
+    type: 4
+    typeName: map
+    value: 'java.lang.Object[][]'
+  - name: String.class
+    type: 4
+    typeName: map
+    value: 'java.lang.String'
+  - name: String[].class
+    type: 4
+    typeName: map
+    value: 'java.lang.String[]'
+  - name: String[][].class
+    type: 4
+    typeName: map
+    value: 'java.lang.String[][]'
+  - name: boolean.class
+    type: 4
+    typeName: map
+    value: 'boolean'
+  - name: boolean[].class
+    type: 4
+    typeName: map
+    value: 'boolean[]'
+  - name: boolean[][].class
+    type: 4
+    typeName: map
+    value: 'boolean[][]'
+  - name: byte.class
+    type: 4
+    typeName: map
+    value: 'byte'
+  - name: byte[].class
+    type: 4
+    typeName: map
+    value: 'byte[]'
+  - name: byte[][].class
+    type: 4
+    typeName: map
+    value: 'byte[][]'
+  - name: char.class
+    type: 4
+    typeName: map
+    value: 'char'
+  - name: char[].class
+    type: 4
+    typeName: map
+    value: 'char[]'
+  - name: char[][].class
+    type: 4
+    typeName: map
+    value: 'char[][]'
+  - name: double.class
+    type: 4
+    typeName: map
+    value: 'double'
+  - name: double[].class
+    type: 4
+    typeName: map
+    value: 'double[]'
+  - name: double[][].class
+    type: 4
+    typeName: map
+    value: 'double[][]'
+  - name: float.class
+    type: 4
+    typeName: map
+    value: 'float'
+  - name: float[].class
+    type: 4
+    typeName: map
+    value: 'float[]'
+  - name: float[][].class
+    type: 4
+    typeName: map
+    value: 'float[][]'
+  - name: int.class
+    type: 4
+    typeName: map
+    value: 'int'
+  - name: int[].class
+    type: 4
+    typeName: map
+    value: 'int[]'
+  - name: int[][].class
+    type: 4
+    typeName: map
+    value: 'int[][]'
+  - name: long.class
+    type: 4
+    typeName: map
+    value: 'long'
+  - name: long[].class
+    type: 4
+    typeName: map
+    value: 'long[]'
+  - name: long[][].class
+    type: 4
+    typeName: map
+    value: 'long[][]'
+  - name: 'null'
+    type: 482862660
+    typeName: unknown (482862660)
+    value: 'null'
+  - name: short.class
+    type: 4
+    typeName: map
+    value: 'short'
+  - name: short[].class
+    type: 4
+    typeName: map
+    value: 'short[]'
+  - name: short[][].class
+    type: 4
+    typeName: map
+    value: 'short[][]'
+functions:
+  - name: isNull
+    args: 'values...'
+    desc: 'checks if one or more values are null'
+    desc_ru: 'проверяет, является ли одно или несколько значений null'
+  - name: newClass
+    args: 'name'
+    desc: 'creates ClassValue'
+    desc_ru: 'создаёт ClassValue'
+  - name: toObject
+    args: 'ownlangValue'
+    desc: 'converts ownlangValue to Java object'
+    desc_ru: 'конвертирует ownlangValue в Java объект'
+  - name: toValue
+    args: 'javaObject'
+    desc: 'converts javaObject to OwnLang value'
+    desc_ru: 'конвертирует javaObject в OwnLang значение'
+types:
+  - name: ClassValue
+    functions:
+      - name: "asSubclass"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "canonicalName"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "cast"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "genericString"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "getComponentType"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "getDeclaringClass"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "getEnclosingClass"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "getSuperclass"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "getClasses"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "getDeclaredClasses"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "getInterfaces"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isAnnotation"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isAnonymousClass"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isArray"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isAssignableFrom"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isEnum"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isInterface"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isLocalClass"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isMemberClass"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isPrimitive"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "isSynthetic"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "modifiers"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "name"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "new"
+        args: ""
+        desc: "creates new instance of class"
+        desc_ru: "создаёт новый экземпляр класса"
+      - name: "simpleName"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "typeName"
+        args: ""
+        desc: ""
+        desc_ru: ""
+  - name: NullValue
+  - name: ObjectValue

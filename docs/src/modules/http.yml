@@ -1,0 +1,82 @@
+name: http
+scope: "both"
+desc: "Contains network functions"
+desc_ru: "Содержит функции для взаимодействия с сетью"
+constants: []
+functions:
+  - name: "http"
+    args: "url"
+    desc: |-
+      performs GET-request to `url`.
+      
+      `http(url, method)` - performs request with `method` (GET, POST, PUT, DELETE, PATCH, OPTIONS) to `url`.
+      
+      `http(url, callback)` - performs GET-request to `url`, response will be send to function `callback`.
+      
+      `http(url, method, params)` - performs request with given `method` and object `params` to `url`.
+      
+      `http(url, method, callback)` - performs request with given `method` to `url`, response will be send to function `callback`.
+      
+      `http(url, method, params, callback)` - performs request with given `method` and object `params` to `url`, response will be send to function `callback`.
+      
+      `http(url, method, params, options, callback)` - performs request with given `method`, object `params` and connection `options` to `url`, response will be send to function `callback`.
+      
+      Connection options is a object (map):
+      
+       - `header` - sets http-header (string or array).
+       - `encoded` - is `params` object already urlencoded.
+       - `content_type` - sets Content-Type.
+       - `extended_result` - marks that response should be extended and should contains:
+          - `text` - server response text
+          - `message` - server response message
+          - `code` - server response code
+          - `headers` - response http-header
+          - `content_length` - Content-Length
+          - `content_type` - Content-Type
+    desc_ru: |-
+      `http(url)` - выполняет GET-запрос на указанный адрес `url`.
+      
+      `http(url, method)` - выполняет запрос на указанный адрес `url` методом method (GET, POST, PUT, DELETE, PATCH, OPTIONS).
+      
+      `http(url, callback)` - выполняет GET-запрос на указанный адрес `url`, ответ сервера передаёт в функцию `callback`.
+      
+      `http(url, method, params)` - выполняет запрос на указанный адрес `url`, методом `method` c данными `params` (объект).
+      
+      `http(url, method, callback)` - выполняет запрос на указанный адрес `url`, методом `method`, ответ сервера передаёт в функцию `callback`.
+      
+      `http(url, method, params, callback)` - выполняет запрос на указанный адрес `url`, методом `method`, с данными `params`, ответ сервера передаёт в функцию `callback`.
+      
+      `http(url, method, params, options, callback)` - выполняет запрос на указанный адрес `url`, методом `method`, с данными `params`, параметрами подключения `options`, ответ сервера передаёт в функцию `callback`.
+      
+      Параметрами подключения выступает объект. Допустимы следующие параметры
+      
+       - `header` - задаёт http-заголовок, если передана строка или несколько заголовков, если массив.
+       - `encoded` - указывает, что данные `params` уже закодированы в URL-формате.
+       - `content_type` - указывает Content-Type.
+       - `extended_result` - указывает, что ответ сервера нужно вернуть в расширенном виде, а именно объектом с данными:
+          - `text` - текст ответа сервера
+          - `message` - сообщение сервера
+          - `code` - код ответа сервера
+          - `headers` - http-заголовки ответа
+          - `content_length` - Content-Length
+          - `content_type` - Content-Type
+    example: |-
+      use http
+      http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
+        println "Added: " + v
+      })
+  - name: "download"
+    args: "url"
+    desc: "downloads content by url as bytes array"
+    desc_ru: "получает содержимое по указанному адресу в виде массива байт"
+    example: |-
+      use http, files
+      bytes = download("http://url")
+      f = fopen("file", "wb")
+      writeBytes(f, bytes)
+      flush(f)
+      fclose(f)
+  - name: "urlencode"
+    args: "str"
+    desc: "converts string to URL-format"
+    desc_ru: "преобразует строку в URL-формат"

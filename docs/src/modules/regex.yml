@@ -1,0 +1,147 @@
+name: regex
+since: 1.4.0
+constants:
+  - name: Pattern
+    type: 4
+    typeName: map
+    value: "{UNIX_LINES=1, CASE_INSENSITIVE=2, I=2, COMMENTS=4, MULTILINE=8, M=8, LITERAL=16, S=32, DOTALL=32, UNICODE_CASE=64, CANON_EQ=128, UNICODE_CHARACTER_CLASS=256, U=256, quote=def(s) { return string }, matches=def(str,pattern) { return boolean }, split=def(str,pattern,limit = 0) { return array }, compile=def(pattern,flags = 0) { return PatternValue }}"
+functions:
+  - name: regex
+    args: 'pattern, flags = 0'
+    desc: 'creates pattern and returns PatternValue'
+    desc_ru: 'создаёт шаблон регулярного выражения и возвращает PatternValue'
+types:
+  - name: PatternValue
+    functions:
+      - name: "flags"
+        args: ""
+        desc: "returns pattern flags"
+        desc_ru: "возвращает флаги шаблона"
+      - name: "pattern"
+        args: ""
+        desc: "returns pattern as string"
+        desc_ru: "возвращает шаблон в виде строки"
+      - name: "matcher"
+        args: "input"
+        desc: "returns MatcherValue"
+        desc_ru: "возвращает MatcherValue"
+      - name: "matches"
+        args: "input"
+        desc: "checks if input matches the pattern"
+        desc_ru: "проверяет, соответствует ли входная строка шаблону"
+      - name: "split"
+        args: "input, limit = 0"
+        desc: "splits input around matches of this pattern"
+        desc_ru: "разбивает строку на основе совпадений шаблона"
+      - name: "replaceCallback"
+        args: "input, callback"
+        desc: "replaces input with the result of the given callback"
+        desc_ru: "заменяет строку результатом заданной функции"
+        example: |-
+          use regex
+          in = "dog cat"
+          pattern = regex("(\w+)\s(\w+)", Pattern.I)
+          println pattern.replaceCallback(in, def(m) = m.group(2) + "" + m.group(1))
+        example_ru: |-
+          use regex
+          in = "пёс кот"
+          pattern = regex("(\w+)\s(\w+)", Pattern.U | Pattern.I)
+          println pattern.replaceCallback(in, def(m) = m.group(2) + "о" + m.group(1))
+  - name: MatcherValue
+    functions:
+      - name: "start"
+        args: "group = ..."
+        desc: "returns the start index of matched subsequence"
+        desc_ru: "возвращает начальную позицию найденного совпадения"
+      - name: "end"
+        args: "group = ..."
+        desc: "returns the offset after last character of matched subsequence"
+        desc_ru: "возвращает позицию, следующую за последним символов найденного совпадения"
+      - name: "find"
+        args: "start = 0"
+        desc: "resets this matcher and attempts to find the next matched subsequence"
+        desc_ru: "сбрасывает состояние матчера и пытается найти следующее совпадение"
+      - name: "group"
+        args: "group = 0"
+        desc: "returns matched group"
+        desc_ru: "возвращает найденную группу"
+      - name: "pattern"
+        args: ""
+        desc: "returns the pattern"
+        desc_ru: "возвращает шаблон"
+      - name: "region"
+        args: "start, end"
+        desc: "sets the limits of this matcher's region"
+        desc_ru: "задаёт ограничения для текущего региона"
+      - name: "replaceFirst"
+        args: "replacement"
+        desc: "replaces first matched subsequence with the given replacement string"
+        desc_ru: "заменяет первое совпадение на заданную строку"
+      - name: "replaceAll"
+        args: "replacement"
+        desc: "replaces all matched subsequences with the given replacement string"
+        desc_ru: "заменяет все совпадения на заданную строку"
+      - name: "replaceCallback"
+        args: "callback"
+        desc: "replaces input with the result of the given callback"
+        desc_ru: "заменяет строку результатом заданной функции"
+        example: |-
+          use regex
+          in = "dog cat"
+          pattern = regex("(\w+)\s(\w+)", Pattern.I)
+          matcher = pattern.matcher(in)
+          println matcher.replaceCallback(def(m) = m.group(2) + m.group(1))
+        example_ru: |-
+          use regex
+          in = "пёс кот"
+          pattern = regex("(\w+)\s(\w+)", Pattern.U | Pattern.I)
+          matcher = pattern.matcher(in)
+          println matcher.replaceCallback(def(m) = m.group(2) + "о" + m.group(1))
+      - name: "reset"
+        args: input = ""
+        desc: ""
+        desc_ru: ""
+      - name: "usePattern"
+        args: "patternvalue"
+        desc: ""
+        desc_ru: ""
+      - name: "useAnchoringBounds"
+        args: "status"
+        desc: ""
+        desc_ru: ""
+      - name: "hasAnchoringBounds"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "useTransparentBounds"
+        args: "status"
+        desc: ""
+        desc_ru: ""
+      - name: "hasTransparentBounds"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "hitEnd"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "lookingAt"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "matches"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "groupCount"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "regionStart"
+        args: ""
+        desc: ""
+        desc_ru: ""
+      - name: "regionEnd"
+        args: ""
+        desc: ""
+        desc_ru: ""

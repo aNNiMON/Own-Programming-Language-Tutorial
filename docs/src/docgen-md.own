@@ -1,0 +1,180 @@
+use std, types, files, yaml, functional
+
+INPUT_PATH_FMT = "./modules/%s.yml"
+OUTPUT_DIR_FMT = "../docs/%s/modules"
+OUTPUT_PATH_FMT = OUTPUT_DIR_FMT + "/%s.md"
+
+LANGS = ["en", "ru"]
+MODULES = [
+  "std",
+  "types",
+  "math",
+  "date",
+  "files",
+  "http",
+  "socket",
+  "downloader",
+  "base64",
+  "json",
+  "yaml",
+  "zip",
+  "gzip",
+  "functional",
+  "robot",
+  "ounit",
+  "canvas",
+  "canvasfx",
+  "forms",
+  "java",
+  "jdbc",
+  "regex",
+  "android",
+  "canvas_android",
+  "forms_android",
+  "imageprocessing_android",
+  "gps_android"
+]
+messages = {
+    "constants": {"en": "Constants", "ru": "Константы"},
+    "functions": {"en": "Functions", "ru": "Функции"},
+    "types": {"en": "Types", "ru": "Типы"},
+    "example": {"en": "Example", "ru": "Пример"},
+    "since": {"en": "since", "ru": "начиная с"}
+}
+
+// Write modules pages to vuepress config
+f = fopen("../docs/.vuepress/configs/modules.js", "w")
+writeLine(f, "export default [")
+writeLine(f, stream(MODULES).map(def(m) = "  \"%s.md\"".sprintf(m)).joining(",\n"))
+writeLine(f, "]")
+flush(f)
+fclose(f)
+
+// Create output dirs
+for lang : LANGS {
+  mkdirs(sprintf(OUTPUT_DIR_FMT, lang))
+}
+
+for moduleName : MODULES {
+  module = readYml(sprintf(INPUT_PATH_FMT, moduleName))
+  for lang : LANGS {
+    println "" + module.name + " / " + lang
+    file = sprintf(OUTPUT_PATH_FMT, lang, moduleName)
+    f = fopen(file, "w")
+
+    writeHeader(f, module, lang)
+    writeConstants(f, module.constants ?? [], lang)
+    writeFunctions(f, module.functions ?? [], lang, 2);
+    writeTypes(f, module.types ?? [], lang);
+
+    flush(f)
+    fclose(f)
+  }
+}
+
+// -- write
+def writeHeader(f, module, lang) {
+  writeText(f, header(module.name, 1))
+  if length(module.scope ?? "") && (module.scope != "both") {
+    writeText(f, " (" + module.scope + ")")
+  }
+  writeLine(f, "\n")
+  if length(module.since ?? "") {
+    writeSince(f, module.since, lang)
+  }
+  writeDescription(f, module, lang, "\n%s\n")
+}
+
+def writeConstants(f, constants, lang) {
+  if (constants.isEmpty()) return 0
+
+  writeLine(f, "\n\n## " + messages.constants[lang])
+  for info : constants {
+    writeText(f, "\n`%s` : *%s*".sprintf(info.name, info.typeName))
+    writeScope(f, info.scope ?? "")
+    writeText(f, " = ")
+    constValue = getValue(info, "value", lang)
+    if (info.type != MAP && info.type != CLASS) {
+      writeText(f, "`%s`".sprintf(constValue))
+    } else {
+      mapValues = constValue.substring(1, constValue.length - 1).split(", ")
+      if (mapValues.length >= 7) {
+          writeText(f, "\n\n```own\n{\n  ");
+          writeText(f, mapValues.joinToString(",\n  "));
+          writeText(f, "\n}\n```");
+      } else {
+          writeText(f, "`%s`".sprintf(constValue));
+      }
+    }
+    writeLine(f, "")
+    writeDescription(f, info, lang, "\n%s\n")
+  }
+
+}
+
+def writeFunctions(f, functions, lang, level = 2) {
+  if (functions.isEmpty()) return 0
+
+  writeLine(f, "\n\n" + header(messages.functions[lang], level))
+  for info : functions {
+    writeText(f, "\n`%s(%s)`".sprintf(info.name, info.args))
+    writeScope(f, info.scope ?? "")
+    if length(info.since ?? "") {
+      writeSince(f, info.since, lang)
+    }
+    writeDescription(f, info, lang, " — %s")
+    writeLine(f, "")
+
+    example = getValue(info, "example", lang)
+    if (length(example ?? "")) {
+      writeLine(f, "\n```own")
+      writeLine(f, example)
+      writeLine(f, "```")
+    }
+  }
+}
+
+def writeTypes(f, types, lang) {
+  if (types.isEmpty()) return 0
+
+  writeLine(f, "\n\n" + header(messages.types[lang]))
+  for info : types {
+    writeText(f, "\n\n" + header("`%s`".sprintf(info.name), 3))
+    writeScope(f, info.scope ?? "")
+    writeDescription(f, info, lang, "%s\n")
+    writeFunctions(f, info.functions ?? [], lang, 4);
+    writeLine(f, "")
+  }
+}
+
+def writeScope(f, scope) = match(scope) {
+  case "android": writeText(f, " <Badge text=\"Android\" />")
+  case "desktop": writeText(f, " <Badge text=\"Desktop\" />")
+  case _: { }
+}
+
+def writeDescription(f, obj, lang, format = "%s") {
+  str = getValue(obj, "desc", lang)
+  if (str != "") {
+    writeText(f, sprintf(format, str))
+  }
+}
+
+def writeSince(f, since, lang) {
+  writeText(f, "<Badge text=\"%s %s\" />".sprintf(messages.since[lang], since))
+}
+
+// -- utils
+def getValue(object, key, lang = "en") {
+  newKey = (lang != "en") ? (key + "_" + lang) : key
+  return object[newKey] ?? object[key] ?? ""
+}
+
+def header(text, level = 2) = ("#" * level) + " " + text
+
+def readYml(filename) {
+  f = fopen(filename, "r")
+  s = readText(f)
+  fclose(f)
+  return yamldecode(s)
+}

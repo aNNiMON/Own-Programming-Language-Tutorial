@@ -1,3 +1,4 @@
+import modules from './modules'
 export default {
   '/': {
     text: {'en': 'OwnLang', 'ru': 'OwnLang'},
@@ -24,7 +25,6 @@ export default {
 
   '/modules/': {
     text: {'en': 'Modules', 'ru': 'Модули'},
-    pages: [
-    ]
+    pages: modules
   }
 }

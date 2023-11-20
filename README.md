@@ -8,7 +8,7 @@ OwnLang - dynamic functional programming language inspired by Scala and Python. 
 
 | Free | Pro | Desktop |
 | :--: | :-: | :-----: |
-| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v1.5.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v1.5.0)
+| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v1.5.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v1.5.0) |
 
 Also available as AUR package:
 
@@ -139,7 +139,7 @@ def patch_callback(v) {
 
 ## Build
 
-Build using Gradle `./gradlew dist`
+Build using Gradle `./gradlew shadowJar`
 
 or take a look to [latest release](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/latest) for binaries.
 

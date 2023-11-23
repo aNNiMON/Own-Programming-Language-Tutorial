@@ -39,7 +39,7 @@ messages = {
     "functions": {"en": "Functions", "ru": "Функции"},
     "types": {"en": "Types", "ru": "Типы"},
     "example": {"en": "Example", "ru": "Пример"},
-    "since": {"en": "since", "ru": "начиная с"}
+    "since": {"en": "Since", "ru": "Начиная с"}
 }
 
 // Write modules pages to vuepress config
@@ -120,7 +120,7 @@ def writeFunctions(f, functions, lang, level = 2) {
     writeText(f, "\n`%s(%s)`".sprintf(info.name, info.args))
     writeScope(f, info.scope ?? "")
     if length(info.since ?? "") {
-      writeSince(f, info.since, lang)
+      writeSince(f, info.since, lang, true)
     }
     writeDescription(f, info, lang, " — %s")
     writeLine(f, "")
@@ -148,8 +148,8 @@ def writeTypes(f, types, lang) {
 }
 
 def writeScope(f, scope) = match(scope) {
-  case "android": writeText(f, " <Badge text=\"Android\" vertical=\"middle\"/>")
-  case "desktop": writeText(f, " <Badge text=\"Desktop\" type=\"danger\" vertical=\"middle\"/>")
+  case "android": writeText(f, " <Scope scope=\"android\" />")
+  case "desktop": writeText(f, " <Scope scope=\"desktop\" />")
   case _: { }
 }
 
@@ -160,8 +160,12 @@ def writeDescription(f, obj, lang, format = "%s") {
   }
 }
 
-def writeSince(f, since, lang) {
-  writeText(f, "<Badge text=\"%s %s\" type=\"warning\" />".sprintf(messages.since[lang], since))
+def writeSince(f, version, lang, isInline = false) {
+  if (isInline) {
+    writeText(f, "<Since version=\"%s\" />".sprintf(version))
+  } else {
+    writeText(f, "<Since text=\"%s\" version=\"%s\" />".sprintf(messages.since[lang], version))
+  }
 }
 
 // -- utils

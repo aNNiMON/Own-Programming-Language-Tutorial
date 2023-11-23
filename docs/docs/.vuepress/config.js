@@ -1,10 +1,14 @@
 import { defineUserConfig, defaultTheme } from 'vuepress'
+import { getDirname, path } from '@vuepress/utils'
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import { sidebarConfig } from './configs/sidebar'
 import { navbarConfig } from './configs/navbar'
 import Prism from 'prismjs';
 import definePrismOwnLang from '../../../editors/prismjs/own-language.js'
+
 definePrismOwnLang(Prism)
+const __dirname = getDirname(import.meta.url)
 
 export default defineUserConfig({
   locales: {
@@ -44,5 +48,8 @@ export default defineUserConfig({
     prismjsPlugin({
       preloadLanguages: ['own', 'json']
     }),
+    registerComponentsPlugin({
+      componentsDir: path.resolve(__dirname, './components'),
+    })
   ],
 })

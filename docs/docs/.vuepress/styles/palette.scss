@@ -3,6 +3,9 @@
   --c-brand-light: #ff9562;
   --c-badge-danger: #f63f3f;
   --c-badge-warning: #d0af01;
+
+  --usc-since: var(--c-badge-warning);
+  --usc-scope: var(--c-brand);
 }
 html.dark {
   --c-brand: #e1792d;

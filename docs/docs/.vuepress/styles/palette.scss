@@ -1,0 +1,12 @@
+:root {
+  --c-brand: #f15d15;
+  --c-brand-light: #ff9562;
+  --c-badge-danger: #f63f3f;
+  --c-badge-warning: #d0af01;
+}
+html.dark {
+  --c-brand: #e1792d;
+  --c-brand-light: #ff8e3d;
+  --c-badge-danger: #d94657;
+  --c-badge-danger-text: #160304;
+}

@@ -21,6 +21,11 @@ export default defineUserConfig({
   },
 
   theme: defaultTheme({
+    repo: 'aNNiMON/Own-Programming-Language-Tutorial',
+    docsBranch: 'next',
+    editLinkPattern: ':repo/blob/:branch/docs/docs/:path',
+    editLinkText: 'View source',
+    contributors: false,
     locales: {
       '/en/': {
         selectLanguageName: 'English',

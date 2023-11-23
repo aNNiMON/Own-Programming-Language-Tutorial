@@ -148,8 +148,8 @@ def writeTypes(f, types, lang) {
 }
 
 def writeScope(f, scope) = match(scope) {
-  case "android": writeText(f, " <Badge text=\"Android\" />")
-  case "desktop": writeText(f, " <Badge text=\"Desktop\" />")
+  case "android": writeText(f, " <Badge text=\"Android\" vertical=\"middle\"/>")
+  case "desktop": writeText(f, " <Badge text=\"Desktop\" type=\"danger\" vertical=\"middle\"/>")
   case _: { }
 }
 
@@ -161,7 +161,7 @@ def writeDescription(f, obj, lang, format = "%s") {
 }
 
 def writeSince(f, since, lang) {
-  writeText(f, "<Badge text=\"%s %s\" />".sprintf(messages.since[lang], since))
+  writeText(f, "<Badge text=\"%s %s\" type=\"warning\" />".sprintf(messages.since[lang], since))
 }
 
 // -- utils

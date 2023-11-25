@@ -12,7 +12,7 @@ dependencies {
     implementation "org.slf4j:slf4j-simple:${versions.slf4j}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
 
-    testImplementation platform("org.junit:junit-bom:")
+    testImplementation platform("org.junit:junit-bom:${versions.junit}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 

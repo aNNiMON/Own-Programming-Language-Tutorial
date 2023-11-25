@@ -4,6 +4,7 @@ include 'ownlang-core'
 include 'ownlang-parser'
 include 'ownlang-desktop'
 include 'ownlang-utils'
+include 'docs'
 
 final def modules = ['main', 'canvasfx', 'server']
 

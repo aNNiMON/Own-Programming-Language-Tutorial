@@ -1,0 +1,11 @@
+tasks.register('generateMarkdownModules') {
+    group = "documentation"
+    def ownlangExec = tasks.getByPath(':ownlang-desktop:ownlangExec')
+    doFirst {
+        ownlangExec.configure {
+            workingDir '../docs/src'
+            args '-f', 'docgen-md.own'
+        }
+    }
+    finalizedBy ownlangExec
+}

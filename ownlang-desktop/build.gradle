@@ -12,6 +12,12 @@ application {
     mainClass = project.mainClassName
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+
 dependencies {
     implementation project(":ownlang-core")
     implementation project(":ownlang-parser")
@@ -26,25 +32,33 @@ test {
     useJUnitPlatform()
 }
 
-tasks.register('runProgram', JavaExec) {
-    group = "application"
-    description = "Run sample program"
+def ownlangExec = tasks.register('ownlangExec', JavaExec) {
     dependsOn classes
     mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    ignoreExitValue true
-    args '-f ../program.own'.split(' ')
 }
 
-tasks.register('runOptimizing', JavaExec) {
+tasks.register('runProgram') {
+    group = "application"
+    description = "Run sample program"
+    doFirst {
+        ownlangExec.configure {
+            args '-f ../program.own'.split(' ')
+        }
+    }
+    finalizedBy ownlangExec
+}
+
+tasks.register('runOptimizing') {
     group = "application"
     description = "Run sample program with optimizations and measurements"
-    dependsOn classes
-    mainClass = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    ignoreExitValue true
-    args '-o 9 -m -a -f ../program.own'.split(' ')
+    doFirst {
+        ownlangExec.configure {
+            args '-o 9 -m -a -f ../program.own'.split(' ')
+        }
+    }
+    finalizedBy ownlangExec
 }
 
 tasks.register('runOptimizationDumper', JavaExec) {

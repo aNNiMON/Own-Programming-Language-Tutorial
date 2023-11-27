@@ -45,7 +45,8 @@ messages = {
     "functions": {"en": "Functions", "ru": "Функции"},
     "types": {"en": "Types", "ru": "Типы"},
     "example": {"en": "Example", "ru": "Пример"},
-    "since": {"en": "Since", "ru": "Начиная с"}
+    "since": {"en": "Since", "ru": "Начиная с"},
+    "elements": {"en": " elements", "ru": " элементов"}
 }
 
 // Write modules pages to vuepress config
@@ -104,11 +105,13 @@ def writeConstants(f, constants, lang) {
     } else {
       mapValues = constValue.substring(1, constValue.length - 1).split(", ")
       if (mapValues.length >= 7) {
-          writeText(f, "\n\n```own\n{\n  ");
-          writeText(f, mapValues.joinToString(",\n  "));
-          writeText(f, "\n}\n```");
+        writeText(f, "\n\n::: details %d %s".sprintf(mapValues.length, messages.elements[lang]));
+        writeText(f, "\n\n```own:no-line-numbers\n{\n  ");
+        writeText(f, mapValues.joinToString(",\n  "));
+        writeText(f, "\n}\n```");
+        writeText(f, "\n:::");
       } else {
-          writeText(f, "`%s`".sprintf(constValue));
+        writeText(f, "`%s`".sprintf(constValue));
       }
     }
     writeLine(f, "")

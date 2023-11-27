@@ -1,4 +1,4 @@
-use std, types, files, yaml, functional
+use std, types, files, json, yaml, functional
 
 INPUT_PATH_FMT = "./modules/%s.yml"
 OUTPUT_DIR_FMT = "../docs/%s/modules"
@@ -7,33 +7,39 @@ OUTPUT_PATH_FMT = OUTPUT_DIR_FMT + "/%s.md"
 LANGS = ["en", "ru"]
 MODULES = [
   "std",
-  "types",
-  "math",
   "date",
-  "files",
-  "http",
-  "socket",
   "downloader",
+  "files",
+  "functional",
+  "http",
+  "java",
+  "math",
+  "ounit",
+  "regex",
+  "robot",
+  "socket",
+  "types",
+  // formats
   "base64",
   "json",
   "yaml",
-  "zip",
   "gzip",
-  "functional",
-  "robot",
-  "ounit",
+  "zip"
+
+  // Desktop-only
   "canvas",
   "canvasfx",
   "forms",
-  "java",
-  "jdbc",
-  "regex",
+  "jdbc"
+
+  // Android-only
   "android",
   "canvas_android",
   "forms_android",
-  "imageprocessing_android",
-  "gps_android"
+  "gps_android",
+  "imageprocessing_android"
 ]
+
 messages = {
     "constants": {"en": "Constants", "ru": "Константы"},
     "functions": {"en": "Functions", "ru": "Функции"},
@@ -43,10 +49,9 @@ messages = {
 }
 
 // Write modules pages to vuepress config
+modulesPages = jsonencode(map(MODULES, def(m) = m + ".md"))
 f = fopen("../docs/.vuepress/configs/modules.js", "w")
-writeLine(f, "export default [")
-writeLine(f, stream(MODULES).map(def(m) = "  \"%s.md\"".sprintf(m)).joining(",\n"))
-writeLine(f, "]")
+writeLine(f, "export default " + modulesPages)
 flush(f)
 fclose(f)
 

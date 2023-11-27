@@ -1,5 +1,17 @@
 use std, functional
 
+def testGroupByKeys() {
+  data = [
+    {"k1": 1, "k2": "a"},
+    {"k1": 2, "k2": "b"},
+    {"k1": 3, "k2": "c"},
+  ]
+  result = groupby(data, def(e) = e.k2)
+  assertEquals([{"k1": 1, "k2": "a"}], result.a)
+  assertEquals([{"k1": 2, "k2": "b"}], result.b)
+  assertEquals([{"k1": 3, "k2": "c"}], result.c)
+}
+
 def testArraysGroupBy() {
   arr = [1, 2, 3, 4, 1, 2, 3, 1, 2, 3]
   result = groupby(arr, def(v) = v % 2 == 0)
@@ -13,3 +25,4 @@ def testMapsGroupBy() {
   assertEquals({"test1": 234, "test2": 345, "test3": 456}, result[true])
   assertEquals({"abc": 123, "def": 567}, result[false])
 }
+

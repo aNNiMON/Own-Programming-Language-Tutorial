@@ -11,7 +11,7 @@ constants:
   - name: OwnLang
     typeName: map
     type: 4
-    value: "{PLATFORM=android/desktop, VERSION=1.5.0_000000, VERSION_MAJOR=1, VERSION_MINOR=5, VERSION_PATCH=0}"
+    value: "{PLATFORM=android/desktop, VERSION=2.0.1_000000, VERSION_MAJOR=2, VERSION_MINOR=0, VERSION_PATCH=1}"
     since: 1.4.0
 functions:
   - name: arrayCombine
@@ -76,11 +76,39 @@ functions:
       
       echo(1, "abc") // выведет строку "1 abc" в консоль
       echo(1, 2, 3, 4, 5, "a", "b") // выведет строку "1 2 3 4 5 a b" в консоль"
+  - name: exit
+    args: status
+    desc: terminates an application with provided status code. Non-zero values indicates abnormal termination
+    desc_ru: завершает работу приложения с заданным кодом. Ненулевое значение означает завершение с ошибкой
+    since: 2.0.0
+    example: |-
+      use std
+      
+      println "Bye!"
+      exit(0)
+    example_ru: |-
+      use std
+      
+      println "До свидания!"
+      exit(0)
   - name: getBytes
     args: input, charset = "UTF-8"
     desc: returns byte array of the string in the given charset
     desc_ru: возвращает массив байт строки в заданной кодировке
     since: 1.5.0
+  - name: getenv
+    args: key, defaultValue = ""
+    desc: returns the value of the specified environment variable if it's exists, returns `defaultValue` otherwise
+    desc_ru: возвращает значение указанной переменной среды, если такова существует. В противном случае возвращает `defaultValue`
+    since: 2.0.0
+    example: |-
+      use std
+      println getenv("JAVA_HOME")
+  - name: getprop
+    args: key, defaultValue = ""
+    desc: returns the value of the system property if it's exists, returns `defaultValue` otherwise
+    desc_ru: возвращает значение системного свойства, если оно существует. В противном случае возвращает `defaultValue`
+    since: 2.0.0
   - name: indexOf
     args: "input, what, index = 0"
     desc: "finds first occurrence of `what` in string `input`, starting at position `index`"
@@ -97,6 +125,11 @@ functions:
     args: "x"
     desc: "returns length of string, array/map size or number of function arguments"
     desc_ru: "возвращает длину строки, размер массива/объекта или количество аргументов функции в зависимости от типа аргумента x"
+  - name: nanotime
+    args: ""
+    desc: returns VM time source in nanoseconds for elapsed time purposes
+    desc_ru: возвращает время виртуальной машины в наносекундах, для отсчёта затраченного времени
+    since: 2.0.0
   - name: newarray
     args: "size..."
     desc: "creates array with `size`.\n`newarray(x)` - creates 1D array, `newarray(x,y)` - creates 2D array"
@@ -107,13 +140,18 @@ functions:
       println newarray(4) // [0, 0, 0, 0]
       println newarray(2, 3) // [[0, 0, 0], [0, 0, 0]]
   - name: parseInt
-    args: "str, radix"
-    desc: parses string into integer in the `radix`
-    desc_ru: парсит строку в целое число с указанным основанием
+    args: str, radix
+    desc: parses the input string into an integer with `radix` base
+    desc_ru: преобразует строку в целое число с указанным основанием
   - name: parseLong
-    args: "str, radix"
-    desc: parses string into long in the `radix`
-    desc_ru: парсит строку в длинное целое число с указанным основанием
+    args: str, radix
+    desc: parses the input string into a long integer with `radix` base
+    desc_ru: преобразует строку в длинное целое число с указанным основанием
+  - name: parseDouble
+    args: str
+    desc: parses the input string into a double
+    desc_ru: преобразует строку в вещественное число типа double
+    since: 2.0.0
   - name: rand
     args: "from = 0, to = .."
     desc: |-

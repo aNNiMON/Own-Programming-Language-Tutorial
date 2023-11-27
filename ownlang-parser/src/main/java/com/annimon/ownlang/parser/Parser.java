@@ -388,7 +388,7 @@ public final class Parser {
     private Node map() {
         // {key1 : value1, key2 : value2, ...}
         consume(TokenType.LBRACE);
-        final Map<Node, Node> elements = new HashMap<>();
+        final Map<Node, Node> elements = new LinkedHashMap<>();
         while (!match(TokenType.RBRACE)) {
             final Node key = primary();
             consume(TokenType.COLON);

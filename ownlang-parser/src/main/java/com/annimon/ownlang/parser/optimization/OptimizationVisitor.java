@@ -5,10 +5,7 @@ import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.parser.ast.*;
 import static com.annimon.ownlang.parser.visitors.VisitorUtils.isValue;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
@@ -264,7 +261,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
 
     @Override
     public Node visit(MapExpression s, T t) {
-        final Map<Node, Node> elements = new HashMap<>(s.elements.size());
+        final Map<Node, Node> elements = new LinkedHashMap<>(s.elements.size());
         boolean changed = false;
         for (Map.Entry<Node, Node> entry : s.elements.entrySet()) {
             final Node key = entry.getKey().accept(this, t);

@@ -33,17 +33,14 @@ class ServerValue extends MapValue {
 
     private Value error(Value[] args) {
         Arguments.checkOrOr(2, 3, args.length);
-        final int handlerIndex;
         final String contentType;
         if (args.length == 2) {
             contentType = "*";
-            handlerIndex = 1;
         } else {
-            contentType = args[1].asString();
-            handlerIndex = 2;
+            contentType = args[2].asString();
         }
         int status = args[0].asInt();
-        final Handler handler = toHandler(ValueUtils.consumeFunction(args[handlerIndex], handlerIndex));
+        final Handler handler = toHandler(ValueUtils.consumeFunction(args[1], 1));
         server.error(status, contentType, handler);
         return this;
     }
@@ -70,7 +67,7 @@ class ServerValue extends MapValue {
         switch (args.length) {
             case 0 -> server.start();
             case 1 -> server.start(args[0].asInt());
-            case 2 -> server.start(args[0].asString(), args[1].asInt());
+            case 2 -> server.start(args[1].asString(), args[0].asInt());
         }
         return this;
     }

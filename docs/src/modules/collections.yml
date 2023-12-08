@@ -1,0 +1,26 @@
+name: collections
+scope: both
+desc: Contains functions for working with collections
+desc_ru: Содержит функции для работы с коллекциями
+since: 2.0.0
+functions:
+  - name: hashMap
+    args: "fromMap = {}"
+    desc: creates a new HashMap based on `fromMap` values
+    desc_ru: создаёт новый HashMap из значений `fromMap`
+  - name: linkedHashMap
+    args: "fromMap = {}"
+    desc: creates a new LinkedHashMap based on `fromMap` values
+    desc_ru: создаёт новый LinkedHashMap из значений `fromMap`
+  - name: concurrentHashMap
+    args: "fromMap = {}"
+    desc: creates a new ConcurrentHashMap based on `fromMap` values
+    desc_ru: создаёт новый ConcurrentHashMap из значений `fromMap`
+  - name: treeMap
+    args: "fromMap = {}, comparator = def(a, b) = 0"
+    desc: creates a new TreeMap based on `fromMap` values and `comparator`
+    desc_ru: создаёт новый TreeMap из значений `fromMap` и компаратора `comparator`
+  - name: concurrentSkipListMap
+    args: "fromMap = {}, comparator = def(a, b) = 0"
+    desc: creates a new ConcurrentSkipListMap based on `fromMap` values and `comparator`
+    desc_ru: создаёт новый ConcurrentSkipListMap из значений `fromMap` и компаратора `comparator`

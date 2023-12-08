@@ -53,24 +53,14 @@ public class collections implements Module {
                 case 0: // treeMap()
                     map = mapSupplier.get();
                     break;
-                case 1: // treeMap(map) || treeMap(comparator)
-                    if (args[0].type() == Types.MAP) {
-                        map = mapSupplier.get();
-                        map.putAll(((MapValue) args[0]).getMap());
-                    } else if (args[0].type() == Types.FUNCTION) {
-                        final Function comparator = ValueUtils.consumeFunction(args[0], 0);
-                        map = comparatorToMapFunction.apply((o1, o2) -> comparator.execute(o1, o2).asInt());
-                    } else {
-                        throw new TypeException("Map or comparator function expected in first argument");
-                    }
+                case 1: // treeMap(map)
+                    map = mapSupplier.get();
+                    map.putAll(ValueUtils.consumeMap(args[0], 0).getMap());
                     break;
                 case 2: // treeMap(map, comparator)
-                    if (args[0].type() != Types.MAP) {
-                        throw new TypeException("Map expected in first argument");
-                    }
                     final Function comparator = ValueUtils.consumeFunction(args[1], 1);
                     map = comparatorToMapFunction.apply((o1, o2) -> comparator.execute(o1, o2).asInt());
-                    map.putAll(((MapValue) args[0]).getMap());
+                    map.putAll(ValueUtils.consumeMap(args[0], 0).getMap());
                     break;
                 default:
                     throw new IllegalStateException();

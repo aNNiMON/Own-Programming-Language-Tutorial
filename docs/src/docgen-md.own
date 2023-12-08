@@ -7,6 +7,7 @@ OUTPUT_PATH_FMT = OUTPUT_DIR_FMT + "/%s.md"
 LANGS = ["en", "ru"]
 MODULES = [
   "std",
+  "collections",
   "date",
   "downloader",
   "files",

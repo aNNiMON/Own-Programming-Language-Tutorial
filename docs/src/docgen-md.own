@@ -31,7 +31,8 @@ MODULES = [
   "canvas",
   "canvasfx",
   "forms",
-  "jdbc"
+  "jdbc",
+  "server",
 
   // Android-only
   "android",

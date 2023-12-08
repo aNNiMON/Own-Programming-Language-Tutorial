@@ -1,0 +1,222 @@
+name: server
+since: 2.0.0
+scope: desktop
+functions:
+  - name: newServer
+    args: 'config = {}'
+    desc: Initializes server using provided config. Returns ServerValue.
+    desc_ru: Инициализирует сервер, используя заданный конфиг. Возвращает ServerValue.
+    example: |-
+      use std, server
+      
+      newServer()
+        .get("/", def(ctx) = ctx.json({"message": "Hello, world!"}))
+        .start(8081)
+  - name: serve
+    args: 'port = 8080, dir = "."'
+    desc: Starts a server on the `port` and hosts the directory `dir`
+    desc_ru: Запускает сервер на указанном порту и хостит директорию `dir`
+    example: |-
+      use server
+      serve(8083, "./public_html")
+types:
+  - name: ServerValue
+    functions:
+      - name: get
+        args: 'path, handler, roles...'
+        desc: adds a GET request handler
+        desc_ru: добавляет обработчик GET запросов
+      - name: post
+        args: 'path, handler, roles...'
+        desc: adds a POST request handler
+        desc_ru: добавляет обработчик POST запросов
+      - name: put
+        args: 'path, handler, roles...'
+        desc: adds a PUT request handler
+        desc_ru: добавляет обработчик PUT запросов
+      - name: patch
+        args: 'path, handler, roles...'
+        desc: adds a PATCH request handler
+        desc_ru: добавляет обработчик PATCH запросов
+      - name: head
+        args: 'path, handler, roles...'
+        desc: adds a HEAD request handler
+        desc_ru: добавляет обработчик HEAD запросов
+      - name: delete
+        args: 'path, handler, roles...'
+        desc: adds a DELETE request handler
+        desc_ru: добавляет обработчик DELETE запросов
+      - name: options
+        args: 'path, handler, roles...'
+        desc: adds a OPTIONS request handler
+        desc_ru: добавляет обработчик OPTIONS запросов
+      - name: error
+        args: 'status, handler, contentType = "*"'
+        desc: adds an error handler
+        desc_ru: добавляет обработчик ошибок
+      - name: exception
+        args: 'className, handler'
+        desc: adds an exception handler
+        desc_ru: добавляет обработчик исключений
+      - name: start
+        args: 'port = 8080, host = ""'
+        desc: Starts a server. Use `port` 0 to start a server on a random port.
+        desc_ru: Запускает сервер. Укажите `port` 0, чтобы запустить сервер на случайном порте
+      - name: stop
+        args: ''
+        desc: Stops a server
+        desc_ru: Останавливает работу сервера
+  - name: ContextValue
+    functions:
+      - name: attribute
+        args: 'key, value = ""'
+        desc: gets or sets an attribute by key
+        desc_ru: получает или устанавливает аттрибут по ключу `key`
+      - name: basicAuthCredentials
+        args: ''
+        desc: returns a basic authorization credentials, an array with two elements — username and password
+        desc_ru: возвращает простые данные авторизации, массив с двумя элементами — имя пользователя и пароль
+        example: |-
+          extract(username, password) = ctx.basicAuthCredentials()
+      - name: body
+        args: ''
+        desc: returns a response body as a string
+        desc_ru: возвращает тело ответа в виде строки
+      - name: bodyAsBytes
+        args: ''
+        desc: returns a response body as a byte array
+        desc_ru: возвращает тело ответа в виде массива байт
+      - name: characterEncoding
+        args: ''
+        desc: returns a character encoding from Content-Type if possible
+        desc_ru: возвращает кодировку символов из заголовка Content-Type, если возможно
+      - name: cookie
+        args: 'name, value = "", maxAge = -1'
+        desc: gets or sets a cookie
+        desc_ru: получает или устанавливает значение куки
+      - name: contentLength
+        args: ''
+        desc: returns a content length in bytes
+        desc_ru: возвращает длину контента в байтах
+      - name: contentType
+        args: 'contentType = ""'
+        desc: gets or sets a Content-Type header
+        desc_ru: получает или устанавливает заголовок  Content-Type
+      - name: contextPath
+        args: ''
+        desc: returns a request context path
+        desc_ru: возвращает путь контекста запроса
+      - name: endpointHandlerPath
+        args: ''
+        desc: returns a matched endpoint handler path
+        desc_ru: возвращает путь обработчика совпавшего эндпоинта
+      - name: formParam
+        args: 'key'
+        desc: returns a form parameter
+        desc_ru: возвращает параметр формы
+      - name: fullUrl
+        args: ''
+        desc: returns a full url
+        desc_ru: возвращает полный адрес
+      - name: handlerType
+        args: ''
+        desc: returns a current handler type
+        desc_ru: возвращает тип текущего обработчика
+      - name: header
+        args: 'name, value =""'
+        desc: gets or sets header
+        desc_ru: получает или устанавливает заголовок по названию `name`
+      - name: host
+        args: ''
+        desc: returns a host
+        desc_ru: возвращает имя хоста
+      - name: html
+        args: 'html'
+        desc: sets result to the specified html string. Also sets Content-Type header to text/html
+        desc_ru: устанавливает указанныую html-строку в качестве результата. Также устанавливает заголовок Content-Type в text/html
+      - name: ip
+        args: ''
+        desc: returns an IP address
+        desc_ru: возвращает IP адрес
+      - name: json
+        args: 'obj'
+        desc: serializes an object to json string and sets it as the result
+        desc_ru: сериализует объект в json строку и устанавливает в качестве результата
+      - name: jsonStream
+        args: 'obj'
+        desc: serializes an object to json stream and sets it as the result
+        desc_ru: сериализует объект в json потом и устанавливает в качестве результата
+      - name: matchedPath
+        args: ''
+        desc: returns a matched request path
+        desc_ru: возвращает совпавший путь запроса
+      - name: path
+        args: ''
+        desc: returns a request path
+        desc_ru: возвращает путь запроса
+      - name: port
+        args: ''
+        desc: returns a port number
+        desc_ru: возвращает номер порта
+      - name: protocol
+        args: ''
+        desc: returns a protocol
+        desc_ru: возвращает протокол
+      - name: queryString
+        args: ''
+        desc: returns a query string
+        desc_ru: возвращает строку запроса
+      - name: redirect
+        args: 'location, statusCode = 302'
+        desc: redirects to a location with the given status. By default, the status is 302 FOUND
+        desc_ru: редиректит на указанный путь с указанным статусом. По умолчанию, статус — 302 FOUND
+      - name: removeCookie
+        args: 'name, path = "/"'
+        desc: removes a cookie by name and path
+        desc_ru: удаляет куки по имени и пути
+      - name: render
+        args: 'filePath, data = {}'
+        desc: renders a file with specified data and sets it as the result
+        desc_ru: рендерит файл с указанными данными и устанавливает в качестве результата
+      - name: result
+        args: 'value = ""'
+        desc: gets or sets a result. `value` can be a string or a byte array
+        desc_ru: получает или устанавливает результат. `value` может быть строкой или массивом байт
+      - name: statusCode
+        args: ''
+        desc: returns a response status code
+        desc_ru: возвращает код статуса ответа
+      - name: scheme
+        args: ''
+        desc: returns a request scheme
+        desc_ru: возвращает схему запроса
+      - name: url
+        args: ''
+        desc: returns a request url
+        desc_ru: возвращает адрес запроса
+      - name: userAgent
+        args: ''
+        desc: returns an User-Agent header
+        desc_ru: возвращает заголовок User-Agent
+  - name: Config
+    desc: |-
+      {
+        "webjars": true,
+        "classpathDirs": ["dir1", "dir2"],
+        "externalDirs": ["dir1", "dir2"],
+      
+        "asyncTimeout": 6_000,
+        "defaultContentType": "text/plain",
+        "etags": true,
+        "maxRequestSize": 1_000_000,
+      
+        "caseInsensitiveRoutes": true,
+        "ignoreTrailingSlashes": true,
+        "multipleSlashesAsSingle": true,
+        "contextPath": "/",
+      
+        "basicAuth": ["user", "password"],
+        "dev": true,
+        "showBanner": false,
+        "sslRedirects": true
+      }

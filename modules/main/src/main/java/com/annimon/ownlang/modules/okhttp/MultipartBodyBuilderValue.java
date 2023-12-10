@@ -8,6 +8,7 @@ import com.annimon.ownlang.lib.Value;
 import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class MultipartBodyBuilderValue extends MapValue {
 
@@ -56,14 +57,14 @@ public class MultipartBodyBuilderValue extends MapValue {
     }
 
     private Value addPart(Value[] args) {
-        Arguments.checkOrOr(2, 3, args.length);
+        Arguments.checkOrOr(1, 2, args.length);
+        RequestBody requestBody = Values.getRequestBody(args[0], " at first argument");
         if (args.length == 1) {
-            builder.addPart(
-                    Values.getRequestBody(args[0], " at first argument"));
+            builder.addPart(requestBody);
         } else {
             builder.addPart(
-                    Values.getHeaders(args[0], " at first argument"),
-                    Values.getRequestBody(args[1], " at second argument"));
+                    Values.getHeaders(args[1], " at second argument"),
+                    requestBody);
         }
         return this;
     }

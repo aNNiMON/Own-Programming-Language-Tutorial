@@ -13,6 +13,7 @@ MODULES = [
   "files",
   "functional",
   "http",
+  "okhttp",
   "java",
   "math",
   "ounit",

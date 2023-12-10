@@ -1,0 +1,210 @@
+name: okhttp
+since: 2.0.0
+scope: both
+constants:
+  - name: MultipartBody
+    type: 4
+    typeName: map
+    value: MultipartBodyValue
+  - name: RequestBody
+    type: 4
+    typeName: map
+    value: RequestBodyValue
+  - name: okhttp
+    type: 4
+    typeName: map
+    value: OkHttpValue
+functions: []
+types:
+  - name: CallValue
+    functions:
+      - name: cancel
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: enqueue
+        args: 'onResponse, onFailure=def(call, errorMessage)'
+        desc: ''
+        desc_ru: ''
+      - name: execute
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isCanceled
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: isExecuted
+        args: ''
+        desc: ''
+        desc_ru: ''
+  - name: MultipartBodyValue
+    constants:
+      - name: ALTERNATIVE
+        type: 2
+        typeName: string
+        value: multipart/alternative
+      - name: DIGEST
+        type: 2
+        typeName: string
+        value: multipart/digest
+      - name: FORM
+        type: 2
+        typeName: string
+        value: multipart/form-data
+      - name: MIXED
+        type: 2
+        typeName: string
+        value: multipart/mixed
+      - name: PARALLEL
+        type: 2
+        typeName: string
+        value: multipart/parallel
+    functions:
+      - name: builder
+        args: ''
+        desc: returns MultipartBodyBuilderValue
+        desc_ru: dозвращает MultipartBodyBuilderValue
+  - name: MultipartBodyBuilderValue
+    functions:
+      - name: addFormData
+        args: 'data'
+        desc: ''
+        desc_ru: ''
+      - name: addFormDataPart
+        args: 'name, value, requestBody = empty'
+        desc: ''
+        desc_ru: ''
+      - name: addPart
+        args: 'requestBody, headers = {}'
+        desc: ''
+        desc_ru: ''
+      - name: build
+        args: ''
+        desc: creates and returns MultipartBodyValue
+        desc_ru: создаёт и возвращает MultipartBodyValue
+      - name: setType
+        args: 'type'
+        desc: ''
+        desc_ru: ''
+  - name: RequestBuilderValue
+    functions:
+      - name: addHeader
+        args: 'name, value'
+        desc: ''
+        desc_ru: ''
+      - name: cacheControl
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: delete
+        args: 'requestBody = empty'
+        desc: ''
+        desc_ru: ''
+      - name: get
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: head
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: header
+        args: 'name, value'
+        desc: ''
+        desc_ru: ''
+      - name: headers
+        args: 'headersMap'
+        desc: ''
+        desc_ru: ''
+      - name: method
+        args: 'method, requestBody = empty'
+        desc: ''
+        desc_ru: ''
+      - name: newCall
+        args: 'client'
+        desc: creates new call, returns CallValue
+        desc_ru: создаёт новый вызов, возвращает CallValue
+      - name: patch
+        args: 'requestBody = empty'
+        desc: ''
+        desc_ru: ''
+      - name: post
+        args: 'requestBody = empty'
+        desc: ''
+        desc_ru: ''
+      - name: put
+        args: 'requestBody = empty'
+        desc: ''
+        desc_ru: ''
+      - name: removeHeader
+        args: 'name'
+        desc: ''
+        desc_ru: ''
+      - name: url
+        args: 'url'
+        desc: ''
+        desc_ru: ''
+  - name: RequestBodyValue
+    functions:
+      - name: bytes
+        args: 'contentType, bytes, offset = 0, bytesCount = bytes.length'
+        desc: ''
+        desc_ru: ''
+      - name: file
+        args: 'contentType, filePath'
+        desc: ''
+        desc_ru: ''
+      - name: string
+        args: 'contentType, content'
+        desc: ''
+        desc_ru: ''
+  - name: OkHttpValue
+    constants:
+      - name: client
+        type: 4
+        typeName: map
+        value: HttpClientValue
+    functions:
+      - name: request
+        args: ''
+        desc: returns RequestBuilderValue
+        desc_ru: возвращает RequestBuilderValue
+  - name: HttpClientValue
+    functions:
+      - name: connectTimeoutMillis
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: followRedirects
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: followSslRedirects
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: newCall
+        args: 'request'
+        desc: creates new call, returns CallValue
+        desc_ru: создаёт новый вызов, возвращает CallValue
+      - name: newWebSocket
+        args: 'request, callbacks'
+        desc: ''
+        desc_ru: ''
+      - name: pingIntervalMillis
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: readTimeoutMillis
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: retryOnConnectionFailure
+        args: ''
+        desc: ''
+        desc_ru: ''
+      - name: writeTimeoutMillis
+        args: ''
+        desc: ''
+        desc_ru: ''

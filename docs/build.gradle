@@ -1,3 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.annimon'
+version = '2.0-SNAPSHOT'
+
+dependencies {
+    implementation project(":ownlang-core")
+    implementation project(":ownlang-parser")
+    implementation project(":ownlang-utils")
+    implementation project(":modules:main")
+    implementation project(":modules:canvasfx")
+    implementation project(":modules:server")
+
+    implementation "org.yaml:snakeyaml:${versions.snakeyaml}"
+}
+
 tasks.register('generateMarkdownModules') {
     group = "documentation"
     def ownlangExec = tasks.getByPath(':ownlang-desktop:ownlangExec')
@@ -8,4 +26,13 @@ tasks.register('generateMarkdownModules') {
         }
     }
     finalizedBy ownlangExec
+}
+
+tasks.register('generateModuleInfo', JavaExec) {
+    group = "documentation"
+    description = "Run sample program"
+    dependsOn classes
+    mainClass = 'com.annimon.ownlang.docs.ModulesInfoCreator'
+    classpath = sourceSets.main.runtimeClasspath
+    args 'server', 'okhttp'
 }

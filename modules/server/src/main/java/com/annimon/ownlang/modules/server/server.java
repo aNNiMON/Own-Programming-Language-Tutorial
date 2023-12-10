@@ -3,6 +3,7 @@ package com.annimon.ownlang.modules.server;
 import com.annimon.ownlang.lib.*;
 import com.annimon.ownlang.modules.Module;
 import io.javalin.Javalin;
+import io.javalin.http.Header;
 import io.javalin.http.staticfiles.Location;
 import java.util.Map;
 import static java.util.Map.entry;
@@ -11,7 +12,7 @@ public final class server implements Module {
 
     @Override
     public Map<String, Value> constants() {
-        return Map.of();
+        return Map.of("Header", ValueUtils.collectStringConstants(Header.class));
     }
 
     @Override

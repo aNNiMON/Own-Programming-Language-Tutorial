@@ -1,6 +1,34 @@
 name: server
 since: 2.0.0
 scope: desktop
+constants:
+  - name: Header
+    type: 4
+    typeName: map
+    value: '{ACCEPT=Accept, ACCEPT_CHARSET=Accept-Charset, ACCEPT_ENCODING=Accept-Encoding,
+      ACCEPT_LANGUAGE=Accept-Language, ACCEPT_RANGES=Accept-Ranges, ACCESS_CONTROL_ALLOW_CREDENTIALS=Access-Control-Allow-Credentials,
+      ACCESS_CONTROL_ALLOW_HEADERS=Access-Control-Allow-Headers, ACCESS_CONTROL_ALLOW_METHODS=Access-Control-Allow-Methods,
+      ACCESS_CONTROL_ALLOW_ORIGIN=Access-Control-Allow-Origin, ACCESS_CONTROL_EXPOSE_HEADERS=Access-Control-Expose-Headers,
+      ACCESS_CONTROL_MAX_AGE=Access-Control-Max-Age, ACCESS_CONTROL_REQUEST_HEADERS=Access-Control-Request-Headers,
+      ACCESS_CONTROL_REQUEST_METHOD=Access-Control-Request-Method, AGE=Age, ALLOW=Allow,
+      AUTHORIZATION=Authorization, CACHE_CONTROL=Cache-Control, CLEAR_SITE_DATA=Clear-Site-Data,
+      CONNECTION=Connection, CONTENT_DISPOSITION=Content-Disposition, CONTENT_ENCODING=Content-Encoding,
+      CONTENT_LANGUAGE=Content-Language, CONTENT_LENGTH=Content-Length, CONTENT_LOCATION=Content-Location,
+      CONTENT_RANGE=Content-Range, CONTENT_SECURITY_POLICY=Content-Security-Policy,
+      CONTENT_TYPE=Content-Type, COOKIE=Cookie, CROSS_ORIGIN_EMBEDDER_POLICY=Cross-Origin-Embedder-Policy,
+      CROSS_ORIGIN_OPENER_POLICY=Cross-Origin-Opener-Policy, CROSS_ORIGIN_RESOURCE_POLICY=Cross-Origin-Resource-Policy,
+      DATE=Date, ETAG=ETag, EXPECT=Expect, EXPIRES=Expires, FROM=From, HOST=Host,
+      IF_MATCH=If-Match, IF_MODIFIED_SINCE=If-Modified-Since, IF_NONE_MATCH=If-None-Match,
+      IF_RANGE=If-Range, IF_UNMODIFIED_SINCE=If-Unmodified-Since, LAST_MODIFIED=Last-Modified,
+      LINK=Link, LOCATION=Location, MAX_FORWARDS=Max-Forwards, ORIGIN=Origin, PRAGMA=Pragma,
+      PROXY_AUTHENTICATE=Proxy-Authenticate, PROXY_AUTHORIZATION=Proxy-Authorization,
+      RANGE=Range, REFERER=Referer, REFERRER_POLICY=Referrer-Policy, RETRY_AFTER=Retry-After,
+      SEC_WEBSOCKET_KEY=Sec-WebSocket-Key, SERVER=Server, SET_COOKIE=Set-Cookie, STRICT_TRANSPORT_SECURITY=Strict-Transport-Security,
+      TE=TE, TRAILER=Trailer, TRANSFER_ENCODING=Transfer-Encoding, UPGRADE=Upgrade,
+      USER_AGENT=User-Agent, VARY=Vary, VIA=Via, WARNING=Warning, WWW_AUTHENTICATE=WWW-Authenticate,
+      X_ACCEL_BUFFERING=X-Accel-Buffering, X_CONTENT_TYPE_OPTIONS=X-Content-Type-Options,
+      X_FORWARDED_FOR=X-Forwarded-For, X_FORWARDED_PROTO=X-Forwarded-Proto, X_FRAME_OPTIONS=X-Frame-Options,
+      X_HTTP_METHOD_OVERRIDE=X-HTTP-Method-Override, X_PERMITTED_CROSS_DOMAIN_POLICIES=X-Permitted-Cross-Domain-Policies}'
 functions:
   - name: newServer
     args: 'config = {}'

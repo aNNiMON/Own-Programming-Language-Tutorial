@@ -123,17 +123,29 @@ public final class ValueUtils {
         return ((FunctionValue) value).getValue();
     }
 
-    @SuppressWarnings("unchecked")
     public static <T extends Number> MapValue collectNumberConstants(Class<?> clazz, Class<T> type) {
+        return collectConstants(clazz, type, NumberValue::of);
+    }
+
+    public static <T extends String> MapValue collectStringConstants(Class<?> clazz) {
+        return collectConstants(clazz, String.class, StringValue::new);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T, V extends Value> MapValue collectConstants(Class<?> clazz, Class<T> type, FieldConverter<? super T, ? extends V> converter) {
         MapValue result = new MapValue(20);
         for (Field field : clazz.getDeclaredFields()) {
             if (!Modifier.isStatic(field.getModifiers())) continue;
             if (!field.getType().equals(type)) continue;
             try {
-                result.set(field.getName(), NumberValue.of((T) field.get(type)));
+                result.set(field.getName(), converter.convert((T) field.get(type)));
             } catch (IllegalAccessException ignore) {
             }
         }
         return result;
+    }
+
+    private interface FieldConverter<T, V> {
+        V convert(T input) throws IllegalAccessException;
     }
 }

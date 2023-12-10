@@ -9,7 +9,6 @@ import com.annimon.ownlang.parser.Parser;
 import com.annimon.ownlang.parser.SourceLoader;
 import com.annimon.ownlang.parser.Token;
 import com.annimon.ownlang.parser.ast.Node;
-import com.annimon.ownlang.parser.ast.Statement;
 import com.annimon.ownlang.parser.visitors.FunctionAdder;
 import java.io.File;
 import java.io.IOException;

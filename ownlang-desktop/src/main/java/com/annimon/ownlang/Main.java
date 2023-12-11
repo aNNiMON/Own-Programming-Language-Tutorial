@@ -178,7 +178,7 @@ public final class Main {
                 System.out.println(stagesData.getOrDefault(OptimizationStage.TAG_OPTIMIZATION_SUMMARY, ""));
             }
             if (options.showMeasurements) {
-                System.out.println("======================");
+                System.out.println("=".repeat(25));
                 System.out.println(measurement.summary(TimeUnit.MILLISECONDS, true));
             }
         }

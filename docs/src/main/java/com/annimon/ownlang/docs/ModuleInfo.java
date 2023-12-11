@@ -20,6 +20,10 @@ public class ModuleInfo {
         types = new ArrayList<>();
     }
 
+    public String name() {
+        return name;
+    }
+
     public List<Map<String, Object>> functions() {
         return functions.stream().sorted()
                 .map(f -> {
@@ -62,8 +66,8 @@ public class ModuleInfo {
     public Map<String, Object> info() {
         final Map<String, Object> result = new LinkedHashMap<>();
         result.put("name", name);
-        result.put("scope", "both");
         result.put("since", "%d.%d.%d".formatted(Version.VERSION_MAJOR, Version.VERSION_MINOR, Version.VERSION_PATCH));
+        result.put("scope", "both");
         result.put("constants", constants());
         result.put("functions", functions());
         if (!types.isEmpty()) {

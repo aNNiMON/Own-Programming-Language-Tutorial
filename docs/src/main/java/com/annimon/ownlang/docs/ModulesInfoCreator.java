@@ -48,11 +48,16 @@ public final class ModulesInfoCreator {
         options.setIndent(2);
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        final List<Map<String, Object>> infos = new ArrayList<>();
+        final Yaml yaml = new Yaml(options);
         for (ModuleInfo moduleInfo : moduleInfos) {
-            infos.add(moduleInfo.info());
+            final String separator = "-".repeat(moduleInfo.name().length() + 12);
+            System.out.println(separator);
+            System.out.print("--- ");
+            System.out.print(moduleInfo.name() + ".yml");
+            System.out.println(" ---");
+            System.out.println(separator);
+            System.out.println(yaml.dump(moduleInfo.info()));
         }
-        System.out.println(new Yaml(options).dump(infos));
     }
 
     private static List<String> listValues(Class<?> moduleClass) {

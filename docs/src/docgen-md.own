@@ -136,12 +136,7 @@ def writeFunctions(f, functions, lang, level = 2) {
     writeDescription(f, info, lang, " — %s")
     writeLine(f, "")
 
-    example = getValue(info, "example", lang)
-    if (length(example ?? "")) {
-      writeLine(f, "\n```own")
-      writeLine(f, example)
-      writeLine(f, "```")
-    }
+    writeExample(f, info, lang)
   }
 }
 
@@ -155,6 +150,7 @@ def writeTypes(f, types, lang) {
     writeDescription(f, info, lang, "%s\n")
     writeFunctions(f, info.functions ?? [], lang, 4);
     writeLine(f, "")
+    writeExample(f, info, lang)
   }
 }
 
@@ -176,6 +172,15 @@ def writeSince(f, version, lang, isInline = false) {
     writeText(f, "<Since version=\"%s\" />".sprintf(version))
   } else {
     writeText(f, "<Since text=\"%s\" version=\"%s\" />".sprintf(messages.since[lang], version))
+  }
+}
+
+def writeExample(f, info, lang) {
+  example = getValue(info, "example", lang)
+  if (length(example ?? "")) {
+    writeLine(f, "\n```own")
+    writeLine(f, example)
+    writeLine(f, "```")
   }
 }
 

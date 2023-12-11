@@ -1,7 +1,6 @@
 package com.annimon.ownlang.modules.http;
 
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
-import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -31,65 +30,59 @@ public final class http_http implements Function {
     @Override
     public Value execute(Value[] args) {
         String url, method;
+        Function function;
         switch (args.length) {
             case 1: // http(url)
                 url = args[0].asString();
                 return process(url, "GET");
-                
+
             case 2: // http(url, method) || http(url, callback)
                 url = args[0].asString();
                 if (args[1].type() == Types.FUNCTION) {
-                    return process(url, "GET", (FunctionValue) args[1]);
+                    return process(url, "GET", ValueUtils.consumeFunction(args[1], 1));
                 }
                 return process(url, args[1].asString());
-                
+
             case 3: // http(url, method, params) || http(url, method, callback)
                 url = args[0].asString();
                 method = args[1].asString();
                 if (args[2].type() == Types.FUNCTION) {
-                    return process(url, method, (FunctionValue) args[2]);
+                    return process(url, method, ValueUtils.consumeFunction(args[2], 2));
                 }
-                return process(url, method, args[2], FunctionValue.EMPTY);
-                
+                return process(url, method, args[2], FunctionValue.EMPTY.getValue());
+
             case 4: // http(url, method, params, callback)
-                if (args[3].type() != Types.FUNCTION) {
-                    throw new TypeException("Fourth arg must be a function callback");
-                }
                 url = args[0].asString();
                 method = args[1].asString();
-                return process(url, method, args[2], (FunctionValue) args[3]);
-                
+                function = ValueUtils.consumeFunction(args[3], 3);
+                return process(url, method, args[2], function);
+
             case 5: // http(url, method, params, headerParams, callback)
-                if (args[3].type() != Types.MAP) {
-                    throw new TypeException("Third arg must be a map");
-                }
-                if (args[4].type() != Types.FUNCTION) {
-                    throw new TypeException("Fifth arg must be a function callback");
-                }
                 url = args[0].asString();
                 method = args[1].asString();
-                return process(url, method, args[2], (MapValue) args[3], (FunctionValue) args[4]);
-                
+                MapValue options = ValueUtils.consumeMap(args[3], 3);
+                function = ValueUtils.consumeFunction(args[4], 4);
+                return process(url, method, args[2], options, function);
+
             default:
                 throw new ArgumentsMismatchException("From 1 to 5 arguments expected, got " + args.length);
         }
     }
     
     private Value process(String url, String method) {
-        return process(url, method, FunctionValue.EMPTY);
+        return process(url, method, FunctionValue.EMPTY.getValue());
     }
     
-    private Value process(String url, String method, FunctionValue function) {
-        return process(url, method, MapValue.EMPTY, function);
+    private Value process(String url, String method, Function callback) {
+        return process(url, method, MapValue.EMPTY, callback);
     }
 
-    private Value process(String url, String method, Value params, FunctionValue function) {
-        return process(url, method, params, MapValue.EMPTY, function);
+    private Value process(String url, String method, Value params, Function callback) {
+        return process(url, method, params, MapValue.EMPTY, callback);
     }
     
-    private Value process(String url, String methodStr, Value requestParams, MapValue options, FunctionValue function) {
+    private Value process(String url, String methodStr, Value requestParams, MapValue options, Function callback) {
         final String method = methodStr.toUpperCase();
-        final Function callback = function.getValue();
         try {
             final Request.Builder builder = new Request.Builder()
                     .url(url)

@@ -25,23 +25,17 @@ public final class robot_exec implements Function {
             final Process process;
             if (args.length > 1) {
                 process = Runtime.getRuntime().exec(toStringArray(args));
-            } else switch (args[0].type()) {
-                case Types.ARRAY:
-                    final ArrayValue array = (ArrayValue) args[0];
-                    process = Runtime.getRuntime().exec(toStringArray(array.getCopyElements()));
-                    break;
-                
-                default:
-                    process = Runtime.getRuntime().exec(args[0].asString());
+            } else if (args[0].type() == Types.ARRAY) {
+                final ArrayValue array = (ArrayValue) args[0];
+                process = Runtime.getRuntime().exec(toStringArray(array.getCopyElements()));
+            } else {
+                process = Runtime.getRuntime().exec(args[0].asString());
             }
-            
-            switch (mode) {
-                case EXEC_AND_WAIT:
-                    return NumberValue.of(process.waitFor());
-                case EXEC:
-                default:
-                    return NumberValue.ZERO;
+
+            if (mode == Mode.EXEC_AND_WAIT) {
+                return NumberValue.of(process.waitFor());
             }
+            return NumberValue.ZERO;
         } catch (Exception ex) {
             return NumberValue.ZERO;
         }

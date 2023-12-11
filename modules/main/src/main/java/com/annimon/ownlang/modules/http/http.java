@@ -19,9 +19,11 @@ public final class http implements Module {
 
     @Override
     public Map<String, Function> functions() {
+        final var httpFunctions = new HttpFunctions();
         return Map.of(
                 "urlencode", new http_urlencode(),
-                "http", new http_http(),
+                "http", httpFunctions::http,
+                "httpSync", httpFunctions::httpSync,
                 "download", new http_download()
         );
     }

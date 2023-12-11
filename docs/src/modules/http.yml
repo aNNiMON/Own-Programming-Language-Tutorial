@@ -4,8 +4,8 @@ desc: "Contains network functions"
 desc_ru: "Содержит функции для взаимодействия с сетью"
 constants: []
 functions:
-  - name: "http"
-    args: "url"
+  - name: http
+    args: "url, ..."
     desc: |-
       performs GET-request to `url`.
       
@@ -65,6 +65,18 @@ functions:
       http("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10}, def(v) {
         println "Added: " + v
       })
+  - name: httpSync
+    args: 'url, method = "GET", requestParams = {}, options = {}'
+    desc: Synchronous version of `http` function. See above for parameters description.
+    desc_ru: Синхронная версия функции `http`. См. выше описание параметров.
+    example: |-
+      use http
+      extract(isOk, content) = httpSync("http://jsonplaceholder.typicode.com/users", "POST", {"name": "OwnLang", "versionCode": 10})
+      if (isOk) {
+        println "Added: " + content
+      } else {
+        println "Failure"
+      }
   - name: "download"
     args: "url"
     desc: "downloads content by url as bytes array"

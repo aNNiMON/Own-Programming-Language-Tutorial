@@ -1,6 +1,5 @@
 package com.annimon.ownlang.modules.http;
 
-import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -14,7 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.http.HttpMethod;
 
-public final class http_http implements Function {
+public final class HttpFunctions {
     
     private static final Value
             HEADER_KEY = new StringValue("header"),
@@ -27,76 +26,92 @@ public final class http_http implements Function {
     
     private final OkHttpClient client = new OkHttpClient();
 
-    @Override
-    public Value execute(Value[] args) {
-        String url, method;
-        Function function;
+    public Value httpSync(Value[] args) {
+        Arguments.checkRange(1, 4, args.length);
+
+        String url = args[0].asString();
+        String method = (args.length >= 2) ? args[1].asString() : "GET";
+        Value requestParams = (args.length >= 3) ? args[2] : MapValue.EMPTY;
+        MapValue options = (args.length >= 4) ? ValueUtils.consumeMap(args[3], 3) : MapValue.EMPTY;
+
+        boolean isSuccessful;
+        Value result = options.containsKey(EXTENDED_RESULT) ? MapValue.EMPTY : StringValue.EMPTY;
+        try (Response response = executeRequest(url, method, requestParams, options)) {
+            isSuccessful = response.isSuccessful();
+            if (isSuccessful) {
+                result = getResult(response, options);
+            }
+        } catch (IOException ioe) {
+            isSuccessful = false;
+        }
+        return new ArrayValue(new Value[] {
+                NumberValue.fromBoolean(isSuccessful),
+                result
+        });
+    }
+
+    public Value http(Value[] args) {
+        Arguments.checkRange(1, 5, args.length);
+
+        String url = args[0].asString();
+        String method = "GET";
+        Value requestParams = MapValue.EMPTY;
+        MapValue options = MapValue.EMPTY;
+        Function callback = FunctionValue.EMPTY.getValue();
+
         switch (args.length) {
             case 1: // http(url)
-                url = args[0].asString();
-                return process(url, "GET");
+                break;
 
             case 2: // http(url, method) || http(url, callback)
-                url = args[0].asString();
                 if (args[1].type() == Types.FUNCTION) {
-                    return process(url, "GET", ValueUtils.consumeFunction(args[1], 1));
+                    callback = ValueUtils.consumeFunction(args[1], 1);
+                } else {
+                    method = args[1].asString();
                 }
-                return process(url, args[1].asString());
+                break;
 
             case 3: // http(url, method, params) || http(url, method, callback)
-                url = args[0].asString();
                 method = args[1].asString();
                 if (args[2].type() == Types.FUNCTION) {
-                    return process(url, method, ValueUtils.consumeFunction(args[2], 2));
+                    callback = ValueUtils.consumeFunction(args[2], 2);
+                } else {
+                    requestParams = args[2];
                 }
-                return process(url, method, args[2], FunctionValue.EMPTY.getValue());
+                break;
 
             case 4: // http(url, method, params, callback)
-                url = args[0].asString();
                 method = args[1].asString();
-                function = ValueUtils.consumeFunction(args[3], 3);
-                return process(url, method, args[2], function);
+                requestParams = args[2];
+                callback = ValueUtils.consumeFunction(args[3], 3);
+                break;
 
             case 5: // http(url, method, params, headerParams, callback)
-                url = args[0].asString();
                 method = args[1].asString();
-                MapValue options = ValueUtils.consumeMap(args[3], 3);
-                function = ValueUtils.consumeFunction(args[4], 4);
-                return process(url, method, args[2], options, function);
-
-            default:
-                throw new ArgumentsMismatchException("From 1 to 5 arguments expected, got " + args.length);
+                requestParams = args[2];
+                options = ValueUtils.consumeMap(args[3], 3);
+                callback = ValueUtils.consumeFunction(args[4], 4);
+                break;
         }
-    }
-    
-    private Value process(String url, String method) {
-        return process(url, method, FunctionValue.EMPTY.getValue());
-    }
-    
-    private Value process(String url, String method, Function callback) {
-        return process(url, method, MapValue.EMPTY, callback);
-    }
 
-    private Value process(String url, String method, Value params, Function callback) {
-        return process(url, method, params, MapValue.EMPTY, callback);
-    }
-    
-    private Value process(String url, String methodStr, Value requestParams, MapValue options, Function callback) {
-        final String method = methodStr.toUpperCase();
         try {
-            final Request.Builder builder = new Request.Builder()
-                    .url(url)
-                    .method(method, getRequestBody(method, requestParams, options));
-            if (options.containsKey(HEADER_KEY)) {
-                applyHeaderParams((MapValue) options.get(HEADER_KEY), builder);
-            }
-            
-            final Response response = client.newCall(builder.build()).execute();
+            final Response response = executeRequest(url, method, requestParams, options);
             callback.execute(getResult(response, options));
             return NumberValue.fromBoolean(response.isSuccessful());
         } catch (IOException ex) {
             return NumberValue.fromBoolean(false);
         }
+    }
+
+    private Response executeRequest(String url, String methodStr, Value requestParams, MapValue options) throws IOException {
+        final String method = methodStr.toUpperCase();
+        final Request.Builder builder = new Request.Builder()
+                .url(url)
+                .method(method, getRequestBody(method, requestParams, options));
+        if (options.containsKey(HEADER_KEY)) {
+            applyHeaderParams((MapValue) options.get(HEADER_KEY), builder);
+        }
+        return client.newCall(builder.build()).execute();
     }
 
     private Value getResult(Response response, MapValue options) throws IOException {

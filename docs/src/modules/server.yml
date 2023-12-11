@@ -227,7 +227,7 @@ types:
         desc: returns an User-Agent header
         desc_ru: возвращает заголовок User-Agent
   - name: Config
-    desc: |-
+    example: |-
       {
         "webjars": true,
         "classpathDirs": ["dir1", "dir2"],

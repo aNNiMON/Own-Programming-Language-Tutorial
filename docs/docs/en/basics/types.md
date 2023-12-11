@@ -7,6 +7,7 @@ OwnLang types are:
  * Array - arrays
  * Map - objects (an associative arrays)
  * Function - functions
+ * Class
 
 Since OwnLang is dynamic programming language, which means that explicitly declare the types is not necessary.
 

@@ -28,6 +28,14 @@ tasks.register('generateMarkdownModules') {
     finalizedBy ownlangExec
 }
 
+tasks.register('runDocsDev', Exec) {
+    group = "documentation"
+    description = "Run sample program"
+    dependsOn generateMarkdownModules
+    workingDir '../docs/docs'
+    commandLine 'pnpm', 'docs:dev'
+}
+
 tasks.register('generateModuleInfo', JavaExec) {
     group = "documentation"
     description = "Run sample program"

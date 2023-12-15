@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.annimon'
-version = '2.0-SNAPSHOT'
+version = versions.project
 
 dependencies {
     implementation "org.json:json:${versions.json}"

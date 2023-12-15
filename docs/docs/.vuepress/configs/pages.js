@@ -4,7 +4,8 @@ export default {
     text: {'en': 'OwnLang', 'ru': 'OwnLang'},
     pages: [
       'README.md',
-      'links.md'
+      'links.md',
+      'changelog.md',
     ]
   },
 

@@ -1,5 +1,7 @@
 ext {
     versions = [
+            project: '2.0.0',
+
             json: '20230227', // org.json:json
             snakeyaml: '1.20', // org.yaml:snakeyaml
             okhttp: '3.8.1', // com.squareup.okhttp3:okhttp

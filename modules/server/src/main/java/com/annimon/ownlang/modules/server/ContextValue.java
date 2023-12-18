@@ -35,17 +35,24 @@ class ContextValue extends MapValue {
         set("host", Converters.voidToString(ctx::host));
         set("html", stringToContext(ctx::html));
         set("ip", Converters.voidToString(ctx::ip));
+        set("isHttpMethod", Converters.voidToBoolean(() -> ctx.method().isHttpMethod()));
+        set("isMultipart", Converters.voidToBoolean(ctx::isMultipart));
+        set("isMultipartFormData", Converters.voidToBoolean(ctx::isMultipartFormData));
         set("json", objectToContext(ctx::json));
         set("jsonStream", objectToContext(ctx::jsonStream));
         set("matchedPath", Converters.voidToString(ctx::matchedPath));
+        set("method", Converters.voidToString(() -> ctx.method().name()));
         set("path", Converters.voidToString(ctx::path));
+        set("pathParam", Converters.stringToString(ctx::pathParam));
         set("port", Converters.voidToInt(ctx::port));
         set("protocol", Converters.voidToString(ctx::protocol));
+        set("queryParam", Converters.stringToString(ctx::queryParam));
         set("queryString", Converters.voidToString(ctx::queryString));
         set("redirect", this::redirect);
         set("removeCookie", this::removeCookie);
         set("render", this::render);
         set("result", this::result);
+        set("status", this::status);
         set("statusCode", Converters.voidToInt(ctx::statusCode));
         set("scheme", Converters.voidToString(ctx::scheme));
         set("url", Converters.voidToString(ctx::url));
@@ -146,6 +153,21 @@ class ContextValue extends MapValue {
                 ctx.result(ValueUtils.toByteArray((ArrayValue) arg));
             } else {
                 ctx.result(arg.asString());
+            }
+            return this;
+        }
+    }
+
+    private Value status(Value[] args) {
+        Arguments.checkOrOr(0, 1, args.length);
+        if (args.length == 0) {
+            return new StringValue(ctx.status().name());
+        } else {
+            final var arg = args[0];
+            if (arg.type() == Types.NUMBER) {
+                ctx.status(arg.asInt());
+            } else {
+                ctx.status(HttpStatus.valueOf(arg.asString()));
             }
             return this;
         }

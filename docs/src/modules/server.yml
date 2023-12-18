@@ -161,11 +161,23 @@ types:
       - name: html
         args: 'html'
         desc: sets result to the specified html string. Also sets Content-Type header to text/html
-        desc_ru: устанавливает указанныую html-строку в качестве результата. Также устанавливает заголовок Content-Type в text/html
+        desc_ru: устанавливает указанную html-строку в качестве результата. Также устанавливает заголовок Content-Type в text/html
       - name: ip
         args: ''
         desc: returns an IP address
         desc_ru: возвращает IP адрес
+      - name: isHttpMethod
+        args: ''
+        desc: returns true if the request is http method
+        desc_ru: возвращает true, если запрос — http метод
+      - name: isMultipartFormData
+        args: ''
+        desc: returns true if the request is multipart/formdata
+        desc_ru: возвращает true, если запрос — multipart/formdata
+      - name: isMultipart
+        args: ''
+        desc: returns true if the request is multipart
+        desc_ru: возвращает true, если запрос — multipart
       - name: json
         args: 'obj'
         desc: serializes an object to json string and sets it as the result
@@ -178,10 +190,18 @@ types:
         args: ''
         desc: returns a matched request path
         desc_ru: возвращает совпавший путь запроса
+      - name: method
+        args: ''
+        desc: returns a method (GET, POST, ...)
+        desc_ru: возвращает метод (GET, POST, ...)
       - name: path
         args: ''
         desc: returns a request path
         desc_ru: возвращает путь запроса
+      - name: pathParam
+        args: 'key'
+        desc: returns a request path parameter
+        desc_ru: возвращает параметр пути запроса
       - name: port
         args: ''
         desc: returns a port number
@@ -190,6 +210,10 @@ types:
         args: ''
         desc: returns a protocol
         desc_ru: возвращает протокол
+      - name: queryParam
+        args: 'key'
+        desc: returns a query parameter
+        desc_ru: возвращает параметр запроса
       - name: queryString
         args: ''
         desc: returns a query string
@@ -210,6 +234,10 @@ types:
         args: 'value = ""'
         desc: gets or sets a result. `value` can be a string or a byte array
         desc_ru: получает или устанавливает результат. `value` может быть строкой или массивом байт
+      - name: status
+        args: 'status = ...'
+        desc: gets or sets a status code. `status` can be an integer status code (404, 500) or a string status name ("NOT_FOUND", "INTERNAL_SERVER_ERROR").
+        desc_ru: получает или устанавливает код статуса. `status` может быть числовым кодом (404, 500) или строкой имени статуса ("NOT_FOUND", "INTERNAL_SERVER_ERROR")
       - name: statusCode
         args: ''
         desc: returns a response status code

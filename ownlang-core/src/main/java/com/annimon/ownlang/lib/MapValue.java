@@ -104,7 +104,7 @@ public class MapValue implements Value, Iterable<Map.Entry<Value, Value>> {
 
     @Override
     public Object asJavaObject() {
-        Map<Object, Object> result = new HashMap<>(map.size());
+        Map<Object, Object> result = new LinkedHashMap<>(map.size());
         map.forEach((k, v) -> result.put(k.asJavaObject(), v.asJavaObject()));
         return result;
     }

@@ -1,0 +1,35 @@
+templates {
+  display: none;
+}
+
+#notes {
+  list-style-type: none;
+  padding: 0;
+}
+.note {
+  margin: 0;
+  padding: 0rem 0.3rem;
+}
+.note h4 {
+  margin: 0;
+}
+.note p {
+  color: #333;
+  margin-top: 0;
+}
+
+.new-note {
+  margin-bottom: 2rem;
+}
+.new-note input {
+  width: 15rem;
+  padding: 0.3rem;
+}
+.new-note button {
+  padding: 0.3rem 1rem;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}

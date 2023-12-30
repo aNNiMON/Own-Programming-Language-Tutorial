@@ -1,0 +1,20 @@
+use std, jdbc, server
+
+// curl -X POST http://localhost:8084/notes/ -d "New note 2"
+
+notes = []
+createNote("This is your first note.")
+
+def createNote(content) {
+  note = {"id": notes.length + 1, "content": content};
+  notes += note
+  return note
+}
+
+newServer({"externalDirs": ["notes_public"]})
+  .get("/notes", def(ctx) = ctx.json(notes))
+  .post("/notes", def(ctx) {
+    ctx.status(201)
+    ctx.json( createNote(ctx.body()) )
+  })
+  .start(8084)

@@ -1,0 +1,37 @@
+use std, jdbc, server
+
+// curl -X POST http://localhost:8084/notes/ -d "New note 2"
+
+conn = getConnection("jdbc:sqlite::memory:")
+st = conn.createStatement()
+st.executeUpdate("CREATE TABLE IF NOT EXISTS notes(id integer primary key, content string)")
+stAddNote = conn.prepareStatement("INSERT INTO notes(content) VALUES(?)", RETURN_GENERATED_KEYS)
+stGetNote = conn.prepareStatement("SELECT id, content FROM notes WHERE id = ?")
+
+createNote("This is your first note.")
+
+def getNotes() {
+  notes = []
+  rs = st.executeQuery("SELECT id, content FROM notes")
+  while (rs.next()) {
+    notes += {"id": rs.getInt(1), "content": rs.getString(2)}
+  }
+  rs.close()
+  return notes
+}
+
+def createNote(content) {
+  stAddNote.setString(1, content)
+  stAddNote.executeUpdate()
+  rs = stAddNote.getGeneratedKeys()
+  rs.next()
+  return {"id": rs.getLong(1) ?? -1, "content": content}
+}
+
+newServer({"dev": true, "externalDirs": ["notes_public"]})
+  .get("/notes", def(ctx) = ctx.json( getNotes() ))
+  .post("/notes", def(ctx) {
+    ctx.status(201)
+    ctx.json( createNote(ctx.body()) )
+  })
+  .start(8084)

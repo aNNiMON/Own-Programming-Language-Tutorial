@@ -1,0 +1,27 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Notes</title>
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+  <div class="notes">
+    <h2>Notes</h2>
+    <div class="new-note">
+      <input placeholder="Your note" />
+      <button onclick="addNote()">add</button>
+    </div>
+    <ul id="notes"></ul>
+  </div>
+  
+  <templates>
+    <ul name="note">
+      <li class="note">
+        <h4>Note 1</h4>
+        <p>Content</p>
+      </li>
+    </ul>
+  </templates>
+</body>
+<script src="notes.js"></script>
+</html>

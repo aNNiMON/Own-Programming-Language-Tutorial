@@ -7,7 +7,7 @@ import com.annimon.ownlang.lib.FunctionValue;
 import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 
-public final class functional_combine implements Function {
+final class functional_combine implements Function {
 
     @Override
     public Value execute(Value[] args) {

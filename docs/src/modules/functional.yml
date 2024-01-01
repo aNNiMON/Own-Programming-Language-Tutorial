@@ -128,6 +128,17 @@ functions:
       ]
       println groupby(data, def(e) = e.k1) // {"2"=[{k1=2, k2=x}], "4"=[{k1=4, k2=z}], "5"=[{k2=p, k1=5}]}
       println groupby(data, def(e) = e.k2) // {"x"=[{k1=2, k2=x}], "z"=[{k1=4, k2=z}], "p"=[{k2=p, k1=5}]}
+  - name: tomap
+    args: "data, keyMapper, valueMapper = def(v) = v, merger = def(oldValue, newValue) = newValue"
+    desc: "converts elements of an array or a map to a map based on `keyMapper` and `valueMapper` functions result. `merger` function resolves collisions"
+    desc_ru: "преобразует элементы массива или объекта в объект, основываясь на результате функций `keyMapper` и `valueMapper`. Функция `merger` используется для разрешения коллизий"
+    since: 2.0.0
+    example: |-
+      use functional
+      
+      data = ["apple", "banana"]
+      println tomap(data, def(str) = str.substring(0, 1)) // {"a": "apple", "b": "banana"}
+      println tomap(data, def(str) = str.substring(0, 1), ::toUpperCase) // {"a": "APPLE", "b": "BANANA"}
   - name: stream
     args: data
     desc: creates stream from data and returns `StreamValue`
@@ -229,6 +240,26 @@ types:
         args: ""
         desc: returns array of elements
         desc_ru: возвращает массив элементов
+      - name: toMap
+        args: "keyMapper, valueMapper = def(v) = v, merger = def(oldValue, newValue) = newValue"
+        desc: "converts elements to a map based on `keyMapper` and `valueMapper` functions result. `merger` function resolves collisions"
+        desc_ru: "преобразует элементы в объект, основываясь на результате функций `keyMapper` и `valueMapper`. Функция `merger` используется для разрешения коллизий"
+        since: 2.0.0
+      - name: anyMatch
+        args: predicate
+        desc: "returns `true` if there is any element matching the given `predicate`, otherwise returns `false`"
+        desc_ru: "возвращает `true`, если хотя бы один элемент удовлетворяет функции `predicate`, иначе возвращает `false`"
+        since: 2.0.0
+      - name: allMatch
+        args: predicate
+        desc: "returns `true` if all elements match the given `predicate`, otherwise returns `false`"
+        desc_ru: "возвращает `true`, если все элементы удовлетворяют функции `predicate`, иначе возвращает `false`"
+        since: 2.0.0
+      - name: noneMatch
+        args: predicate
+        desc: "returns `true` if no elements match the given `predicate`, otherwise returns `false`"
+        desc_ru: "возвращает `true`, если нет элементов, удовлетворяющих функции `predicate`, иначе возвращает `false`"
+        since: 2.0.0
       - name: count
         args: ""
         desc: returns the elements count

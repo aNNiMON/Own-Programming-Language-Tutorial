@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.ValueUtils;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public final class functional_sortBy implements Function {
+final class functional_sortBy implements Function {
 
     @Override
     public Value execute(Value[] args) {

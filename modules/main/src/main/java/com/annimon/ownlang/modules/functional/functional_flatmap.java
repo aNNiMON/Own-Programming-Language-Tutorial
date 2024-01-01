@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.ValueUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class functional_flatmap implements Function {
+final class functional_flatmap implements Function {
 
     @Override
     public Value execute(Value[] args) {

@@ -28,6 +28,7 @@ public final class functional implements Module {
         result.put("takewhile", new functional_takeWhile());
         result.put("dropwhile", new functional_dropWhile());
         result.put("groupby", new functional_groupBy());
+        result.put("tomap", new functional_toMap());
 
         result.put("chain", new functional_chain());
         result.put("stream", new functional_stream());

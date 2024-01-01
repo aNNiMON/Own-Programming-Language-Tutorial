@@ -3,7 +3,7 @@ package com.annimon.ownlang.modules.functional;
 import com.annimon.ownlang.exceptions.TypeException;
 import com.annimon.ownlang.lib.*;
 
-public final class functional_stream implements Function {
+final class functional_stream implements Function {
 
     @Override
     public Value execute(Value[] args) {

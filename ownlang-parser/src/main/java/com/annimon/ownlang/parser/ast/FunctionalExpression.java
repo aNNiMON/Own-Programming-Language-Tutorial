@@ -54,6 +54,9 @@ public final class FunctionalExpression extends InterruptableNode
     
     private Function consumeFunction(Node expr) {
         final Value value = expr.eval();
+        if (value == null) {
+            throw new UnknownFunctionException(expr.toString(), getRange());
+        }
         if (value.type() == Types.FUNCTION) {
             return ((FunctionValue) value).getValue();
         }

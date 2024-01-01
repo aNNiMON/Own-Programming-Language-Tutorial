@@ -1,0 +1,39 @@
+use std, functional
+
+def testArrayToMapByKeyMapper() {
+  data = ["apple", "banana", "cherry"]
+  result = tomap(data, def(str) = str.substring(0, 1))
+  assertEquals("apple", result.a)
+  assertEquals("banana", result.b)
+  assertEquals("cherry", result.c)
+}
+
+def testArrayToMapByKeyValueMapper() {
+  data = ["apple", "banana", "cherry"]
+  result = tomap(data, def(str) = str.substring(0, 1), ::toUpperCase)
+  assertEquals("APPLE", result.a)
+  assertEquals("BANANA", result.b)
+  assertEquals("CHERRY", result.c)
+}
+
+def testArrayToMapByKeyValueMapperAndMerger() {
+  data = ["apple", "banana", "cherry", "apricot", "coconut"]
+  result = tomap(data, def(str) = str.substring(0, 1), ::toUpperCase, def(oldValue, newValue) = oldValue + ", " + newValue)
+  assertEquals("APPLE, APRICOT", result.a)
+  assertEquals("BANANA", result.b)
+  assertEquals("CHERRY, COCONUT", result.c)
+}
+
+def testMapToMapByKeyMapper() {
+  data = {"k1": 1, "k2": 2}
+  result = tomap(data, def(k, v) = k + "" + v)
+  assertEquals(1, result.k11)
+  assertEquals(2, result.k22)
+}
+
+def testMapToMapByKeyValueMapper() {
+  data = {"k1": 1, "k2": 2}
+  result = tomap(data, def(k, v) = k + "" + v, def(k, v) = v + 10)
+  assertEquals(11, result.k11)
+  assertEquals(12, result.k22)
+}

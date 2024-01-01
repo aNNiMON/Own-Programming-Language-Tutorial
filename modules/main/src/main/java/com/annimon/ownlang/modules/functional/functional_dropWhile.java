@@ -9,7 +9,7 @@ import com.annimon.ownlang.lib.Types;
 import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.ValueUtils;
 
-public final class functional_dropWhile implements Function {
+final class functional_dropWhile implements Function {
 
     @Override
     public Value execute(Value[] args) {

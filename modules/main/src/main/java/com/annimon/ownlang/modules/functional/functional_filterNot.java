@@ -2,7 +2,7 @@ package com.annimon.ownlang.modules.functional;
 
 import com.annimon.ownlang.lib.*;
 
-public final class functional_filterNot implements Function {
+final class functional_filterNot implements Function {
 
     @Override
     public Value execute(Value[] args) {

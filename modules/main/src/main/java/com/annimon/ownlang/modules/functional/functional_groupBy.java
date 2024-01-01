@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class functional_groupBy implements Function {
+final class functional_groupBy implements Function {
 
     @Override
     public Value execute(Value[] args) {

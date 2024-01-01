@@ -10,7 +10,7 @@ import com.annimon.ownlang.lib.Value;
 import com.annimon.ownlang.lib.ValueUtils;
 import java.util.Map;
 
-public final class functional_map implements Function {
+final class functional_map implements Function {
 
     @Override
     public Value execute(Value[] args) {

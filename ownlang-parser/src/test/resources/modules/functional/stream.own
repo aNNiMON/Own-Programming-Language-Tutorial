@@ -125,3 +125,32 @@ def testMapsGroupBy() {
   assertEquals([["test1", 234], ["test2", 345], ["test3", 456]], sort(result[true]))
   assertEquals([["abc", 123], ["def", 567]], sort(result[false]))
 }
+
+def testToMap() {
+  data = ["apple", "banana", "cherry"]
+  result = stream(data)
+    .toMap(def(str) = str.substring(0, 1), ::toUpperCase)
+  assertEquals("APPLE", result.a)
+  assertEquals("BANANA", result.b)
+  assertEquals("CHERRY", result.c)
+}
+
+def testAllMatch() {
+  data = [2, 4, 8, 20]
+  assertTrue(stream(data).allMatch(def(v) = v % 2 == 0))
+  assertFalse(stream(data).allMatch(def(v) = v < 10))
+}
+
+def testAnyMatch() {
+  data = [2, 4, 8, 20]
+  assertTrue(stream(data).anyMatch(def(v) = v > 10))
+  assertFalse(stream(data).anyMatch(def(v) = v % 2 == 1))
+}
+
+def testNoneMatch() {
+  data = [2, 4, 8, 20]
+  assertTrue(stream(data).noneMatch(def(v) = v % 2 == 1))
+  assertFalse(stream(data).noneMatch(def(v) = v > 10))
+}
+
+

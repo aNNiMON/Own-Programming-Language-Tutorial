@@ -2,6 +2,7 @@ package com.annimon.ownlang.modules.functional;
 
 import com.annimon.ownlang.exceptions.ArgumentsMismatchException;
 import com.annimon.ownlang.lib.*;
+import com.annimon.ownlang.modules.functional.functional_match.MatchType;
 import java.util.Arrays;
 
 class StreamValue extends MapValue {
@@ -33,6 +34,10 @@ class StreamValue extends MapValue {
         set("forEachIndexed", wrapTerminal(new functional_forEachIndexed()));
         set("groupBy", wrapTerminal(new functional_groupBy()));
         set("toArray", args -> container);
+        set("toMap", wrapTerminal(new functional_toMap()));
+        set("anyMatch", wrapTerminal(functional_match.match(MatchType.ANY)));
+        set("allMatch", wrapTerminal(functional_match.match(MatchType.ALL)));
+        set("noneMatch", wrapTerminal(functional_match.match(MatchType.NONE)));
         set("joining", container::joinToString);
         set("count", args -> NumberValue.of(container.size()));
     }

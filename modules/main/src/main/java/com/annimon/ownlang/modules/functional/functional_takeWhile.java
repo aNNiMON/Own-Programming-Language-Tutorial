@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public final class functional_takeWhile implements Function {
+final class functional_takeWhile implements Function {
 
     @Override
     public Value execute(Value[] args) {

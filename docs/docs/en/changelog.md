@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.0.0
+
+### Breaking changes
+- Minimal Java version is 17. 
+- Simplified use statement. `use std, math` instead of `use ["std", "math"]`.
+- Change `case [x]` behavior in list pattern matching to match single element.
+- More strict lexer. Fixed escaping backslash in strings. Fixed HEX numbers println 0x０１２３４５６７８９, 0x०१२३४५६७८९.
+
+### Changes
+- Introducing Constants. Constant can be imported only when using a module.
+- Fixed variables scope in shadowing.
+- Better error visualizing. Parse errors shows exact line in which an error occurs. Same for Linter and Runtime errors.
+- Semantic linter as a required stage.
+- Preserve the order of Map elements by default.
+- Ability to run programs from resources by adding "resource:" prefix to path.
+- Updated documentation. New documentation engine.
+
+### Modules
+- [std] Added parseDouble, nanotime, exit, getenv, getprop functions.
+- [http] Added httpSync function.
+- [functional] Added groupby, tomap, Stream.groupBy, Stream.filterNot, Stream.forEachIndexed, Stream::toMap, Stream.anyMatch, Stream.allMatch, Stream.noneMatch operators.
+- [canvasfx] Works for Java 17+ with Java FX 17 (Windows only).
+- [server] New server module.
+
+
 ## 1.5.0
 
 - Added modules `zip`, `gzip`, `okhttp`

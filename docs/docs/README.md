@@ -10,6 +10,6 @@ actions:
   - text: 🇷🇺 Русский
     link: /ru/
     type: primary
-footer: © 2023 aNNiMON
+footer: © 2024 aNNiMON
 ---
  

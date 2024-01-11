@@ -30,10 +30,18 @@ tasks.register('generateMarkdownModules') {
 
 tasks.register('runDocsDev', Exec) {
     group = "documentation"
-    description = "Run sample program"
+    description = "Start docs dev server"
     dependsOn generateMarkdownModules
     workingDir '../docs/docs'
     commandLine 'pnpm', 'docs:dev'
+}
+
+tasks.register('buildDocs', Exec) {
+    group = "documentation"
+    description = "Build docs to static site"
+    dependsOn generateMarkdownModules
+    workingDir '../docs/docs'
+    commandLine 'pnpm', 'docs:build'
 }
 
 tasks.register('generateModuleInfo', JavaExec) {

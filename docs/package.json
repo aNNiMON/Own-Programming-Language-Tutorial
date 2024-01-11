@@ -7,13 +7,18 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
-  "keywords": ["documentation", "ownlang", "programming-language"],
+  "keywords": [
+    "documentation",
+    "ownlang",
+    "programming-language"
+  ],
   "author": "aNNiMON",
   "license": "MIT",
   "devDependencies": {
     "@vuepress/client": "2.0.0-rc.0",
     "@vuepress/plugin-prismjs": "2.0.0-rc.0",
     "@vuepress/plugin-register-components": "2.0.0-rc.0",
+    "@vuepress/plugin-search": "2.0.0-rc.0",
     "@vuepress/utils": "2.0.0-rc.0",
     "prismjs": "^1.29.0",
     "vue": "^3.3.8",

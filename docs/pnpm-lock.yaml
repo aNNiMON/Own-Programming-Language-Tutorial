@@ -14,6 +14,9 @@ devDependencies:
   '@vuepress/plugin-register-components':
     specifier: 2.0.0-rc.0
     version: 2.0.0-rc.0
+  '@vuepress/plugin-search':
+    specifier: 2.0.0-rc.0
+    version: 2.0.0-rc.0
   '@vuepress/utils':
     specifier: 2.0.0-rc.0
     version: 2.0.0-rc.0
@@ -825,6 +828,22 @@ packages:
       '@vuepress/core': 2.0.0-rc.0
       '@vuepress/utils': 2.0.0-rc.0
       chokidar: 3.5.3
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - supports-color
+      - typescript
+    dev: true
+
+  /@vuepress/plugin-search@2.0.0-rc.0:
+    resolution: {integrity: sha512-1ikJUgIN+7QrcAftxpWUKTrNVHEN2+k/az0Sjz7Ok7EthMHcG6qQsIb+AoK4WIQMsJkwVPLxwym/M1FbBTZDWQ==}
+    dependencies:
+      '@vuepress/client': 2.0.0-rc.0
+      '@vuepress/core': 2.0.0-rc.0
+      '@vuepress/shared': 2.0.0-rc.0
+      '@vuepress/utils': 2.0.0-rc.0
+      chokidar: 3.5.3
+      vue: 3.3.8
+      vue-router: 4.2.5(vue@3.3.8)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - supports-color

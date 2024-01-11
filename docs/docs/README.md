@@ -7,7 +7,7 @@ actions:
   - text: 🇺🇸 English
     link: /en/
     type: primary
-  - text: 🇷🇺 Русский
+  - text: 🇪🇷 Русский
     link: /ru/
     type: primary
 footer: © 2024 aNNiMON

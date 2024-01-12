@@ -1,7 +1,5 @@
 # OwnLang
 
-[![Build Status](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial.svg?branch=latest)](https://travis-ci.org/aNNiMON/Own-Programming-Language-Tutorial)
-
 OwnLang - dynamic functional programming language inspired by Scala and Python. Available for PC, Android and Java ME devices.
 
 ## Installing
@@ -157,4 +155,4 @@ or
 
 ## License
 
-MIT - see [MIT licence information](LICENSE)
+MIT - see [MIT license information](LICENSE)

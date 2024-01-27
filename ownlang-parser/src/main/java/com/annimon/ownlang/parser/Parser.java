@@ -353,10 +353,10 @@ public final class Parser {
 
             if (lookMatch(0, TokenType.LPAREN)) {
                 // next function call
-                return functionChain(new ContainerAccessExpression(expr, indices));
+                return functionChain(new ContainerAccessExpression(expr, indices, getRange()));
             }
             // container access
-            return new ContainerAccessExpression(expr, indices);
+            return new ContainerAccessExpression(expr, indices, getRange());
         }
         return expr;
     }
@@ -532,7 +532,7 @@ public final class Parser {
         final BinaryExpression.Operator op = ASSIGN_OPERATORS.get(currentType);
         final Node expression = expression();
 
-        return new AssignmentExpression(op, (Accessible) targetExpr, expression);
+        return new AssignmentExpression(op, (Accessible) targetExpr, expression, getRange(position, index));
     }
 
     private Node ternary() {
@@ -765,9 +765,7 @@ public final class Parser {
                 args.add(expression());
                 match(TokenType.COMMA);
             }
-            final var expr = new ObjectCreationExpression(className, args);
-            expr.setRange(getRange(startTokenIndex, index - 1));
-            return expr;
+            return new ObjectCreationExpression(className, args, getRange(startTokenIndex, index - 1));
         }
         
         return unary();
@@ -859,12 +857,13 @@ public final class Parser {
         if (!match(TokenType.WORD)) return null;
 
         final List<Node> indices = variableSuffix();
+        final var variable = new VariableExpression(current.text());
+        variable.setRange(getRange(startTokenIndex, index - 1));
         if (indices == null || indices.isEmpty()) {
-            final var variable = new VariableExpression(current.text());
-            variable.setRange(getRange(startTokenIndex, index - 1));
             return variable;
+        } else {
+            return new ContainerAccessExpression(variable, indices, variable.getRange());
         }
-        return new ContainerAccessExpression(current.text(), indices);
     }
 
     private List<Node> variableSuffix() {
@@ -905,15 +904,16 @@ public final class Parser {
                 if (lookMatch(1, TokenType.WORD) && lookMatch(2, TokenType.LPAREN)) {
                     match(TokenType.DOT);
                     return functionChain(new ContainerAccessExpression(
-                            strExpr, Collections.singletonList(
-                                    new ValueExpression(consume(TokenType.WORD).text())
-                    )));
+                            strExpr,
+                            Collections.singletonList(new ValueExpression(consume(TokenType.WORD).text())),
+                            getRange()
+                    ));
                 }
                 final List<Node> indices = variableSuffix();
                 if (indices == null || indices.isEmpty()) {
                     return strExpr;
                 }
-                return new ContainerAccessExpression(strExpr, indices);
+                return new ContainerAccessExpression(strExpr, indices, getRange());
             }
             return strExpr;
         }

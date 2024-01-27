@@ -44,7 +44,7 @@ public final class ASTHelper {
     }
     
     public static AssignmentExpression assign(BinaryExpression.Operator op, Accessible accessible, Node expr) {
-        return new AssignmentExpression(op, accessible, expr);
+        return new AssignmentExpression(op, accessible, expr, null);
     }
     
     public static BinaryExpression operator(BinaryExpression.Operator op, Node left, Node right) {

@@ -31,7 +31,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         final Node exprNode = s.expression.accept(this, t);
         final Node targetNode = s.target.accept(this, t);
         if ( (exprNode != s.expression || targetNode != s.target) && (targetNode instanceof Accessible) ) {
-            return new AssignmentExpression(s.operation, (Accessible) targetNode, exprNode);
+            return new AssignmentExpression(s.operation, (Accessible) targetNode, exprNode, s.getRange());
         }
         return s;
     }
@@ -79,7 +79,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
             final AssignmentExpression newField;
             if (fieldExpr != field.expression) {
                 changed = true;
-                newField = new AssignmentExpression(field.operation, field.target, fieldExpr);
+                newField = new AssignmentExpression(field.operation, field.target, fieldExpr, field.getRange());
             } else {
                 newField = field;
             }
@@ -126,7 +126,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
             indices.add(node);
         }
         if (changed) {
-            return new ContainerAccessExpression(root, indices);
+            return new ContainerAccessExpression(root, indices, s.getRange());
         }
         return s;
     }
@@ -356,7 +356,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
         }
         
         if (changed) {
-            return new ObjectCreationExpression(s.className, args);
+            return new ObjectCreationExpression(s.className, args, s.getRange());
         }
         return s;
     }

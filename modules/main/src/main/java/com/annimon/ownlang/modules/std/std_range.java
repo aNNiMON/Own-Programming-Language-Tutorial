@@ -9,9 +9,9 @@ final class std_range implements Function {
     public Value execute(Value[] args) {
         Arguments.checkRange(1, 3, args.length);
         return switch (args.length) {
-            default -> RangeValue.of(0, getLong(args[0]), 1);
             case 2 -> RangeValue.of(getLong(args[0]), getLong(args[1]), 1);
             case 3 -> RangeValue.of(getLong(args[0]), getLong(args[1]), getLong(args[2]));
+            default -> RangeValue.of(0, getLong(args[0]), 1);
         };
     }
 
@@ -41,9 +41,13 @@ final class std_range implements Function {
             this.from = from;
             this.to = to;
             this.step = step;
-            final long base = (from < to) ? (to - from) : (from - to);
+
+            final long base = (from < to)
+                    ? Math.subtractExact(to, from)
+                    : Math.subtractExact(from, to);
             final long absStep = (step < 0) ? -step : step;
-            this.size = (int) (base / absStep + (base % absStep == 0 ? 0 : 1));
+            final long longSize = (base / absStep + (base % absStep == 0 ? 0 : 1));
+            this.size = longSize > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) longSize;
         }
 
         @Override
@@ -67,8 +71,9 @@ final class std_range implements Function {
         private boolean isIntegerRange() {
             if (to > 0) {
                 return (from > Integer.MIN_VALUE && to < Integer.MAX_VALUE);
+            } else {
+                return (to > Integer.MIN_VALUE && from < Integer.MAX_VALUE);
             }
-            return (to > Integer.MIN_VALUE && from < Integer.MAX_VALUE);
         }
 
         @Override
@@ -78,10 +83,12 @@ final class std_range implements Function {
 
         @Override
         public Value get(int index) {
+            long value = from + index * step;
             if (isIntegerRange()) {
-                return NumberValue.of((int) (from + index * step));
+                return NumberValue.of((int) (value));
+            } else {
+                return NumberValue.of(value);
             }
-            return NumberValue.of(from + (long) index * step);
         }
 
         @Override

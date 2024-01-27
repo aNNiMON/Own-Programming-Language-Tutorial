@@ -11,14 +11,11 @@ public final class ObjectCreationExpression implements Node, SourceLocation {
     
     public final String className;
     public final List<Node> constructorArguments;
-    private Range range;
+    private final Range range;
 
-    public ObjectCreationExpression(String className, List<Node> constructorArguments) {
+    public ObjectCreationExpression(String className, List<Node> constructorArguments, Range range) {
         this.className = className;
         this.constructorArguments = constructorArguments;
-    }
-
-    public void setRange(Range range) {
         this.range = range;
     }
 

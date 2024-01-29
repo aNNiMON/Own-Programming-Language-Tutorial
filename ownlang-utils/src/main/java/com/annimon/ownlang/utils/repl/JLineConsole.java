@@ -9,6 +9,7 @@ public class JLineConsole implements ReplConsole {
     private final ConsoleReader console;
 
     public JLineConsole() throws IOException {
+        System.setProperty(ConsoleReader.JLINE_EXPAND_EVENTS, "false");
         console = new ConsoleReader();
     }
 

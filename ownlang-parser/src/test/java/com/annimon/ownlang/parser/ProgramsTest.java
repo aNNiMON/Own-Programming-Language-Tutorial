@@ -2,8 +2,6 @@ package com.annimon.ownlang.parser;
 
 import com.annimon.ownlang.Console;
 import com.annimon.ownlang.exceptions.OwnLangParserException;
-import com.annimon.ownlang.lib.FunctionValue;
-import com.annimon.ownlang.lib.NumberValue;
 import com.annimon.ownlang.lib.ScopeHandler;
 import com.annimon.ownlang.parser.ast.ClassDeclarationStatement;
 import com.annimon.ownlang.parser.ast.FunctionDefineStatement;
@@ -42,51 +40,12 @@ public class ProgramsTest {
                 .then(new ParserStage())
                 .then(new LinterStage(LinterStage.Mode.SEMANTIC))
                 .thenConditional(true, new OptimizationStage(9))
-                .then(ProgramsTest::mockOUnit)
+                .then(new MockOUnitStage())
                 .then(new ExecutionStage())
                 .then((stagesData, input) -> {
                     input.accept(testFunctionsExecutor);
                     return input;
                 });
-    }
-
-    private static Node mockOUnit(StagesData stagesData, Node input) {
-        ScopeHandler.resetScope();
-        // Let's mock junit methods as ounit functions
-        ScopeHandler.setFunction("assertEquals", (args) -> {
-            assertEquals(args[0], args[1]);
-            return NumberValue.ONE;
-        });
-        ScopeHandler.setFunction("assertNotEquals", (args) -> {
-            assertNotEquals(args[0], args[1]);
-            return NumberValue.ONE;
-        });
-        ScopeHandler.setFunction("assertSameType", (args) -> {
-            assertEquals(args[0].type(), args[1].type());
-            return NumberValue.ONE;
-        });
-        ScopeHandler.setFunction("assertTrue", (args) -> {
-            assertTrue(args[0].asInt() != 0);
-            return NumberValue.ONE;
-        });
-        ScopeHandler.setFunction("assertFalse", (args) -> {
-            assertFalse(args[0].asInt() != 0);
-            return NumberValue.ONE;
-        });
-        ScopeHandler.setFunction("assertFail", (args) -> {
-            assertThrows(Throwable.class,
-                    () -> ((FunctionValue) args[0]).getValue().execute());
-            return NumberValue.ONE;
-        });
-        ScopeHandler.setFunction("fail", (args) -> {
-            if (args.length > 0) {
-                fail(args[0].asString());
-            } else {
-                fail();
-            }
-            return NumberValue.ONE;
-        });
-        return input;
     }
 
     @ParameterizedTest
@@ -119,7 +78,7 @@ public class ProgramsTest {
 
         @Override
         public void visit(ClassDeclarationStatement s) {
-
+            // skip for tests
         }
     };
 }

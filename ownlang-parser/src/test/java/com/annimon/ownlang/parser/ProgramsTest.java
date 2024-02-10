@@ -50,7 +50,7 @@ public class ProgramsTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testProgram(InputSource inputSource) {
+    void testProgram(InputSource inputSource) {
         final StagesDataMap stagesData = new StagesDataMap();
         try {
             testPipeline.perform(stagesData, inputSource);

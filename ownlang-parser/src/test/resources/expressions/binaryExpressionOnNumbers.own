@@ -14,6 +14,16 @@ def testMultiplicationOnNumbers() {
   assertEquals(30, 5 * (-2 * -3))
 }
 
+def testMultiplicationOverflowOnNumbers() {
+  assertNotEquals(1234567890000L, 1234567890 * 1000)
+  assertNotEquals(0xFFFFFF00, 0x100 * 0xFFFFFF)
+}
+
+def testMultiplicationOnLongNumbers() {
+  assertEquals(1234567890000L, 1234567890 * 1000L)
+  assertEquals(0xFFFFFF00L, 0x100L * 0xFFFFFF)
+}
+
 def testDivisionOnNumbers() {
   assertEquals(3, 6 / 2)
   assertEquals(30, -900 / (60 / -2))

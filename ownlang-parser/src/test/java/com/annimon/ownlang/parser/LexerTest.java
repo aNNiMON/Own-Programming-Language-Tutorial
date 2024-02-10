@@ -41,17 +41,17 @@ public class LexerTest {
     }
     
     @Test
-    public void testNumbers() {
-        String input = "0 3.1415 0xCAFEBABE 0Xf7_d6_c5 #FFFF";
+    void testNumbers() {
+        String input = "0 800L 3.1415 0xCAFEBABE 0Xf7_d6_c5 #FFFF 0x7FL";
         List<Token> result = Lexer.tokenize(input);
-        assertTokens(result, NUMBER, DECIMAL_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER);
+        assertTokens(result, NUMBER, LONG_NUMBER, DECIMAL_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_LONG_NUMBER);
         assertThat(result)
                 .extracting(Token::text)
-                .containsExactly("0", "3.1415", "CAFEBABE", "f7d6c5", "FFFF");
+                .containsExactly("0", "800", "3.1415", "CAFEBABE", "f7d6c5", "FFFF", "7F");
     }
 
     @Test
-    public void testDecimalNumbersExponent() {
+    void testDecimalNumbersExponent() {
         String input = "4e+7 0.3E-19 2e0 5e0000000000000200 5E-000000089";
         List<Token> result = Lexer.tokenize(input);
         assertThat(result)
@@ -61,7 +61,7 @@ public class LexerTest {
     }
     
     @Test
-    public void testString() {
+    void testString() {
         String input = "\"1\\\"2\"";
         List<Token> result = Lexer.tokenize(input);
         assertTokens(result, TEXT);
@@ -69,7 +69,7 @@ public class LexerTest {
     }
 
     @Test
-    public void testEscapeString() {
+    void testEscapeString() {
         String input = """
                 "\\\\/\\\\"
                 """.stripIndent();
@@ -79,7 +79,7 @@ public class LexerTest {
     }
     
     @Test
-    public void testEmptyString() {
+    void testEmptyString() {
         String input = "\"\"";
         List<Token> result = Lexer.tokenize(input);
         assertTokens(result, TEXT);
@@ -87,7 +87,7 @@ public class LexerTest {
     }
     
     @Test
-    public void testComments() {
+    void testComments() {
         String input = "// 1234 \n /* */ 123 /* \n 12345 \n\n\n */";
         List<Token> result = Lexer.tokenize(input);
         assertTokens(result, NUMBER);
@@ -96,7 +96,7 @@ public class LexerTest {
 
     @ParameterizedTest
     @MethodSource("validData")
-    public void testValidInput(String name, String input, List<TokenType> tokenTypes) throws IOException {
+    void testValidInput(String name, String input, List<TokenType> tokenTypes) throws IOException {
         List<Token> result = Lexer.tokenize(input);
         assertThat(result)
                 .hasSize(tokenTypes.size())
@@ -106,7 +106,7 @@ public class LexerTest {
 
     @ParameterizedTest
     @MethodSource("invalidData")
-    public void testInvalidInput(String name, String input) throws IOException {
+    void testInvalidInput(String name, String input) throws IOException {
         assertThatThrownBy(() -> Lexer.tokenize(input))
                 .isInstanceOf(OwnLangParserException.class);
     }

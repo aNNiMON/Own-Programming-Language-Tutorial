@@ -167,7 +167,8 @@ public final class Lexer {
         while (true) {
             if (current == '.') {
                 decimal = true;
-                if (hasDot) throw error("Invalid float number " + buffer, startPos);
+                if (hasDot)
+                    throw error("Invalid float number " + buffer, startPos);
                 hasDot = true;
             } else if (current == 'e' || current == 'E') {
                 decimal = true;
@@ -182,6 +183,9 @@ public final class Lexer {
         }
         if (decimal) {
             addToken(TokenType.DECIMAL_NUMBER, buffer.toString(), startPos);
+        } else if (current == 'L') {
+            next();
+            addToken(TokenType.LONG_NUMBER, buffer.toString(), startPos);
         } else {
             addToken(TokenType.NUMBER, buffer.toString(), startPos);
         }
@@ -232,7 +236,12 @@ public final class Lexer {
 
         if (buffer.isEmpty()) throw error("Empty HEX value", startPos);
         if (peek(-1) == '_') throw error("HEX value cannot end with _", startPos, markEndPos());
-        addToken(TokenType.HEX_NUMBER, buffer.toString(), startPos);
+        if (current == 'L') {
+            next();
+            addToken(TokenType.HEX_LONG_NUMBER, buffer.toString(), startPos);
+        } else {
+            addToken(TokenType.HEX_NUMBER, buffer.toString(), startPos);
+        }
     }
 
     private static boolean isNumber(char current) {

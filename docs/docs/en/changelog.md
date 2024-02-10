@@ -10,6 +10,7 @@
 
 ### Changes
 - Introducing Constants. Constant can be imported only when using a module.
+- Support for long number declaration: `700L`, `0xABL`
 - Fixed variables scope in shadowing.
 - Better error visualizing. Parse errors shows exact line in which an error occurs. Same for Linter and Runtime errors.
 - Semantic linter as a required stage.

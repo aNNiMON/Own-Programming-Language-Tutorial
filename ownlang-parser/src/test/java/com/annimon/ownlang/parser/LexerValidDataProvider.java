@@ -33,7 +33,10 @@ public class LexerValidDataProvider {
                         List.of(DECIMAL_NUMBER)),
                 Arguments.of("Hex numbers",
                         "#FF 0xCA 0x12fb 0xFF",
-                        List.of(HEX_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER))
+                        List.of(HEX_NUMBER, HEX_NUMBER, HEX_NUMBER, HEX_NUMBER)),
+                Arguments.of("Long numbers",
+                        "680L #80L 0x700L",
+                        List.of(LONG_NUMBER, HEX_LONG_NUMBER, HEX_LONG_NUMBER))
         );
     }
 

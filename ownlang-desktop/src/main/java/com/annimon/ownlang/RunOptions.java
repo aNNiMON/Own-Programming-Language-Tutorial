@@ -6,6 +6,7 @@ import static com.annimon.ownlang.util.input.InputSourceDetector.RESOURCE_PREFIX
 
 public class RunOptions {
     private static final String DEFAULT_PROGRAM = "program.own";
+    private static final String RES_SCRIPTS = "/scripts/";
 
     // input
     String programPath;
@@ -20,6 +21,13 @@ public class RunOptions {
     boolean showMeasurements;
 
     private final InputSourceDetector inputSourceDetector = new InputSourceDetector();
+
+    static RunOptions script(String name) {
+        final var options = new RunOptions();
+        options.programPath = InputSourceDetector.RESOURCE_PREFIX
+                + RES_SCRIPTS + name.toLowerCase() + ".own";
+        return options;
+    }
 
     boolean linterEnabled() {
         return lintMode != null && lintMode != LinterStage.Mode.NONE;

@@ -1,0 +1,6 @@
+println "Available scripts:
+  checkUpdate - checks updates on GitHub
+
+To run a script use command:
+ ownlang run checkUpdate
+"

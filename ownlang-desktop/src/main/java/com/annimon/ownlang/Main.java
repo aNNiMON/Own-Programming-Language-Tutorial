@@ -94,6 +94,17 @@ public final class Main {
                     Sandbox.main(createOwnLangArgs(args, i + 1));
                     return;
 
+                case "run":
+                    final String scriptName;
+                    if (i + 1 < args.length) {
+                        scriptName = args[i + 1];
+                        createOwnLangArgs(args, i + 2);
+                    } else {
+                        scriptName = "listScripts";
+                    }
+                    run(RunOptions.script(scriptName));
+                    return;
+
                 default:
                     if (options.programSource == null) {
                         options.programSource = args[i];
@@ -124,6 +135,7 @@ public final class Main {
                       -a, --showast       Show AST of program
                       -t, --showtokens    Show lexical tokens
                       -m, --showtime      Show elapsed time of parsing and execution
+                  ownlang run <scriptName>
                 """);
     }
 

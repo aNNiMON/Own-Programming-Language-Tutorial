@@ -13,3 +13,7 @@ import Prism from 'prismjs';
 import definePrismOwnLang from './prismjs/own-language.js'
 definePrismOwnLang(Prism)
 ```
+
+## GTKSourceView
+
+Place `ownlang.lang` in `/usr/share/gtksourceview-3.0/language-specs/ownlang.lang`

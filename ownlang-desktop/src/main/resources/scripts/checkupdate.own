@@ -1,0 +1,57 @@
+use std, types, http, functional, json, regex
+
+API_URL="https://api.github.com/repos/aNNiMON/Own-Programming-Language-Tutorial/releases"
+PATTERN_VERSION = Pattern.compile("v?(\\d+)\\.(\\d+)\\.(\\d+).*?")
+CURRENT_VERSION = [OwnLang.VERSION_MAJOR, OwnLang.VERSION_MINOR, OwnLang.VERSION_PATCH]
+
+def populateVersion(r) {
+  version = r.name ?? "0.0.0"
+  r.versionParts = getVersionParts(version);
+  return r
+}
+
+def getVersionParts(version) {
+  m = PATTERN_VERSION.matcher(version)
+  if (m.matches()) {
+    return [int(m.group(1)), int(m.group(2)), int(m.group(3))]
+  } else {
+    return [0, 0, 0]
+  }
+}
+
+def compareRelease(releaseVersion, currentVersion) {
+  extract(rmajor, rminor, rpatch) = releaseVersion
+  extract(cmajor, cminor, cpatch) = currentVersion
+  if (rmajor > cmajor) return 1
+  else if (rmajor < cmajor) return -1
+  else if (rminor > cminor) return 1
+  else if (rminor < cminor) return -1
+  else if (rpatch > cminor) return 1
+  else if (rpatch < cminor) return -1
+  else return 0
+}
+
+extract(status, data) = httpSync(API_URL)
+if (!status) {
+  println "Unable to get releases metadata"
+  exit(1)
+}
+
+newerVersions = stream(jsondecode(data))
+  .filter(def(r) = !r.draft && !r.prerelease)
+  .sortBy(def(r) = r.published_at)
+  .map(::populateVersion)
+  .dropWhile(def(r) = compareRelease(r.versionParts, CURRENT_VERSION) <= 0)
+  .toArray()
+
+if (newerVersions.isEmpty()) {
+  println "You're using the latest version: " + CURRENT_VERSION.joinToString(".")
+} else {
+  newestVersion = newerVersions[newerVersions.length - 1]
+  println "New version available: " + newestVersion.versionParts.joinToString(".")
+  println "Current version: " + CURRENT_VERSION.joinToString(".")
+  println newestVersion.html_url
+  println "\nWhat's new:"
+  println newestVersion.body
+}
+exit(0)

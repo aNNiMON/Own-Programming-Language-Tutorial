@@ -6,7 +6,6 @@ import com.annimon.ownlang.modules.Module;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import java.net.URISyntaxException;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -18,22 +17,11 @@ public final class socket implements Module {
 
     @Override
     public Map<String, Value> constants() {
-        final var result = new LinkedHashMap<String, Value>(15);
-        result.put("EVENT_CONNECT", new StringValue(Socket.EVENT_CONNECT));
-        result.put("EVENT_CONNECTING", new StringValue(Socket.EVENT_CONNECTING));
-        result.put("EVENT_CONNECT_ERROR", new StringValue(Socket.EVENT_CONNECT_ERROR));
-        result.put("EVENT_CONNECT_TIMEOUT", new StringValue(Socket.EVENT_CONNECT_TIMEOUT));
-        result.put("EVENT_DISCONNECT", new StringValue(Socket.EVENT_DISCONNECT));
-        result.put("EVENT_ERROR", new StringValue(Socket.EVENT_ERROR));
-        result.put("EVENT_MESSAGE", new StringValue(Socket.EVENT_MESSAGE));
-        result.put("EVENT_PING", new StringValue(Socket.EVENT_PING));
-        result.put("EVENT_PONG", new StringValue(Socket.EVENT_PONG));
-        result.put("EVENT_RECONNECT", new StringValue(Socket.EVENT_RECONNECT));
-        result.put("EVENT_RECONNECTING", new StringValue(Socket.EVENT_RECONNECTING));
-        result.put("EVENT_RECONNECT_ATTEMPT", new StringValue(Socket.EVENT_RECONNECT_ATTEMPT));
-        result.put("EVENT_RECONNECT_ERROR", new StringValue(Socket.EVENT_RECONNECT_ERROR));
-        result.put("EVENT_RECONNECT_FAILED", new StringValue(Socket.EVENT_RECONNECT_FAILED));
-        return result;
+        return Map.of(
+                "EVENT_CONNECT", new StringValue(Socket.EVENT_CONNECT),
+                "EVENT_CONNECT_ERROR", new StringValue(Socket.EVENT_CONNECT_ERROR),
+                "EVENT_DISCONNECT", new StringValue(Socket.EVENT_DISCONNECT)
+        );
     }
 
     @Override
@@ -71,37 +59,18 @@ public final class socket implements Module {
         }
 
         private void init() {
-            set("close", this::close);
-            set("connect", this::connect);
-            set("connected", this::connected);
-            set("disconnect", this::disconnect);
+            set("close", Converters.voidToVoid(socket::close));
+            set("connect", Converters.voidToVoid(socket::connect));
+            set("connected", Converters.voidToBoolean(socket::connected));
+            set("disconnect", Converters.voidToVoid(socket::disconnect));
             set("emit", this::emit);
             set("hasListeners", this::hasListeners);
-            set("id", this::id);
+            set("id", Converters.voidToString(socket::id));
             set("off", this::off);
             set("on", this::on);
             set("once", this::once);
-            set("open", this::open);
+            set("open", Converters.voidToVoid(socket::open));
             set("send", this::send);
-        }
-
-        private Value close(Value[] args) {
-            socket.close();
-            return this;
-        }
-
-        private Value connect(Value[] args) {
-            socket.connect();
-            return this;
-        }
-
-        private Value connected(Value[] args) {
-            return NumberValue.fromBoolean(socket.connected());
-        }
-
-        private Value disconnect(Value[] args) {
-            socket.disconnect();
-            return this;
         }
 
         private Value hasListeners(Value[] args) {
@@ -120,10 +89,6 @@ public final class socket implements Module {
             }
             socket.emit(event, ValueUtils.toObject(value));
             return this;
-        }
-
-        private Value id(Value[] args) {
-            return new StringValue(socket.id());
         }
 
         private Value off(Value[] args) {
@@ -153,11 +118,6 @@ public final class socket implements Module {
             socket.once(event, sArgs -> {
                 executeSocketListener(listener, sArgs);
             });
-            return this;
-        }
-
-        private Value open(Value[] args) {
-            socket.open();
             return this;
         }
 

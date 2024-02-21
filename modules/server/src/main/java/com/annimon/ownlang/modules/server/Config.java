@@ -61,16 +61,16 @@ class Config {
         ifNumber("maxRequestSize", value -> config.http.maxRequestSize = value.asLong());
 
         // routing
-        ifBoolean("caseInsensitiveRoutes", flag -> config.routing.caseInsensitiveRoutes = flag);
-        ifBoolean("ignoreTrailingSlashes", flag -> config.routing.ignoreTrailingSlashes = flag);
-        ifBoolean("multipleSlashesAsSingle", flag -> config.routing.treatMultipleSlashesAsSingleSlash = flag);
-        ifString("contextPath", path -> config.routing.contextPath = path);
+        ifBoolean("caseInsensitiveRoutes", flag -> config.router.caseInsensitiveRoutes = flag);
+        ifBoolean("ignoreTrailingSlashes", flag -> config.router.ignoreTrailingSlashes = flag);
+        ifBoolean("multipleSlashesAsSingle", flag -> config.router.treatMultipleSlashesAsSingleSlash = flag);
+        ifString("contextPath", path -> config.router.contextPath = path);
 
         // other
-        ifArray("basicAuth", arr -> config.plugins.enableBasicAuth(arr.get(0).asString(), arr.get(1).asString()));
+        ifArray("basicAuth", arr -> config.bundledPlugins.enableBasicAuth(arr.get(0).asString(), arr.get(1).asString()));
         ifBoolean("showBanner", flag -> config.showJavalinBanner = flag);
-        ifTrue("dev", config.plugins::enableDevLogging);
-        ifTrue("sslRedirects", config.plugins::enableSslRedirects);
+        ifTrue("dev", config.bundledPlugins::enableDevLogging);
+        ifTrue("sslRedirects", config.bundledPlugins::enableSslRedirects);
     }
 
     private void ifTrue(String key, Runnable action) {

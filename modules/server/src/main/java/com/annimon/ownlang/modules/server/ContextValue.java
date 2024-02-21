@@ -1,6 +1,7 @@
 package com.annimon.ownlang.modules.server;
 
 import com.annimon.ownlang.lib.*;
+import io.javalin.config.Key;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
@@ -12,12 +13,13 @@ class ContextValue extends MapValue {
     private final Context ctx;
 
     public ContextValue(@NotNull Context ctx) {
-        super(32);
+        super(40);
         this.ctx = ctx;
         init();
     }
 
     private void init() {
+        set("appData", this::appData);
         set("attribute", this::attribute);
         set("basicAuthCredentials", this::basicAuthCredentials);
         set("body", Converters.voidToString(ctx::body));
@@ -57,6 +59,12 @@ class ContextValue extends MapValue {
         set("scheme", Converters.voidToString(ctx::scheme));
         set("url", Converters.voidToString(ctx::url));
         set("userAgent", Converters.voidToString(ctx::userAgent));
+    }
+
+    private Value appData(Value[] args) {
+        Arguments.check(1, args.length);
+        String key = args[0].asString();
+        return ctx.appData(new Key<>(key));
     }
 
     private Value attribute(Value[] args) {

@@ -1,10 +1,8 @@
 package com.annimon.ownlang.modules.server;
 
-import com.annimon.ownlang.lib.ArrayValue;
-import com.annimon.ownlang.lib.NumberValue;
-import com.annimon.ownlang.lib.Types;
-import com.annimon.ownlang.lib.Value;
+import com.annimon.ownlang.lib.*;
 import io.javalin.config.JavalinConfig;
+import io.javalin.config.Key;
 import io.javalin.http.staticfiles.Location;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -21,6 +19,9 @@ import java.util.function.Consumer;
  *   "etags": true,
  *   "maxRequestSize": 1_000_000,
  *
+ *   "defaultHost": "localhost",
+ *   "defaultPort": 8000,
+ *
  *   "caseInsensitiveRoutes": true,
  *   "ignoreTrailingSlashes": true,
  *   "multipleSlashesAsSingle": true,
@@ -29,7 +30,12 @@ import java.util.function.Consumer;
  *   "basicAuth": ["user", "password"],
  *   "dev": true,
  *   "showBanner": false,
- *   "sslRedirects": true
+ *   "sslRedirects": true,
+ *   "virtualThreads": true,
+ *   "appData": {
+ *     "key1": "value1",
+ *     "key2": "value2"
+ *   }
  * }
  */
 
@@ -60,6 +66,10 @@ class Config {
         ifBoolean("etags", flag -> config.http.generateEtags = flag);
         ifNumber("maxRequestSize", value -> config.http.maxRequestSize = value.asLong());
 
+        // jetty
+        ifString("defaultHost", value -> config.jetty.defaultHost = value);
+        ifNumber("defaultPort", value -> config.jetty.defaultPort = value.asInt());
+
         // routing
         ifBoolean("caseInsensitiveRoutes", flag -> config.router.caseInsensitiveRoutes = flag);
         ifBoolean("ignoreTrailingSlashes", flag -> config.router.ignoreTrailingSlashes = flag);
@@ -71,6 +81,9 @@ class Config {
         ifBoolean("showBanner", flag -> config.showJavalinBanner = flag);
         ifTrue("dev", config.bundledPlugins::enableDevLogging);
         ifTrue("sslRedirects", config.bundledPlugins::enableSslRedirects);
+        ifBoolean("virtualThreads", flag -> config.useVirtualThreads = flag);
+        ifMap("appData", appData -> appData.getMapStringKeys()
+                .forEach((key, value) -> config.appData(new Key<>(key), value)));
     }
 
     private void ifTrue(String key, Runnable action) {
@@ -102,6 +115,14 @@ class Config {
         final Value value = map.get(key);
         if (value.type() == Types.ARRAY) {
             consumer.accept((ArrayValue) value);
+        }
+    }
+
+    private void ifMap(String key, Consumer<MapValue> consumer) {
+        if (!map.containsKey(key)) return;
+        final Value value = map.get(key);
+        if (value.type() == Types.MAP) {
+            consumer.accept((MapValue) value);
         }
     }
 }

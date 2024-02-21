@@ -96,6 +96,10 @@ types:
         desc_ru: Останавливает работу сервера
   - name: ContextValue
     functions:
+      - name: appData
+        args: 'key'
+        desc: gets an appData value by key. See config.appData
+        desc_ru: получает значение appData по ключу `key`. См. config.appData
       - name: attribute
         args: 'key, value = ""'
         desc: gets or sets an attribute by key
@@ -266,6 +270,9 @@ types:
         "etags": true,
         "maxRequestSize": 1_000_000,
       
+        "defaultHost": "localhost",
+        "defaultPort": 8000,
+      
         "caseInsensitiveRoutes": true,
         "ignoreTrailingSlashes": true,
         "multipleSlashesAsSingle": true,
@@ -274,5 +281,10 @@ types:
         "basicAuth": ["user", "password"],
         "dev": true,
         "showBanner": false,
-        "sslRedirects": true
+        "sslRedirects": true,
+        "virtualThreads": true,
+        "appData": {
+          "key1": "value1",
+          "key2": "value2"
+        }
       }

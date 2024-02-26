@@ -1,0 +1,53 @@
+name: docs
+
+on:
+  push:
+    branches: [ "latest" ]
+
+jobs:
+  docs-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16]
+        java: [21]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Install dependencies
+        run: cd docs && pnpm install
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+      - name: Build docs
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          arguments: buildDocs
+
+      - name: Clear docs
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: ${{ secrets.DOCS_CLEAR_SCRIPT }}
+      - name: Upload docs
+        uses:  appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          source: './docs/docs/.vuepress/dist/*'
+          target: ${{ secrets.DOCS_UPLOAD_PATH }}

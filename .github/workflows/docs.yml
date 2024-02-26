@@ -52,3 +52,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           source: './docs/docs/.vuepress/dist/*'
           target: ${{ secrets.DOCS_UPLOAD_PATH }}
+          strip_components: 4

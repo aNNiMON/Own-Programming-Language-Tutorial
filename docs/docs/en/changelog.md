@@ -16,7 +16,8 @@
 - Semantic linter as a required stage.
 - Preserve the order of Map elements by default.
 - Ability to run programs from resources by adding "resource:" prefix to path.
-- Updated documentation. New documentation engine.
+- Added internal scripts and command `ownlang run` to run them. Added script `checkUpdate` that checks app updates.
+- Updated [documentation](https://annimon.com/docs/ownlang/). New documentation engine based on vuepress.
 
 ### Modules
 - [std] Added parseDouble, nanotime, exit, getenv, getprop functions.

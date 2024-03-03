@@ -9,9 +9,6 @@ dependencies {
     compileOnlyApi project(":ownlang-core")
 
     implementation "com.squareup.okhttp3:okhttp:${versions.okhttp}"
-    implementation ("io.socket:socket.io-client:${versions.socket}") {
-        exclude group: 'org.json', module: 'json'
-    }
     implementation "org.json:json:${versions.json}"
     implementation "org.yaml:snakeyaml:${versions.snakeyaml}"
 

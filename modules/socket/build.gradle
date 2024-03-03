@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.annimon.module'
+version = '1.0.0'
+
+dependencies {
+    compileOnlyApi project(":ownlang-core")
+
+    implementation ("io.socket:socket.io-client:${versions.socket}") {
+        exclude group: 'org.json', module: 'json'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
+    compileOnly "com.squareup.okhttp3:okhttp:${versions.okhttp}"
+    compileOnly "org.json:json:${versions.json}"
+
+    testImplementation platform("org.junit:junit-bom:${versions.junit}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

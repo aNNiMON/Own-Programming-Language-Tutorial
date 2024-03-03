@@ -7,6 +7,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import java.net.URISyntaxException;
 import java.util.Map;
+import static com.annimon.ownlang.lib.ValueUtils.getNumber;
 
 /**
  * socket.io module.
@@ -179,10 +180,5 @@ public final class socket implements Module {
             result.transports = values;
         });
         return result;
-    }
-
-    private static Number getNumber(Value value) {
-        if (value.type() != Types.NUMBER) return value.asInt();
-        return ((NumberValue) value).raw();
     }
 }

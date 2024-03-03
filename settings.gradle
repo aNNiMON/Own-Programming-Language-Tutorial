@@ -6,7 +6,7 @@ include 'ownlang-desktop'
 include 'ownlang-utils'
 include 'docs'
 
-final def modules = ['main', 'canvasfx', 'server']
+final def modules = ['main', 'canvasfx', 'jdbc', 'server']
 
 for (final def module in modules) {
     include "modules:$module"

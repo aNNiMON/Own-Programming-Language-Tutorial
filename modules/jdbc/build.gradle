@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.annimon.module'
+version = '1.0.0'
+
+dependencies {
+    compileOnlyApi project(":ownlang-core")
+
+    testImplementation platform("org.junit:junit-bom:${versions.junit}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

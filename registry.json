@@ -1,0 +1,11 @@
+{
+  "packages": {
+    "telegram-bot": {
+      "id": "18f1894447dfa72000a83011511a817c",
+      "type": "gist",
+      "description": "Telegram Bot API client",
+      "version": "1.0.0",
+      "author": "aNNiMON"
+    }
+  }
+}

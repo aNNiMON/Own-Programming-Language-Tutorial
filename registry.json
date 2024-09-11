@@ -1,5 +1,12 @@
 {
   "packages": {
+    "openai": {
+      "id": "f45b534f9ad63e3ae4058129adf52e97",
+      "type": "gist",
+      "description": "OpenAI client",
+      "version": "1.0.0",
+      "author": "aNNiMON"
+    },
     "telegram-bot": {
       "id": "18f1894447dfa72000a83011511a817c",
       "type": "gist",

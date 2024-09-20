@@ -4,7 +4,7 @@ ext {
 
             json: '20240303', // org.json:json
             snakeyaml: '1.33', // org.yaml:snakeyaml
-            okhttp: '3.14.9', // com.squareup.okhttp3:okhttp
+            okhttp: '4.12.0', // com.squareup.okhttp3:okhttp
             socket: '2.1.0', // io.socket:socket.io-client
             jline: '2.14.6', // jline:jline
 

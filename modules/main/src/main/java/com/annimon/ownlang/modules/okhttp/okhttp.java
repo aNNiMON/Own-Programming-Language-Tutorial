@@ -52,22 +52,23 @@ public final class okhttp implements Module {
                 bytesCount = args[3].asInt();
             }
             return new RequestBodyValue(RequestBody.create(
+                    bytes,
                     MediaType.parse(args[0].asString()),
-                    bytes, offset, bytesCount
+                    offset, bytesCount
             ));
         });
         requestBody.set("file", args -> {
             Arguments.check(2, args.length);
             return new RequestBodyValue(RequestBody.create(
-                    MediaType.parse(args[0].asString()),
-                    Console.fileInstance(args[1].asString())
+                    Console.fileInstance(args[1].asString()),
+                    MediaType.parse(args[0].asString())
             ));
         });
         requestBody.set("string", args -> {
             Arguments.check(2, args.length);
             return new RequestBodyValue(RequestBody.create(
-                    MediaType.parse(args[0].asString()),
-                    args[1].asString()
+                    args[1].asString(),
+                    MediaType.parse(args[0].asString())
             ));
         });
         return requestBody;

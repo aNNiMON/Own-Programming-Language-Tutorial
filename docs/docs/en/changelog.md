@@ -3,11 +3,12 @@
 ## Next
 
 ### Fixes
-- Fix passing command-line arguments to scripts
-- Fix `this` in non-static class methods
+- Fix passing command-line arguments to scripts.
+- Fix `this` in non-static class methods.
+- Fix program stucking if using any http call (okhttp issue).
 
 ### Modules
-- [okhttp] Added `okhttp.newClient()` and `HttpClientBuilderValue`
+- [okhttp] Added `okhttp.newClient()` and `HttpClientBuilderValue`.
 
 
 ## 2.0.0

@@ -177,9 +177,9 @@ public final class HttpFunctions {
         
         if (options.containsKey(CHARSET_KEY)) {
             final String charset = options.get(CHARSET_KEY).asString();
-            return RequestBody.create(type, params.asString().getBytes(charset));
+            return RequestBody.create(params.asString().getBytes(charset), type);
         }
         
-        return RequestBody.create(type, params.asString());
+        return RequestBody.create(params.asString(), type);
     }
 }

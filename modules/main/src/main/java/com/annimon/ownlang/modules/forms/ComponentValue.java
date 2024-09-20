@@ -111,7 +111,7 @@ public abstract class ComponentValue extends MapValue {
                 map.set("isControlDown", NumberValue.fromBoolean(e.isControlDown()));
                 map.set("isMetaDown", NumberValue.fromBoolean(e.isMetaDown()));
                 map.set("isShiftDown", NumberValue.fromBoolean(e.isShiftDown()));
-                map.set("modifiers", NumberValue.of(e.getModifiers()));
+                map.set("modifiers", NumberValue.of(e.getModifiersEx()));
                 action.execute(new StringValue(type), map);
             }
         });

@@ -38,9 +38,9 @@ public final class robot implements Module {
                 entry("VK_FIRE", NumberValue.of(KeyEvent.VK_ENTER)),
                 entry("VK_ESCAPE", NumberValue.of(KeyEvent.VK_ESCAPE)),
 
-                entry("BUTTON1", NumberValue.of(InputEvent.BUTTON1_MASK)),
-                entry("BUTTON2", NumberValue.of(InputEvent.BUTTON2_MASK)),
-                entry("BUTTON3", NumberValue.of(InputEvent.BUTTON3_MASK))
+                entry("BUTTON1", NumberValue.of(InputEvent.BUTTON1_DOWN_MASK)),
+                entry("BUTTON2", NumberValue.of(InputEvent.BUTTON2_DOWN_MASK)),
+                entry("BUTTON3", NumberValue.of(InputEvent.BUTTON3_DOWN_MASK))
         );
     }
 

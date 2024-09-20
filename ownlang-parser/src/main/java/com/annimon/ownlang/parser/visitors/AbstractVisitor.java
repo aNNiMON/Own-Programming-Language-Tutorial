@@ -1,5 +1,7 @@
 package com.annimon.ownlang.parser.visitors;
 
+import com.annimon.ownlang.lib.Types;
+import com.annimon.ownlang.lib.UserDefinedFunction;
 import com.annimon.ownlang.parser.ast.*;
 
 import java.util.Map;
@@ -183,6 +185,15 @@ public abstract class AbstractVisitor implements Visitor {
 
     @Override
     public void visit(ValueExpression s) {
+        if ( (s.value.type() == Types.FUNCTION) && (s.value.raw() instanceof UserDefinedFunction function) ) {
+            for (Argument arg : function.arguments) {
+                final Node valueExpr = arg.valueExpr();
+                if (valueExpr != null) {
+                    arg.valueExpr().accept(this);
+                }
+            }
+            function.body.accept(this);
+        }
     }
 
     @Override

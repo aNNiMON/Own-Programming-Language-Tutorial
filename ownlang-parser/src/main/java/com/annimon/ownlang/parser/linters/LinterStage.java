@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class LinterStage implements Stage<Node, Node> {
-    public enum Mode { NONE, SEMANTIC, FULL }
+    public enum Mode { NONE, INTERNAL, SEMANTIC, FULL }
 
     private final Mode mode;
 
@@ -29,10 +29,14 @@ public class LinterStage implements Stage<Node, Node> {
         validators.add(new IncludeSourceValidator(results));
         validators.add(new LoopStatementsValidator(results));
 
-        if (mode == Mode.SEMANTIC) {
+        if (mode == Mode.SEMANTIC || mode == Mode.INTERNAL) {
             validators.forEach(input::accept);
             if (results.hasErrors()) {
-                throw new OwnLangParserException(results.errors().toList());
+                if (mode == Mode.INTERNAL) {
+                    System.err.println(results.errors().toList());
+                } else {
+                    throw new OwnLangParserException(results.errors().toList());
+                }
             }
             return input;
         }

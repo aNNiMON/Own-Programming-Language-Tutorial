@@ -38,7 +38,7 @@ public class ProgramsTest {
         testPipeline = new SourceLoaderStage()
                 .then(new LexerStage())
                 .then(new ParserStage())
-                .then(new LinterStage(LinterStage.Mode.SEMANTIC))
+                .then(new LinterStage(LinterStage.Mode.INTERNAL))
                 .thenConditional(true, new OptimizationStage(9))
                 .then(new MockOUnitStage())
                 .then(new ExecutionStage())

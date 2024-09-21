@@ -14,22 +14,22 @@ import okhttp3.RequestBody;
 public class Values {
 
     public static RequestBody getRequestBody(Value arg, String msg) {
-        if (arg.type() == Types.MAP && (arg instanceof RequestBodyValue)) {
-            return ((RequestBodyValue) arg).getRequestBody();
+        if (arg.type() == Types.MAP && (arg instanceof RequestBodyValue rbv)) {
+            return rbv.getRequestBody();
         }
         throw new TypeException("RequestBody value expected" + msg);
     }
 
     public static Request getRequest(Value arg, String msg) {
-        if (arg.type() == Types.MAP && (arg instanceof RequestBuilderValue)) {
-            return ((RequestBuilderValue) arg).getRequest();
+        if (arg.type() == Types.MAP && (arg instanceof RequestBuilderValue rbv)) {
+            return rbv.getRequest();
         }
         throw new TypeException("Request value expected" + msg);
     }
 
     public static OkHttpClient getHttpClient(Value arg, String msg) {
-        if (arg.type() == Types.MAP && (arg instanceof HttpClientValue)) {
-            return ((HttpClientValue) arg).getClient();
+        if (arg.type() == Types.MAP && (arg instanceof HttpClientValue hcv)) {
+            return hcv.getClient();
         }
         throw new TypeException("HttpClient value expected" + msg);
     }

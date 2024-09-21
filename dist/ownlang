@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+(set -o igncr) 2>/dev/null && set -o igncr; # cygwin encoding fix
+
+# resolve links - $0 may be a softlink
+PRG="$0"
+while [ -h "$PRG" ] ; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+PRGDIR=`dirname "$PRG"`
+
+_classpath=".:$PRGDIR/OwnLang.jar"
+if [ `uname -a | grep -i -c cygwin` -ne 0 ]; then # Cygwin, translate the path
+  for k in "$PRGDIR"/modules/*.jar
+  do
+    _classpath="${_classpath};`cygpath -w ${k}`"
+  done
+  for k in "$PRGDIR"/libs/*.jar
+  do
+    _classpath="${_classpath};`cygpath -w ${k}`"
+  done
+else
+  for k in "$PRGDIR"/modules/*.jar
+  do
+    _classpath="${_classpath}:${k}"
+  done
+  for k in "$PRGDIR"/libs/*.jar
+  do
+    _classpath="${_classpath}:${k}"
+  done
+fi
+
+java -cp "${_classpath}" com.annimon.ownlang.Main "$@"

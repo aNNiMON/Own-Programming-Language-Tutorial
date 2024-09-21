@@ -2,6 +2,9 @@
 
 ## Next
 
+### Changes
+- Add `own` package manager. Usage examples: `own`, `own init`, `own add openai`.
+
 ### Fixes
 - Fix passing command-line arguments to scripts.
 - Fix `this` in non-static class methods.

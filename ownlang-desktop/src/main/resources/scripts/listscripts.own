@@ -1,5 +1,6 @@
 println "Available scripts:
   checkUpdate - checks updates on GitHub
+  own - own package manager
 
 To run a script use command:
  ownlang run checkUpdate

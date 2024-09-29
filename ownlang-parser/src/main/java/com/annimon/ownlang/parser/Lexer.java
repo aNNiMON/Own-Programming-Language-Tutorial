@@ -303,7 +303,7 @@ public final class Lexer {
         char current = peek(0);
         while (current != '`') {
             if ("\r\n\0".indexOf(current) != -1) {
-                throw error("Reached end of line while parsing extended word.", startPos, markEndPos());
+                throw error("Reached end of line while parsing extended word", startPos, markEndPos());
             }
             buffer.append(current);
             current = next();
@@ -321,7 +321,7 @@ public final class Lexer {
             if (current == '\\') {
                 current = next();
                 if ("\r\n\0".indexOf(current) != -1) {
-                    throw error("Reached end of line while parsing extended word.", startPos, markEndPos());
+                    throw error("Reached end of line while parsing text", startPos, markEndPos());
                 }
 
                 int idx = "\\0\"bfnrt".indexOf(current);

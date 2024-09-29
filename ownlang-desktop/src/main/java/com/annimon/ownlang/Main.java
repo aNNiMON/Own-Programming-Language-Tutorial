@@ -97,6 +97,10 @@ public final class Main {
                     return;
 
                 case "run":
+                    if (options.programPath != null) {
+                        // discard "run" if some programs already specified
+                        break;
+                    }
                     final String scriptName;
                     if (i + 1 < args.length) {
                         scriptName = args[i + 1];

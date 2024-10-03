@@ -2,7 +2,7 @@ use std, files, http, json, functional, downloader, robot, java
 
 PB = newClass("java.lang.ProcessBuilder")
 
-DEBUG=false
+DEBUG=getenv("OWN_DEBUG", false) == "true"
 logger = {}
 logger.color = def(num = 0) = sprintf("%s[0%sm", toChar(27), num > 0 ? (";" + num) : "")
 logger.error = def(a = "", b = "", c = "") = echo(logger.color(31) + a, b, c + logger.color())

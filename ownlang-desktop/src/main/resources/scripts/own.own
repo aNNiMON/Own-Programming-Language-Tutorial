@@ -366,7 +366,7 @@ class Own {
   }
 
   def usage() {
-    this.ctx.logger.info("own package manager")
+    this.ctx.logger.info("own package manager v1.0.0")
     this.ctx.logger.info("")
     this.ctx.logger.info("
     |Usage: own [options]

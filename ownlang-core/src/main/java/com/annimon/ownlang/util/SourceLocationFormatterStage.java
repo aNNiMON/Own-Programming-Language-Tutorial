@@ -19,7 +19,7 @@ public class SourceLocationFormatterStage implements Stage<Range, String> {
 
     static void printPosition(StringBuilder sb, Range range, String[] lines) {
         final Pos start = range.start();
-        final int linesCount = lines.length;;
+        final int linesCount = lines.length;
         if (range.isOnSameLine()) {
             if (start.row() < linesCount) {
                 sb.append(lines[start.row()]);

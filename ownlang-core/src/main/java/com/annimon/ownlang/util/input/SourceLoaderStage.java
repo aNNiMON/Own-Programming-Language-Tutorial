@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public class SourceLoaderStage implements Stage<InputSource, String> {
 
+    public static final String TAG_BASE_PATH = "basePath";
     public static final String TAG_SOURCE_LINES = "sourceLines";
 
     @Override
@@ -20,6 +21,7 @@ public class SourceLoaderStage implements Stage<InputSource, String> {
                     ? new String[0]
                     : result.split("\r?\n");
             stagesData.put(TAG_SOURCE_LINES, lines);
+            stagesData.put(TAG_BASE_PATH, inputSource.getBasePath());
             return result;
         } catch (IOException e) {
             throw new OwnLangRuntimeException("Unable to read input " + inputSource, e);

@@ -61,6 +61,7 @@ public final class Parser {
     private final List<Token> tokens;
     private final int size;
     private final ParseErrors parseErrors;
+    private ParserMetadata metadata;
     private Statement parsedStatement;
 
     private int index;
@@ -77,6 +78,10 @@ public final class Parser {
 
     public ParseErrors getParseErrors() {
         return parseErrors;
+    }
+
+    public void setMetadata(ParserMetadata metadata) {
+        this.metadata = metadata;
     }
 
     public Node parse() {
@@ -177,7 +182,8 @@ public final class Parser {
 
     private IncludeStatement includeStatement() {
         final var startTokenIndex = index - 1;
-        final var include = new IncludeStatement(expression());
+        final String basePath = (metadata != null) ? metadata.basePath() : "";
+        final var include = new IncludeStatement(expression(), basePath);
         include.setRange(getRange(startTokenIndex, index));
         return include;
     }

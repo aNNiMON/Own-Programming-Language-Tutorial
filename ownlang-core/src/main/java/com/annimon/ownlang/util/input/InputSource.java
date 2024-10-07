@@ -8,8 +8,9 @@ public interface InputSource {
     String load() throws IOException;
 
     default String getBasePath() {
-        int i = getPath().lastIndexOf("/");
+        final String normalizedPath = getPath().replace("\\", "/");
+        int i = normalizedPath.lastIndexOf("/");
         if (i == -1) return "";
-        return getPath().substring(0, i + 1);
+        return normalizedPath.substring(0, i + 1);
     }
 }

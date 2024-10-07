@@ -30,8 +30,8 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(AssignmentExpression s, T t) {
         final Node exprNode = s.expression.accept(this, t);
         final Node targetNode = s.target.accept(this, t);
-        if ( (exprNode != s.expression || targetNode != s.target) && (targetNode instanceof Accessible) ) {
-            return new AssignmentExpression(s.operation, (Accessible) targetNode, exprNode, s.getRange());
+        if ( (exprNode != s.expression || targetNode != s.target) && (targetNode instanceof Accessible acc) ) {
+            return new AssignmentExpression(s.operation, acc, exprNode, s.getRange());
         }
         return s;
     }
@@ -254,7 +254,7 @@ public abstract class OptimizationVisitor<T> implements ResultVisitor<Node, T> {
     public Node visit(IncludeStatement s, T t) {
         final Node expression = s.expression.accept(this, t);
         if (expression != s.expression) {
-            return new IncludeStatement(expression);
+            return new IncludeStatement(expression, s.basePath);
         }
         return s;
     }

@@ -18,12 +18,14 @@ import com.annimon.ownlang.util.input.SourceLoaderStage;
 public final class IncludeStatement extends InterruptableNode implements Statement, SourceLocation {
 
     public final Node expression;
+    public final String basePath;
     private final InputSourceDetector inputSourceDetector;
     private Range range;
 
-    public IncludeStatement(Node expression) {
+    public IncludeStatement(Node expression, String basePath) {
         this.expression = expression;
-        inputSourceDetector = new InputSourceDetector();
+        this.basePath = basePath;
+        inputSourceDetector = new InputSourceDetector(basePath);
     }
 
     public void setRange(Range range) {

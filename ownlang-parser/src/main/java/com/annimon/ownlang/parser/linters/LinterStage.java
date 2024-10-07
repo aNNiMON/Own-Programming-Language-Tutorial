@@ -7,6 +7,7 @@ import com.annimon.ownlang.parser.ast.Node;
 import com.annimon.ownlang.parser.ast.Visitor;
 import com.annimon.ownlang.stages.Stage;
 import com.annimon.ownlang.stages.StagesData;
+import com.annimon.ownlang.util.input.SourceLoaderStage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +27,8 @@ public class LinterStage implements Stage<Node, Node> {
 
         final LinterResults results = new LinterResults();
         final List<Visitor> validators = new ArrayList<>();
-        validators.add(new IncludeSourceValidator(results));
+        String basePath = stagesData.getOrDefault(SourceLoaderStage.TAG_BASE_PATH, "");
+        validators.add(new IncludeSourceValidator(results, basePath));
         validators.add(new LoopStatementsValidator(results));
 
         if (mode == Mode.SEMANTIC || mode == Mode.INTERNAL) {

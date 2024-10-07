@@ -1,7 +1,7 @@
 use std
 
 def testIncludeClass() {
-  include "src/test/resources/expressions/includeClass.own.txt"
+  include "includeClass.own.txt"
   obj = new IncludeClass()
   assertEquals("1", obj.field1)
   assertEquals(2, obj.field2)
@@ -10,26 +10,26 @@ def testIncludeClass() {
 
 def testIncludeNotExistsSource() {
   assertFail(def() {
-    include "src/test.own"
+    include "test.own"
   })
 }
 
 def testCatchingIncludeNotExistsSource() {
   res = try(def() {
-    include "src/test.own"
+    include "test.own"
   }, def(classname, message) = "ok")
   assertEquals("ok", res)
 }
 
 def testIncludeParseErrorSource() {
   assertFail(def() {
-    include "src/test/resources/expressions/includeParseErrorSource.own.txt"
+    include "includeParseErrorSource.own.txt"
   })
 }
 
 def testCatchingIncludeParseErrorSource() {
   res = try(def() {
-    include "src/test/resources/expressions/includeParseErrorSource.own.txt"
+    include "includeParseErrorSource.own.txt"
   }, def(classname, message) = "ok")
   assertEquals("ok", res)
 }

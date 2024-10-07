@@ -4,6 +4,7 @@
 
 ### Changes
 - Add `own` package manager. Usage examples: `own`, `own init`, `own add openai`.
+- Use relative path in include statement. 
 
 ### Fixes
 - Fix passing command-line arguments to scripts.

@@ -11,9 +11,9 @@ import com.annimon.ownlang.util.input.InputSourceDetector;
 final class IncludeSourceValidator extends LintVisitor {
     private final InputSourceDetector detector;
 
-    IncludeSourceValidator(LinterResults results) {
+    IncludeSourceValidator(LinterResults results, String basePath) {
         super(results);
-        detector = new InputSourceDetector();
+        detector = new InputSourceDetector(basePath);
     }
 
     @Override

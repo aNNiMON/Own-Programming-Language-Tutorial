@@ -1,0 +1,76 @@
+use std, files, json
+
+class Config {
+  def Config(ctx) {
+    this.ctx = ctx
+    this.configName = "own-package.json"
+    this.config = {}
+  }
+
+  def createNewConfig() = {"dependencies": {}}
+
+  def getConfig() {
+    this.ctx.logger.debug("Config.getConfig")
+    if length(this.config) == 0 {
+      f = fopen(this.configName, "i")
+      this.config = exists(f)
+        ? this.loadConfig()
+        : this.createNewConfig()
+      fclose(f)
+    }
+    return this.config
+  }
+
+  def loadConfig() {
+    this.ctx.logger.debug("Config.loadConfig")
+    f = fopen(this.configName, "r")
+    config = jsondecode(readText(f))
+    fclose(f)
+    return config
+  }
+
+  def saveConfig(config) {
+    this.ctx.logger.debug("Config.saveConfig")
+    f = fopen(this.configName, "w")
+    writeText(f, jsonencode(config, 2))
+    flush(f)
+    fclose(f)
+  }
+
+  def mergeConfig(config) {
+    this.ctx.logger.debug("Config.mergeConfig")
+    mapping = {
+      "name": def() = this.getDefaultProjectName(),
+      "version": def() = this.getDefaultVersion(),
+      "author": def() = this.getDefaultAuthor(),
+      "program": def() = this.getDefaultProgram(),
+      "scripts": def() = {
+        "default": ["$ownlang$", "-f", "$program$"]
+      },
+      "dependencies": def() = {},
+    }
+    for property, defaultValue : mapping {
+      if !arrayKeyExists(property, config)
+        config[property] = defaultValue()
+    }
+    return config
+  }
+
+  def getDefaultProjectName() {
+    this.ctx.logger.debug("Config.getDefaultProjectName")
+    parts = getprop("user.dir").replace("\\", "/").split("/")
+    name = parts[parts.length - 1]
+      .toLowerCase()
+      .replace("\\s+", "_")
+      .replaceAll("[^a-z\\-_]", "")
+    return match(length(name)) {
+      case 0: "project"
+      case x if x > 20: substring(name, 0, 20)
+      case _: name
+    }
+  }
+
+  def getDefaultVersion() = "1.0.0"
+  def getDefaultAuthor() = getprop("user.name", "unknown")
+  def getDefaultProgram() = "main.own"
+}

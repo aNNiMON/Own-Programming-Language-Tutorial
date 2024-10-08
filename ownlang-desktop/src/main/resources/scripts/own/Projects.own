@@ -1,0 +1,21 @@
+use files
+
+class Projects {
+  def Projects(ctx) {
+    this.ctx = ctx
+    this.defaultPrograms = {
+      "main.own" : "use std\n\necho(\"Hello, world!\", ARGS)"
+    }
+  }
+
+  def savePrograms() {
+    this.ctx.logger.debug("Projects.savePrograms")
+    for name, content : this.defaultPrograms {
+      if exists(name) continue
+      f = fopen(name, "w")
+      writeText(f, content)
+      flush(f)
+      fclose(f)
+    }
+  }
+}

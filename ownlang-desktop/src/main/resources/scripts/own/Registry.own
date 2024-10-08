@@ -1,0 +1,58 @@
+use files, json, http
+
+class Registry {
+  GLOBAL_URL = "https://raw.githubusercontent.com/aNNiMON/Own-Programming-Language-Tutorial/registry/registry.json"
+
+  def Registry(ctx) {
+    this.ctx = ctx
+    this.registry = {}
+    this.registryPackages = {}
+    this.registryCacheFile = ctx.TMPDIR + "/ownlang-registry.json"
+  }
+
+  def isRegistryLoaded() = length(this.registry) > 0
+
+  def getPackages() {
+    this.ctx.logger.debug("Registry.getPackages")
+    if !this.isRegistryLoaded() {
+      this.loadRegistry()
+    }
+    return this.registryPackages
+  }
+
+  def loadRegistry() {
+    this.ctx.logger.debug("Registry.loadRegistry")
+    if (!this.loadFromCache()) {
+      this.loadFromHttp()
+    }
+  }
+
+  def loadFromCache() {
+    this.ctx.logger.debug("Registry.loadFromCache")
+    if exists(this.registryCacheFile) {
+      f = fopen(this.registryCacheFile, "r")
+      this.registry = jsondecode(readText(f))
+      this.registryPackages = this.registry.packages ?? {}
+      fclose(f)
+      return true
+    }
+    return false
+  }
+
+  def loadFromHttp() {
+    this.ctx.logger.debug("Registry.loadFromHttp")
+    extract(ok, content) = httpSync(this.GLOBAL_URL)
+    this.registry = ok ? jsondecode(content) : {}
+    this.registryPackages = this.registry.packages ?? {}
+    if (ok) this.updateCache()
+    return ok
+  }
+
+  def updateCache() {
+    this.ctx.logger.debug("Registry.updateCache")
+    f = fopen(this.registryCacheFile, "w")
+    writeText(f, jsonencode(this.registry, 0))
+    flush(f)
+    fclose(f)
+  }
+}

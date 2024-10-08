@@ -1,0 +1,80 @@
+use std, java, robot
+
+PB = newClass("java.lang.ProcessBuilder")
+
+class Own {
+  def Own(ctx) {
+    this.ctx = ctx
+  }
+
+  def init() {
+    this.ctx.logger.debug("Own.init")
+    config = this.ctx.config.getConfig()
+    config = this.ctx.config.mergeConfig(config)
+    this.ctx.config.saveConfig(config)
+    this.ctx.projects.savePrograms()
+    this.ctx.logger.success("Project created")
+  }
+
+  def install() {
+    this.ctx.logger.debug("Own.install")
+    config = this.ctx.config.getConfig()
+    this.ctx.packages.downloadDependencies(config.dependencies ?? {})
+  }
+
+  def addDependencies() {
+    packages = this.nonEmptyArgs()
+    this.ctx.logger.debug("Own.addDependencies", packages)
+    this.ctx.packages.addDependencies(packages)
+    this.ctx.config.saveConfig(this.ctx.config.getConfig())
+  }
+
+  def showUsages() {
+    packages = this.nonEmptyArgs()
+    this.ctx.logger.debug("Own.showUsages", packages)
+    this.ctx.packages.showUsages(packages)
+  }
+
+  def runScript(script) {
+    this.ctx.logger.debug("Own.runScript", script)
+    config = this.ctx.config.getConfig()
+    vars = {
+      "$ownlang$": "ownlang" + (this.ctx.OSNAME.startsWith("win") ? ".cmd" : ""),
+      "$program$": config.program ?? "",
+      "$dir$": getprop("user.dir").replace("\\", "/")
+    }
+    if (script == "") script = "default"
+    if arrayKeyExists(script, config.scripts ?? {}) {
+      commands = []
+      for c : config.scripts[script] {
+        commands += arrayKeyExists(c, vars) ? vars[c] : c
+      }
+      this.ctx.logger.debug("Own.runScript run:", commands)
+      pb = new PB(commands)
+      pb.inheritIO()
+      p = pb.start()
+    } else {
+      this.ctx.logger.error("No script '%s' found in config's scripts section".sprintf(script))
+    }
+  }
+
+  def usage() {
+    this.ctx.logger.info("own package manager v1.0.0")
+    this.ctx.logger.info("")
+    this.ctx.logger.info("
+    |Usage: own [options]
+    |  options:
+    |     init               initialize new project
+    |     add [package]      add new package dependency to own-package.json
+    |     usage [package]    display the package usage (from .usage.own) if exists
+    |     install            install packages defined in own-package.json
+    |     run                run program defined in the config program section
+    |     run [script]       run script defined in the config scripts section
+    ".stripMargin())
+  }
+
+  def nonEmptyArgs(skip = 1) = stream(ARGS)
+      .skip(skip)
+      .filter(def(s) = !s.isEmpty())
+      .toArray()
+}

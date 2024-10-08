@@ -1,0 +1,145 @@
+use std, files, json, functional, http, downloader
+
+class Packages {
+  def Packages(ctx) {
+    this.ctx = ctx
+    this.packagesDir = "own-modules"
+    this.usageFile = ".usage.own"
+  }
+
+  def addDependencies(packages) {
+    this.ctx.logger.debug("Packages.addDependencies", packages)
+    if packages.isEmpty() {
+      this.ctx.logger.error("No package names provided. Try: own add telegram-bot")
+      return false
+    }
+    res = true
+    config = this.ctx.config.getConfig()
+    for package : packages {
+      res = res && this.addDependency(package, config)
+    }
+    return res
+  }
+
+  def addDependency(packageName, config) {
+    this.ctx.logger.debug("Packages.addDependency", packageName)
+    if packageName == "" {
+      this.ctx.logger.error("No package name provided. Try: own add telegram-bot")
+      return false
+    }
+    // Check in global registry
+    registryPackages = this.ctx.registry.getPackages()
+    if !arrayKeyExists(packageName, registryPackages) {
+      this.ctx.logger.error("Unknown package " + packageName + ". Check if the name specified correctly")
+      return false
+    }
+    dep = registryPackages[packageName]
+    // Check if exists in config
+    if arrayKeyExists(packageName, config.dependencies ?? {}) {
+      // Exists, check version match
+      if dep.version == config.dependencies[packageName] {
+        this.ctx.logger.info("Package " + packageName + " is up to date")
+        return true
+      }
+    }
+    // Install this dependency
+    dep.name = packageName
+    config.dependencies[packageName] = dep.version
+    downloaded = this.ctx.packages.downloadPackage(dep)
+    logText = "Installing " + packageName + " " + dep.version
+    if downloaded {
+      this.ctx.logger.success(logText + " [success]")
+    } else {
+      this.ctx.logger.error(logText + " [failure]")
+    }
+    return downloaded
+  }
+
+  def downloadDependencies(dependencies) {
+    this.ctx.logger.debug("Packages.downloadDependencies")
+    if length(dependencies) == 0 {
+      this.ctx.logger.error("No dependency packages provided, or own-package.json is missing")
+      return false
+    }
+    registryPackages = this.ctx.registry.getPackages()
+    for name, version : dependencies {
+      logText = "Installing " + name + " " + version
+      dep = registryPackages[name] ?? {"downloaded": 0}
+      if !(dep.downloaded ?? 0) {
+        dep.name = name
+        dep.downloaded = this.ctx.packages.downloadPackage(dep)
+      }
+      if dep.downloaded {
+        this.ctx.logger.success(logText + " [success]")
+      } else {
+        this.ctx.logger.error(logText + " [failure]")
+      }
+    }
+    return true
+  }
+
+  def getPackageFiles(dep) = match (dep.type ?? 0) {
+    case "gist": {
+      this.ctx.logger.debug("Packages.getPackageFiles for gist")
+      extract(ok, content) = httpSync("https://api.github.com/gists/" + dep.id)
+      return match ok {
+        case false: []
+        case true: stream(jsondecode(content).files)
+          .map(def(r) = [r[0], r[1].raw_url])
+          .toArray()
+      }
+    }
+    case _: []
+  }
+
+  def getPackagePath(package) {
+    this.ctx.logger.debug("Packages.getPackagePath", package)
+    dir = this.packagesDir + "/" + package
+    stream([this.packagesDir, dir])
+      .filterNot(::exists)
+      .forEach(::mkdir)
+    return dir
+  }
+
+  def downloadPackage(dep) {
+    this.ctx.logger.debug("Packages.downloadPackage", dep.name)
+    files = this.getPackageFiles(dep)
+    dir = this.getPackagePath(dep.name)
+    result = 0
+    for mf : files {
+      extract(name, url) = mf
+      result += downloader(url, dir + "/" + name)
+    }
+    return result > 0
+  }
+
+  def showUsages(packages) {
+    this.ctx.logger.debug("Packages.showUsages", packages)
+    if packages.isEmpty() {
+      this.ctx.logger.error("No package names provided")
+      return false
+    }
+    config = this.ctx.config.getConfig()
+    for package : packages {
+      this.showUsage(package, config)
+    }
+    return true
+  }
+
+  def showUsage(package, config) {
+    file = this.packagesDir + "/" + package + "/" + this.usageFile
+    exists = arrayKeyExists(package, config.dependencies ?? {})
+      && exists(file)
+    if !exists {
+      this.ctx.logger.error("[" + package + "] "
+        + "Error: no .usage.own file provided in the package,"
+        + " or the package is not installed")
+      return false
+    }
+    this.ctx.logger.success("\n[" + package + "]")
+    f = fopen(file, "r")
+    this.ctx.logger.info(readText(f))
+    fclose(f)
+    return true
+  }
+}

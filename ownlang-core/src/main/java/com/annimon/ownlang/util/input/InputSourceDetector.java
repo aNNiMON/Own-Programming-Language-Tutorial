@@ -11,9 +11,10 @@ public record InputSourceDetector(String basePath) {
     }
 
     public boolean isReadable(String programPath) {
-        if (programPath.startsWith(RESOURCE_PREFIX)) {
-            String path = programPath.substring(RESOURCE_PREFIX.length());
-            return getClass().getResource(basePath + path) != null;
+        if (basePath.startsWith(RESOURCE_PREFIX) || programPath.startsWith(RESOURCE_PREFIX)) {
+            String base = removePrefixIfExists(basePath);
+            String path = removePrefixIfExists(programPath);
+            return getClass().getResource(base + path) != null;
         } else {
             Path path = Path.of(basePath, programPath);
             return Files.isReadable(path) && Files.isRegularFile(path);
@@ -21,11 +22,19 @@ public record InputSourceDetector(String basePath) {
     }
 
     public InputSource toInputSource(String programPath) {
-        if (programPath.startsWith(RESOURCE_PREFIX)) {
-            String path = programPath.substring(RESOURCE_PREFIX.length());
-            return new InputSourceResource(basePath + path);
+        if (basePath.startsWith(RESOURCE_PREFIX) || programPath.startsWith(RESOURCE_PREFIX)) {
+            String base = removePrefixIfExists(basePath);
+            String path = removePrefixIfExists(programPath);
+            return new InputSourceResource(base + path);
         } else {
             return new InputSourceFile(basePath + programPath);
         }
+    }
+
+    private String removePrefixIfExists(String path) {
+        if (path.startsWith(RESOURCE_PREFIX)) {
+            return path.substring(RESOURCE_PREFIX.length());
+        }
+        return path;
     }
 }

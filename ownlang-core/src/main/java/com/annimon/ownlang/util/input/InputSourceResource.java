@@ -21,6 +21,11 @@ public record InputSourceResource(String path) implements InputSource {
     }
 
     @Override
+    public String getBasePath() {
+        return "resource:" + InputSource.super.getBasePath();
+    }
+
+    @Override
     public String toString() {
         return "Resource " + path;
     }

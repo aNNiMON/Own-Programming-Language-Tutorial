@@ -1019,12 +1019,12 @@ public final class canvasfx implements Module {
     }
     
     private static void handleEvent(Event event, final Function handler) {
-        if (event instanceof MouseEvent) {
-            handleMouseEvent((MouseEvent) event, handler);
-        } else if (event instanceof KeyEvent) {
-            handleKeyEvent((KeyEvent) event, handler);
-        } else if (event instanceof DragEvent) {
-            handleDragEvent((DragEvent) event, handler);
+        if (event instanceof MouseEvent me) {
+            handleMouseEvent(me, handler);
+        } else if (event instanceof KeyEvent ke) {
+            handleKeyEvent(ke, handler);
+        } else if (event instanceof DragEvent de) {
+            handleDragEvent(de, handler);
         }
     }
     

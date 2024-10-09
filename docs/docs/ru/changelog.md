@@ -13,7 +13,8 @@
 - Исправлен visitor и проверки линтера внутри функций.
 
 ### Modules
-- [okhttp] Добавлен `okhttp.newClient()` и `HttpClientBuilderValue`
+- [okhttp] Добавлен `okhttp.newClient()` и `HttpClientBuilderValue`.
+- [canvasfx] Обновлена версия JavaFX.
 
 
 ## 2.0.0

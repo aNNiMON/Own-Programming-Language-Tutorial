@@ -5,10 +5,10 @@ plugins {
 }
 
 group = 'com.annimon.module'
-version = '1.0.0'
+version = '1.1.0'
 
 javafx {
-    version = "17"
+    version = "21"
     modules = [ 'javafx.controls', 'javafx.swing' ]
 }
 

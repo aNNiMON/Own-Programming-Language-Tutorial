@@ -14,6 +14,7 @@
 
 ### Modules
 - [okhttp] Added `okhttp.newClient()` and `HttpClientBuilderValue`.
+- [canvasfx] Updated JavaFX version.
 
 
 ## 2.0.0

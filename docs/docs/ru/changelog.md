@@ -15,7 +15,7 @@
 - Исправлено завершение программы при использовании любого http запроса (баг в okhttp).
 - Исправлен visitor и проверки линтера внутри функций.
 
-### Modules
+### Модули
 - [okhttp] Добавлен `okhttp.newClient()` и `HttpClientBuilderValue`.
 - [canvasfx] Обновлена версия JavaFX.
 

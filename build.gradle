@@ -1,20 +1,20 @@
 ext {
     versions = [
-            project: '2.0.0',
+            project: '2.1.0',
 
             json: '20240303', // org.json:json
             snakeyaml: '1.33', // org.yaml:snakeyaml
             okhttp: '4.12.0', // com.squareup.okhttp3:okhttp
-            socket: '2.1.0', // io.socket:socket.io-client
+            socket: '2.1.1', // io.socket:socket.io-client
             jline: '2.14.6', // jline:jline
 
-            javalin: '6.1.3', // io.javalin:javalin
-            slf4j: '2.0.13', // org.slf4j:slf4j-simple
-            jackson: '2.17.0', // com.fasterxml.jackson.core:jackson-databind
+            javalin: '6.3.0', // io.javalin:javalin
+            slf4j: '2.0.16', // org.slf4j:slf4j-simple
+            jackson: '2.18.0', // com.fasterxml.jackson.core:jackson-databind
 
-            junit: '5.11.0', // org.junit:junit-bom
+            junit: '5.11.2', // org.junit:junit-bom
             jmh: '1.37', // org.openjdk.jmh:jmh-core
-            assertj: '3.25.3' // org.assertj:assertj-core
+            assertj: '3.26.3' // org.assertj:assertj-core
     ]
 }
 

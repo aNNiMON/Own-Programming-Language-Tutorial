@@ -4,9 +4,9 @@ OwnLang - dynamic functional programming language inspired by Scala and Python. 
 
 ## Installing
 
-| Free | Pro | Desktop |
-| :--: | :-: | :-----: |
-| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v2.0.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v2.0.0) |
+| Free | Pro |                                          Desktop                                           |
+| :--: | :-: |:------------------------------------------------------------------------------------------:|
+| [![Free](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang.free) | [![Pro](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.annimon.ownlang) | [v2.1.0](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/releases/tag/v2.1.0) |
 
 Also available as AUR package:
 

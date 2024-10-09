@@ -2,6 +2,9 @@
 
 ## Next
 
+
+## 2.1.0
+
 ### Changes
 - Add `own` package manager. Usage examples: `own`, `own init`, `own add openai`.
 - Use relative path in include statement. 

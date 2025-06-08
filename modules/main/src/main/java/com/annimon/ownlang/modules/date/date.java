@@ -93,7 +93,7 @@ public final class date implements Module {
         @Override
         public String asString() {
             return String.format("%04d-%02d-%02d %02d:%02d:%02d.%03d",
-                    get(YEAR).asInt(), get(MONTH).asInt(), get(DAY).asInt(),
+                    get(YEAR).asInt(), get(MONTH).asInt() + 1, get(DAY).asInt(),
                     get(HOUR).asInt(), get(MINUTE).asInt(), get(SECOND).asInt(),
                     get(MILLISECOND).asInt());
         }

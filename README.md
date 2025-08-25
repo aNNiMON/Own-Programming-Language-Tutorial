@@ -1,5 +1,7 @@
 # OwnLang
 
+[![build](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/actions/workflows/gradle.yml/badge.svg?branch=latest)](https://github.com/aNNiMON/Own-Programming-Language-Tutorial/actions/workflows/gradle.yml) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/aNNiMON/Own-Programming-Language-Tutorial)
+
 OwnLang - dynamic functional programming language inspired by Scala and Python. Available for PC, Android and Java ME devices.
 
 ## Installing
